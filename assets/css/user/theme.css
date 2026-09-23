@@ -1,0 +1,30 @@
+/* Final User theme layer. Loaded last to resolve cross-page CSS conflicts. */
+body { background: var(--color-background) !important; color: var(--color-text); }
+
+.profile-layout { width: min(1180px, calc(100% - 32px)); margin: 36px auto 60px; gap: 24px; }
+.profile-sidebar, .profile-content { border-color: var(--color-border) !important; background: var(--color-surface) !important; box-shadow: var(--shadow-sm) !important; }
+.profile-sidebar { border-radius: var(--radius-lg) !important; }
+.profile-content { border-radius: var(--radius-lg) !important; }
+.sidebar-menu li.active, .sidebar-menu li:hover { background: #eee9df !important; border-left-color: var(--color-accent) !important; }
+.sidebar-menu li.active a, .profile-content h2, .info-row label { color: var(--color-primary) !important; }
+
+.save-btn, #addAddressBtn, #editProfileBtn, .address-right button { background: var(--color-primary) !important; }
+.save-btn:hover, #addAddressBtn:hover, #editProfileBtn:hover, .address-right button:hover { background: var(--color-primary-hover) !important; }
+
+.address-card, .info-box { border-color: var(--color-border) !important; border-radius: var(--radius-md) !important; }
+.address-actions { display: flex; flex-wrap: wrap; gap: 6px; justify-content: flex-end; margin-top: 8px; }
+
+@media (max-width: 900px) {
+  .profile-layout { flex-direction: column; width: min(100% - 24px, 720px); margin-top: 24px; }
+  .profile-sidebar { width: 100% !important; }
+  .profile-form input { width: 100% !important; }
+}
+
+@media (max-width: 640px) {
+  .profile-content { padding: 16px !important; }
+  .info-row { flex-direction: column; gap: 4px !important; }
+  .info-row label { width: auto !important; }
+  .address-card { flex-direction: column; align-items: stretch; gap: 14px; }
+  .address-right { width: 100%; }
+  .address-actions { justify-content: flex-start; }
+}

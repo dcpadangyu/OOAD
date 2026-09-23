@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<base href="../">
+<title>Shoe Store - Trang chủ</title>
+    <link rel="stylesheet" href="assets/css/user/variables.css">
+  <link rel="stylesheet" href="assets/css/user/base.css">
+<link rel="stylesheet" href="assets/css/user/common.css">
+  <link rel="stylesheet" href="assets/css/user/header.css">
+  <link rel="stylesheet" href="assets/css/user/footer.css">
+
+<link rel="stylesheet" href="assets/css/user/banner.css">
+<link rel="stylesheet" href="assets/css/user/products.css">
+<link rel="stylesheet" href="assets/css/user/chitietsanpham.css">
+<link rel="stylesheet" href="assets/css/user/indexGIoHang.css">
+<link rel="stylesheet" href="assets/css/user/TrangHienThi.css">
+  <link rel="stylesheet" href="assets/css/user/theme.css">
+  <link rel="stylesheet" href="assets/css/user/modern.css">
+</head>
+<body>
+<div data-user-component="header"></div>
+<div id="chitietsanpham-banner-index">
+  <section class="brand-strip" aria-label="Thương hiệu giày">
+    <div class="brand-strip-heading">Thương hiệu nổi bật</div>
+    <div class="brand-strip-list">
+      <a class="brand-link" href="pages/home.html#sanpham" data-catalog="Nike"><img src="./assets/images/brands/Nike.png" alt="Nike"><span>Nike</span></a>
+      <a class="brand-link" href="pages/home.html#sanpham" data-catalog="Adidas"><img src="./assets/images/brands/Adidas.jpg" alt="Adidas"><span>Adidas</span></a>
+      <a class="brand-link" href="pages/home.html#sanpham" data-catalog="Converse"><img src="./assets/images/brands/Converse.jpg" alt="Converse"><span>Converse</span></a>
+      <a class="brand-link" href="pages/home.html#sanpham" data-catalog="MLB"><img src="./assets/images/brands/Mlb.png" alt="MLB"><span>MLB</span></a>
+      <a class="brand-link" href="pages/home.html#sanpham" data-catalog="Vans"><img src="./assets/images/brands/Vans.jpg" alt="Vans"><span>Vans</span></a>
+    </div>
+  </section>
+  <!-- ===== BANNER ===== -->
+  <section class="banner">
+    <video class="banner-video" autoplay muted loop playsinline>
+      <source src="./assets/filemp4/banner.mp4" type="video/mp4">
+      Trình duyệt của bạn không hỗ trợ video banner.
+    </video>
+    <div class="banner-overlay"></div>
+    <div class="banner-content">
+      <h1>GIÀY CHÍNH HÃNG</h1>
+      <p>Phong cách năng động, thoải mái cho mọi bước chân</p>
+    </div>
+  </section>
+
+  <!-- ===== CHI TIẾT SẢN PHẨM ===== -->
+  <main class="detail-container">
+    <section id="product-detail" style="display: none;">
+      <!-- Nội dung chi tiết sản phẩm sẽ được JS render -->
+    </section>
+  </main>
+
+  <!-- ===== DANH SÁCH SẢN PHẨM ===== -->
+  <div class="main-wrapper" id="product-list-wrapper">
+    <main>
+      <aside class="filter-sidebar">
+        <h3>Chọn sản phẩm theo yêu cầu</h3>
+        <div class="filter-group">
+          <label>Khoảng giá</label>
+          <select id="priceFilter" onchange="filterProducts()">
+            <option value="">Tất cả</option>
+            <option value="duoi1">Dưới 1.000.000₫</option>
+            <option value="1-2">1.000.000₫ - 2.000.000₫</option>
+            <option value="2-3">2.000.000₫ - 3.000.000₫</option>
+            <option value="3-4">3.000.000₫ - 4.000.000₫</option>
+            <option value="tren4">Trên 4.000.000₫</option>
+          </select>
+        </div>
+
+        <div class="filter-group">
+          <label>Màu sắc</label>
+          <select id="colorFilter" onchange="filterProducts()">
+            <option value="">Tất cả</option>
+            <option value="đen">Đen</option>
+            <option value="trắng">Trắng</option>
+            <option value="vàng">Vàng</option>
+            <option value="bạc">Bạc</option>
+            <option value="hồng">Hồng</option>
+            <option value="xanh lá">Xanh lá</option>
+            <option value="xanh dương">Xanh dương</option>
+          </select>
+        </div>
+
+        <div class="filter-group">
+          <label>Chất liệu</label>
+          <select id="materialFilter" onchange="filterProducts()">
+            <option value="">Tất cả</option>
+            <option value="da">Da</option>
+            <option value="da tổng hợp">Da tổng hợp</option>
+            <option value="vải">Vải</option>
+          </select>
+        </div>
+
+        <div class="filter-group">
+          <label>Phong cách</label>
+          <select id="styleFilter" onchange="filterProducts()">
+            <option value="">Tất cả</option>
+            <option value="thể thao">Thể thao</option>
+            <option value="casual">Casual</option>
+            <option value="thời trang">Thời trang</option>
+          </select>
+        </div>
+
+        <div class="filter-group">
+          <label>Giới tính</label>
+          <select id="genderFilter" onchange="filterProducts()">
+            <option value="">Tất cả</option>
+            <option value="nam">Nam</option>
+            <option value="nữ">Nữ</option>
+          </select>
+        </div>
+      </aside>
+
+      <section class="product-section">
+        <div class="product-grid" id="product-grid">
+          <!-- JS sẽ thêm sản phẩm -->
+        </div>
+        <div id="pagination" class="pagination"></div>
+      </section>
+    </main>
+  </div>
+</div>
+<div id="product-popup" class="popup-overlay">
+  <div class="popup-content">
+    <button class="popup-close" id="closePopup">&times;</button>
+    <div id="popup-details"></div>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+<div data-user-component="footer"></div>
+  <script src="assets/js/user/core/site-shell.js"></script>
+  <script src="assets/js/user/core/account-session.js"></script>
+  <script src="assets/js/user/core/site-header.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script src="database/reviews.js"></script>
+  <script src="assets/js/user/product/products.js"></script>
+  <script src="assets/js/user/product/reviews.js"></script>
+</body>
+</html>

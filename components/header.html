@@ -1,0 +1,29 @@
+<header>
+  <div class="top-nav">
+    <div class="logo">SHOE STORE</div>
+    <div class="search-box">
+      <input type="text" id="searchInput" placeholder="Tìm kiếm sản phẩm...:" autocomplete="off">
+      <div id="searchSuggestions" class="search-suggestions" role="listbox" aria-label="Gợi ý và lịch sử tìm kiếm"></div>
+    </div>
+    <nav class="category-nav" aria-label="Danh mục sản phẩm">
+      <a href="pages/home.html?category=Nike#sanpham" data-catalog="Nike">Nike</a>
+      <a href="pages/home.html?category=Adidas#sanpham" data-catalog="Adidas">Adidas</a>
+      <a href="pages/home.html?category=Converse#sanpham" data-catalog="Converse">Converse</a>
+      <a href="pages/home.html?category=MLB#sanpham" data-catalog="MLB">MLB</a>
+      <a href="pages/home.html?category=Vans#sanpham" data-catalog="Vans">Vans</a>
+    </nav>
+    <div class="menu">
+      <a href="pages/home.html" class="nav-home">Trang chủ</a>
+      <a href="pages/login.html" class="nav-login">Đăng nhập</a>
+      <a href="pages/cart.html" id="open-cart-btn">Giỏ hàng🛒</a>
+      <a href="pages/order-history.html" id="LichSuMuaHangBTN">Lịch sử</a>
+      <div class="user-avatar" id="userAvatar" hidden>
+        <img src="assets/img/Avatar/avtuser.jpg" alt="avatar">
+        <div class="dropdown" id="avatarDropdown">
+          <a class ="nav-profile-header" href="pages/profile.html"><p>Tài khoản: <b id="usernameDisplay"></b></p></a>
+          <button id="logoutBtn">Đăng xuất</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>

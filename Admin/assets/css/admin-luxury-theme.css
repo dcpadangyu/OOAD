@@ -1,0 +1,616 @@
+/* =====================================================================
+   WEB1-STORE ADMIN — LỚP GIAO DIỆN "SANG TRỌNG" (LUXURY SKIN)
+   ---------------------------------------------------------------------
+   File này KHÔNG thay thế các file CSS gốc — nó được nạp SAU CÙNG,
+   trong tất cả các trang admin, để phủ lại bảng màu, typography và
+   chi tiết trang trí. Toàn bộ layout / cấu trúc / tên class gốc được
+   giữ nguyên 100%, nên không cần sửa HTML hay JS hiện có.
+
+   Cách dùng: thêm dòng dưới đây làm <link> CUỐI CÙNG trong <head>,
+   sau tất cả các file CSS khác:
+
+   <link rel="stylesheet" href="assets/css/admin-luxury-theme.css">
+
+   Bảng màu: ink (đen navy) + blue (xanh dương primary) + slate (xám sáng)
+    Typography: Inter (toàn bộ UI — chuẩn thị trường)
+   ===================================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+:root {
+    /* Nền tối chủ đạo (header/sidebar) */
+    --lux-ink: #0f172a;
+    --lux-ink-2: #1e293b;
+    --lux-ink-soft: #334155;
+
+    /* Xanh dương — màu nhấn chính, chuẩn admin trên thị trường */
+    --lux-brass: #2563eb;
+    --lux-brass-light: #93c5fd;
+    --lux-brass-dark: #1d4ed8;
+    --lux-brass-wash: rgba(37, 99, 235, 0.10);
+
+    /* Nền sáng & bề mặt */
+    --lux-paper: #f1f5f9;
+    --lux-card: #ffffff;
+    --lux-line: #e2e8f0;
+    --lux-line-soft: #e5e7eb;
+
+    /* Chữ */
+    --lux-text: #1e293b;
+    --lux-muted: #64748b;
+    --lux-on-ink: #f8fafc;
+    --lux-on-ink-muted: #94a3b8;
+
+    --lux-shadow: 0 10px 30px rgba(15, 23, 42, 0.06);
+    --lux-shadow-lift: 0 16px 36px rgba(15, 23, 42, 0.12);
+
+    --lux-font-display: 'Inter', 'Segoe UI', Tahoma, sans-serif;
+    --lux-font-ui: 'Inter', 'Segoe UI', Tahoma, sans-serif;
+}
+
+/* ---------------------------------------------------------------------
+   NỀN & TYPOGRAPHY CHUNG
+--------------------------------------------------------------------- */
+
+body {
+    font-family: var(--lux-font-ui);
+    background: var(--lux-paper);
+    color: var(--lux-text);
+}
+
+h1, h2, h3,
+.dashboard-header h1,
+.page-header h1,
+.header-left .logo h1,
+.login-header h1,
+.dark-text h1,
+.modal-header h2,
+.QLSP_page-header h3,
+.QLNH_page-header h3,
+.QLDH_page-header h3,
+.QLGB_page-header h3,
+.TK_page-header h3,
+.BCDT_header h3,
+.quick-actions h2,
+.action-card h3,
+.QLNH_bang-san-pham-nhap h3,
+.QLNH_modal-header h2,
+.order-info h3,
+.order-status h3 {
+    font-family: var(--lux-font-display);
+    letter-spacing: 0.2px;
+}
+
+/* Loại bỏ nhãn IN HOA mặc định của nav — thay bằng phân cấp qua màu/khoảng cách */
+.nav-section h3 {
+    text-transform: none;
+    letter-spacing: 0.4px;
+    font-size: 11.5px;
+    font-weight: 600;
+    color: var(--lux-on-ink-muted);
+}
+
+/* Thanh cuộn tinh gọn, đồng bộ tông màu */
+* {
+    scrollbar-width: thin;
+    scrollbar-color: var(--lux-brass-light) transparent;
+}
+*::-webkit-scrollbar { width: 8px; height: 8px; }
+*::-webkit-scrollbar-thumb { background: var(--lux-brass-light); border-radius: 8px; }
+
+:focus-visible {
+    outline: 2px solid var(--lux-brass);
+    outline-offset: 2px;
+}
+
+/* ---------------------------------------------------------------------
+   HEADER TRÊN CÙNG
+--------------------------------------------------------------------- */
+
+.admin-header {
+    background: linear-gradient(120deg, var(--lux-ink) 0%, var(--lux-ink-2) 100%);
+    box-shadow: 0 2px 0 var(--lux-brass), 0 12px 24px rgba(0, 0, 0, 0.18);
+}
+
+.header-left .logo h1 {
+    font-weight: 600;
+    font-size: 22px;
+    color: var(--lux-on-ink);
+}
+
+.header-left .logo h1::first-letter {
+    color: var(--lux-brass-light);
+}
+
+.admin-name { color: var(--lux-on-ink); }
+
+.admin-avatar {
+    background: var(--lux-brass-wash);
+    border: 1px solid var(--lux-brass);
+    color: var(--lux-brass-light);
+}
+
+.logout-btn {
+    background: rgba(255, 255, 255, 0.08) !important;
+    border: 1px solid rgba(148, 163, 184, 0.45) !important;
+    color: #e2e8f0 !important;
+    border-radius: 6px;
+    transition: all 0.25s ease;
+}
+
+.logout-btn:hover {
+    background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%) !important;
+    border-color: #93c5fd !important;
+    color: #ffffff !important;
+    box-shadow: 0 4px 14px rgba(29, 78, 216, 0.35);
+    transform: none;
+}
+
+/* ---------------------------------------------------------------------
+   SIDEBAR
+--------------------------------------------------------------------- */
+
+.admin-sidebar {
+    background: var(--lux-ink);
+    box-shadow: 1px 0 0 var(--lux-line);
+    border-right: 1px solid rgba(0, 0, 0, 0.3);
+}
+
+.nav-link {
+    color: var(--lux-on-ink-muted);
+    border-left: 2px solid transparent;
+}
+
+.nav-link:hover {
+    background: rgba(37, 99, 235, 0.10);
+    color: var(--lux-on-ink);
+    border-left-color: var(--lux-brass-light);
+}
+
+.nav-item.active .nav-link,
+.menu-item.active .nav-link,
+.menu-item.active > .nav-link {
+    background: var(--lux-brass-wash);
+    color: var(--lux-brass-light);
+    border-left-color: var(--lux-brass);
+    font-weight: 600;
+}
+
+.nav-link svg,
+.nav-link i {
+    color: inherit;
+    opacity: 0.9;
+}
+
+/* ---------------------------------------------------------------------
+   NỀN VÙNG NỘI DUNG
+--------------------------------------------------------------------- */
+
+.admin-main {
+    background: var(--lux-paper);
+}
+
+.dashboard-header p,
+.page-header p,
+.QLSP_page-header p,
+.QLNH_page-header p,
+.QLDH_page-header p,
+.QLGB_page-header p,
+.TK_page-header p,
+.BCDT_header p {
+    color: var(--lux-muted);
+}
+
+/* ---------------------------------------------------------------------
+   THẺ / CARD (dashboard, quick actions, summary, báo cáo)
+--------------------------------------------------------------------- */
+
+.stat-card,
+.quick-actions,
+.action-bar,
+.table-container,
+.pagination,
+.modal-content,
+.summary-card,
+.chart-container,
+.BCDT_card,
+.BCDT_panel,
+.QLGB_card,
+#page-categories .table-responsive,
+#page-customers .table-responsive {
+    background: var(--lux-card);
+    border: 1px solid var(--lux-line-soft);
+    box-shadow: var(--lux-shadow);
+    border-radius: 10px;
+}
+
+.stat-card {
+    position: relative;
+    overflow: hidden;
+}
+
+.stat-card::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--lux-brass) 0%, var(--lux-brass-light) 100%);
+}
+
+.stat-card:hover,
+.action-card:hover,
+.product-card:hover {
+    box-shadow: var(--lux-shadow-lift);
+}
+
+.stat-icon,
+.action-icon {
+    background: linear-gradient(135deg, var(--lux-ink) 0%, var(--lux-ink-soft) 100%);
+    border: 1px solid var(--lux-brass-dark);
+    color: var(--lux-brass-light);
+    border-radius: 10px;
+}
+
+.stat-icon.customers,
+.stat-icon.products,
+.stat-icon.orders,
+.stat-icon.revenue {
+    background: linear-gradient(135deg, var(--lux-ink) 0%, var(--lux-ink-soft) 100%);
+}
+
+.stat-content h3 {
+    color: var(--lux-text);
+    font-family: var(--lux-font-display);
+    font-weight: 600;
+}
+
+.action-card {
+    background: var(--lux-paper);
+    border: 1px solid var(--lux-line-soft);
+}
+
+.action-card:hover {
+    background: var(--lux-card);
+    border-color: var(--lux-brass);
+}
+
+.product-price { color: var(--lux-brass-dark); }
+
+.summary-card .trend.increase { color: #4f7a52; }
+.summary-card .trend.decrease { color: #a5474a; }
+
+/* ---------------------------------------------------------------------
+   NÚT BẤM — PHONG CÁCH SANG TRỌNG CAO CẤP (OBSIDIAN & CHAMPAGNE ACCENTS)
+--------------------------------------------------------------------- */
+
+/* Nút chính (Primary Buttons & Submit) */
+.btn-primary,
+.search-box button,
+.QLSP_boLoc input[type="button"],
+.QLNH_boLoc input[type="button"],
+#TK_btnFilter,
+.QLGB_filters button,
+.QLGB_lookup_row button,
+.QLDH_filters button,
+.QLDH_md_btnUpdate,
+.BCDT_filters button,
+.QLSP_file-upload-label,
+.QLNH_btn-them-dong,
+#QLSP_btnSaveSP,
+#QLSP_btnUpdateSP,
+.QLNH_btn-luu {
+    background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%) !important;
+    color: #ffffff !important;
+    border: 1px solid rgba(29, 78, 216, 0.35) !important;
+    box-shadow: 0 4px 14px rgba(29, 78, 216, 0.30), inset 0 1px 0 rgba(255, 255, 255, 0.15) !important;
+    font-weight: 500;
+    letter-spacing: 0.4px;
+    border-radius: 6px;
+    transition: all 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
+    cursor: pointer;
+}
+
+.btn-primary:hover,
+.search-box button:hover,
+.QLSP_boLoc input[type="button"]:hover,
+.QLNH_boLoc input[type="button"]:hover,
+#TK_btnFilter:hover,
+.QLGB_filters button:hover,
+.QLGB_lookup_row button:hover,
+.QLDH_filters button:hover,
+.QLDH_md_btnUpdate:hover,
+.BCDT_filters button:hover,
+.QLSP_file-upload-label:hover,
+.QLNH_btn-them-dong:hover,
+#QLSP_btnSaveSP:hover,
+#QLSP_btnUpdateSP:hover,
+.QLNH_btn-luu:hover {
+    filter: none !important;
+    background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%) !important;
+    border-color: rgba(147, 197, 253, 0.8) !important;
+    color: #ffffff !important;
+    box-shadow: 0 6px 20px rgba(37, 99, 235, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.2) !important;
+    transform: translateY(-1.5px);
+}
+
+/* Nút phụ / Nút Hủy (Secondary & Cancel) */
+.btn-secondary,
+.QLSP_cancel-btn,
+.QLNH_btn-huy,
+#QLNH_btnXoaLocNgay {
+    background: #f1f5f9 !important;
+    color: #475569 !important;
+    border: 1px solid #e2e8f0 !important;
+    font-weight: 500;
+    border-radius: 6px;
+    transition: all 0.2s ease;
+    cursor: pointer;
+}
+
+.btn-secondary:hover,
+.QLSP_cancel-btn:hover,
+.QLNH_btn-huy:hover,
+#QLNH_btnXoaLocNgay:hover {
+    background: #e2e8f0 !important;
+    color: #1e293b !important;
+    border-color: #cbd5e1 !important;
+    transform: translateY(-1px);
+}
+
+/* Nút viền mảnh & Nút thao tác bảng */
+.btn-outline,
+.QLDH_btn-detail,
+.QLDH_sel-status,
+.QLGB_btn-edit-percent,
+.QLGB_btn-edit-price,
+.QLGB_editorSave,
+.QLGB_editorCancel,
+.QLDH_rt_btn {
+    background: #ffffff !important;
+    border: 1px solid #d1d5db !important;
+    color: #374151 !important;
+    border-radius: 5px;
+    transition: all 0.2s ease;
+    cursor: pointer;
+}
+
+.btn-outline:hover,
+.QLDH_btn-detail:hover,
+.QLGB_btn-edit-percent:hover,
+.QLGB_btn-edit-price:hover,
+.QLGB_editorSave:hover,
+.QLGB_editorCancel:hover,
+.QLDH_rt_btn:hover {
+    background: #2563eb !important;
+    color: #ffffff !important;
+    border-color: #2563eb !important;
+    box-shadow: 0 4px 12px rgba(29, 78, 216, 0.25);
+}
+
+/* ---------------------------------------------------------------------
+   PHÂN TRANG (PAGINATION)
+--------------------------------------------------------------------- */
+
+.pagination button,
+.chart-options button,
+.QLSP_pagination-btn,
+.QLNH_pagination-btn,
+.QLGB_pagination button,
+.QLDH_pagination button,
+.TK_pagination-btn {
+    background: #ffffff !important;
+    color: #374151 !important;
+    border: 1px solid #d1d5db !important;
+    border-radius: 5px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    cursor: pointer;
+}
+
+.pagination button.active,
+.chart-options button.active,
+.pagination button:hover:not(:disabled),
+.chart-options button:hover:not(:disabled),
+.QLSP_pagination-btn:hover:not(:disabled),
+.QLNH_pagination-btn:hover:not(:disabled),
+.QLGB_pagination button:hover:not(:disabled),
+.QLDH_pagination button:hover:not(:disabled),
+.TK_pagination-btn:hover:not(:disabled) {
+    background: #2563eb !important;
+    color: #ffffff !important;
+    border-color: #2563eb !important;
+    box-shadow: 0 3px 10px rgba(29, 78, 216, 0.25);
+}
+
+.QLSP_pagination-btn:disabled,
+.QLNH_pagination-btn:disabled,
+.TK_pagination-btn:disabled,
+.pagination button:disabled {
+    background: #f1f5f9 !important;
+    border-color: #e2e8f0 !important;
+    color: #cbd5e1 !important;
+    cursor: not-allowed;
+    box-shadow: none;
+    transform: none;
+}
+
+/* ---------------------------------------------------------------------
+   BẢNG DỮ LIỆU
+--------------------------------------------------------------------- */
+
+.data-table th,
+.items-table th,
+.QLSP_admin-table th,
+.QLSP_table-header table,
+.QLNH_admin-table th,
+.QLNH_table-header table,
+.QLDH_admin-table thead th,
+.QLGB_admin-table thead th,
+.TK_admin-table th,
+.BCDT_table th,
+.QLNH_bangNhap th,
+#page-categories .table thead tr th,
+#page-customers .table thead tr th {
+    background: var(--lux-paper);
+    color: var(--lux-ink);
+    font-family: var(--lux-font-ui);
+    font-weight: 600;
+    border-bottom: 1.5px solid var(--lux-brass-light);
+}
+
+.data-table tr:hover,
+.QLSP_admin-table tbody tr:hover,
+.QLNH_table-content tr:hover,
+.QLDH_table-content tr:hover,
+.QLGB_table-content tr:hover,
+.TK_admin-table tbody tr:hover,
+#page-categories .table tbody tr:hover,
+#page-customers .table tbody tr:hover {
+    background: var(--lux-brass-wash);
+}
+
+.table-container,
+.QLSP_table-header,
+.QLNH_table-header,
+.QLDH_table-header,
+.QLGB_table-header {
+    box-shadow: var(--lux-shadow);
+}
+
+/* ---------------------------------------------------------------------
+   FORM — trạng thái focus đồng bộ về brass thay vì tím/xanh/lục
+--------------------------------------------------------------------- */
+
+.form-group input:focus,
+.form-group textarea:focus,
+.form-group select:focus,
+.QLSP_modal-content input:focus,
+.QLSP_modal-content select:focus,
+.QLSP_modal-content textarea:focus,
+.QLNH_form-group input:focus,
+.QLNH_form-group select:focus,
+.QLNH_selectSP:focus,
+.QLNH_selectSP-input:focus,
+.QLNH_bangNhap input:focus,
+.QLNH_loc-ngay-group input[type="date"]:focus,
+.nguong-input:focus,
+.form-group input[type="text"]:focus,
+.form-group input[type="password"]:focus {
+    border-color: var(--lux-brass) !important;
+    box-shadow: 0 0 0 3px var(--lux-brass-wash) !important;
+}
+
+/* ---------------------------------------------------------------------
+   MODAL — viền mảnh + vệt brass phía trên thay cho khối bóng nặng
+--------------------------------------------------------------------- */
+
+.modal-content,
+.QLSP_modal-content,
+.QLNH_modal-content,
+.QLDH_modal-content {
+    border-top: 3px solid var(--lux-brass);
+    box-shadow: var(--lux-shadow-lift);
+}
+
+.modal-header,
+.QLNH_modal-header {
+    background: var(--lux-paper);
+    border-bottom: 1px solid var(--lux-line);
+}
+
+.QLSP_modal-header h2,
+.QLNH_modal-header h2,
+.modal-header h2 {
+    color: var(--lux-ink);
+}
+
+.close-btn:hover,
+.modal-close:hover,
+.QLSP_close-btn:hover {
+    color: var(--lux-brass-dark);
+    background: var(--lux-brass-wash);
+}
+
+/* ---------------------------------------------------------------------
+   BIỂU ĐỒ DOANH THU
+--------------------------------------------------------------------- */
+
+.BCDT_bar {
+    background: linear-gradient(135deg, var(--lux-brass) 0%, var(--lux-brass-dark) 100%);
+}
+
+/* ---------------------------------------------------------------------
+   TRANG ĐĂNG NHẬP
+--------------------------------------------------------------------- */
+
+.dark-section {
+    background: linear-gradient(150deg, var(--lux-ink) 0%, var(--lux-ink-2) 60%, var(--lux-ink-soft) 100%);
+}
+
+.dark-text h1 {
+    font-family: var(--lux-font-display);
+    font-weight: 600;
+    background: linear-gradient(135deg, var(--lux-on-ink) 0%, var(--lux-brass-light) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.feature-icon {
+    background: var(--lux-brass-wash);
+    border: 1px solid var(--lux-brass-dark);
+    color: var(--lux-brass-light);
+}
+
+.login-section { background: var(--lux-paper); }
+
+.login-box {
+    background: var(--lux-card);
+    border: 1px solid var(--lux-line-soft);
+    box-shadow: var(--lux-shadow-lift);
+}
+
+.login-header h1 {
+    color: var(--lux-ink);
+    font-weight: 600;
+}
+
+.login-header p { color: var(--lux-muted); }
+
+.form-group input[type="text"],
+.form-group input[type="password"] {
+    background: var(--lux-paper);
+    border-color: var(--lux-line);
+}
+
+.login-btn {
+    background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%) !important;
+    border: 1px solid rgba(59, 130, 246, 0.5) !important;
+    color: #ffffff !important;
+    box-shadow: 0 6px 18px rgba(29, 78, 216, 0.30) !important;
+    border-radius: 6px;
+    letter-spacing: 0.5px;
+    font-weight: 600;
+    transition: all 0.25s ease;
+}
+
+.login-btn:hover {
+    background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%) !important;
+    border-color: rgba(147, 197, 253, 0.9) !important;
+    box-shadow: 0 8px 24px rgba(37, 99, 235, 0.40) !important;
+    transform: translateY(-1.5px);
+}
+
+.forgot-password:hover { color: var(--lux-brass-dark); }
+
+/* ---------------------------------------------------------------------
+   TAB TRẠNG THÁI TỒN KHO — gạch chân theo brass
+--------------------------------------------------------------------- */
+
+.TK_tab-status button[data-type="all"]:hover,
+.TK_tab-status button[data-type="all"].active {
+    color: var(--lux-brass-dark);
+}
+.TK_tab-status button[data-type="all"].active::after {
+    background-color: var(--lux-brass);
+}

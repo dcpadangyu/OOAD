@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đăng nhập</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="stylesheet" href="assets/css/DangNhap_Admin.css">
+    <link rel="stylesheet" href="assets/css/admin-luxury-theme.css">
+</head>
+
+<body>
+    <div class="main-container">
+        <!-- Phần nền đen bên trái -->
+        <div class="dark-section">
+            <div class="dark-content">
+                <div class="dark-text">
+                    <h1>Shoe-Store</h1>
+                    <h2>Chào mừng bạn trở lại</h2>
+                    <p>Đăng nhập để truy cập vào hệ thống quản trị và quản lý dữ liệu của bạn một cách an toàn và hiệu quả.</p>
+                    <div class="features">
+                        <div class="feature-item">
+                            <div class="feature-icon">
+                                <i class="fa-solid fa-shield-halved fa-2x"></i>
+                            </div>
+                            <span>Bảo mật cao</span>
+                        </div>
+                        <div class="feature-item">
+                            <div class="feature-icon">
+                                <i class="fa-solid fa-desktop fa-2x"></i>
+                            </div>
+                            <span>Giao diện thân thiện</span>
+                        </div>
+                        <div class="feature-item">
+                            <div class="feature-icon">
+                                <i class="fa-solid fa-bolt fa-2x"></i>
+                            </div>
+                            <span>Hiệu suất cao</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Phần đăng nhập bên phải -->
+        <div class="login-section">
+            <div class="login-container">
+                <div class="login-box">
+                    <div class="login-header">
+                        <h1>Đăng nhập</h1>
+                        <p>Vui lòng nhập thông tin đăng nhập</p>
+                    </div>
+
+                    <form class="login-form" id="loginForm">
+                        <div class="form-group">
+                            <label for="username">Tên đăng nhập</label>
+                            <div class="input-wrapper">
+                                <div class="input-icon">
+                                    <i class="fa-solid fa-user"></i>
+                                </div>
+                                <input type="text" id="username" name="username" required>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="password">Mật khẩu</label>
+                            <div class="input-wrapper">
+                                <div class="input-icon">
+                                    <i class="fa-solid fa-lock"></i>
+                                </div>
+                                <input type="password" id="password" name="password" required>
+                            </div>
+                        </div>
+
+                        <div class="form-group checkbox-group">
+                            <input type="checkbox" id="remember" name="remember">
+                            <label for="remember">Ghi nhớ đăng nhập</label>
+                        </div>
+
+                        <button type="submit" class="login-btn">Đăng nhập</button>
+                    </form>
+
+                    <div class="login-footer">
+                        <a href="#" class="forgot-password">Quên mật khẩu?</a>
+                        <span class="footer-separator">|</span>
+                        <a href="DangNhap_NhanVien.html">Đăng nhập nhân viên</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="notification" id="notification"></div>
+
+    <script src="assets/js/DangNhap_Admin.js"></script>
+</body>
+
+</html>

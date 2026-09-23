@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<base href="../">
+<title>Shoe Store - Thông tin cá nhân</title>
+    <link rel="stylesheet" href="assets/css/user/variables.css">
+  <link rel="stylesheet" href="assets/css/user/base.css">
+<link rel="stylesheet" href="assets/css/user/common.css">
+  <link rel="stylesheet" href="assets/css/user/header.css">
+  <link rel="stylesheet" href="assets/css/user/footer.css">
+
+<link rel="stylesheet" href="assets/css/user/profile.css">
+  <link rel="stylesheet" href="assets/css/user/theme.css">
+  <link rel="stylesheet" href="assets/css/user/modern.css">
+</head>
+<body>
+<div data-user-component="header"></div>
+<section class="page-section" id="section-thongtincanhan">
+<div class="profile-layout">
+<aside class="profile-sidebar">
+<div class="user-info">
+<img alt="avatar" id="sideAvatar-thongtin" src="./assets/img/Avatar/avtuser.jpg"/>
+<h4 id="sideUsername-thongtin">Người dùng</h4>
+</div>
+<ul class="sidebar-menu">
+<li><a href="pages/profile.html">Hồ Sơ</a></li>
+<li><a href="pages/address.html">Địa Chỉ Giao Hàng </a></li>
+<li class="active"><a href="pages/personal-info.html">Thông Tin Cá Nhân</a></li>
+<li><a href="pages/change-password.html">Đổi Mật Khẩu</a></li>
+</ul>
+</aside>
+<section class="profile-content single-column">
+<div class="profile-header">
+<h2>Thông tin cá nhân</h2>
+<button class="edit-btn" id="editProfileBtn">Cập nhật thông tin</button>
+</div>
+<p class="subtitle">Bạn có thể chỉnh thông tin cá nhân của mình</p>
+<form class="profile-form" id="profileForm">
+<div class="form-group">
+<label>Tên hiển thị</label>
+<input id="nameInput" readonly="" type="text"/>
+</div>
+<div class="form-group">
+<label>Email</label>
+<input id="emailInput" readonly="" type="email"/>
+</div>
+<div class="form-group">
+<label>Số điện thoại</label>
+<input id="phoneInput" placeholder="Nhập số điện thoại" readonly="" type="text"/>
+</div>
+<div class="form-group">
+<label>Địa chỉ</label>
+<input id="addressInput" placeholder="Số nhà, đường, phường, thành phố" readonly="" type="text"/>
+</div>
+<div class="form-actions hidden" id="profileFormActions">
+<button class="save-btn" type="submit">Lưu</button>
+<button class="cancel-btn" id="cancelProfileBtn" type="button">Hủy</button>
+</div>
+</form>
+</section>
+</div>
+</section>
+<div data-user-component="footer"></div>
+  <script src="assets/js/user/core/site-shell.js"></script>
+  <script src="assets/js/user/core/account-session.js"></script>
+  <script src="assets/js/user/core/site-header.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script src="assets/js/user/account/personal-info.js"></script>
+</body>
+</html>

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<base href="../">
+<title>Shoe Store - Hồ sơ</title>
+    <link rel="stylesheet" href="assets/css/user/variables.css">
+  <link rel="stylesheet" href="assets/css/user/base.css">
+<link rel="stylesheet" href="assets/css/user/common.css">
+  <link rel="stylesheet" href="assets/css/user/header.css">
+  <link rel="stylesheet" href="assets/css/user/footer.css">
+
+<link rel="stylesheet" href="assets/css/user/profile.css">
+  <link rel="stylesheet" href="assets/css/user/theme.css">
+  <link rel="stylesheet" href="assets/css/user/modern.css">
+</head>
+<body>
+<div data-user-component="header"></div>
+<section class="page-section" id="section-hoso">
+<div class="profile-layout">
+<aside class="profile-sidebar">
+<div class="user-info">
+<img alt="avatar" id="sideAvatar-hoso" src="./assets/img/Avatar/avtuser.jpg"/>
+<h4 id="sideUsername-hoso">Người dùng</h4>
+</div>
+<ul class="sidebar-menu">
+<li class="active"><a href="pages/profile.html">Hồ Sơ</a></li>
+<li><a href="pages/address.html">Địa Chỉ Giao Hàng</a></li>
+<li><a href="pages/personal-info.html">Thông Tin Cá Nhân</a></li>
+<li><a href="pages/change-password.html">Đổi Mật Khẩu</a></li>
+</ul>
+</aside>
+<section class="profile-content single-column">
+<h2>Thông tin tài khoản của tôi</h2>
+<div class="info-box">
+<div class="info-row"><label>Tên cá nhân:</label> <span id="usernameDisplay-hoso"></span></div>
+<div class="info-row"><label>Email:</label> <span id="emailDisplay-hoso"></span></div>
+<div class="info-row"><label>Số điện thoại:</label><span id="phoneDisplay-hoso"></span></div>
+<div class="info-row"><label>Địa chỉ hiện tại:</label> <span id="addressDisplay-hoso"></span></div>
+</div>
+</section>
+</div>
+</section>
+<div data-user-component="footer"></div>
+  <script src="assets/js/user/core/site-shell.js"></script>
+  <script src="assets/js/user/core/account-session.js"></script>
+  <script src="assets/js/user/core/site-header.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script src="assets/js/user/account/profile.js"></script>
+</body>
+</html>

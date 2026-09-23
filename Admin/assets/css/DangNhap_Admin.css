@@ -1,0 +1,521 @@
+/* Reset và base styles */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #f0f0f0;
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+}
+
+
+/* Main container chia đôi màn hình */
+
+.main-container {
+    display: flex;
+    min-height: 100vh;
+}
+
+
+/* Phần nền đen bên trái */
+
+.dark-section {
+    flex: 3;
+    background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    box-shadow: inset -2px 0 4px rgba(0, 0, 0, 0.3);
+}
+
+.dark-content {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 60px;
+}
+
+.dark-text {
+    max-width: 500px;
+    color: #ffffff;
+    text-align: left;
+}
+
+.dark-text h1 {
+    font-size: 48px;
+    font-weight: 700;
+    margin: 0 0 20px 0;
+    background: linear-gradient(135deg, #ffffff 0%, #cccccc 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.dark-text h2 {
+    font-size: 24px;
+    font-weight: 400;
+    margin: 0 0 30px 0;
+    color: #e0e0e0;
+}
+
+.dark-text p {
+    font-size: 16px;
+    line-height: 1.6;
+    margin: 0 0 40px 0;
+    color: #b0b0b0;
+}
+
+.features {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.feature-item {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 15px 0;
+}
+
+.feature-icon {
+    width: 40px;
+    height: 40px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #ffffff;
+    box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.2);
+}
+
+.feature-item span {
+    font-size: 16px;
+    font-weight: 500;
+    color: #ffffff;
+}
+
+
+/* Phần đăng nhập bên phải */
+
+.login-section {
+    flex: 2;
+    background: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    box-shadow: inset 2px 0 4px rgba(0, 0, 0, 0.1);
+}
+
+
+/* Container chính */
+
+.login-container {
+    width: 100%;
+    max-width: 100%;
+    padding: 40px;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
+/* Hộp đăng nhập */
+
+.login-box {
+    background: #f8f8f8;
+    border-radius: 20px;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1), inset 0 -2px 4px rgba(0, 0, 0, 0.1), 0 8px 16px rgba(0, 0, 0, 0.1);
+    padding: 60px;
+    border: 1px solid #e0e0e0;
+    position: relative;
+    width: 100%;
+    max-width: 500px;
+    min-height: 600px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+
+/* Header */
+
+.login-header {
+    text-align: center;
+    margin-bottom: 50px;
+    position: relative;
+    z-index: 2;
+}
+
+.login-header h1 {
+    color: #333;
+    font-size: 36px;
+    font-weight: 700;
+    margin-bottom: 15px;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.login-header p {
+    color: #666;
+    font-size: 16px;
+    font-weight: 500;
+}
+
+
+/* Form */
+
+.login-form {
+    margin-bottom: 40px;
+}
+
+.form-group {
+    margin-bottom: 30px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 10px;
+    color: #333;
+    font-weight: 600;
+    font-size: 16px;
+}
+
+
+/* Input wrapper */
+
+.input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.input-icon {
+    position: absolute;
+    left: 20px;
+    z-index: 2;
+    color: #666;
+    transition: color 0.3s ease;
+    pointer-events: none;
+}
+
+.input-icon svg {
+    display: block;
+    width: 24px;
+    height: 24px;
+}
+
+.form-group input[type="text"],
+.form-group input[type="password"] {
+    width: 100%;
+    padding: 16px 20px 16px 56px;
+    border: 2px solid #e0e0e0;
+    border-radius: 12px;
+    font-size: 18px;
+    transition: all 0.3s ease;
+    background: #f8f8f8;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+    position: relative;
+}
+
+.form-group input[type="text"]:focus,
+.form-group input[type="password"]:focus {
+    outline: none;
+    border-color: #333;
+    background: #ffffff;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1), 0 0 0 2px rgba(0, 0, 0, 0.1);
+}
+
+
+/* Khi input được focus */
+
+.form-group input[type="text"]:focus~.input-icon,
+.form-group input[type="password"]:focus~.input-icon {
+    color: #333;
+    transform: scale(1.1);
+}
+
+
+/* Khi input có nội dung */
+
+.form-group input[type="text"]:not(:placeholder-shown)~.input-icon,
+.form-group input[type="password"]:not(:placeholder-shown)~.input-icon {
+    color: #333;
+}
+
+
+/* Checkbox group */
+
+.checkbox-group {
+    display: flex;
+    align-items: center;
+    margin-bottom: 40px;
+}
+
+.checkbox-group input[type="checkbox"] {
+    margin-right: 12px;
+    transform: scale(1.5);
+}
+
+.checkbox-group label {
+    margin-bottom: 0;
+    cursor: pointer;
+    color: #666;
+    font-size: 16px;
+}
+
+
+/* Button đăng nhập */
+
+.login-btn {
+    width: 100%;
+    padding: 18px;
+    background: #333;
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-size: 18px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    position: relative;
+    box-shadow: inset 0 2px 4px rgba(255, 255, 255, 0.2), inset 0 -2px 4px rgba(0, 0, 0, 0.2), 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.login-btn:hover {
+    background: #555;
+    transform: translateY(-1px);
+    box-shadow: inset 0 2px 4px rgba(255, 255, 255, 0.2), inset 0 -2px 4px rgba(0, 0, 0, 0.2), 0 6px 12px rgba(0, 0, 0, 0.3);
+}
+
+.login-btn:active {
+    transform: translateY(0);
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2), inset 0 -2px 4px rgba(255, 255, 255, 0.1);
+}
+
+.login-btn:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+
+/* Footer */
+
+.login-footer {
+    text-align: center;
+    padding-top: 30px;
+    border-top: 1px solid #e0e0e0;
+    margin-top: 20px;
+}
+
+.forgot-password {
+    color: #666;
+    text-decoration: none;
+    font-size: 16px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.forgot-password:hover {
+    color: #333;
+    text-decoration: underline;
+    transform: translateY(-1px);
+}
+
+
+/* Notification */
+
+.notification {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 15px 20px;
+    border-radius: 8px;
+    color: white;
+    font-weight: 500;
+    z-index: 1000;
+    transform: translateX(400px);
+    transition: transform 0.3s ease;
+    max-width: 300px;
+}
+
+.notification.show {
+    transform: translateX(0);
+}
+
+.notification.success {
+    background: #4CAF50;
+    box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.2), inset 0 -1px 2px rgba(0, 0, 0, 0.2), 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.notification.error {
+    background: #f44336;
+    box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.2), inset 0 -1px 2px rgba(0, 0, 0, 0.2), 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.notification.warning {
+    background: #ff9800;
+    box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.2), inset 0 -1px 2px rgba(0, 0, 0, 0.2), 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+
+/* Responsive */
+
+@media (max-width: 768px) {
+    .main-container {
+        flex-direction: column;
+    }
+    .dark-section {
+        min-height: 50vh;
+        flex: 1;
+    }
+    .login-section {
+        min-height: 50vh;
+        flex: 1;
+    }
+    .dark-content {
+        padding: 40px 30px;
+    }
+    .dark-text h1 {
+        font-size: 36px;
+    }
+    .dark-text h2 {
+        font-size: 20px;
+    }
+    .dark-text p {
+        font-size: 14px;
+    }
+    .features {
+        gap: 15px;
+    }
+    .feature-item {
+        padding: 10px 0;
+    }
+    .feature-icon {
+        width: 35px;
+        height: 35px;
+    }
+}
+
+@media (max-width: 480px) {
+    .login-container {
+        padding: 20px;
+        height: auto;
+    }
+    .login-box {
+        padding: 40px 30px;
+        min-height: auto;
+    }
+    .login-header h1 {
+        font-size: 28px;
+    }
+    .login-header p {
+        font-size: 14px;
+    }
+    .form-group input[type="text"],
+    .form-group input[type="password"] {
+        padding: 14px 16px 14px 48px;
+        font-size: 16px;
+    }
+    .input-icon {
+        left: 16px;
+    }
+    .input-icon svg {
+        width: 20px;
+        height: 20px;
+    }
+    .login-btn {
+        padding: 16px;
+        font-size: 16px;
+    }
+    .notification {
+        right: 10px;
+        left: 10px;
+        max-width: none;
+    }
+    .dark-content {
+        padding: 30px 20px;
+    }
+    .dark-text h1 {
+        font-size: 28px;
+    }
+    .dark-text h2 {
+        font-size: 18px;
+    }
+    .dark-text p {
+        font-size: 13px;
+    }
+    .feature-icon {
+        width: 30px;
+        height: 30px;
+    }
+    .feature-item span {
+        font-size: 14px;
+    }
+}
+
+
+/* Animation cho form */
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.login-box {
+    animation: fadeInUp 0.6s ease;
+}
+
+
+/* Loading state */
+
+.loading {
+    position: relative;
+    pointer-events: none;
+}
+
+.loading::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 20px;
+    height: 20px;
+    margin: -10px 0 0 -10px;
+    border: 2px solid transparent;
+    border-top: 2px solid white;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}

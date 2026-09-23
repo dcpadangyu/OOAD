@@ -1,0 +1,343 @@
+/* Chỉ áp dụng khi body là trang đăng ký riêng (không phải trong index.html) */
+body:not(:has(header)):not(:has(footer)) {
+    font-family: Roboto, "Segoe UI", Arial, sans-serif;
+    background: #f8fafc;
+    margin: 0;
+    padding: 0;
+}
+
+/* Page section styles - để sections hoạt động trong index.html */
+.page-section {
+    min-height: calc(100vh - 200px);
+    padding: 40px 20px;
+    background: #f8fafc;
+}
+
+.page-section .main-content {
+    margin-top: 0;
+    margin-bottom: 0;
+}
+nav {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 30px;
+    padding: 15px 0;
+}
+
+nav a {
+    color: #fff;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 15px;
+    position: relative;
+    transition: color 0.3s ease;
+}
+
+nav a::after {
+    content: "";
+    position: absolute;
+    bottom: -4px;
+    left: 0;
+    width: 0%;
+    height: 2px;
+    background: #fff;
+    transition: width 0.3s ease;
+}
+
+nav a:hover {
+    color: #e0e0ff;
+}
+
+nav a:hover::after {
+    width: 100%;
+}
+
+/* .top-nav,
+.logo,
+.search-box,
+.menu a{
+    color: #fff !important;
+} */
+/* header {
+      background: #4f46e5;
+      color: white;
+      padding: 10px 0;
+      text-align: center;
+    }
+
+    nav a {
+      color: white;
+      text-decoration: none;
+      margin: 0 15px;
+      font-size: 15px;
+    }
+
+    nav a:hover {
+      text-decoration: underline;
+    } */
+
+.main-content {
+    display: flex;
+    justify-content: center;
+    align-items: stretch;
+    max-width: 1200px;
+    margin: 80px auto;
+    background: white;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.form-container {
+    flex: 0.8;
+    padding: 40px 35px;
+    text-align: center;
+}
+
+h2 {
+    color: #222;
+    margin-bottom: 25px;
+}
+
+.form-login {
+    margin: 0 30px;
+}
+
+.input-group {
+    text-align: left;
+    margin-bottom: 18px;
+}
+
+label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 6px;
+    color: #333;
+    font-size: 14px;
+}
+
+input,
+textarea {
+    width: 94%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 15px;
+    outline: none;
+    resize: none;
+    transition: border 0.2s;
+}
+
+input:focus,
+textarea:focus {
+    border-color: #4f46e5;
+    box-shadow: 0 0 4px #6366f1;
+}
+
+#nutdky {
+    width: 100%;
+    background: #4f46e5;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 12px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+#nutdky:hover {
+    background: #4338ca;
+}
+
+.login-link {
+    margin-top: 15px;
+    font-size: 14px;
+}
+
+.login-link a {
+    color: #4f46e5;
+    text-decoration: none;
+}
+
+.login-link a:hover {
+    text-decoration: underline;
+}
+
+input,
+textarea,
+select,
+button {
+    font-family: 'Roboto', sans-serif;
+}
+
+label.required::after {
+    content: " *";
+    color: red;
+    font-weight: 500;
+}
+
+.image-side {
+    flex: 1.2;
+    background: url("../img/background-login.jpg") center/cover no-repeat;
+    min-height: 500px;
+}
+
+
+@media (max-width: 768px) {
+    .main-content {
+        flex-direction: column;
+    }
+
+    .image-side {
+        height: 200px;
+    }
+}
+
+
+
+/* Kiểu chữ cho thông báo lỗi */
+.error-message {
+    color: red;
+    font-size: 0.9em;
+    margin-top: 5px;
+    display: block; 
+    min-height: 18px; 
+}
+
+
+.input-group input.input-error,
+.input-group textarea.input-error {
+    border: 2px solid red;
+    box-shadow: 0 0 4px rgba(255, 0, 0, 0.5);
+}
+
+/* Tô viền xanh khi input/textarea đã vượt qua kiểm tra (tùy chọn) */
+.input-group input.input-success,
+.input-group textarea.input-success {
+    border: 2px solid #4caf50;
+}
+
+/* Đảm bảo khi có lỗi, viền focus màu xanh mặc định không ghi đè viền đỏ */
+.input-group input.input-error:focus,
+.input-group textarea.input-error:focus {
+    border-color: red;
+    box-shadow: 0 0 4px rgba(255, 0, 0, 0.5);
+}
+.password-rules {
+    display: none;
+    /* Ẩn toàn bộ khi trang vừa load */
+    list-style: none;
+    padding-left: 10px;
+    margin: 6px 0;
+    font-size: 13px;
+    color: #dc2626;
+    transition: all 0.3s ease;
+}
+
+.password-rules li.valid {
+    color: #16a34a;
+}
+
+/* Luxury sneaker palette for registration */
+#section-register.page-section {
+    --auth-ink: #171717;
+    --auth-muted: #6f6b63;
+    --auth-paper: #fbfaf7;
+    --auth-line: #d8d2c7;
+    --auth-gold: #b08d57;
+    --auth-wine: #7c2638;
+    min-height: calc(100vh - 75px);
+    padding: 54px 20px;
+    background: radial-gradient(circle at 88% 10%, rgba(176, 141, 87, 0.18), transparent 32%), linear-gradient(135deg, #171717 0%, #282621 52%, #49352c 100%);
+}
+
+#section-register .main-content {
+    max-width: 1080px;
+    margin: 0 auto;
+    background: var(--auth-paper);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    border-radius: 4px;
+    box-shadow: 0 24px 70px rgba(0, 0, 0, 0.38);
+}
+
+#section-register .form-container {
+    padding: 42px 46px;
+}
+
+#section-register h2 {
+    color: var(--auth-ink);
+    letter-spacing: 0.06em;
+    font-size: 24px;
+}
+
+#section-register label {
+    color: var(--auth-ink);
+}
+
+#section-register input,
+#section-register textarea {
+    width: 94%;
+    border: 1px solid var(--auth-line);
+    border-radius: 2px;
+    background: #fff;
+    color: var(--auth-ink);
+}
+
+#section-register input:focus,
+#section-register textarea:focus {
+    border-color: var(--auth-gold);
+    box-shadow: 0 0 0 3px rgba(176, 141, 87, 0.16);
+}
+
+#section-register #nutdky {
+    background: var(--auth-wine);
+    border-radius: 2px;
+    letter-spacing: 0.08em;
+}
+
+#section-register #nutdky:hover {
+    background: #5f1c2b;
+    filter: none;
+    transform: translateY(-1px);
+}
+
+#section-register .login-link {
+    color: var(--auth-muted);
+}
+
+#section-register .login-link a {
+    color: var(--auth-wine);
+    font-weight: 700;
+}
+
+#section-register .image-side {
+    background-image: linear-gradient(rgba(23, 23, 23, 0.12), rgba(23, 23, 23, 0.42)), url("../img/background-login.jpg");
+    background-position: center;
+}
+
+#section-register .error-message {
+    color: #a62d3f;
+}
+
+#section-register .input-group input.input-error,
+#section-register .input-group textarea.input-error {
+    border-color: #a62d3f;
+    box-shadow: 0 0 0 3px rgba(166, 45, 63, 0.12);
+}
+
+#section-register .input-group input.input-success,
+#section-register .input-group textarea.input-success {
+    border-color: #768c63;
+}
+
+@media (max-width: 768px) {
+    #section-register.page-section {
+        padding: 28px 14px;
+    }
+
+    #section-register .form-container {
+        padding: 32px 22px;
+    }
+}

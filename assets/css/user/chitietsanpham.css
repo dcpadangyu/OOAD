@@ -1,0 +1,146 @@
+.detail-container {
+  padding: 40px;
+  display: flex;
+  justify-content: center;
+}
+
+.product-info {
+  display: flex;
+  gap: 40px;
+  max-width: 1100px;
+  background: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 0 8px rgba(0,0,0,0.1);
+}
+.back-button {
+    display: inline-block;
+    padding: 10px 25px; 
+    font-size: 16px;
+    font-weight: bold;
+    color: #007BFF; 
+    text-align: center;
+    text-decoration: none;
+    background-color: transparent; 
+    border: 2px solid #007BFF; 
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.25s ease;
+}
+
+.back-button:hover {
+    background-color: #007BFF; 
+    color: white; 
+} 
+.product-info .left img {
+  width: 380px;
+  border-radius: 10px;
+}
+
+.product-info .right {
+  flex: 1;
+}
+
+.product-info h2 {
+  font-size: 24px;
+  margin-bottom: 10px;
+}
+
+.product-info .desc {
+  margin-bottom: 15px;
+  font-style: italic;
+  color: #555;
+}
+
+.product-info p {
+  margin-bottom: 8px;
+  font-size: 16px;
+}
+
+.price {
+  font-size: 26px;
+  color: #e60000;
+  font-weight: bold;
+  margin-top: 20px;
+  margin-bottom: 25px;
+}
+
+.actions {
+  display: flex;
+  gap: 15px;
+}
+
+.actions button {
+  padding: 12px 20px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+#add-to-cart {
+  background-color: #333;
+  color: white;
+}
+
+#buy-now {
+  background-color: #e60000;
+  color: white;
+}
+
+/* --- TAB PHẦN MÔ TẢ & THÔNG SỐ KỸ THUẬT --- */
+.product-info-tabs {
+  display: flex;
+  gap: 10px;
+  border-bottom: 2px solid #ddd;
+  margin-top: 40px;
+}
+
+.product-info-tabs .tab {
+  background: none;
+  border: none;
+  padding: 10px 20px;
+  font-weight: bold;
+  cursor: pointer;
+  font-size: 16px;
+  color: #444;
+}
+
+.product-info-tabs .tab.active {
+  border-bottom: 3px solid #e60000;
+  color: #e60000;
+}
+
+/* --- NỘI DUNG TAB --- */
+.tab-content {
+  padding: 20px 0;
+  animation: fadeIn 0.3s ease;
+}
+
+.tab-content.hidden {
+  display: none;
+}
+
+/* --- BẢNG THÔNG SỐ KỸ THUẬT --- */
+.tab-content table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 15px;
+}
+
+.tab-content table td {
+  padding: 10px 8px;
+  border-bottom: 1px solid #ddd;
+}
+
+.tab-content table td:first-child {
+  width: 200px;
+  font-weight: bold;
+  color: #222;
+}
+
+/* --- HIỆU ỨNG NHẸ --- */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}

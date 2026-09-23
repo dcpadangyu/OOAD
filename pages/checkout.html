@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<base href="../">
+<title>Shoe Store - Thanh toán</title>
+    <link rel="stylesheet" href="assets/css/user/variables.css">
+  <link rel="stylesheet" href="assets/css/user/base.css">
+<link rel="stylesheet" href="assets/css/user/common.css">
+  <link rel="stylesheet" href="assets/css/user/header.css">
+  <link rel="stylesheet" href="assets/css/user/footer.css">
+
+<link rel="stylesheet" href="assets/css/user/indexGIoHang.css">
+<link rel="stylesheet" href="assets/css/user/GioHang.css">
+<link rel="stylesheet" href="assets/css/user/TrangThaiThanhToan.css">
+<link rel="stylesheet" href="assets/css/user/TrangHienThi.css">
+<link rel="stylesheet" href="assets/css/user/thanhtoan.css">
+  <link rel="stylesheet" href="assets/css/user/theme.css">
+  <link rel="stylesheet" href="assets/css/user/modern.css">
+</head>
+<body >
+<div data-user-component="header"></div>
+<div id="ThanhToan">
+<div id="content_center_menu_shop">
+<h2>
+<button class="ToiGioHangBtn Menu_Center">Giỏ hàng</button> &gt;
+        <button class="active_menu_center">Đặt Hàng</button> &gt;
+        <button class="Menu_Center Succes">Hoàn thành</button>
+<h2>
+</h2></h2></div>
+<div id="element_center_shop">
+<div id="all_left-thanhtoan">
+<div id="ThanhToan_element_center_left">
+<div class="ThongTinThanhToan">Thông Tin thanh toán</div>
+<div class="diachi">địa chỉ</div>
+<div>
+<button class="more_address">Giao địa chỉ khác</button>
+</div>
+</div>
+</div>
+<div id="all-right-thanhtoan">
+<div id="element_center_right-thanhtoan">
+<div class="list_danhsach danhsach"></div>
+<div class="Tongtien_thanhtoan">Tổng: <span class="SumCart SumCart-thanhtoan_tong"></span></div>
+<input checked="" class="payment-radio-hidden" id="cod" name="phuong-thuc-tt" type="radio"/>
+<input class="payment-radio-hidden" id="paybank" name="phuong-thuc-tt" type="radio"/>
+<input class="payment-radio-hidden" id="inshop" name="phuong-thuc-tt" type="radio"/>
+<div class="payment-option payment-option-cod">
+<label class="border-label" for="cod">Thanh toán khi nhận hàng</label>
+<div id="in4cod">
+              Quý khách hàng xem và kiểm tra hàng thoải mái trước khi quyết định thanh toán. Chúng tôi khuyến khích
+              khách
+              hàng vui lòng bóc kiện hàng, xem và kiểm tra hàng trước khi thanh toán ( một số trường hợp quý khách để lộ
+              thông tin đặt hàng trên bài post fanpage facebook hoặc tại một số trang giả mạo, họ sẽ gửi hàng nhái, hàng
+              giả tới địa chỉ nhận hàng của quý khách hàng mà không cho xem hàng).
+            </div>
+</div>
+<div class="payment-option payment-option-paybank">
+<label class="border-label" for="paybank">Thanh toán chuyển khoản</label>
+<div id="in4paybank">
+              Bạn ở Hà Nội và muốn tặng quà cho bạn bè hoặc người thân của mình tại TP HCM, bạn ở Huế và muốn tặng quà
+              bạn
+              mình ở Đà Nẵng, bạn muốn bên trong quà tặng của bạn có 1 tấm thiệp ghi những lời chúc tốt đẹp nhất của bạn
+              tới người thân! Rất đơn giản, chúng tôi có giải pháp cho bạn, hãy nhấn ” ĐẶT HÀNG” , chúng tôi sẽ liên hệ
+              lại với bạn ngay sau khi nhận được thông tin đơn hàng, Thông tin tài khoản chuyển khoản sẽ hiển thị sau
+              khi
+              bạn ” ĐẶT HÀNG”
+            </div>
+</div>
+<div class="payment-option payment-option-inshop">
+<label class="border-label" for="inshop">Nhận hàng và thanh toán tại cửa hàng</label>
+<div id="in4inshop">
+              Quý khách hàng muốn xem và nhận sản phẩm tại cửa hàng vui lòng ghi chú địa chỉ cửa hàng muốn nhận sản phẩm
+              tại phần ghi chú sau
+              <div>Cổng trước đại học sài gòn đường An Dương Vương</div>
+<div>Cổng trước đại học sài gòn đường Nguyễn Trải</div>
+<div>Cổng trước đại học hoạc liên hệ hotline 0xxxxxx </div>
+</div>
+</div>
+<div id="dathangck">
+<button class="CK_BTN chuyenqua_chuyenkhoan">Đặt hàng</button>
+</div>
+<div id="dathangCod">
+<button class="TM_BTN chuyenqua_tienmat">Đặt hàng</button>
+</div>
+<div id="dathangch">
+<button class="CH_BTN chuyenqua_cuahang">Đặt hàng</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div data-user-component="footer"></div>
+<script src="assets/js/user/core/site-shell.js"></script>
+<script src="assets/js/user/core/account-session.js"></script>
+<script src="assets/js/user/core/site-header.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="assets/js/user/cart/cart.js"></script>
+<script src="assets/js/user/payment/payment.js"></script>
+  <script src="assets/js/user/payment/checkout.js"></script>
+</body>
+</html>

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<base href="../">
+<title>Shoe Store - Đăng nhập</title>
+    <link rel="stylesheet" href="assets/css/user/variables.css">
+  <link rel="stylesheet" href="assets/css/user/base.css">
+<link rel="stylesheet" href="assets/css/user/common.css">
+  <link rel="stylesheet" href="assets/css/user/header.css">
+  <link rel="stylesheet" href="assets/css/user/footer.css">
+
+
+
+<link rel="stylesheet" href="assets/css/user/login.css">
+  <link rel="stylesheet" href="assets/css/user/theme.css">
+  <link rel="stylesheet" href="assets/css/user/modern.css">
+</head>
+<body>
+<div data-user-component="header"></div>
+<section class="page-section" id="section-login">
+<div class="login-box">
+<h2>ĐĂNG NHẬP</h2>
+<p class="sub">Vui lòng nhập thông tin đăng nhập</p>
+<form action="#" id="login-form" method="post">
+<div class="input-group">
+<label class="required" for="input-login">Tên đăng nhập / Email</label>
+<input id="input-login" name="input-identifier" type="text" autocomplete="username" required>
+<span class="error-message"></span>
+</div>
+<div class="input-group">
+<label class="required" for="password-login">Mật khẩu</label>
+<input id="password-login" name="password" type="password" autocomplete="current-password" required>
+<span class="error-message"></span>
+</div>
+<div class="remember">
+<input id="remember-login" type="checkbox" autocomplete="off">
+<label for="remember-login">Ghi nhớ đăng nhập</label>
+</div>
+<button id="nutdnhap" type="submit">ĐĂNG NHẬP</button>
+<div class="register">
+<p>Bạn chưa có tài khoản?
+            <a href="pages/register.html">Đăng ký ngay</a>
+</p>
+</div>
+</form>
+</div>
+</section>
+  <div data-user-component="footer"></div>
+  <script src="assets/js/user/core/site-shell.js"></script>
+  <script src="assets/js/user/core/account-session.js"></script>
+  <script src="assets/js/user/core/site-header.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script src="assets/js/user/account/account-data.js"></script>
+  <script src="assets/js/user/account/login.js"></script>
+</body>
+</html>

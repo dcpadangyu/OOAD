@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<base href="../">
+<title>Shoe Store - Đăng ký</title>
+    <link rel="stylesheet" href="assets/css/user/variables.css">
+  <link rel="stylesheet" href="assets/css/user/base.css">
+<link rel="stylesheet" href="assets/css/user/common.css">
+  <link rel="stylesheet" href="assets/css/user/header.css">
+  <link rel="stylesheet" href="assets/css/user/footer.css">
+
+<link rel="stylesheet" href="assets/css/user/register.css">
+  <link rel="stylesheet" href="assets/css/user/theme.css">
+  <link rel="stylesheet" href="assets/css/user/modern.css">
+</head>
+<body>
+<div data-user-component="header"></div>
+<section class="page-section" id="section-register" >
+<div class="main-content">
+<div class="form-container">
+<h2>ĐĂNG KÝ - KHÁCH HÀNG MỚI</h2>
+<form action="#" class="form-login" id="register-form" method="post">
+<div class="input-group">
+<label class="required" for="username-register">Tên đăng nhập</label>
+<input id="username-register" name="username" placeholder="Nhập họ và tên" required="" type="text">
+<span class="error-message" id="username-error"></span>
+</input></div>
+<div class="input-group">
+<label class="required" for="email-register">Email</label>
+<input id="email-register" name="email" placeholder="VD: user@gmail.com" required="" type="email"/>
+<span class="error-message" id="email-error"></span>
+</div>
+<div class="input-group">
+<label class="required" for="phone-register">Số điện thoại</label>
+<input id="phone-register" name="phone" placeholder="Nhập số điện thoại" required="" type="phone"/>
+<span class="error-message" id="phone-error"></span>
+</div>
+<div class="input-group">
+<label class="required" for="password-register">Mật khẩu</label>
+<input id="password-register" name="password" placeholder="Nhập mật khẩu" required="" type="password">
+<span class="error-message" id="password-error"></span>
+</input></div>
+<div class="input-group">
+<label class="required" for="confirmPassword-register">Nhập lại mật khẩu</label>
+<input id="confirmPassword-register" name="confirmPassword" placeholder="Nhập lại mật khẩu" required="" type="password"/>
+<span class="error-message" id="confirmPassword-error"></span>
+</div>
+<div class="input-group">
+<label class="required" for="address-register">Địa chỉ</label>
+<textarea id="address-register" name="address" placeholder="Nhập địa chỉ" required="" rows="3"></textarea>
+<span class="error-message" id="address-error"></span>
+</div>
+<div class="input-group">
+<button id="nutdky" type="submit">ĐĂNG KÝ</button>
+</div>
+<div class="login-link">
+            Bạn đã có tài khoản? <a href="pages/login.html">Đăng nhập</a>
+</div>
+</form>
+</div>
+<div class="image-side"></div>
+</div>
+</section>
+<div data-user-component="footer"></div>
+  <script src="assets/js/user/core/site-shell.js"></script>
+  <script src="assets/js/user/core/account-session.js"></script>
+  <script src="assets/js/user/core/site-header.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script src="assets/js/user/account/account-data.js"></script>
+  <script src="assets/js/user/account/register.js"></script>
+</body>
+</html>

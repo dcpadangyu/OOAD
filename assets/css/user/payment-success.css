@@ -1,0 +1,363 @@
+/* Payment success — modern confirmation page */
+
+:root {
+  --success-ink: #0f172a;
+  --success-muted: #64748b;
+  --success-line: #e2e8f0;
+  --success-surface: #ffffff;
+  --success-soft: #f8fafc;
+  --success-green: #059669;
+  --success-green-soft: #ecfdf5;
+  --success-primary: #2563eb;
+  --success-primary-hover: #1d4ed8;
+}
+
+body:has(#ThanhToan_ThanhCong) {
+  background:
+    radial-gradient(circle at 50% 0%, rgba(37, 99, 235, 0.07), transparent 38%),
+    #f5f7fb;
+}
+
+#ThanhToan_ThanhCong {
+  width: 100%;
+  min-height: calc(100vh - 66px);
+  padding: 44px 20px 64px;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  box-sizing: border-box;
+}
+
+#ThanhToan_ThanhCong #tt_success {
+  width: min(920px, 100%);
+  max-width: 920px;
+  margin: 0 auto;
+  padding: 0;
+  border: 1px solid var(--success-line);
+  border-radius: 24px;
+  background: var(--success-surface);
+  box-shadow: 0 24px 60px rgba(15, 23, 42, 0.10);
+  overflow: hidden;
+  text-align: left;
+}
+
+#ThanhToan_ThanhCong #tick {
+  margin: 0;
+  padding: 34px 28px 30px;
+  border: 0;
+  border-bottom: 1px solid var(--success-line);
+  background: linear-gradient(180deg, #ffffff 0%, #f8fffb 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  flex-wrap: wrap;
+  text-align: left;
+  color: var(--success-ink);
+}
+
+#ThanhToan_ThanhCong #tick div:first-child {
+  width: 58px;
+  height: 58px;
+  display: grid;
+  place-items: center;
+  flex: 0 0 58px;
+  border-radius: 50%;
+  background: var(--success-green-soft);
+  color: var(--success-green);
+  border: 1px solid #a7f3d0;
+  font-size: 30px;
+  font-weight: 800;
+  line-height: 1;
+}
+
+#ThanhToan_ThanhCong #tick div:last-child {
+  font-size: clamp(20px, 2.4vw, 28px);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--success-ink);
+}
+
+#ThanhToan_ThanhCong h2 {
+  margin: 0;
+  padding: 28px 28px 8px;
+  text-align: left;
+  font-size: 20px;
+  color: var(--success-ink);
+}
+
+#ThanhToan_ThanhCong .madhck {
+  display: inline-block;
+  margin: 0 28px 18px;
+  padding: 7px 11px;
+  border: 1px solid #dbeafe;
+  border-radius: 999px;
+  background: #eff6ff;
+  color: var(--success-primary) !important;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+#ThanhToan_ThanhCong .diachi,
+#ThanhToan_ThanhCong .list_danhsach {
+  margin: 0 28px 18px;
+  padding: 20px;
+  border: 1px solid var(--success-line);
+  border-radius: 16px;
+  background: var(--success-soft);
+}
+
+#ThanhToan_ThanhCong .diachi:empty {
+  display: none;
+}
+
+#ThanhToan_ThanhCong .address_all {
+  display: grid;
+  gap: 12px;
+}
+
+#ThanhToan_ThanhCong .nguoi_nhan,
+#ThanhToan_ThanhCong .sdt_nhan,
+#ThanhToan_ThanhCong .gmail_nhan,
+#ThanhToan_ThanhCong .diachi_nhan {
+  display: grid;
+  grid-template-columns: 175px minmax(0, 1fr);
+  gap: 12px;
+  align-items: start;
+  padding-bottom: 11px;
+  border-bottom: 1px solid var(--success-line);
+}
+
+#ThanhToan_ThanhCong .nguoi_nhan:last-child,
+#ThanhToan_ThanhCong .sdt_nhan:last-child,
+#ThanhToan_ThanhCong .gmail_nhan:last-child,
+#ThanhToan_ThanhCong .diachi_nhan:last-child {
+  padding-bottom: 0;
+  border-bottom: 0;
+}
+
+#ThanhToan_ThanhCong .nguoi_nhan > div:first-child,
+#ThanhToan_ThanhCong .sdt_nhan > div:first-child,
+#ThanhToan_ThanhCong .gmail_nhan > div:first-child,
+#ThanhToan_ThanhCong .diachi_nhan > div:first-child {
+  color: var(--success-muted);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+#ThanhToan_ThanhCong .nguoi_nhan > div:last-child,
+#ThanhToan_ThanhCong .sdt_nhan > div:last-child,
+#ThanhToan_ThanhCong .gmail_nhan > div:last-child,
+#ThanhToan_ThanhCong .diachi_nhan > div:last-child {
+  color: var(--success-ink);
+  font-weight: 600;
+  word-break: break-word;
+}
+
+#ThanhToan_ThanhCong .list_danhsach {
+  background: #fff;
+}
+
+#ThanhToan_ThanhCong .list_danhsach .modal_cart {
+  width: 100%;
+}
+
+#ThanhToan_ThanhCong .list_danhsach .item-info {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 140px 100px;
+  gap: 16px;
+  padding: 0 0 10px;
+  color: var(--success-muted);
+  font-size: 12px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border-bottom: 1px solid var(--success-line);
+}
+
+#ThanhToan_ThanhCong .list_danhsach .all-cart {
+  display: grid;
+  grid-template-columns: 64px minmax(0, 1fr);
+  gap: 14px;
+  position: relative;
+  padding: 15px 0;
+  margin: 0;
+  border-bottom: 1px solid #eef2f7;
+}
+
+#ThanhToan_ThanhCong .list_danhsach .all-cart:last-child {
+  border-bottom: 0;
+}
+
+#ThanhToan_ThanhCong .list_danhsach .item-img {
+  width: 64px;
+  height: 64px;
+  object-fit: cover;
+  border: 1px solid var(--success-line);
+  border-radius: 12px;
+  background: #fff;
+}
+
+#ThanhToan_ThanhCong .list_danhsach .name-price-quantity {
+  min-width: 0;
+}
+
+#ThanhToan_ThanhCong .list_danhsach .display-flex {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  align-items: flex-start;
+}
+
+#ThanhToan_ThanhCong .list_danhsach .item-name {
+  color: var(--success-ink);
+  font-weight: 700;
+  line-height: 1.45;
+}
+
+#ThanhToan_ThanhCong .list_danhsach .item-price {
+  color: var(--success-primary);
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+#ThanhToan_ThanhCong .list_danhsach .item-quantity-all {
+  display: inline-flex;
+  margin-top: 8px;
+  border: 1px solid var(--success-line);
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+#ThanhToan_ThanhCong .list_danhsach .quantity {
+  min-width: 34px;
+  padding: 4px 8px;
+  text-align: center;
+  color: var(--success-muted);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+#ThanhToan_ThanhCong .list_danhsach .remove-quantity,
+#ThanhToan_ThanhCong .list_danhsach .add-quantity {
+  display: none;
+}
+
+#ThanhToan_ThanhCong .list_danhsach .remove_item {
+  display: none;
+}
+
+#ThanhToan_ThanhCong .allship,
+#ThanhToan_ThanhCong .Tongtien_thanhtoan {
+  margin: 0 28px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+}
+
+#ThanhToan_ThanhCong .allship {
+  padding: 18px 0 10px;
+  color: var(--success-muted);
+  font-size: 14px;
+}
+
+#ThanhToan_ThanhCong .Ship_money {
+  font-weight: 700;
+}
+
+#ThanhToan_ThanhCong .Tongtien_thanhtoan {
+  padding: 16px 0 22px;
+  border-top: 1px solid var(--success-line);
+  color: var(--success-ink);
+  font-size: 18px;
+  font-weight: 800;
+}
+
+#ThanhToan_ThanhCong .SumCartEnd {
+  color: var(--success-primary) !important;
+  font-size: 24px;
+  font-weight: 900;
+}
+
+#ThanhToan_ThanhCong #text-center {
+  margin: 0;
+  padding: 22px 28px 28px;
+  border-top: 1px solid var(--success-line);
+  background: #fcfdff;
+  text-align: center;
+  color: var(--success-muted);
+}
+
+#ThanhToan_ThanhCong #nut {
+  margin-top: 16px;
+  background: transparent;
+  border: 0;
+}
+
+#ThanhToan_ThanhCong #nut a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 170px;
+  padding: 11px 20px;
+  border-radius: 12px;
+  background: var(--success-primary);
+  color: #fff;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 800;
+  box-shadow: 0 10px 24px rgba(37, 99, 235, 0.20);
+  transition: transform var(--transition-fast), background var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+#ThanhToan_ThanhCong #nut a:hover {
+  transform: translateY(-1px);
+  background: var(--success-primary-hover);
+  box-shadow: 0 14px 28px rgba(37, 99, 235, 0.24);
+}
+
+@media (max-width: 700px) {
+  #ThanhToan_ThanhCong {
+    padding: 24px 12px 40px;
+  }
+
+  #ThanhToan_ThanhCong #tick {
+    justify-content: flex-start;
+    padding: 26px 20px;
+  }
+
+  #ThanhToan_ThanhCong h2 {
+    padding: 22px 20px 8px;
+  }
+
+  #ThanhToan_ThanhCong .madhck,
+  #ThanhToan_ThanhCong .diachi,
+  #ThanhToan_ThanhCong .list_danhsach {
+    margin-left: 20px;
+    margin-right: 20px;
+  }
+
+  #ThanhToan_ThanhCong .nguoi_nhan,
+  #ThanhToan_ThanhCong .sdt_nhan,
+  #ThanhToan_ThanhCong .gmail_nhan,
+  #ThanhToan_ThanhCong .diachi_nhan {
+    grid-template-columns: 1fr;
+    gap: 4px;
+  }
+
+  #ThanhToan_ThanhCong .list_danhsach .item-info {
+    display: none;
+  }
+
+  #ThanhToan_ThanhCong .allship,
+  #ThanhToan_ThanhCong .Tongtien_thanhtoan {
+    margin-left: 20px;
+    margin-right: 20px;
+  }
+
+  #ThanhToan_ThanhCong #text-center {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+}

@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<base href="../">
+<title>Shoe Store - Địa chỉ giao hàng</title>
+    <link rel="stylesheet" href="assets/css/user/variables.css">
+  <link rel="stylesheet" href="assets/css/user/base.css">
+<link rel="stylesheet" href="assets/css/user/common.css">
+  <link rel="stylesheet" href="assets/css/user/header.css">
+  <link rel="stylesheet" href="assets/css/user/footer.css">
+
+<link rel="stylesheet" href="assets/css/user/profile.css">
+  <link rel="stylesheet" href="assets/css/user/theme.css">
+  <link rel="stylesheet" href="assets/css/user/modern.css">
+</head>
+<body>
+<div data-user-component="header"></div>
+<section class="page-section" id="section-diachi">
+<div class="profile-layout">
+<aside class="profile-sidebar">
+<div class="user-info">
+<img alt="avatar" id="sideAvatar-diachi" src="./assets/img/Avatar/avtuser.jpg"/>
+<h4 id="sideUsername-diachi">Người dùng</h4>
+</div>
+<ul class="sidebar-menu">
+<li><a href="pages/profile.html">Hồ Sơ</a></li>
+<li class="active"><a href="pages/address.html">Địa Chỉ Giao Hàng</a></li>
+<li><a href="pages/personal-info.html">Thông Tin Cá Nhân</a></li>
+<li><a href="pages/change-password.html">Đổi Mật Khẩu</a></li>
+</ul>
+</aside>
+<section class="profile-content single-column">
+<div class="address-header">
+<h2>Địa chỉ của tôi</h2>
+<button class="add-btn" id="addAddressBtn">+ Thêm địa chỉ mới</button>
+</div>
+<div class="address-list" id="addressList"></div>
+<!-- Form thêm / sửa -->
+<div class="address-form-wrap hidden" id="addressFormWrap">
+<form class="address-form" id="addressForm">
+<h3 id="addressFormTitle">Thêm địa chỉ</h3>
+<div class="form-group">
+<label>Người nhận</label>
+<input id="addrName" placeholder="Nhập tên người nhận" required="" type="text"/>
+</div>
+<div class="form-group">
+<label>Số điện thoại</label>
+<input id="addrPhone" placeholder="Nhập số điện thoại" required="" type="text"/>
+</div>
+<div class="form-group">
+<label>Email</label>
+<input id="addEmail" placeholder="VD: user@gmail.com" required="" type="email"/>
+</div>
+<div class="form-group">
+<label>Địa chỉ</label>
+<input id="addAddress" placeholder="Số nhà, đường, phường, thành phố" required="" type="text"/>
+</div>
+<div class="form-actions">
+<button class="save-btn" type="submit">Lưu</button>
+<button class="cancel-btn" id="cancelAddr" type="button">Hủy</button>
+</div>
+</form>
+</div>
+</section>
+</div>
+</section>
+<div data-user-component="footer"></div>
+  <script src="assets/js/user/core/site-shell.js"></script>
+  <script src="assets/js/user/core/account-session.js"></script>
+  <script src="assets/js/user/core/site-header.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script src="assets/js/user/account/address.js"></script>
+</body>
+</html>
