@@ -5,7 +5,7 @@ document.addEventListener("DOMContentLoaded", () => {
     window.trusoluong && window.trusoluong();
     localStorage.setItem("DanhSachDatHang", localStorage.getItem("CurrDanhSachDatHang") || localStorage.getItem("DanhSachDatHang") || "[]");
     localStorage.removeItem("CurrDanhSachDatHang");
-    localStorage.removeItem("cart");
+    window.removeCheckoutCart?.();
     window.location.href = "pages/payment-success.html";
   }));
   document.querySelectorAll(".chuyenqua_giaodich_thatbai").forEach(btn => btn.addEventListener("click", () => {

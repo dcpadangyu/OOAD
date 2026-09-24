@@ -161,8 +161,14 @@ document.addEventListener("DOMContentLoaded", () => {
     };
     const error = validate(data.name, data.phone, data.email, data.address);
     if (error) { Swal?.fire?.({ icon: "error", title: "Dữ liệu chưa hợp lệ", text: error }); return; }
-    if (editIndex < 0) user.addresses.push(data);
-    else user.addresses[editIndex] = { ...user.addresses[editIndex], ...data };
+    if (editIndex < 0) {
+      data.default = user.addresses.length === 0;
+      user.addresses.push(data);
+    } else {
+      user.addresses[editIndex] = { ...user.addresses[editIndex], ...data };
+    }
+    const defaultAddress = user.addresses.find((address) => address.default) || user.addresses[0];
+    if (defaultAddress) localStorage.setItem("selectedAddress", JSON.stringify(defaultAddress));
     save();
     addressForm.reset();
     addressFormWrap.classList.add("hidden");

@@ -1,15 +1,10 @@
 // Du lieu san pham giay dung chung cho cua hang va khu vuc admin.
 const shoeImagePaths = [
   "Adidas/adidas-samba-og-black-white.jpg", "Adidas/adidas-samba-og-white-black.jpg", "Adidas/adidas-campus-00s-black-white.jpg", "Adidas/adidas-campus-00s-grey.jpg", "Adidas/adidas-gazelle-bold-pink.jpg", "Adidas/adidas-gazelle-indoor-blue.jpg", "Adidas/adidas-forum-low-white-black.jpg", "Adidas/adidas-superstar-black-white.jpg", "Adidas/adidas-ultraboost-light-black.jpg", "Adidas/adidas-duramo-sl-white.jpg",
-  "Converse/converse-chuck-70-high-black.jpg", "Converse/converse-chuck-70-high-red.jpg", "Converse/converse-chuck-70-high-white.jpg", "Converse/converse-chuck-70-low-black.jpg", "Converse/converse-chuck-70-low-white.jpg", "Converse/converse-one-star-black.jpg", "Converse/converse-one-star-white.jpg", "Converse/converse-pro-leather-black.jpg", "Converse/converse-run-star-hike-black.jpg", "Converse/converse-run-star-motion-white.jpg",
+  "Converse/converse-chuck-70-high-black.jpg", "Converse/converse-chuck-70-high-red.jpg", "Converse/converse-chuck-70-high-white.jpg", "Converse/converse-chuck-70-low-black.jpg", "Converse/converse-chuck-70-low-white.jpg", "Converse/converse-one-star-black.jpg", "Converse/converse-one-star-white.jpg", "Converse/converse-run-star-hike-black.jpg", "Converse/converse-run-star-motion-white.jpg", "Converse/converse-pro-leather-black.jpg",
   "Mlb/mlb-big-ball-chunky-black.jpg", "Mlb/mlb-big-ball-chunky-white.jpg", "Mlb/mlb-big-ball-chunky-beige.jpg", "Mlb/mlb-big-ball-chunky-pink.jpg", "Mlb/mlb-big-ball-chunky-green.jpg", "Mlb/mlb-chunky-classic-los-angeles-black.jpg", "Mlb/mlb-chunky-classic-los-angeles-white.jpg", "Mlb/mlb-chunky-classic-new-york-black.jpg", "Mlb/mlb-playball-origin-new-york-black.jpg", "Mlb/mlb-playball-origin-los-angeles-white.jpg",
   "Nike/nike-air-force-1-black.jpg", "Nike/nike-air-force-1-white.jpg", "Nike/nike-air-jordan-1-low-black.jpg", "Nike/nike-air-jordan-1-low-white.jpg", "Nike/nike-air-jordan-1-mid-black.jpg", "Nike/nike-air-jordan-1-mid-red.jpg", "Nike/nike-air-max-270-black.jpg", "Nike/nike-air-max-90-white.jpg", "Nike/nike-dunk-low-grey.jpg", "Nike/nike-pegasus-41-black.jpg",
-  "Vans/vans-authentic-black.jpg", "Vans/vans-authentic-white.jpg", "Vans/vans-authentic-red.jpg", "Vans/vans-era-black-white.jpg", "Vans/vans-era-white-black.jpg", "Vans/vans-knu-skool-black.jpg", "Vans/vans-old-skool-navy.jpg", "Vans/vans-old-skool-red.jpg", "Vans/vans-sk8-hi-black-white.jpg", "Vans/vans-slip-on-checkerboard.jpg",
-  "Adidas/adidas-adizero-sl-black.jpg", "Adidas/adidas-alphabounce-black.jpg", "Adidas/adidas-forum-low-white-blue.jpg", "Adidas/adidas-gazelle-indoor-green.jpg", "Adidas/adidas-handball-spezial-black.jpg", "Adidas/adidas-handball-spezial-brown.jpg", "Adidas/adidas-response-super-black.jpg", "Adidas/adidas-stan-smith-white-green.jpg", "Adidas/adidas-superstar-white-black.jpg", "Adidas/adidas-ultraboost-light-white.jpg",
-  "Converse/converse-chuck-taylor-high-black.jpg", "Converse/converse-chuck-taylor-high-navy.jpg", "Converse/converse-chuck-taylor-high-red.jpg", "Converse/converse-chuck-taylor-high-white.jpg", "Converse/converse-chuck-taylor-low-black.jpg", "Converse/converse-chuck-taylor-low-navy.jpg", "Converse/converse-chuck-taylor-low-red.jpg", "Converse/converse-chuck-taylor-low-white.jpg", "Converse/converse-run-star-hike-white.jpg", "Converse/converse-run-star-motion-black.jpg",
-  "Mlb/mlb-big-ball-chunky-new-york-red.jpg", "Mlb/mlb-chunky-classic-new-york-white.jpg", "Mlb/mlb-chunky-liner-los-angeles-black.jpg", "Mlb/mlb-chunky-liner-los-angeles-pink.jpg", "Mlb/mlb-chunky-liner-los-angeles-white.jpg", "Mlb/mlb-chunky-liner-new-york-beige.jpg", "Mlb/mlb-chunky-liner-new-york-black.jpg", "Mlb/mlb-chunky-liner-new-york-white.jpg", "Mlb/mlb-playball-origin-los-angeles-black.jpg", "Mlb/mlb-playball-origin-new-york-white.jpg",
-  "Nike/nike-air-max-270-white.jpg", "Nike/nike-air-max-90-black.jpg", "Nike/nike-blazer-mid-black.jpg", "Nike/nike-blazer-mid-white.jpg", "Nike/nike-court-vision-low-black.jpg", "Nike/nike-court-vision-low-white.jpg", "Nike/nike-dunk-low-black.jpg", "Nike/nike-dunk-low-white.jpg", "Nike/nike-initiator-white.jpg", "Nike/nike-revolution-7-white.jpg",
-  "Vans/vans-knu-skool-white.jpg", "Vans/vans-old-skool-black-white.jpg", "Vans/vans-old-skool-white-black.jpg", "Vans/vans-sk8-hi-navy.jpg", "Vans/vans-sk8-hi-white-black.jpg", "Vans/vans-slip-on-black-white.jpg", "Vans/vans-slip-on-white-black.jpg", "Vans/vans-ultrarange-exo-black.jpg", "Vans/vans-ultrarange-exo-white.jpg", "Vans/vans-ward-platform-black.jpg"
+  "Vans/vans-authentic-black.jpg", "Vans/vans-authentic-white.jpg", "Vans/vans-authentic-red.jpg", "Vans/vans-era-black-white.jpg", "Vans/vans-era-white-black.jpg", "Vans/vans-knu-skool-black.jpg", "Vans/vans-old-skool-navy.jpg", "Vans/vans-old-skool-red.jpg", "Vans/vans-sk8-hi-black-white.jpg", "Vans/vans-slip-on-checkerboard.jpg"
 ];
 
 function shoeColor(path) {
@@ -40,7 +35,7 @@ const products = shoeImagePaths.map((imagePath, index) => {
     id: `SH-${String(index + 1).padStart(3, "0")}`,
     catalog,
     name,
-    gender: index % 3 === 0 ? "Nữ" : "Nam",
+    gender: index % 5 === 0 ? "Unisex" : index % 3 === 0 ? "Nữ" : "Nam",
     desc: `Giày ${catalog} chính hãng, thiết kế thời trang và bền bỉ`,
     color: shoeColor(imagePath),
     material,
@@ -59,54 +54,16 @@ const products = shoeImagePaths.map((imagePath, index) => {
   };
 });
 
-function isProductCatalog(data) {
-  return Array.isArray(data) && data.length > 0 && data.every((p) =>
-    p && typeof p === "object" &&
-    typeof p.id === "string" && p.id &&
-    typeof p.name === "string" && p.name &&
-    typeof p.image === "string" && p.image
-  );
-}
-
-// Phiên bản seed: tăng lên mỗi khi đổi cấu trúc/số lượng sản phẩm seed
-const PRODUCTS_SEED_VERSION = 200;
-
 function getLocalProducts() {
   try {
     const stored = JSON.parse(localStorage.getItem("productsLocal") || "null");
-    if (isProductCatalog(stored)) {
-      const version = Number(localStorage.getItem("productsSeedVersion") || 0);
-      if (version < PRODUCTS_SEED_VERSION) {
-        const seedIds = new Set(products.map((p) => p.id));
-        const custom = stored.filter((p) => !seedIds.has(p.id));
-        const rebuilt = products.slice();
-        rebuilt.push(...custom);
-        localStorage.setItem("productsLocal", JSON.stringify(rebuilt));
-        localStorage.setItem("productsSeedVersion", String(PRODUCTS_SEED_VERSION));
-        return rebuilt;
-      }
-      return stored;
-    }
+    const isShoeCatalog = Array.isArray(stored) && stored.length > 0 && stored.every((product) => product.image && product.image.includes("assets/images/products"));
+    if (isShoeCatalog) return stored;
   } catch (error) {
     console.error("Loi khi doc san pham:", error);
   }
   localStorage.setItem("productsLocal", JSON.stringify(products));
-  localStorage.setItem("productsSeedVersion", String(PRODUCTS_SEED_VERSION));
   return products;
-}
-
-function saveLocalProducts(data) {
-  try {
-    localStorage.setItem("productsLocal", JSON.stringify(data));
-  } catch (error) {
-    alert("Lưu dữ liệu thất bại: bộ nhớ trình duyệt đã đầy. Hãy dùng ảnh nhỏ hơn hoặc xóa bớt sản phẩm!");
-    console.error("Loi khi luu san pham:", error);
-  }
-  window.dispatchEvent(new Event("productsUpdated"));
-}
-
-function formatProductPrice(value) {
-  return `${Number(value || 0).toLocaleString("vi-VN")}₫`;
 }
 
 const PER_PAGE = 15;
@@ -123,17 +80,10 @@ function createProductCard(product) {
   return card;
 }
 
-// *** FIX: Chỉ hiển thị sản phẩm đã nhập hàng + đã set giá ***
-function sanPhamBanDuoc(product) {
-  return product && product.visibility !== "hidden"
-    && Number(product.priceValue) > 0
-    && Number(product.quantity) > 0;
-}
-
 function renderProducts(list, page = 1) {
   const grid = document.getElementById("product-grid");
   if (!grid) return;
-  const visibleList = (list || getLocalProducts()).filter(sanPhamBanDuoc);
+  const visibleList = (list || getLocalProducts()).filter((product) => product.visibility !== "hidden");
   currentList = visibleList;
   const totalPages = Math.max(1, Math.ceil(visibleList.length / PER_PAGE));
   currentPage = Math.min(Math.max(page, 1), totalPages);
@@ -146,17 +96,19 @@ function openProductPopup(product) {
   const popup = document.getElementById("product-popup");
   const detail = document.getElementById("popup-details");
   if (!popup || !detail) return;
-  detail.innerHTML = `<div class="product-info"><div class="left"><img src="${product.image}" alt="${product.name}"></div><div class="right"><p class="desc">${product.desc}</p><h2>${product.name}</h2><p><strong>Màu sắc:</strong> ${product.color}</p><p><strong>Chất liệu:</strong> ${product.material}</p><p><strong>Phong cách:</strong> ${product.style}</p><p><strong>Giới tính:</strong> ${product.gender}</p><p><strong>Size:</strong> ${product.size}</p><p class="price">${product.price}</p><div class="actions"><button id="add-to-cart">Thêm vào giỏ hàng</button><button id="buy-now">Mua ngay</button></div></div></div><div class="description"><h3>Mô tả sản phẩm</h3><p>${product.description}</p><h3>Thông số giày</h3><p><strong>Chất liệu:</strong> ${product.material}</p><p><strong>Phong cách:</strong> ${product.style}</p><p><strong>Kích thước:</strong> ${product.size}</p><p><strong>Xuất xứ:</strong> ${product.origin}</p></div><div class="review-section" id="review-section"><h3>Đánh giá sản phẩm</h3><div id="review-block"></div></div>`;
+  const sizes = String(product.size || "36 - 44").split("-").map((size) => size.trim()).filter(Boolean);
+  const sizeOptions = sizes.length > 1
+    ? Array.from({ length: Number(sizes[1]) - Number(sizes[0]) + 1 }, (_, index) => Number(sizes[0]) + index)
+    : sizes;
+  detail.innerHTML = `<div class="product-info"><div class="left"><img src="${product.image}" alt="${product.name}"></div><div class="right"><p class="desc">${product.desc}</p><h2>${product.name}</h2><p><strong>Màu sắc:</strong> ${product.color}</p><p><strong>Chất liệu:</strong> ${product.material}</p><p><strong>Phong cách:</strong> ${product.style}</p><p><strong>Giới tính:</strong> ${product.gender}</p><label for="product-size"><strong>Chọn size:</strong></label><select id="product-size">${sizeOptions.map((size) => `<option value="${size}">${size}</option>`).join("")}</select><p class="price">${product.price}</p><div class="actions"><button id="add-to-cart">Thêm vào giỏ hàng</button><button id="buy-now">Mua ngay</button></div></div></div><div class="description"><h3>Mô tả sản phẩm</h3><p>${product.description}</p><h3>Thông số giày</h3><p><strong>Chất liệu:</strong> ${product.material}</p><p><strong>Phong cách:</strong> ${product.style}</p><p><strong>Kích thước:</strong> ${product.size}</p><p><strong>Xuất xứ:</strong> ${product.origin}</p></div>`;
   popup.style.display = "flex";
   document.body.style.overflow = "hidden";
-  if (window.ProductReviews) {
-    window.ProductReviews.init(product, document.getElementById("review-block"));
-  }
   const addToCart = () => {
     const cart = JSON.parse(localStorage.getItem("cart") || "[]");
-    const existing = cart.find((item) => item.id === product.id);
+    const size = document.getElementById("product-size")?.value || product.size;
+    const existing = cart.find((item) => item.id === product.id && String(item.selectedSize) === String(size));
     if (existing) existing.quantity += 1;
-    else cart.push({ ...product, quantity: 1 });
+    else cart.push({ ...product, selectedSize: size, quantity: 1 });
     localStorage.setItem("cart", JSON.stringify(cart));
     alert("Đã thêm giày vào giỏ hàng!");
   };
@@ -168,34 +120,13 @@ function renderPagination(totalPages, page) {
   const container = document.getElementById("pagination");
   if (!container) return;
   container.innerHTML = "";
-
-  const makeBtn = (label, target, cls, disabled) => {
-    const b = document.createElement("button");
-    b.textContent = label;
-    if (cls) b.classList.add(cls);
-    if (disabled) b.disabled = true;
-    b.addEventListener("click", () => renderProducts(currentList, target));
-    return b;
-  };
-
-  // Mũi tên quay lại (vô hiệu ở trang 1)
-  container.appendChild(makeBtn("←", page - 1, "nav-prev", page <= 1));
-
-  // Nút về trang đầu, chỉ hiện khi đã vượt qua trang 4
-  if (page > 4) container.appendChild(makeBtn("⟪ Trang đầu", 1, "nav-first"));
-
-  // Cửa sổ 4 trang trượt theo trang hiện tại
-  const windowSize = 4;
-  const start = Math.min(Math.max(1, page - 1), Math.max(1, totalPages - windowSize + 1));
-  const end = Math.min(start + windowSize - 1, totalPages);
-  for (let index = start; index <= end; index += 1) {
-    const button = makeBtn(index, index, "page-num", false);
+  for (let index = 1; index <= totalPages; index += 1) {
+    const button = document.createElement("button");
+    button.textContent = index;
     button.classList.toggle("active", index === page);
+    button.addEventListener("click", () => renderProducts(currentList, index));
     container.appendChild(button);
   }
-
-  // Mũi tên xem tiếp (vô hiệu ở trang cuối)
-  container.appendChild(makeBtn("→", page + 1, "nav-next", page >= totalPages));
 }
 
 function applyAllFilters() {
@@ -204,10 +135,13 @@ function applyAllFilters() {
   const material = document.getElementById("materialFilter")?.value.toLowerCase() || "";
   const style = document.getElementById("styleFilter")?.value.toLowerCase() || "";
   const gender = document.getElementById("genderFilter")?.value.toLowerCase() || "";
+  const size = document.getElementById("sizeFilter")?.value || "";
   const search = document.getElementById("searchInput")?.value.trim().toLowerCase() || "";
   const filtered = localproducts.filter((product) => {
     const matchesPrice = !price || (price === "duoi1" ? product.priceValue < 1000000 : price === "tren4" ? product.priceValue > 4000000 : product.priceValue >= Number(price.split("-")[0]) * 1000000 && product.priceValue <= Number(price.split("-")[1]) * 1000000);
-    return (!currentCatalog || String(product.catalog).toLowerCase() === String(currentCatalog).toLowerCase()) && (!search || `${product.name} ${product.catalog}`.toLowerCase().includes(search)) && matchesPrice && (!color || product.color.toLowerCase() === color) && (!material || product.material.toLowerCase() === material) && (!style || product.style.toLowerCase() === style) && (!gender || product.gender.toLowerCase() === gender);
+    const productSizes = String(product.size || "").split("-").map((value) => Number(value.trim())).filter(Boolean);
+    const matchesSize = !size || (productSizes.length === 2 && Number(size) >= productSizes[0] && Number(size) <= productSizes[1]) || productSizes.includes(Number(size));
+    return (!currentCatalog || String(product.catalog).toLowerCase() === String(currentCatalog).toLowerCase()) && (!search || `${product.name} ${product.catalog}`.toLowerCase().includes(search)) && matchesPrice && (!color || product.color.toLowerCase() === color) && (!material || product.material.toLowerCase() === material) && (!style || product.style.toLowerCase() === style) && (!gender || product.gender.toLowerCase() === gender) && matchesSize;
   });
   renderProducts(filtered, 1);
 }
@@ -232,8 +166,7 @@ function renderSearchSuggestions() {
   if (!input || !container) return;
   const query = input.value.trim().toLowerCase();
   const history = getSearchHistory();
-  // *** FIX: Gợi ý tìm kiếm cũng chỉ hiện sản phẩm bán được ***
-  const matches = query ? localproducts.filter(product => sanPhamBanDuoc(product) && `${product.name} ${product.catalog}`.toLowerCase().includes(query)).slice(0, 6).map(product => product.name) : [];
+  const matches = query ? localproducts.filter(product => `${product.name} ${product.catalog}`.toLowerCase().includes(query)).slice(0, 6).map(product => product.name) : [];
   const items = query ? matches : history;
   if (!items.length) { container.innerHTML = ""; container.style.display = "none"; return; }
   container.innerHTML = `${query ? "<div class=\"search-suggestion-label\">Gợi ý tìm kiếm</div>" : "<div class=\"search-suggestion-label\">Lịch sử tìm kiếm</div>"}${items.map(item => `<button type="button" class="search-suggestion" data-query="${item.replace(/"/g, "&quot;")}">${query ? "⌕" : "↻"}<span>${item}</span></button>`).join("")}${!query ? '<button type="button" class="search-history-clear">Xóa lịch sử</button>' : ""}`;
@@ -245,6 +178,19 @@ function renderProductsByCatalog(catalog) { currentCatalog = catalog; applyAllFi
 
 window.addEventListener("productsUpdated", () => { localproducts = getLocalProducts(); renderProducts(localproducts, 1); });
 document.addEventListener("DOMContentLoaded", () => {
+  const heroCta = document.querySelector(".hero-cta");
+  const productHeading = document.getElementById("sanpham");
+  if (heroCta && productHeading) {
+    heroCta.addEventListener("click", (event) => {
+      event.preventDefault();
+      const header = document.querySelector(".store-header");
+      const headerHeight = header ? header.getBoundingClientRect().height : 0;
+      const top = productHeading.getBoundingClientRect().top + window.scrollY - headerHeight - 12;
+      window.scrollTo({ top: Math.max(0, top), behavior: "smooth" });
+      window.history.replaceState(null, "", "#sanpham");
+    });
+  }
+
   const close = document.getElementById("closePopup");
   if (close) close.addEventListener("click", () => { document.getElementById("product-popup").style.display = "none"; document.body.style.overflow = "auto"; });
   const searchInput = document.getElementById("searchInput");

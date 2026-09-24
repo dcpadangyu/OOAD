@@ -9,6 +9,7 @@ document.addEventListener("DOMContentLoaded", () => {
     password: document.getElementById("password-register"),
     confirmPassword: document.getElementById("confirmPassword-register"),
     address: document.getElementById("address-register")
+    ,otp: document.getElementById("otp-register")
   };
   const errors = {
     username: document.getElementById("username-error"),
@@ -17,6 +18,7 @@ document.addEventListener("DOMContentLoaded", () => {
     password: document.getElementById("password-error"),
     confirmPassword: document.getElementById("confirmPassword-error"),
     address: document.getElementById("address-error")
+    ,otp: document.getElementById("otp-register-error")
   };
   const passwordRules = document.getElementById("password-rules");
   const ruleLength = document.getElementById("rule-length");
@@ -50,6 +52,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (key === "password" && value.length < 8) return "Mật khẩu phải có ít nhất 8 ký tự.";
     if (key === "confirmPassword" && value !== input.password.value.trim()) return "Mật khẩu nhập lại không khớp.";
     if (key === "address" && value.length < 10) return "Vui lòng nhập địa chỉ chi tiết hơn (ít nhất 10 ký tự).";
+    if (key === "otp" && !/^\d{6}$/.test(value)) return "Vui lòng nhập mã OTP gồm 6 chữ số.";
     return null;
   }
   function validateAll() {
@@ -80,26 +83,40 @@ document.addEventListener("DOMContentLoaded", () => {
     if (input.confirmPassword.value) setError("confirmPassword", validate("confirmPassword"));
   });
 
-  function nextCustomerCode(users) {
-    let maxNum = 0;
-    (users || []).forEach((u) => {
-      const m = /KH(\d+)/i.exec(String(u.customerCode || ""));
-      if (m) maxNum = Math.max(maxNum, parseInt(m[1], 10));
-    });
-    return "KH" + String(maxNum + 1).padStart(3, "0");
-  }
+  document.getElementById("send-register-otp")?.addEventListener("click", async (event) => {
+    const button = event.currentTarget;
+    const emailError = validate("email");
+    setError("email", emailError);
+    if (emailError) return;
+    button.disabled = true;
+    button.textContent = "ĐANG GỬI...";
+    try {
+      await window.UserOtp.request(input.email.value.trim(), "register");
+      Swal?.fire?.({ icon: "success", title: "Đã gửi OTP", text: "Kiểm tra Gmail để lấy mã xác thực." });
+    } catch (error) {
+      Swal?.fire?.({ icon: "error", title: "Không gửi được OTP", text: error.message });
+    } finally {
+      button.disabled = false;
+      button.textContent = "GỬI MÃ OTP";
+    }
+  });
 
-  form.addEventListener("submit", (event) => {
+  form.addEventListener("submit", async (event) => {
     event.preventDefault();
     if (!validateAll()) {
       Swal?.fire?.({ icon: "error", title: "Lỗi dữ liệu!", text: "Vui lòng kiểm tra lại các trường bị lỗi." });
       return;
     }
+    try {
+      await window.UserOtp.verify(input.email.value.trim(), "register", input.otp.value.trim());
+    } catch (error) {
+      setError("otp", error.message);
+      Swal?.fire?.({ icon: "error", title: "OTP không hợp lệ", text: error.message });
+      return;
+    }
 
-    const users = getUsers();
     const user = {
       id: `user_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`,
-      customerCode: nextCustomerCode(users),
       userName: input.username.value.trim(),
       email: input.email.value.trim(),
       phone: input.phone.value.trim(),
@@ -109,6 +126,7 @@ document.addEventListener("DOMContentLoaded", () => {
       avatar: "assets/img/Avatar/avtuser.jpg",
       isLoggedIn: false
     };
+    const users = getUsers();
     users.push(user);
     localStorage.setItem("userList", JSON.stringify(users));
     form.reset();

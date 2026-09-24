@@ -136,6 +136,528 @@ body:has(#ThanhToan_CuaHang) > [data-user-component="footer"] {
   background: transparent;
 }
 
+/* Product summary on payment result pages */
+#ThanhToan_TienMat .list_danhsach .modal_cart,
+#ThanhToan_ChuyenKhoan .list_danhsach .modal_cart,
+#ThanhToan_CuaHang .list_danhsach .modal_cart {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+#ThanhToan_TienMat .list_danhsach .item-info,
+#ThanhToan_ChuyenKhoan .list_danhsach .item-info,
+#ThanhToan_CuaHang .list_danhsach .item-info {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 112px 76px;
+  gap: 12px;
+  align-items: center;
+  padding: 0 0 10px;
+  border-bottom: 1px solid var(--pay-border);
+  color: var(--pay-muted);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: .05em;
+  text-transform: uppercase;
+}
+
+#ThanhToan_TienMat .list_danhsach .item-info div:first-child,
+#ThanhToan_ChuyenKhoan .list_danhsach .item-info div:first-child,
+#ThanhToan_CuaHang .list_danhsach .item-info div:first-child {
+  display: none;
+}
+
+#ThanhToan_TienMat .list_danhsach .item-info div:nth-child(2),
+#ThanhToan_ChuyenKhoan .list_danhsach .item-info div:nth-child(2),
+#ThanhToan_CuaHang .list_danhsach .item-info div:nth-child(2) {
+  grid-column: 1;
+}
+
+#ThanhToan_TienMat .list_danhsach .item-info div:nth-child(3),
+#ThanhToan_ChuyenKhoan .list_danhsach .item-info div:nth-child(3),
+#ThanhToan_CuaHang .list_danhsach .item-info div:nth-child(3) {
+  grid-column: 2;
+  text-align: right;
+}
+
+#ThanhToan_TienMat .list_danhsach .item-info div:nth-child(4),
+#ThanhToan_ChuyenKhoan .list_danhsach .item-info div:nth-child(4),
+#ThanhToan_CuaHang .list_danhsach .item-info div:nth-child(4) {
+  grid-column: 3;
+  text-align: right;
+}
+
+#ThanhToan_TienMat .list_danhsach .all-cart,
+#ThanhToan_ChuyenKhoan .list_danhsach .all-cart,
+#ThanhToan_CuaHang .list_danhsach .all-cart {
+  display: grid;
+  grid-template-columns: 72px minmax(0, 1fr) 112px 76px;
+  gap: 12px;
+  align-items: center;
+  width: auto;
+  min-width: 0;
+  box-sizing: border-box;
+  padding: 12px;
+  border: 1px solid var(--pay-border);
+  border-radius: 14px;
+  background: var(--pay-surface);
+  box-shadow: 0 6px 18px rgba(15, 23, 42, .05);
+}
+
+#ThanhToan_TienMat .list_danhsach .cart-select,
+#ThanhToan_ChuyenKhoan .list_danhsach .cart-select,
+#ThanhToan_CuaHang .list_danhsach .cart-select,
+#ThanhToan_TienMat .list_danhsach .remove_item,
+#ThanhToan_ChuyenKhoan .list_danhsach .remove_item,
+#ThanhToan_CuaHang .list_danhsach .remove_item {
+  display: none;
+}
+
+#ThanhToan_TienMat .list_danhsach .item-img,
+#ThanhToan_ChuyenKhoan .list_danhsach .item-img,
+#ThanhToan_CuaHang .list_danhsach .item-img {
+  display: block;
+  grid-column: 1;
+  width: 72px;
+  height: 72px;
+  object-fit: contain;
+  padding: 5px;
+  border: 1px solid var(--pay-border);
+  border-radius: 10px;
+  background: var(--pay-surface-soft);
+}
+
+#ThanhToan_TienMat .list_danhsach .name-price-quantity,
+#ThanhToan_ChuyenKhoan .list_danhsach .name-price-quantity,
+#ThanhToan_CuaHang .list_danhsach .name-price-quantity {
+  display: contents;
+  width: auto;
+}
+
+#ThanhToan_TienMat .list_danhsach .display-flex,
+#ThanhToan_ChuyenKhoan .list_danhsach .display-flex,
+#ThanhToan_CuaHang .list_danhsach .display-flex {
+  display: contents;
+  width: auto;
+}
+
+#ThanhToan_TienMat .list_danhsach .item-name,
+#ThanhToan_ChuyenKhoan .list_danhsach .item-name,
+#ThanhToan_CuaHang .list_danhsach .item-name {
+  grid-column: 2;
+  min-width: 0;
+  width: auto;
+  color: var(--pay-text);
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1.45;
+  white-space: normal;
+  word-break: normal;
+  overflow-wrap: break-word;
+}
+
+#ThanhToan_TienMat .list_danhsach .item-price,
+#ThanhToan_ChuyenKhoan .list_danhsach .item-price,
+#ThanhToan_CuaHang .list_danhsach .item-price {
+  grid-column: 3;
+  width: auto;
+  white-space: nowrap;
+  color: var(--pay-primary);
+  font-size: 13px;
+  font-weight: 800;
+  text-align: right;
+}
+
+@media (min-width: 901px) {
+  #ThanhToan_TienMat,
+  #ThanhToan_ChuyenKhoan,
+  #ThanhToan_CuaHang {
+    width: min(1280px, calc(100% - 64px));
+    box-sizing: border-box;
+  }
+
+  #ThanhToan_TienMat .list_danhsach .all-cart,
+  #ThanhToan_ChuyenKhoan .list_danhsach .all-cart,
+  #ThanhToan_CuaHang .list_danhsach .all-cart {
+    min-height: 62px;
+    padding: 14px 12px;
+  }
+}
+
+#ThanhToan_TienMat .list_danhsach .item-quantity-all,
+#ThanhToan_ChuyenKhoan .list_danhsach .item-quantity-all,
+#ThanhToan_CuaHang .list_danhsach .item-quantity-all {
+  display: block;
+  grid-column: 4;
+  width: auto;
+  color: var(--pay-muted);
+  font-size: 13px;
+  text-align: right;
+}
+
+#ThanhToan_TienMat .list_danhsach .quantity,
+#ThanhToan_ChuyenKhoan .list_danhsach .quantity,
+#ThanhToan_CuaHang .list_danhsach .quantity {
+  display: block;
+  padding: 6px 9px;
+  border-radius: 8px;
+  background: var(--pay-surface-soft);
+  text-align: center;
+}
+
+@media (max-width: 600px) {
+  #ThanhToan_TienMat .list_danhsach .item-info,
+  #ThanhToan_ChuyenKhoan .list_danhsach .item-info,
+  #ThanhToan_CuaHang .list_danhsach .item-info {
+    grid-template-columns: minmax(0, 1fr) 76px;
+    gap: 10px;
+  }
+
+  /* Final alignment for the updated cart row markup. */
+  #ThanhToan_TienMat .list_danhsach .all-cart,
+  #ThanhToan_ChuyenKhoan .list_danhsach .all-cart,
+  #ThanhToan_CuaHang .list_danhsach .all-cart {
+    grid-template-columns: 72px minmax(0, 1fr) 112px 76px;
+  }
+
+  #ThanhToan_TienMat .list_danhsach .cart-product,
+  #ThanhToan_ChuyenKhoan .list_danhsach .cart-product,
+  #ThanhToan_CuaHang .list_danhsach .cart-product {
+    display: flex;
+    grid-column: 1 / span 2;
+    min-width: 0;
+    align-items: center;
+    gap: 12px;
+  }
+
+  #ThanhToan_TienMat .list_danhsach .cart-product .item-img,
+  #ThanhToan_ChuyenKhoan .list_danhsach .cart-product .item-img,
+  #ThanhToan_CuaHang .list_danhsach .cart-product .item-img {
+    flex: 0 0 72px;
+    grid-column: auto;
+  }
+
+  #ThanhToan_TienMat .list_danhsach .cart-product .item-name,
+  #ThanhToan_ChuyenKhoan .list_danhsach .cart-product .item-name,
+  #ThanhToan_CuaHang .list_danhsach .cart-product .item-name {
+    min-width: 0;
+    width: auto;
+    overflow-wrap: anywhere;
+  }
+
+  #ThanhToan_TienMat .list_danhsach .invoice-price-quantity,
+  #ThanhToan_ChuyenKhoan .list_danhsach .invoice-price-quantity,
+  #ThanhToan_CuaHang .list_danhsach .invoice-price-quantity {
+    display: contents;
+  }
+
+  #ThanhToan_TienMat .list_danhsach .invoice-price-quantity .item-price,
+  #ThanhToan_ChuyenKhoan .list_danhsach .invoice-price-quantity .item-price,
+  #ThanhToan_CuaHang .list_danhsach .invoice-price-quantity .item-price {
+    grid-column: 3;
+  }
+
+  #ThanhToan_TienMat .list_danhsach .invoice-price-quantity .item-quantity-all,
+  #ThanhToan_ChuyenKhoan .list_danhsach .invoice-price-quantity .item-quantity-all,
+  #ThanhToan_CuaHang .list_danhsach .invoice-price-quantity .item-quantity-all {
+    grid-column: 4;
+  }
+
+  @media (max-width: 600px) {
+    #ThanhToan_TienMat .list_danhsach .all-cart,
+    #ThanhToan_ChuyenKhoan .list_danhsach .all-cart,
+    #ThanhToan_CuaHang .list_danhsach .all-cart {
+      grid-template-columns: 58px minmax(0, 1fr) 68px;
+    }
+
+    #ThanhToan_TienMat .list_danhsach .cart-product,
+    #ThanhToan_ChuyenKhoan .list_danhsach .cart-product,
+    #ThanhToan_CuaHang .list_danhsach .cart-product {
+      grid-column: 1 / span 2;
+    }
+
+    #ThanhToan_TienMat .list_danhsach .cart-product .item-img,
+    #ThanhToan_ChuyenKhoan .list_danhsach .cart-product .item-img,
+    #ThanhToan_CuaHang .list_danhsach .cart-product .item-img {
+      flex-basis: 58px;
+    }
+
+    #ThanhToan_TienMat .list_danhsach .invoice-price-quantity .item-price,
+    #ThanhToan_ChuyenKhoan .list_danhsach .invoice-price-quantity .item-price,
+    #ThanhToan_CuaHang .list_danhsach .invoice-price-quantity .item-price {
+      grid-column: 3;
+    }
+  }
+
+  /* Final alignment for the updated cart row markup. */
+  #ThanhToan_TienMat .list_danhsach .all-cart,
+  #ThanhToan_ChuyenKhoan .list_danhsach .all-cart,
+  #ThanhToan_CuaHang .list_danhsach .all-cart {
+    grid-template-columns: 72px minmax(0, 1fr) 112px 76px;
+  }
+
+  #ThanhToan_TienMat .list_danhsach .cart-product,
+  #ThanhToan_ChuyenKhoan .list_danhsach .cart-product,
+  #ThanhToan_CuaHang .list_danhsach .cart-product {
+    display: flex;
+    grid-column: 1 / span 2;
+    min-width: 0;
+    align-items: center;
+    gap: 12px;
+  }
+
+  #ThanhToan_TienMat .list_danhsach .cart-product .item-img,
+  #ThanhToan_ChuyenKhoan .list_danhsach .cart-product .item-img,
+  #ThanhToan_CuaHang .list_danhsach .cart-product .item-img {
+    flex: 0 0 72px;
+    grid-column: auto;
+  }
+
+  #ThanhToan_TienMat .list_danhsach .cart-product .item-name,
+  #ThanhToan_ChuyenKhoan .list_danhsach .cart-product .item-name,
+  #ThanhToan_CuaHang .list_danhsach .cart-product .item-name {
+    min-width: 0;
+    width: auto;
+    overflow-wrap: anywhere;
+  }
+
+  #ThanhToan_TienMat .list_danhsach .invoice-price-quantity,
+  #ThanhToan_ChuyenKhoan .list_danhsach .invoice-price-quantity,
+  #ThanhToan_CuaHang .list_danhsach .invoice-price-quantity {
+    display: contents;
+  }
+
+  #ThanhToan_TienMat .list_danhsach .invoice-price-quantity .item-price,
+  #ThanhToan_ChuyenKhoan .list_danhsach .invoice-price-quantity .item-price,
+  #ThanhToan_CuaHang .list_danhsach .invoice-price-quantity .item-price {
+    grid-column: 3;
+  }
+
+  #ThanhToan_TienMat .list_danhsach .invoice-price-quantity .item-quantity-all,
+  #ThanhToan_ChuyenKhoan .list_danhsach .invoice-price-quantity .item-quantity-all,
+  #ThanhToan_CuaHang .list_danhsach .invoice-price-quantity .item-quantity-all {
+    grid-column: 4;
+  }
+
+  @media (max-width: 600px) {
+    #ThanhToan_TienMat .list_danhsach .all-cart,
+    #ThanhToan_ChuyenKhoan .list_danhsach .all-cart,
+    #ThanhToan_CuaHang .list_danhsach .all-cart {
+      grid-template-columns: 58px minmax(0, 1fr) 68px;
+    }
+
+    #ThanhToan_TienMat .list_danhsach .cart-product,
+    #ThanhToan_ChuyenKhoan .list_danhsach .cart-product,
+    #ThanhToan_CuaHang .list_danhsach .cart-product {
+      grid-column: 1 / span 2;
+    }
+
+    #ThanhToan_TienMat .list_danhsach .cart-product .item-img,
+    #ThanhToan_ChuyenKhoan .list_danhsach .cart-product .item-img,
+    #ThanhToan_CuaHang .list_danhsach .cart-product .item-img {
+      flex-basis: 58px;
+    }
+
+    #ThanhToan_TienMat .list_danhsach .invoice-price-quantity .item-price,
+    #ThanhToan_ChuyenKhoan .list_danhsach .invoice-price-quantity .item-price,
+    #ThanhToan_CuaHang .list_danhsach .invoice-price-quantity .item-price {
+      grid-column: 3;
+    }
+  }
+
+  /* Keep the product image and name in one row on payment result pages. */
+  #ThanhToan_TienMat .list_danhsach .all-cart,
+  #ThanhToan_ChuyenKhoan .list_danhsach .all-cart,
+  #ThanhToan_CuaHang .list_danhsach .all-cart {
+    grid-template-columns: 72px minmax(0, 1fr) 112px 76px;
+  }
+
+  #ThanhToan_TienMat .list_danhsach .cart-product,
+  #ThanhToan_ChuyenKhoan .list_danhsach .cart-product,
+  #ThanhToan_CuaHang .list_danhsach .cart-product {
+    display: flex;
+    grid-column: 1 / span 2;
+    min-width: 0;
+    align-items: center;
+    gap: 12px;
+  }
+
+  #ThanhToan_TienMat .list_danhsach .cart-product .item-img,
+  #ThanhToan_ChuyenKhoan .list_danhsach .cart-product .item-img,
+  #ThanhToan_CuaHang .list_danhsach .cart-product .item-img {
+    flex: 0 0 72px;
+    grid-column: auto;
+  }
+
+  #ThanhToan_TienMat .list_danhsach .cart-product .item-name,
+  #ThanhToan_ChuyenKhoan .list_danhsach .cart-product .item-name,
+  #ThanhToan_CuaHang .list_danhsach .cart-product .item-name {
+    min-width: 0;
+    width: auto;
+    overflow-wrap: anywhere;
+  }
+
+  #ThanhToan_TienMat .list_danhsach .invoice-price-quantity,
+  #ThanhToan_ChuyenKhoan .list_danhsach .invoice-price-quantity,
+  #ThanhToan_CuaHang .list_danhsach .invoice-price-quantity {
+    display: contents;
+  }
+
+  #ThanhToan_TienMat .list_danhsach .invoice-price-quantity .item-price,
+  #ThanhToan_ChuyenKhoan .list_danhsach .invoice-price-quantity .item-price,
+  #ThanhToan_CuaHang .list_danhsach .invoice-price-quantity .item-price {
+    grid-column: 3;
+  }
+
+  #ThanhToan_TienMat .list_danhsach .invoice-price-quantity .item-quantity-all,
+  #ThanhToan_ChuyenKhoan .list_danhsach .invoice-price-quantity .item-quantity-all,
+  #ThanhToan_CuaHang .list_danhsach .invoice-price-quantity .item-quantity-all {
+    grid-column: 4;
+  }
+
+  @media (max-width: 600px) {
+    #ThanhToan_TienMat .list_danhsach .all-cart,
+    #ThanhToan_ChuyenKhoan .list_danhsach .all-cart,
+    #ThanhToan_CuaHang .list_danhsach .all-cart {
+      grid-template-columns: 58px minmax(0, 1fr) 68px;
+    }
+
+    #ThanhToan_TienMat .list_danhsach .cart-product,
+    #ThanhToan_ChuyenKhoan .list_danhsach .cart-product,
+    #ThanhToan_CuaHang .list_danhsach .cart-product {
+      grid-column: 1 / span 2;
+    }
+
+    #ThanhToan_TienMat .list_danhsach .cart-product .item-img,
+    #ThanhToan_ChuyenKhoan .list_danhsach .cart-product .item-img,
+    #ThanhToan_CuaHang .list_danhsach .cart-product .item-img {
+      flex-basis: 58px;
+    }
+
+    #ThanhToan_TienMat .list_danhsach .invoice-price-quantity .item-price,
+    #ThanhToan_ChuyenKhoan .list_danhsach .invoice-price-quantity .item-price,
+    #ThanhToan_CuaHang .list_danhsach .invoice-price-quantity .item-price {
+      grid-column: 3;
+    }
+  }
+
+  #ThanhToan_TienMat .list_danhsach .item-info div:nth-child(3),
+  #ThanhToan_ChuyenKhoan .list_danhsach .item-info div:nth-child(3),
+  #ThanhToan_CuaHang .list_danhsach .item-info div:nth-child(3) {
+    grid-column: 2;
+    text-align: right;
+  }
+
+  #ThanhToan_TienMat .list_danhsach .item-info div:nth-child(4),
+  #ThanhToan_ChuyenKhoan .list_danhsach .item-info div:nth-child(4),
+  #ThanhToan_CuaHang .list_danhsach .item-info div:nth-child(4) {
+    display: none;
+  }
+
+  #ThanhToan_TienMat .list_danhsach .all-cart,
+  #ThanhToan_ChuyenKhoan .list_danhsach .all-cart,
+  #ThanhToan_CuaHang .list_danhsach .all-cart {
+    grid-template-columns: 58px minmax(0, 1fr) 68px;
+    gap: 10px;
+    padding: 10px;
+  }
+
+  #ThanhToan_TienMat .list_danhsach .item-img,
+  #ThanhToan_ChuyenKhoan .list_danhsach .item-img,
+  #ThanhToan_CuaHang .list_danhsach .item-img {
+    width: 58px;
+    height: 58px;
+  }
+
+  #ThanhToan_TienMat .list_danhsach .item-name,
+  #ThanhToan_ChuyenKhoan .list_danhsach .item-name,
+  #ThanhToan_CuaHang .list_danhsach .item-name {
+    font-size: 12px;
+  }
+
+  #ThanhToan_TienMat .list_danhsach .item-price,
+  #ThanhToan_ChuyenKhoan .list_danhsach .item-price,
+  #ThanhToan_CuaHang .list_danhsach .item-price {
+    grid-column: 3;
+    font-size: 11px;
+  }
+
+  #ThanhToan_TienMat .list_danhsach .item-quantity-all,
+  #ThanhToan_ChuyenKhoan .list_danhsach .item-quantity-all,
+  #ThanhToan_CuaHang .list_danhsach .item-quantity-all {
+    display: none;
+  }
+}
+
+#ThanhToan_TienMat .list_danhsach .all-cart,
+#ThanhToan_ChuyenKhoan .list_danhsach .all-cart,
+#ThanhToan_CuaHang .list_danhsach .all-cart {
+  grid-template-columns: 72px minmax(0, 1fr) 112px 76px !important;
+}
+
+#ThanhToan_TienMat .list_danhsach .cart-product,
+#ThanhToan_ChuyenKhoan .list_danhsach .cart-product,
+#ThanhToan_CuaHang .list_danhsach .cart-product {
+  display: flex !important;
+  grid-column: 1 / span 2 !important;
+  min-width: 0;
+  align-items: center;
+  gap: 12px;
+}
+
+#ThanhToan_TienMat .list_danhsach .cart-product .item-img,
+#ThanhToan_ChuyenKhoan .list_danhsach .cart-product .item-img,
+#ThanhToan_CuaHang .list_danhsach .cart-product .item-img {
+  flex: 0 0 72px;
+  grid-column: auto;
+}
+
+#ThanhToan_TienMat .list_danhsach .cart-product .item-name,
+#ThanhToan_ChuyenKhoan .list_danhsach .cart-product .item-name,
+#ThanhToan_CuaHang .list_danhsach .cart-product .item-name {
+  min-width: 0;
+  width: auto;
+  overflow-wrap: anywhere;
+}
+
+#ThanhToan_TienMat .list_danhsach .invoice-price-quantity,
+#ThanhToan_ChuyenKhoan .list_danhsach .invoice-price-quantity,
+#ThanhToan_CuaHang .list_danhsach .invoice-price-quantity {
+  display: contents !important;
+}
+
+#ThanhToan_TienMat .list_danhsach .invoice-price-quantity .item-price,
+#ThanhToan_ChuyenKhoan .list_danhsach .invoice-price-quantity .item-price,
+#ThanhToan_CuaHang .list_danhsach .invoice-price-quantity .item-price {
+  grid-column: 3 !important;
+}
+
+#ThanhToan_TienMat .list_danhsach .invoice-price-quantity .item-quantity-all,
+#ThanhToan_ChuyenKhoan .list_danhsach .invoice-price-quantity .item-quantity-all,
+#ThanhToan_CuaHang .list_danhsach .invoice-price-quantity .item-quantity-all {
+  grid-column: 4 !important;
+}
+
+@media (max-width: 600px) {
+  #ThanhToan_TienMat .list_danhsach .all-cart,
+  #ThanhToan_ChuyenKhoan .list_danhsach .all-cart,
+  #ThanhToan_CuaHang .list_danhsach .all-cart {
+    grid-template-columns: 58px minmax(0, 1fr) 68px !important;
+  }
+
+  #ThanhToan_TienMat .list_danhsach .cart-product,
+  #ThanhToan_ChuyenKhoan .list_danhsach .cart-product,
+  #ThanhToan_CuaHang .list_danhsach .cart-product {
+    grid-column: 1 / span 2 !important;
+  }
+
+  #ThanhToan_TienMat .list_danhsach .cart-product .item-img,
+  #ThanhToan_ChuyenKhoan .list_danhsach .cart-product .item-img,
+  #ThanhToan_CuaHang .list_danhsach .cart-product .item-img {
+    flex-basis: 58px;
+  }
+}
+
 #ThanhToan_TienMat .allship,
 #ThanhToan_ChuyenKhoan .allship,
 #ThanhToan_CuaHang .allship,

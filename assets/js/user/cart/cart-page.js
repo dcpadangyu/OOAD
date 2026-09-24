@@ -7,12 +7,12 @@ document.addEventListener("DOMContentLoaded", () => {
         btn.addEventListener("click", (event) => {
             event.preventDefault();
 
-            const cart = window.getcart
-                ? window.getcart()
-                : JSON.parse(localStorage.getItem("cart") || "[]");
+            const cart = window.getCheckoutCart
+                ? window.getCheckoutCart()
+                : [];
 
             if (!cart.length) {
-                alert("Bạn cần có sản phẩm trong giỏ hàng mới được đặt hàng.");
+                alert("Vui lòng chọn ít nhất một sản phẩm để thanh toán.");
                 return;
             }
 

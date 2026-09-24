@@ -1,15 +1,10 @@
 // Du lieu san pham giay dung chung cho cua hang va khu vuc admin.
 const shoeImagePaths = [
   "Adidas/adidas-samba-og-black-white.jpg", "Adidas/adidas-samba-og-white-black.jpg", "Adidas/adidas-campus-00s-black-white.jpg", "Adidas/adidas-campus-00s-grey.jpg", "Adidas/adidas-gazelle-bold-pink.jpg", "Adidas/adidas-gazelle-indoor-blue.jpg", "Adidas/adidas-forum-low-white-black.jpg", "Adidas/adidas-superstar-black-white.jpg", "Adidas/adidas-ultraboost-light-black.jpg", "Adidas/adidas-duramo-sl-white.jpg",
-  "Converse/converse-chuck-70-high-black.jpg", "Converse/converse-chuck-70-high-red.jpg", "Converse/converse-chuck-70-high-white.jpg", "Converse/converse-chuck-70-low-black.jpg", "Converse/converse-chuck-70-low-white.jpg", "Converse/converse-one-star-black.jpg", "Converse/converse-one-star-white.jpg", "Converse/converse-pro-leather-black.jpg", "Converse/converse-run-star-hike-black.jpg", "Converse/converse-run-star-motion-white.jpg",
+  "Converse/converse-chuck-70-high-black.jpg", "Converse/converse-chuck-70-high-red.jpg", "Converse/converse-chuck-70-high-white.jpg", "Converse/converse-chuck-70-low-black.jpg", "Converse/converse-chuck-70-low-white.jpg", "Converse/converse-one-star-black.jpg", "Converse/converse-one-star-white.jpg", "Converse/converse-run-star-hike-black.jpg", "Converse/converse-run-star-motion-white.jpg", "Converse/converse-pro-leather-black.jpg",
   "Mlb/mlb-big-ball-chunky-black.jpg", "Mlb/mlb-big-ball-chunky-white.jpg", "Mlb/mlb-big-ball-chunky-beige.jpg", "Mlb/mlb-big-ball-chunky-pink.jpg", "Mlb/mlb-big-ball-chunky-green.jpg", "Mlb/mlb-chunky-classic-los-angeles-black.jpg", "Mlb/mlb-chunky-classic-los-angeles-white.jpg", "Mlb/mlb-chunky-classic-new-york-black.jpg", "Mlb/mlb-playball-origin-new-york-black.jpg", "Mlb/mlb-playball-origin-los-angeles-white.jpg",
   "Nike/nike-air-force-1-black.jpg", "Nike/nike-air-force-1-white.jpg", "Nike/nike-air-jordan-1-low-black.jpg", "Nike/nike-air-jordan-1-low-white.jpg", "Nike/nike-air-jordan-1-mid-black.jpg", "Nike/nike-air-jordan-1-mid-red.jpg", "Nike/nike-air-max-270-black.jpg", "Nike/nike-air-max-90-white.jpg", "Nike/nike-dunk-low-grey.jpg", "Nike/nike-pegasus-41-black.jpg",
-  "Vans/vans-authentic-black.jpg", "Vans/vans-authentic-white.jpg", "Vans/vans-authentic-red.jpg", "Vans/vans-era-black-white.jpg", "Vans/vans-era-white-black.jpg", "Vans/vans-knu-skool-black.jpg", "Vans/vans-old-skool-navy.jpg", "Vans/vans-old-skool-red.jpg", "Vans/vans-sk8-hi-black-white.jpg", "Vans/vans-slip-on-checkerboard.jpg",
-  "Adidas/adidas-adizero-sl-black.jpg", "Adidas/adidas-alphabounce-black.jpg", "Adidas/adidas-forum-low-white-blue.jpg", "Adidas/adidas-gazelle-indoor-green.jpg", "Adidas/adidas-handball-spezial-black.jpg", "Adidas/adidas-handball-spezial-brown.jpg", "Adidas/adidas-response-super-black.jpg", "Adidas/adidas-stan-smith-white-green.jpg", "Adidas/adidas-superstar-white-black.jpg", "Adidas/adidas-ultraboost-light-white.jpg",
-  "Converse/converse-chuck-taylor-high-black.jpg", "Converse/converse-chuck-taylor-high-navy.jpg", "Converse/converse-chuck-taylor-high-red.jpg", "Converse/converse-chuck-taylor-high-white.jpg", "Converse/converse-chuck-taylor-low-black.jpg", "Converse/converse-chuck-taylor-low-navy.jpg", "Converse/converse-chuck-taylor-low-red.jpg", "Converse/converse-chuck-taylor-low-white.jpg", "Converse/converse-run-star-hike-white.jpg", "Converse/converse-run-star-motion-black.jpg",
-  "Mlb/mlb-big-ball-chunky-new-york-red.jpg", "Mlb/mlb-chunky-classic-new-york-white.jpg", "Mlb/mlb-chunky-liner-los-angeles-black.jpg", "Mlb/mlb-chunky-liner-los-angeles-pink.jpg", "Mlb/mlb-chunky-liner-los-angeles-white.jpg", "Mlb/mlb-chunky-liner-new-york-beige.jpg", "Mlb/mlb-chunky-liner-new-york-black.jpg", "Mlb/mlb-chunky-liner-new-york-white.jpg", "Mlb/mlb-playball-origin-los-angeles-black.jpg", "Mlb/mlb-playball-origin-new-york-white.jpg",
-  "Nike/nike-air-max-270-white.jpg", "Nike/nike-air-max-90-black.jpg", "Nike/nike-blazer-mid-black.jpg", "Nike/nike-blazer-mid-white.jpg", "Nike/nike-court-vision-low-black.jpg", "Nike/nike-court-vision-low-white.jpg", "Nike/nike-dunk-low-black.jpg", "Nike/nike-dunk-low-white.jpg", "Nike/nike-initiator-white.jpg", "Nike/nike-revolution-7-white.jpg",
-  "Vans/vans-knu-skool-white.jpg", "Vans/vans-old-skool-black-white.jpg", "Vans/vans-old-skool-white-black.jpg", "Vans/vans-sk8-hi-navy.jpg", "Vans/vans-sk8-hi-white-black.jpg", "Vans/vans-slip-on-black-white.jpg", "Vans/vans-slip-on-white-black.jpg", "Vans/vans-ultrarange-exo-black.jpg", "Vans/vans-ultrarange-exo-white.jpg", "Vans/vans-ward-platform-black.jpg"
+  "Vans/vans-authentic-black.jpg", "Vans/vans-authentic-white.jpg", "Vans/vans-authentic-red.jpg", "Vans/vans-era-black-white.jpg", "Vans/vans-era-white-black.jpg", "Vans/vans-knu-skool-black.jpg", "Vans/vans-old-skool-navy.jpg", "Vans/vans-old-skool-red.jpg", "Vans/vans-sk8-hi-black-white.jpg", "Vans/vans-slip-on-checkerboard.jpg"
 ];
 
 function shoeColor(path) {
@@ -59,50 +54,20 @@ const products = shoeImagePaths.map((imagePath, index) => {
   };
 });
 
-// *** FIX: Chấp nhận cả ảnh base64 (data URL) và ảnh đường dẫn ***
-function isProductCatalog(data) {
-  return Array.isArray(data) && data.length > 0 && data.every((p) =>
-    p && typeof p === "object" &&
-    typeof p.id === "string" && p.id &&
-    typeof p.name === "string" && p.name &&
-    typeof p.image === "string" && p.image
-  );
-}
-
-// Phiên bản seed: tăng lên mỗi khi đổi cấu trúc/số lượng sản phẩm seed
-const PRODUCTS_SEED_VERSION = 200;
-
 function getLocalProducts() {
   try {
     const stored = JSON.parse(localStorage.getItem("productsLocal") || "null");
-    if (isProductCatalog(stored)) {
-      const version = Number(localStorage.getItem("productsSeedVersion") || 0);
-      if (version < PRODUCTS_SEED_VERSION) {
-        const seedIds = new Set(products.map((p) => p.id));
-        const custom = stored.filter((p) => !seedIds.has(p.id));
-        const rebuilt = products.slice();
-        rebuilt.push(...custom);
-        localStorage.setItem("productsLocal", JSON.stringify(rebuilt));
-        localStorage.setItem("productsSeedVersion", String(PRODUCTS_SEED_VERSION));
-        return rebuilt;
-      }
-      return stored;
-    }
+    const isShoeCatalog = Array.isArray(stored) && stored.length > 0 && stored.every((product) => product.image && product.image.includes("assets/images/products"));
+    if (isShoeCatalog) return stored;
   } catch (error) {
     console.error("Loi khi doc san pham:", error);
   }
   localStorage.setItem("productsLocal", JSON.stringify(products));
-  localStorage.setItem("productsSeedVersion", String(PRODUCTS_SEED_VERSION));
   return products;
 }
 
 function saveLocalProducts(data) {
-  try {
-    localStorage.setItem("productsLocal", JSON.stringify(data));
-  } catch (error) {
-    alert("Lưu dữ liệu thất bại: bộ nhớ trình duyệt đã đầy. Hãy dùng ảnh nhỏ hơn hoặc xóa bớt sản phẩm!");
-    console.error("Loi khi luu san pham:", error);
-  }
+  localStorage.setItem("productsLocal", JSON.stringify(data));
   window.dispatchEvent(new Event("productsUpdated"));
 }
 

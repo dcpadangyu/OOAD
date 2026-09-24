@@ -1,8 +1,10 @@
-<header>
+<header class="store-header">
+  <div class="store-notice"><span>MIỄN PHÍ VẬN CHUYỂN</span> cho đơn từ 10.000.000₫ <span>•</span> Đổi size trong 7 ngày</div>
   <div class="top-nav">
-    <div class="logo">SHOE STORE</div>
+    <a class="logo" href="pages/home.html" aria-label="OOAD trang chủ"><span>OOAD</span><small>STUDIO</small></a>
     <div class="search-box">
-      <input type="text" id="searchInput" placeholder="Tìm kiếm sản phẩm...:" autocomplete="off">
+      <span class="search-icon" aria-hidden="true">⌕</span>
+      <input type="text" id="searchInput" placeholder="Tìm kiếm giày, thương hiệu..." autocomplete="off">
       <div id="searchSuggestions" class="search-suggestions" role="listbox" aria-label="Gợi ý và lịch sử tìm kiếm"></div>
     </div>
     <nav class="category-nav" aria-label="Danh mục sản phẩm">
@@ -15,12 +17,12 @@
     <div class="menu">
       <a href="pages/home.html" class="nav-home">Trang chủ</a>
       <a href="pages/login.html" class="nav-login">Đăng nhập</a>
-      <a href="pages/cart.html" id="open-cart-btn">Giỏ hàng🛒</a>
-      <a href="pages/order-history.html" id="LichSuMuaHangBTN">Lịch sử</a>
+      <a href="pages/cart.html" id="open-cart-btn" class="cart-link"><span aria-hidden="true">□</span> Giỏ hàng</a>
+      <a href="pages/order-history.html" id="LichSuMuaHangBTN">Đơn hàng</a>
       <div class="user-avatar" id="userAvatar" hidden>
         <img src="assets/img/Avatar/avtuser.jpg" alt="avatar">
         <div class="dropdown" id="avatarDropdown">
-          <a class ="nav-profile-header" href="pages/profile.html"><p>Tài khoản: <b id="usernameDisplay"></b></p></a>
+          <a class="nav-profile-header" href="pages/profile.html"><p>Tài khoản: <b id="usernameDisplay"></b></p></a>
           <button id="logoutBtn">Đăng xuất</button>
         </div>
       </div>

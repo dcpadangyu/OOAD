@@ -26,6 +26,13 @@ const output = `// GENERATED FILE — source of truth: components/header.html + 
   }
 
   function mount() {
+    if (!document.querySelector('link[data-ooda-redesign]')) {
+      const style = document.createElement('link');
+      style.rel = 'stylesheet';
+      style.href = 'assets/css/user/redesign.css?v=20260923-2317';
+      style.dataset.oodaRedesign = 'true';
+      document.head.appendChild(style);
+    }
     inject("header", "[data-user-component=\\"header\\"]");
     inject("footer", "[data-user-component=\\"footer\\"]");
     document.dispatchEvent(new CustomEvent("user-shell-ready"));

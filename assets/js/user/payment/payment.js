@@ -1,35 +1,34 @@
 document.addEventListener('DOMContentLoaded',function(){
-    // Xóa đơn hàng đồng hồ (legacy) khỏi DanhSachDatHang
-    function xoaDonDongHo() {
-        try {
-            const ds = JSON.parse(localStorage.getItem("DanhSachDatHang")) || [];
-            if (!Array.isArray(ds) || !ds.length) return;
-            const catalog = JSON.parse(localStorage.getItem("productsLocal")) || [];
-            const known = new Set(catalog.map(p => String(p.id)));
-            const laDongHo = (o) => {
-                const items = Array.isArray(o.product) ? o.product : Array.isArray(o.items) ? o.items : [];
-                if (!items.length) return false;
-                const hit = items.some(it => {
-                    const key = String(it.productId || it.id || it.name || "");
-                    return key.toUpperCase().startsWith("SH-") || known.has(key) || known.has(String(it.name || ""));
-                });
-                return !hit;
-            };
-            const kept = ds.filter(o => !laDongHo(o));
-            if (kept.length !== ds.length) {
-                localStorage.setItem("DanhSachDatHang", JSON.stringify(kept));
-                window.dispatchEvent(new Event("userOrdersUpdated"));
-            }
-        } catch (e) { /* noop */ }
-    }
-    xoaDonDongHo();
-
     function getaddres() {
+    const currentUser = getlogin();
+    let selected = null;
     try {
-        return JSON.parse(localStorage.getItem("selectedAddress")) || null;
+        selected = JSON.parse(localStorage.getItem("selectedAddress")) || null;
     } catch (e) {
-        return null;
+        selected = null;
     }
+
+    if (selected?.address) return selected;
+
+    const addresses = Array.isArray(currentUser?.addresses) ? currentUser.addresses : [];
+    const fallback = addresses.find((address) => address.default) || addresses[0];
+    if (fallback?.address) {
+        localStorage.setItem("selectedAddress", JSON.stringify(fallback));
+        return fallback;
+    }
+
+    if (currentUser?.address) {
+        const profileAddress = {
+            name: currentUser.userName || currentUser.name || "",
+            phone: currentUser.phone || "",
+            email: currentUser.email || "",
+            address: currentUser.address
+        };
+        localStorage.setItem("selectedAddress", JSON.stringify(profileAddress));
+        return profileAddress;
+    }
+
+    return null;
 }
     window.getDanhSachDatHang=function(){
         return JSON.parse(localStorage.getItem("DanhSachDatHang"))||[];
@@ -80,11 +79,11 @@ document.addEventListener('DOMContentLoaded',function(){
 
     window.ktsoluong=function(){
         const product=getproduct();
-        const cart=getcart();
+        const cart=window.getCheckoutCart ? window.getCheckoutCart() : [];
         let isValid = true; 
         cart.forEach(element => {
            const item=product.find(p=>p.id===element.id);
-            if(item.quantity<element.quantity){
+            if(!item || item.quantity<element.quantity){
                 alert(`Rất tiếc, sản phẩm "${element.name}" không đủ số lượng tồn kho.`);
                 isValid=false;
                 return; 
@@ -94,7 +93,7 @@ document.addEventListener('DOMContentLoaded',function(){
     }
     window.trusoluong=function(){
         const product = getproduct();
-        const cart = getcart();
+        const cart = window.getCheckoutCart ? window.getCheckoutCart() : [];
         cart.forEach(el=>{
             const item = product.find(p=>p.id===el.id);
             if (item) item.quantity = Math.max(0, (item.quantity || 0) - el.quantity);
@@ -112,7 +111,7 @@ document.addEventListener('DOMContentLoaded',function(){
             return;
         }
         const address=getaddres();
-        const cart=getcart();
+        const cart=window.getCheckoutCart ? window.getCheckoutCart() : [];
         let tongtien=0;
         cart.forEach(item=>{
             tongtien+=item.priceValue*item.quantity;

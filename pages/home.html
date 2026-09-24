@@ -18,10 +18,24 @@
 <link rel="stylesheet" href="assets/css/user/TrangHienThi.css">
   <link rel="stylesheet" href="assets/css/user/theme.css">
   <link rel="stylesheet" href="assets/css/user/modern.css">
+<link rel="stylesheet" href="assets/css/user/redesign.css?v=20260923-2317">
 </head>
 <body>
 <div data-user-component="header"></div>
-<div id="chitietsanpham-banner-index">
+<div id="chitietsanpham-banner-index" class="store-home">
+  <section class="hero-shell">
+    <div class="hero-copy">
+      <p class="eyebrow">BỘ SƯU TẬP 2026 <span></span></p>
+      <h1>Đi đúng nhịp<br><em>của bạn.</em></h1>
+      <p class="hero-description">Giày chính hãng, chọn lọc cho từng khoảnh khắc. Tối giản trong thiết kế, thoải mái trên mọi hành trình.</p>
+      <a href="#sanpham" class="hero-cta">Khám phá ngay <span aria-hidden="true">↘</span></a>
+      <div class="hero-meta"><strong>50+</strong><span>mẫu mới mỗi tháng</span><strong>7 ngày</strong><span>đổi size miễn phí</span></div>
+    </div>
+    <div class="hero-media">
+      <video class="banner-video" autoplay muted loop playsinline><source src="./assets/filemp4/banner.mp4" type="video/mp4">Trình duyệt của bạn không hỗ trợ video banner.</video>
+      <div class="hero-media-label">OOAD / 01</div>
+    </div>
+  </section>
   <section class="brand-strip" aria-label="Thương hiệu giày">
     <div class="brand-strip-heading">Thương hiệu nổi bật</div>
     <div class="brand-strip-list">
@@ -32,19 +46,6 @@
       <a class="brand-link" href="pages/home.html#sanpham" data-catalog="Vans"><img src="./assets/images/brands/Vans.jpg" alt="Vans"><span>Vans</span></a>
     </div>
   </section>
-  <!-- ===== BANNER ===== -->
-  <section class="banner">
-    <video class="banner-video" autoplay muted loop playsinline>
-      <source src="./assets/filemp4/banner.mp4" type="video/mp4">
-      Trình duyệt của bạn không hỗ trợ video banner.
-    </video>
-    <div class="banner-overlay"></div>
-    <div class="banner-content">
-      <h1>GIÀY CHÍNH HÃNG</h1>
-      <p>Phong cách năng động, thoải mái cho mọi bước chân</p>
-    </div>
-  </section>
-
   <!-- ===== CHI TIẾT SẢN PHẨM ===== -->
   <main class="detail-container">
     <section id="product-detail" style="display: none;">
@@ -55,8 +56,11 @@
   <!-- ===== DANH SÁCH SẢN PHẨM ===== -->
   <div class="main-wrapper" id="product-list-wrapper">
     <main>
-      <aside class="filter-sidebar">
-        <h3>Chọn sản phẩm theo yêu cầu</h3>
+      <div class="catalog-heading" id="sanpham"><div><p class="eyebrow">SHOP ONLINE</p><h2>Tìm đôi phù hợp với bạn</h2></div><p class="catalog-note">Chính hãng · Giao nhanh · Đổi size dễ dàng</p></div>
+      <aside class="filter-sidebar" id="productFilters">
+        <div class="filter-header">
+          <h3>Chọn sản phẩm theo yêu cầu</h3>
+        </div>
         <div class="filter-group">
           <label>Khoảng giá</label>
           <select id="priceFilter" onchange="filterProducts()">
@@ -109,6 +113,22 @@
             <option value="">Tất cả</option>
             <option value="nam">Nam</option>
             <option value="nữ">Nữ</option>
+            <option value="unisex">Unisex</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <label>Size giày</label>
+          <select id="sizeFilter" onchange="filterProducts()">
+            <option value="">Tất cả size</option>
+            <option value="36">36</option>
+            <option value="37">37</option>
+            <option value="38">38</option>
+            <option value="39">39</option>
+            <option value="40">40</option>
+            <option value="41">41</option>
+            <option value="42">42</option>
+            <option value="43">43</option>
+            <option value="44">44</option>
           </select>
         </div>
       </aside>
@@ -141,8 +161,6 @@
   <script src="assets/js/user/core/account-session.js"></script>
   <script src="assets/js/user/core/site-header.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-  <script src="database/reviews.js"></script>
-  <script src="assets/js/user/product/products.js"></script>
-  <script src="assets/js/user/product/reviews.js"></script>
+  <script src="assets/js/user/product/products.js?v=20260923-2218"></script>
 </body>
 </html>

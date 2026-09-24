@@ -8,6 +8,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const currentInput = document.getElementById("currentPassword");
   const newInput = document.getElementById("newPassword");
   const confirmInput = document.getElementById("confirmNewPassword");
+  const otpInput = document.getElementById("changePasswordOtp");
 
   function getUser() { return window.UserSession?.getCurrentUser?.() || null; }
   function updateSidebar(user) {
@@ -24,7 +25,18 @@ document.addEventListener("DOMContentLoaded", () => {
     updateSidebar(user);
   };
 
-  form?.addEventListener("submit", (event) => {
+  document.getElementById("send-change-password-otp")?.addEventListener("click", async () => {
+    const user = getUser();
+    if (!user?.email) return requireLogin();
+    try {
+      await window.UserOtp.request(user.email, "change-password");
+      Swal?.fire?.({ icon: "success", title: "Đã gửi OTP", text: "Kiểm tra Gmail để xác thực đổi mật khẩu." });
+    } catch (error) {
+      Swal?.fire?.({ icon: "error", title: "Không gửi được OTP", text: error.message });
+    }
+  });
+
+  form?.addEventListener("submit", async (event) => {
     event.preventDefault();
     const currentUser = getUser();
     if (!currentUser) return requireLogin();
@@ -32,12 +44,27 @@ document.addEventListener("DOMContentLoaded", () => {
     const currentPassword = currentInput.value;
     const newPassword = newInput.value;
     const confirmPassword = confirmInput.value;
-    if (!currentPassword || !newPassword || !confirmPassword) {
-      Swal?.fire?.({ icon: "error", title: "Lỗi", text: "Vui lòng điền đầy đủ thông tin!" });
+    if (!newPassword || !confirmPassword) {
+      Swal?.fire?.({ icon: "error", title: "Lỗi", text: "Vui lòng nhập mật khẩu mới và xác nhận mật khẩu!" });
       return;
     }
-    if (currentPassword !== String(currentUser.password ?? "")) {
-      Swal?.fire?.({ icon: "error", title: "Lỗi", text: "Mật khẩu hiện tại không đúng!" });
+    if (!currentPassword && !otpInput?.value.trim()) {
+      Swal?.fire?.({ icon: "error", title: "Lỗi", text: "Vui lòng nhập mật khẩu cũ hoặc mã OTP Gmail!" });
+      return;
+    }
+    const hasValidOldPassword = currentPassword && currentPassword === String(currentUser.password ?? "");
+    let hasValidOtp = false;
+    if (otpInput?.value.trim()) {
+      try {
+        await window.UserOtp.verify(currentUser.email, "change-password", otpInput.value.trim());
+        hasValidOtp = true;
+      } catch (error) {
+        Swal?.fire?.({ icon: "error", title: "OTP không hợp lệ", text: error.message });
+        return;
+      }
+    }
+    if (!hasValidOldPassword && !hasValidOtp) {
+      Swal?.fire?.({ icon: "error", title: "Lỗi", text: "Mật khẩu cũ hoặc mã OTP không đúng!" });
       return;
     }
     if (newPassword.length < 8) {
