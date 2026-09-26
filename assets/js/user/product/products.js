@@ -100,15 +100,25 @@ function openProductPopup(product) {
   const sizeOptions = sizes.length > 1
     ? Array.from({ length: Number(sizes[1]) - Number(sizes[0]) + 1 }, (_, index) => Number(sizes[0]) + index)
     : sizes;
-  detail.innerHTML = `<div class="product-info"><div class="left"><img src="${product.image}" alt="${product.name}"></div><div class="right"><p class="desc">${product.desc}</p><h2>${product.name}</h2><p><strong>Màu sắc:</strong> ${product.color}</p><p><strong>Chất liệu:</strong> ${product.material}</p><p><strong>Phong cách:</strong> ${product.style}</p><p><strong>Giới tính:</strong> ${product.gender}</p><label for="product-size"><strong>Chọn size:</strong></label><select id="product-size">${sizeOptions.map((size) => `<option value="${size}">${size}</option>`).join("")}</select><p class="price">${product.price}</p><div class="actions"><button id="add-to-cart">Thêm vào giỏ hàng</button><button id="buy-now">Mua ngay</button></div></div></div><div class="description"><h3>Mô tả sản phẩm</h3><p>${product.description}</p><h3>Thông số giày</h3><p><strong>Chất liệu:</strong> ${product.material}</p><p><strong>Phong cách:</strong> ${product.style}</p><p><strong>Kích thước:</strong> ${product.size}</p><p><strong>Xuất xứ:</strong> ${product.origin}</p></div>`;
+  detail.innerHTML = `<div class="product-info"><div class="left"><img src="${product.image}" alt="${product.name}"></div><div class="right"><p class="desc">${product.desc}</p><h2>${product.name}</h2><p><strong>Màu sắc:</strong> ${product.color}</p><p><strong>Chất liệu:</strong> ${product.material}</p><p><strong>Phong cách:</strong> ${product.style}</p><p><strong>Giới tính:</strong> ${product.gender}</p><div class="size-picker"><strong>Chọn size:</strong><div class="size-options" role="radiogroup" aria-label="Chọn size">${sizeOptions.map((size, index) => `<button type="button" class="size-option${index === 0 ? " active" : ""}" data-size="${size}" aria-pressed="${index === 0}">${size}</button>`).join("")}</div></div><p class="price">${product.price}</p><div class="actions"><button id="add-to-cart">Thêm vào giỏ hàng</button><button id="buy-now">Mua ngay</button></div></div></div><div class="description"><h3>Mô tả sản phẩm</h3><p>${product.description}</p><h3>Thông số giày</h3><p><strong>Chất liệu:</strong> ${product.material}</p><p><strong>Phong cách:</strong> ${product.style}</p><p><strong>Kích thước:</strong> ${product.size}</p><p><strong>Xuất xứ:</strong> ${product.origin}</p></div>`;
   popup.style.display = "flex";
   document.body.style.overflow = "hidden";
+  let selectedSize = String(sizeOptions[0] || product.size);
+  detail.querySelectorAll(".size-option").forEach((button) => {
+    button.addEventListener("click", () => {
+      selectedSize = button.dataset.size || selectedSize;
+      detail.querySelectorAll(".size-option").forEach((option) => {
+        const isSelected = option === button;
+        option.classList.toggle("active", isSelected);
+        option.setAttribute("aria-pressed", String(isSelected));
+      });
+    });
+  });
   const addToCart = () => {
     const cart = JSON.parse(localStorage.getItem("cart") || "[]");
-    const size = document.getElementById("product-size")?.value || product.size;
-    const existing = cart.find((item) => item.id === product.id && String(item.selectedSize) === String(size));
+    const existing = cart.find((item) => item.id === product.id && String(item.selectedSize) === selectedSize);
     if (existing) existing.quantity += 1;
-    else cart.push({ ...product, selectedSize: size, quantity: 1 });
+    else cart.push({ ...product, selectedSize, quantity: 1 });
     localStorage.setItem("cart", JSON.stringify(cart));
     alert("Đã thêm giày vào giỏ hàng!");
   };
