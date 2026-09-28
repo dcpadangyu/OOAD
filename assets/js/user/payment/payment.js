@@ -83,8 +83,17 @@ document.addEventListener('DOMContentLoaded',function(){
         let isValid = true; 
         cart.forEach(element => {
            const item=product.find(p=>p.id===element.id);
-            if(!item || item.quantity<element.quantity){
-                alert(`Rất tiếc, sản phẩm "${element.name}" không đủ số lượng tồn kho.`);
+            const selectedSize = String(element.selectedSize || "");
+            const available = item?.sizeStock && selectedSize
+                ? Math.max(0, Number(item.sizeStock[selectedSize]) || 0)
+                : Math.max(0, Number(item?.quantity) || 0);
+            if(!item || available < Number(element.quantity)){
+                const message = `Sản phẩm "${element.name}" không đủ. Size ${selectedSize || "này"} chỉ còn ${available}.`;
+                if (typeof Swal !== "undefined") {
+                    Swal.fire({ icon: "warning", title: "Sản phẩm không đủ", text: message, confirmButtonText: "Đã hiểu" });
+                } else {
+                    alert(message);
+                }
                 isValid=false;
                 return; 
         } 
@@ -96,7 +105,13 @@ document.addEventListener('DOMContentLoaded',function(){
         const cart = window.getCheckoutCart ? window.getCheckoutCart() : [];
         cart.forEach(el=>{
             const item = product.find(p=>p.id===el.id);
-            if (item) item.quantity = Math.max(0, (item.quantity || 0) - el.quantity);
+            if (!item) return;
+            const selectedSize = String(el.selectedSize || "");
+            if (item.sizeStock && selectedSize) {
+                item.sizeStock[selectedSize] = Math.max(0, (Number(item.sizeStock[selectedSize]) || 0) - el.quantity);
+            } else {
+                item.quantity = Math.max(0, (item.quantity || 0) - el.quantity);
+            }
         });
         localStorage.setItem("productsLocal", JSON.stringify(product));
         window.dispatchEvent(new Event("productsUpdated"));

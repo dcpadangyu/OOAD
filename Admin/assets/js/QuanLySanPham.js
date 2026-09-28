@@ -4,6 +4,25 @@ let QLSP_currentPage = 1;
 let QLSP_productsLocal = [];
 let QLSP_mangDaLoc = [];
 
+function QLSP_parseSizeStock(value) {
+  const stock = {};
+  String(value || "").split(",").forEach((entry) => {
+    const [size, quantity] = entry.split(":").map((part) => part.trim());
+    if (!/^\d+(?:\.\d+)?$/.test(size || "") || !/^\d+$/.test(quantity || "")) return;
+    stock[size] = Number(quantity);
+  });
+  return Object.keys(stock).length ? stock : null;
+}
+
+function QLSP_formatSizeStock(stock) {
+  if (!stock || typeof stock !== "object") return "";
+  return Object.keys(stock).sort((a, b) => Number(a) - Number(b)).map((size) => `${size}:${Number(stock[size]) || 0}`).join(", ");
+}
+
+function QLSP_totalSizeStock(stock) {
+  return stock ? Object.values(stock).reduce((total, quantity) => total + (Number(quantity) || 0), 0) : null;
+}
+
 // ==================== KHI LOAD TRANG ====================
 document.addEventListener("DOMContentLoaded", function () {
   try {
@@ -275,6 +294,11 @@ QLSP_formThemSP.addEventListener("submit", function (e) {
     return;
   }
 
+  const newSizeStock = QLSP_parseSizeStock(document.getElementById("QLSP_spSizeStock").value);
+  if (document.getElementById("QLSP_spSizeStock").value.trim() && !newSizeStock) {
+    alert("Tồn kho theo size không hợp lệ. Dùng định dạng như: 36:2, 37:0, 38:5");
+    return;
+  }
   const spMoi = {
     id: idValue,
     catalog: document.getElementById("QLSP_spCatalog").value,
@@ -289,6 +313,7 @@ QLSP_formThemSP.addEventListener("submit", function (e) {
     price: "0₫",
     visibility: "visible",
     size: document.getElementById("QLSP_spSize").value.trim(),
+    ...(newSizeStock ? { sizeStock: newSizeStock, quantity: QLSP_totalSizeStock(newSizeStock) } : {}),
     material: document.getElementById("QLSP_spGlass").value.trim(),
     style: document.getElementById("QLSP_spStrap").value.trim(),
     importQuantity: 0,
@@ -340,6 +365,7 @@ function QLSP_openEditModal(product) {
   document.getElementById("QLSP_editImportPrice").value = product.importPrice;
   document.getElementById("QLSP_editVisibility").value = product.visibility;
   document.getElementById("QLSP_editSize").value = product.size || "";
+  document.getElementById("QLSP_editSizeStock").value = QLSP_formatSizeStock(product.sizeStock);
   document.getElementById("QLSP_editGlass").value = product.material || "";
   document.getElementById("QLSP_editStrap").value = product.style || "";
   document.getElementById("QLSP_editDescription").value =
@@ -399,6 +425,11 @@ document
     const editImageInput = document.getElementById("QLSP_editImage");
     let imageData = editImageInput.dataset.imageData || dsSanPham[index].image;
 
+    const editedSizeStock = QLSP_parseSizeStock(document.getElementById("QLSP_editSizeStock").value);
+    if (document.getElementById("QLSP_editSizeStock").value.trim() && !editedSizeStock) {
+      alert("Tồn kho theo size không hợp lệ. Dùng định dạng như: 36:2, 37:0, 38:5");
+      return;
+    }
     dsSanPham[index] = {
       ...dsSanPham[index],
       catalog: document.getElementById("QLSP_editCatalog").value,
@@ -409,6 +440,7 @@ document
       importPrice: giaSuaValue,
       visibility: document.getElementById("QLSP_editVisibility").value,
       size: document.getElementById("QLSP_editSize").value.trim(),
+      ...(editedSizeStock ? { sizeStock: editedSizeStock, quantity: QLSP_totalSizeStock(editedSizeStock) } : { sizeStock: undefined }),
       material: document.getElementById("QLSP_editGlass").value.trim(),
       style: document.getElementById("QLSP_editStrap").value.trim(),
       description: document.getElementById("QLSP_editDescription").value.trim(),

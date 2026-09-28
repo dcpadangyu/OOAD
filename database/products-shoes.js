@@ -25,6 +25,15 @@ function shoeName(path) {
   return file.split("-").map((part) => part.charAt(0).toUpperCase() + part.slice(1)).join(" ");
 }
 
+function createSizeStock(total, start = 36, end = 50) {
+  const count = end - start + 1;
+  const base = Math.floor(Math.max(0, Number(total) || 0) / count);
+  let remainder = Math.max(0, Number(total) || 0) % count;
+  return Object.fromEntries(
+    Array.from({ length: count }, (_, index) => [String(start + index), base + (remainder-- > 0 ? 1 : 0)])
+  );
+}
+
 const products = shoeImagePaths.map((imagePath, index) => {
   const catalogFolder = imagePath.split("/")[0];
   const catalog = catalogFolder.toLowerCase() === "mlb" ? "MLB" : catalogFolder;
@@ -40,7 +49,8 @@ const products = shoeImagePaths.map((imagePath, index) => {
     color: shoeColor(imagePath),
     material,
     style: index % 3 === 0 ? "Thời trang" : index % 3 === 1 ? "Thể thao" : "Casual",
-    size: "36 - 44",
+    size: "36 - 50",
+    sizeStock: createSizeStock(20 + (index % 6) * 5),
     priceValue,
     price: `${priceValue.toLocaleString("vi-VN")}₫`,
     image: `assets/images/products/${imagePath}`,
@@ -57,13 +67,47 @@ const products = shoeImagePaths.map((imagePath, index) => {
 function getLocalProducts() {
   try {
     const stored = JSON.parse(localStorage.getItem("productsLocal") || "null");
-    const isShoeCatalog = Array.isArray(stored) && stored.length > 0 && stored.every((product) => product.image && product.image.includes("assets/images/products"));
-    if (isShoeCatalog) return stored;
+    const isShoeCatalog = Array.isArray(stored) && stored.length > 0 && stored.every((product) => product && product.id && product.name && product.image);
+    if (isShoeCatalog) {
+      const normalized = stored.map(normalizeLocalProduct);
+      localStorage.setItem("productsLocal", JSON.stringify(normalized));
+      return normalized;
+    }
   } catch (error) {
     console.error("Loi khi doc san pham:", error);
   }
   localStorage.setItem("productsLocal", JSON.stringify(products));
   return products;
+}
+
+function normalizeLocalProduct(product) {
+  if (!product || typeof product !== "object") return product;
+  const normalized = { ...product };
+  if (!normalized.sizeStock && normalized.size) {
+    const sizes = String(normalized.size).match(/(\d+)\s*[-–]\s*(\d+)/);
+    if (sizes) {
+      const start = Number(sizes[1]);
+      const end = Number(sizes[2]);
+      if (end >= start && end - start <= 30) {
+        normalized.sizeStock = createSizeStock(normalized.quantity, start, end);
+      }
+    }
+  }
+  if (normalized.sizeStock && typeof normalized.sizeStock === "object" && !Array.isArray(normalized.sizeStock)) {
+    const sizeStock = {};
+    Object.entries(normalized.sizeStock).forEach(([size, quantity]) => {
+      if (/^\d+(?:\.\d+)?$/.test(size) && Number.isFinite(Number(quantity))) {
+        sizeStock[size] = Math.max(0, Math.floor(Number(quantity)));
+      }
+    });
+    if (Object.keys(sizeStock).length) {
+      normalized.sizeStock = sizeStock;
+      normalized.quantity = Object.values(sizeStock).reduce((total, quantity) => total + quantity, 0);
+    } else {
+      delete normalized.sizeStock;
+    }
+  }
+  return normalized;
 }
 
 function saveLocalProducts(data) {

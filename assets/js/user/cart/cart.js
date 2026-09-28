@@ -55,10 +55,20 @@ document.addEventListener("DOMContentLoaded", function () {
         localStorage.setItem("selectedCartItems", JSON.stringify(keys));
         renderallcart();
     }
-    function addItemQuantity(productid) {
+    function addItemQuantity(productid, selectedSize = "") {
         const cart = getcart();
-        const item = cart.find(p => p.id === productid);
+        const item = cart.find(p => p.id === productid && String(p.selectedSize || "") === String(selectedSize || ""));
         if (item) {
+            const products = JSON.parse(localStorage.getItem("productsLocal") || "[]");
+            const product = products.find((p) => p.id === item.id);
+            const selectedSize = String(item.selectedSize || "");
+            const available = product?.sizeStock && selectedSize
+                ? Number(product.sizeStock[selectedSize]) || 0
+                : Number(product?.quantity) || 0;
+            if (item.quantity >= available) {
+                alert(`Sản phẩm không đủ. Size ${selectedSize || "này"} chỉ còn ${available}.`);
+                return;
+            }
             item.quantity++;
             saveCart(cart);
         }
@@ -70,9 +80,9 @@ document.addEventListener("DOMContentLoaded", function () {
         const selected = getSelectedCartKeys().filter((key) => !key.startsWith(`${productId}::`));
         localStorage.setItem("selectedCartItems", JSON.stringify(selected));
     }
-    function removeItemQuantity(productid) {
+    function removeItemQuantity(productid, selectedSize = "") {
         const cart = getcart();
-        const item = cart.find(p => p.id === productid);
+        const item = cart.find(p => p.id === productid && String(p.selectedSize || "") === String(selectedSize || ""));
         if (item) {
             if (item.quantity > 1) {
                 item.quantity--;
@@ -117,9 +127,9 @@ document.addEventListener("DOMContentLoaded", function () {
                 </div>
                 <div class="item-price">${item.price}</div>
                 <div class="item-quantity-all">
-                    <div class="remove-quantity" onclick="removeItemQuantity('${item.id}')">-</div>
+                    <div class="remove-quantity" onclick="removeItemQuantity('${item.id}', '${item.selectedSize || ""}')">-</div>
                     <div class="quantity">${item.quantity}</div>
-                    <div class="add-quantity" onclick="addItemQuantity('${item.id}')">+</div>
+                    <div class="add-quantity" onclick="addItemQuantity('${item.id}', '${item.selectedSize || ""}')">+</div>
                 </div>
             </div>
                      `;

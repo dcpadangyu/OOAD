@@ -245,17 +245,43 @@
 }
 
 [data-user-component="header"] .dropdown a {
-    color: #b08d57;
+    display: block;
+    padding: 4px 4px 12px;
+    color: #171717;
     text-decoration: none;
 }
 
-[data-user-component="header"] .dropdown p {
-    margin: 0 0 12px;
-    color: #b08d57;
+[data-user-component="header"] .dropdown a:hover {
+    background: transparent;
+    color: #171717;
 }
 
-[data-user-component="header"] .dropdown p b {
+[data-user-component="header"] .dropdown .dropdown-label,
+[data-user-component="header"] .dropdown .dropdown-link {
+    display: block;
+}
+
+[data-user-component="header"] .dropdown .dropdown-label {
+    margin-bottom: 4px;
+    color: #77736a;
+    font-size: 11px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+}
+
+[data-user-component="header"] .dropdown strong {
+    display: block;
+    overflow: hidden;
     color: #7c2638;
+    font-size: 14px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+[data-user-component="header"] .dropdown .dropdown-link {
+    margin-top: 5px;
+    color: #77736a;
+    font-size: 12px;
 }
 
 [data-user-component="header"] #logoutBtn {

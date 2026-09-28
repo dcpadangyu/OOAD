@@ -16,14 +16,17 @@
   function normalizeUser(user) {
     if (!user || typeof user !== "object") return null;
     const normalized = { ...user };
-    normalized.userName = String(user.userName || user.username || user.name || "").trim();
+    // username is the immutable login identity; userName/displayName is editable.
+    normalized.username = String(user.username || user.loginUsername || user.userName || user.name || "").trim();
+    normalized.userName = String(user.displayName || user.name || user.userName || normalized.username || "").trim();
+    normalized.displayName = normalized.userName;
     normalized.email = String(user.email || "").trim();
     normalized.phone = String(user.phone || "").trim();
     normalized.address = String(user.address || "").trim();
     normalized.avatar = user.avatar || DEFAULT_AVATAR;
     normalized.addresses = Array.isArray(user.addresses) ? user.addresses : [];
     if (!normalized.id) {
-      const identity = (normalized.email || normalized.userName || "user").toLowerCase();
+      const identity = (normalized.email || normalized.username || "user").toLowerCase();
       normalized.id = `user_${identity.replace(/[^a-z0-9]+/g, "_")}`;
     }
     return normalized;
@@ -44,8 +47,8 @@
     const aEmail = String(a.email || "").trim().toLowerCase();
     const bEmail = String(b.email || "").trim().toLowerCase();
     if (aEmail && bEmail && aEmail === bEmail) return true;
-    const aName = String(a.userName || a.username || a.name || "").trim().toLowerCase();
-    const bName = String(b.userName || b.username || b.name || "").trim().toLowerCase();
+    const aName = String(a.username || a.loginUsername || a.userName || a.name || "").trim().toLowerCase();
+    const bName = String(b.username || b.loginUsername || b.userName || b.name || "").trim().toLowerCase();
     return !!aName && !!bName && aName === bName;
   }
 

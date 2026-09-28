@@ -35,7 +35,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const users = getUsers();
     let user = users.find((item) => {
       const email = String(item.email || "").trim().toLowerCase();
-      const name = String(item.userName || "").trim().toLowerCase();
+      const name = String(item.username || item.loginUsername || item.userName || "").trim().toLowerCase();
       return (email === normalized || name === normalized) && String(item.password ?? "") === password;
     });
 
@@ -46,7 +46,7 @@ document.addEventListener("DOMContentLoaded", () => {
         if (Array.isArray(customers)) {
           user = customers.find((item) => {
             const email = String(item.email || "").trim().toLowerCase();
-            const name = String(item.userName || item.username || item.name || "").trim().toLowerCase();
+            const name = String(item.username || item.loginUsername || item.userName || item.name || "").trim().toLowerCase();
             return (email === normalized || name === normalized) && String(item.password ?? "") === password;
           }) || null;
         }

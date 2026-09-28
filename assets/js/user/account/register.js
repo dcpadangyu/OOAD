@@ -117,7 +117,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const user = {
       id: `user_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`,
+      username: input.username.value.trim(),
       userName: input.username.value.trim(),
+      displayName: input.username.value.trim(),
       email: input.email.value.trim(),
       phone: input.phone.value.trim(),
       password: input.password.value,

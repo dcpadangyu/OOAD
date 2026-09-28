@@ -25,6 +25,15 @@ function shoeName(path) {
   return file.split("-").map((part) => part.charAt(0).toUpperCase() + part.slice(1)).join(" ");
 }
 
+function createSizeStock(total, start = 36, end = 50) {
+  const count = end - start + 1;
+  const base = Math.floor(Math.max(0, Number(total) || 0) / count);
+  let remainder = Math.max(0, Number(total) || 0) % count;
+  return Object.fromEntries(
+    Array.from({ length: count }, (_, index) => [String(start + index), base + (remainder-- > 0 ? 1 : 0)])
+  );
+}
+
 const products = shoeImagePaths.map((imagePath, index) => {
   const catalogFolder = imagePath.split("/")[0];
   const catalog = catalogFolder.toLowerCase() === "mlb" ? "MLB" : catalogFolder;
@@ -40,7 +49,8 @@ const products = shoeImagePaths.map((imagePath, index) => {
     color: shoeColor(imagePath),
     material,
     style: index % 3 === 0 ? "Thời trang" : index % 3 === 1 ? "Thể thao" : "Casual",
-    size: "36 - 44",
+    size: "36 - 50",
+    sizeStock: createSizeStock(20 + (index % 6) * 5),
     priceValue,
     price: `${priceValue.toLocaleString("vi-VN")}₫`,
     image: `assets/images/products/${imagePath}`,
@@ -57,13 +67,47 @@ const products = shoeImagePaths.map((imagePath, index) => {
 function getLocalProducts() {
   try {
     const stored = JSON.parse(localStorage.getItem("productsLocal") || "null");
-    const isShoeCatalog = Array.isArray(stored) && stored.length > 0 && stored.every((product) => product.image && product.image.includes("assets/images/products"));
-    if (isShoeCatalog) return stored;
+    const isShoeCatalog = Array.isArray(stored) && stored.length > 0 && stored.every((product) => product && product.id && product.name && product.image);
+    if (isShoeCatalog) {
+      const normalized = stored.map(normalizeLocalProduct);
+      localStorage.setItem("productsLocal", JSON.stringify(normalized));
+      return normalized;
+    }
   } catch (error) {
     console.error("Loi khi doc san pham:", error);
   }
   localStorage.setItem("productsLocal", JSON.stringify(products));
   return products;
+}
+
+function normalizeLocalProduct(product) {
+  if (!product || typeof product !== "object") return product;
+  const normalized = { ...product };
+  if (!normalized.sizeStock && normalized.size) {
+    const sizes = String(normalized.size).match(/(\d+)\s*[-–]\s*(\d+)/);
+    if (sizes) {
+      const start = Number(sizes[1]);
+      const end = Number(sizes[2]);
+      if (end >= start && end - start <= 30) {
+        normalized.sizeStock = createSizeStock(normalized.quantity, start, end);
+      }
+    }
+  }
+  if (normalized.sizeStock && typeof normalized.sizeStock === "object" && !Array.isArray(normalized.sizeStock)) {
+    const sizeStock = {};
+    Object.entries(normalized.sizeStock).forEach(([size, quantity]) => {
+      if (/^\d+(?:\.\d+)?$/.test(size) && Number.isFinite(Number(quantity))) {
+        sizeStock[size] = Math.max(0, Math.floor(Number(quantity)));
+      }
+    });
+    if (Object.keys(sizeStock).length) {
+      normalized.sizeStock = sizeStock;
+      normalized.quantity = Object.values(sizeStock).reduce((total, quantity) => total + quantity, 0);
+    } else {
+      delete normalized.sizeStock;
+    }
+  }
+  return normalized;
 }
 
 const PER_PAGE = 15;
@@ -92,18 +136,61 @@ function renderProducts(list, page = 1) {
   renderPagination(totalPages, currentPage);
 }
 
+function getProductSizes(product) {
+  if (product?.sizeStock && typeof product.sizeStock === "object" && !Array.isArray(product.sizeStock)) {
+    const declaredSizes = getProductSizes({ size: product.size });
+    const stockSizes = Object.keys(product.sizeStock).map(Number).filter(Number.isFinite);
+    return [...new Set([...declaredSizes, ...stockSizes])].sort((a, b) => a - b);
+  }
+  const value = product?.sizes ?? product?.availableSizes ?? product?.size;
+  if (Array.isArray(value)) {
+    return [...new Set(value.map((size) => Number(size)).filter(Number.isFinite))].sort((a, b) => a - b);
+  }
+  const text = String(value || "").trim();
+  if (!text) return [];
+  const range = text.match(/^(\d+(?:\.\d+)?)\s*[-–]\s*(\d+(?:\.\d+)?)$/);
+  if (range) {
+    const start = Number(range[1]);
+    const end = Number(range[2]);
+    if (end >= start && end - start <= 30) {
+      return Array.from({ length: Math.floor(end - start) + 1 }, (_, index) => start + index);
+    }
+  }
+  return [...new Set(text.split(/[,;/|]+/).map((size) => Number(size.trim())).filter(Number.isFinite))].sort((a, b) => a - b);
+}
+
+function renderAvailableSizeFilter() {
+  const filter = document.getElementById("sizeFilter");
+  const group = filter?.closest(".filter-group");
+  if (!filter || !group) return;
+  const sizes = [...new Set(localproducts.flatMap(getProductSizes))].sort((a, b) => a - b);
+  filter.replaceChildren(new Option("Tất cả size", ""));
+  sizes.forEach((size) => filter.appendChild(new Option(String(size), String(size))));
+  group.hidden = sizes.length === 0;
+}
+
 function openProductPopup(product) {
   const popup = document.getElementById("product-popup");
   const detail = document.getElementById("popup-details");
   if (!popup || !detail) return;
-  const sizes = String(product.size || "36 - 44").split("-").map((size) => size.trim()).filter(Boolean);
-  const sizeOptions = sizes.length > 1
-    ? Array.from({ length: Number(sizes[1]) - Number(sizes[0]) + 1 }, (_, index) => Number(sizes[0]) + index)
-    : sizes;
-  detail.innerHTML = `<div class="product-info"><div class="left"><img src="${product.image}" alt="${product.name}"></div><div class="right"><p class="desc">${product.desc}</p><h2>${product.name}</h2><p><strong>Màu sắc:</strong> ${product.color}</p><p><strong>Chất liệu:</strong> ${product.material}</p><p><strong>Phong cách:</strong> ${product.style}</p><p><strong>Giới tính:</strong> ${product.gender}</p><div class="size-picker"><strong>Chọn size:</strong><div class="size-options" role="radiogroup" aria-label="Chọn size">${sizeOptions.map((size, index) => `<button type="button" class="size-option${index === 0 ? " active" : ""}" data-size="${size}" aria-pressed="${index === 0}">${size}</button>`).join("")}</div></div><p class="price">${product.price}</p><div class="actions"><button id="add-to-cart">Thêm vào giỏ hàng</button><button id="buy-now">Mua ngay</button></div></div></div><div class="description"><h3>Mô tả sản phẩm</h3><p>${product.description}</p><h3>Thông số giày</h3><p><strong>Chất liệu:</strong> ${product.material}</p><p><strong>Phong cách:</strong> ${product.style}</p><p><strong>Kích thước:</strong> ${product.size}</p><p><strong>Xuất xứ:</strong> ${product.origin}</p></div>`;
+  const sizeOptions = getProductSizes(product);
+  const stockForSize = (size) => product.sizeStock && typeof product.sizeStock === "object"
+    ? Math.max(0, Number(product.sizeStock[String(size)]) || 0)
+    : null;
+  const firstAvailableSize = sizeOptions.find((size) => stockForSize(size) === null || stockForSize(size) > 0);
+  const sizePicker = sizeOptions.length
+    ? `<div class="size-picker"><strong>Chọn size:</strong><div class="size-options" role="radiogroup" aria-label="Chọn size">${sizeOptions.map((size) => {
+      const stock = stockForSize(size);
+      const available = stock === null || stock > 0;
+      const selected = available && size === firstAvailableSize;
+      return `<button type="button" class="size-option${selected ? " active" : ""}${available ? "" : " sold-out"}" data-size="${size}" aria-pressed="${selected}"${available ? "" : " disabled"}>${size}${available ? "" : " (Hết hàng)"}</button>`;
+    }).join("")}</div></div>`
+    : "";
+  const sizeDescription = sizeOptions.length ? `<p><strong>Kích thước:</strong> ${sizeOptions.join(", ")}</p>` : "";
+  detail.innerHTML = `<div class="product-info"><div class="left"><img src="${product.image}" alt="${product.name}"></div><div class="right"><p class="desc">${product.desc}</p><h2>${product.name}</h2><p><strong>Màu sắc:</strong> ${product.color}</p><p><strong>Chất liệu:</strong> ${product.material}</p><p><strong>Phong cách:</strong> ${product.style}</p><p><strong>Giới tính:</strong> ${product.gender}</p>${sizePicker}<p class="price">${product.price}</p><div class="actions"><button id="add-to-cart">Thêm vào giỏ hàng</button><button id="buy-now">Mua ngay</button></div></div></div><div class="description"><h3>Mô tả sản phẩm</h3><p>${product.description}</p><h3>Thông số giày</h3><p><strong>Chất liệu:</strong> ${product.material}</p><p><strong>Phong cách:</strong> ${product.style}</p>${sizeDescription}<p><strong>Xuất xứ:</strong> ${product.origin}</p></div>`;
   popup.style.display = "flex";
   document.body.style.overflow = "hidden";
-  let selectedSize = String(sizeOptions[0] || product.size);
+  let selectedSize = firstAvailableSize == null ? "" : String(firstAvailableSize);
   detail.querySelectorAll(".size-option").forEach((button) => {
     button.addEventListener("click", () => {
       selectedSize = button.dataset.size || selectedSize;
@@ -115,15 +202,29 @@ function openProductPopup(product) {
     });
   });
   const addToCart = () => {
+    const latestProduct = getLocalProducts().find((item) => item.id === product.id) || product;
+    if (sizeOptions.length && !selectedSize) {
+      alert("Sản phẩm hiện đã hết hàng ở tất cả size.");
+      return false;
+    }
     const cart = JSON.parse(localStorage.getItem("cart") || "[]");
-    const existing = cart.find((item) => item.id === product.id && String(item.selectedSize) === selectedSize);
-    if (existing) existing.quantity += 1;
-    else cart.push({ ...product, selectedSize, quantity: 1 });
+    const existing = cart.find((item) => item.id === product.id && String(item.selectedSize || "") === selectedSize);
+    const requestedQuantity = Number(existing?.quantity || 0) + 1;
+    const availableQuantity = selectedSize && latestProduct.sizeStock
+      ? Math.max(0, Number(latestProduct.sizeStock[selectedSize]) || 0)
+      : Math.max(0, Number(latestProduct.quantity) || 0);
+    if (requestedQuantity > availableQuantity) {
+      alert(`Sản phẩm không đủ. Size ${selectedSize || "này"} chỉ còn ${availableQuantity}.`);
+      return false;
+    }
+    if (existing) existing.quantity = requestedQuantity;
+    else cart.push({ ...latestProduct, ...(selectedSize ? { selectedSize } : {}), quantity: 1 });
     localStorage.setItem("cart", JSON.stringify(cart));
     alert("Đã thêm giày vào giỏ hàng!");
+    return true;
   };
   document.getElementById("add-to-cart").addEventListener("click", addToCart);
-  document.getElementById("buy-now").addEventListener("click", () => { addToCart(); popup.style.display = "none"; document.body.style.overflow = "auto"; document.getElementById("open-cart-btn")?.click(); });
+  document.getElementById("buy-now").addEventListener("click", () => { if (addToCart()) { popup.style.display = "none"; document.body.style.overflow = "auto"; document.getElementById("open-cart-btn")?.click(); } });
 }
 
 function renderPagination(totalPages, page) {
@@ -149,8 +250,8 @@ function applyAllFilters() {
   const search = document.getElementById("searchInput")?.value.trim().toLowerCase() || "";
   const filtered = localproducts.filter((product) => {
     const matchesPrice = !price || (price === "duoi1" ? product.priceValue < 1000000 : price === "tren4" ? product.priceValue > 4000000 : product.priceValue >= Number(price.split("-")[0]) * 1000000 && product.priceValue <= Number(price.split("-")[1]) * 1000000);
-    const productSizes = String(product.size || "").split("-").map((value) => Number(value.trim())).filter(Boolean);
-    const matchesSize = !size || (productSizes.length === 2 && Number(size) >= productSizes[0] && Number(size) <= productSizes[1]) || productSizes.includes(Number(size));
+    const productSizes = getProductSizes(product);
+    const matchesSize = !size || productSizes.includes(Number(size));
     return (!currentCatalog || String(product.catalog).toLowerCase() === String(currentCatalog).toLowerCase()) && (!search || `${product.name} ${product.catalog}`.toLowerCase().includes(search)) && matchesPrice && (!color || product.color.toLowerCase() === color) && (!material || product.material.toLowerCase() === material) && (!style || product.style.toLowerCase() === style) && (!gender || product.gender.toLowerCase() === gender) && matchesSize;
   });
   renderProducts(filtered, 1);
@@ -186,7 +287,11 @@ function renderSearchSuggestions() {
 function searchProducts() { applyAllFilters(); renderSearchSuggestions(); }
 function renderProductsByCatalog(catalog) { currentCatalog = catalog; applyAllFilters(); }
 
-window.addEventListener("productsUpdated", () => { localproducts = getLocalProducts(); renderProducts(localproducts, 1); });
+window.addEventListener("productsUpdated", () => {
+  localproducts = getLocalProducts();
+  renderAvailableSizeFilter();
+  renderProducts(localproducts, 1);
+});
 document.addEventListener("DOMContentLoaded", () => {
   const heroCta = document.querySelector(".hero-cta");
   const productHeading = document.getElementById("sanpham");
@@ -224,4 +329,5 @@ document.addEventListener("DOMContentLoaded", () => {
   if (category) { renderProductsByCatalog(category); }
   else if (searchParam) { applyAllFilters(); }
   else { renderProducts(localproducts, 1); }
+  renderAvailableSizeFilter();
 });

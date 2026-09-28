@@ -66,6 +66,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const updated = {
       ...current,
       userName: nameInput.value.trim(),
+      displayName: nameInput.value.trim(),
+      username: current.username || current.loginUsername || current.userName,
       email: emailInput.value.trim(),
       phone: phoneInput.value.trim(),
       address: addressInput.value.trim()
