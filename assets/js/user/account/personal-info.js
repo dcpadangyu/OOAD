@@ -15,14 +15,44 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function getUser() { return window.UserSession?.getCurrentUser?.() || null; }
 
+  // Thông báo lỗi/thành công: dùng SweetAlert2 (dạng text, không html) và dự phòng bằng alert.
+  function popup(icon, title, text) {
+    if (window.Swal?.fire) return window.Swal.fire({ icon, title, text });
+    alert(`${title}\n${text}`);
+    return null;
+  }
+
+  const EMAIL_PATTERN = /^[^\s@"'<>]+@[^\s@"'<>]+\.[^\s@"'<>]+$/;
+  const PHONE_PATTERN = /^0\d{9}$/;
+
+  // Trả về thông báo lỗi (hoặc null) cho dữ liệu hồ sơ; so sánh trùng với CÁC tài khoản khác.
+  function validateProfile(data, current) {
+    if (!data.hoTen) return "Họ tên không được để trống.";
+    if (data.hoTen.length > 60) return "Họ tên không được vượt quá 60 ký tự.";
+    if (/[<>]/.test(data.hoTen)) return "Họ tên không được chứa ký tự < hoặc >.";
+    if (!data.thuDienTu) return "Email không được để trống.";
+    if (!EMAIL_PATTERN.test(data.thuDienTu)) return "Email không hợp lệ.";
+    if (!PHONE_PATTERN.test(data.soDienThoai)) return "Số điện thoại phải gồm 10 chữ số và bắt đầu bằng 0.";
+    if (data.diaChi.length < 10) return "Địa chỉ phải có ít nhất 10 ký tự.";
+    const others = (window.UserSession?.getUserList?.() || []).filter((item) => item.maKhachHang !== current.maKhachHang);
+    const emailKey = data.thuDienTu.toLowerCase();
+    if (others.some((item) => String(item.thuDienTu || "").trim().toLowerCase() === emailKey)) {
+      return "Email này đã được sử dụng bởi tài khoản khác.";
+    }
+    if (others.some((item) => String(item.soDienThoai || "").trim() === data.soDienThoai)) {
+      return "Số điện thoại này đã được sử dụng bởi tài khoản khác.";
+    }
+    return null;
+  }
+
   function fillForm(user) {
     if (!user) return;
-    nameInput.value = user.userName || user.email || "";
-    emailInput.value = user.email || "";
-    phoneInput.value = user.phone || "";
-    addressInput.value = user.address || "";
-    if (sideAvatar) sideAvatar.src = user.avatar || window.UserSession?.DEFAULT_AVATAR || "assets/img/Avatar/avtuser.jpg";
-    if (sideUsername) sideUsername.textContent = user.userName || user.email || "Người dùng";
+    nameInput.value = user.hoTen || user.thuDienTu || "";
+    emailInput.value = user.thuDienTu || "";
+    phoneInput.value = user.soDienThoai || "";
+    addressInput.value = user.diaChi || "";
+    if (sideAvatar) sideAvatar.src = user.anhDaiDien || window.UserSession?.DEFAULT_AVATAR || "assets/img/Avatar/avtuser.jpg";
+    if (sideUsername) sideUsername.textContent = user.hoTen || user.thuDienTu || "Người dùng";
   }
 
   function enableEdit() {
@@ -65,25 +95,31 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const updated = {
       ...current,
-      userName: nameInput.value.trim(),
-      displayName: nameInput.value.trim(),
-      username: current.username || current.loginUsername || current.userName,
-      email: emailInput.value.trim(),
-      phone: phoneInput.value.trim(),
-      address: addressInput.value.trim()
+      hoTen: nameInput.value.trim(),
+      tenDangNhap: current.tenDangNhap || current.hoTen,
+      thuDienTu: emailInput.value.trim(),
+      soDienThoai: phoneInput.value.trim(),
+      diaChi: addressInput.value.trim()
     };
 
-    if (!updated.userName || !updated.email) {
-      Swal?.fire?.({ icon: "error", title: "Thiếu thông tin", text: "Tên và email không được để trống." });
+    const error = validateProfile(updated, current);
+    if (error) {
+      popup("error", "Dữ liệu chưa hợp lệ", error);
       return;
     }
 
     window.UserSession.saveUser(updated, current);
     if (typeof window.updateHeaderUI === "function") window.updateHeaderUI();
+    fillForm(getUser());
     disableEdit();
-    Swal?.fire?.({ icon: "success", title: "Thành công", text: "Cập nhật thông tin thành công!" });
+    popup("success", "Thành công", "Cập nhật thông tin thành công!");
   });
 
   const user = getUser();
-  if (user) fillForm(user);
+  if (!user) {
+    // Trang chỉ dành cho người dùng đã đăng nhập: chuyển hướng thay vì hiển thị trang trống.
+    window.location.href = "pages/login.html";
+    return;
+  }
+  fillForm(user);
 });

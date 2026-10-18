@@ -7,6 +7,16 @@ var NhanVienInfo = (function () {
       "/reviews": "Phản hồi đánh giá"
     };
 
+  function esc(value) {
+    if (window.ShopCore && typeof window.ShopCore.esc === "function") return window.ShopCore.esc(value);
+    return String(value == null ? "" : value)
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#39;");
+  }
+
   function openProfile() {
     if (typeof adminSession === "undefined" || !adminSession.isNhanVien()) return;
     const emp = employeeSession.getCurrentEmployee();
@@ -21,18 +31,19 @@ var NhanVienInfo = (function () {
       .join(" · ") || "Không có phân quyền";
     document.getElementById("NSV_profileBody").innerHTML = [
       ["Mã nhân viên", d.maNhanVien || "—"],
-      ["Họ và tên", d.tenNhanVien || emp.fullName || "—"],
+      ["Họ và tên", d.tenNhanVien || (emp && emp.tenNhanVien) || "—"],
       ["Giới tính", d.gioiTinh || "—"],
-      ["Số điện thoại", d.sdt || "—"],
+      ["Số điện thoại", d.soDienThoai || "—"],
       ["Địa chỉ", d.diaChi || "—"],
-      ["Chức vụ", d.chucVu || emp.chucVu || "—"],
-      ["Tên đăng nhập", d.username || emp.username || "—"],
+      ["Chức vụ", d.chucVu || (emp && emp.chucVu) || "—"],
+      ["Tên đăng nhập", d.tenDangNhap || (emp && emp.username) || "—"],
       ["Ngày tạo", d.ngayTao || "—"],
-      ["Trạng thái", '<span class="NSV_badge ' + (isKhoa ? "NSV_badge-khoa" : "NSV_badge-active") + '">' + trangThai + "</span>"],
+      ["Trạng thái", '<span class="NSV_badge ' + (isKhoa ? "NSV_badge-khoa" : "NSV_badge-active") + '">' + trangThai + "</span>", true],
       ["Phân quyền", quyen]
     ]
       .map(function (row) {
-        return '<div class="NSV_infoRow"><span class="NSV_infoLabel">' + row[0] + '</span><span class="NSV_infoValue">' + row[1] + "</span></div>";
+        // row[2] === true: giá trị là HTML nội bộ tin cậy (badge); còn lại luôn được escape
+        return '<div class="NSV_infoRow"><span class="NSV_infoLabel">' + esc(row[0]) + '</span><span class="NSV_infoValue">' + (row[2] === true ? row[1] : esc(row[1])) + "</span></div>";
       })
       .join("");
     document.getElementById("NSV_profileModal").style.display = "flex";

@@ -13,7 +13,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function findUser(email) {
     const normalized = email.trim().toLowerCase();
-    return users().find((user) => String(user.email || "").toLowerCase() === normalized);
+    return users().find((user) => String(user.thuDienTu || "").toLowerCase() === normalized);
   }
 
   function popup(icon, title, text) {
@@ -24,8 +24,9 @@ document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("send-forgot-otp")?.addEventListener("click", async () => {
     const user = findUser(emailInput.value);
     if (!user) return popup("error", "Không tìm thấy tài khoản", "Email chưa được đăng ký.");
+    if (user.biKhoa === true || user.trangThai === "blocked") return popup("warning", "Tài khoản bị khóa", "Tài khoản của bạn đã bị khóa. Vui lòng liên hệ quản trị.");
     try {
-      await window.UserOtp.request(user.email, "forgot-password");
+      await window.UserOtp.request(user.thuDienTu, "forgot-password");
       popup("success", "Đã gửi OTP", "Kiểm tra Gmail để lấy mã xác thực.");
     } catch (error) {
       popup("error", "Không gửi được OTP", error.message);
@@ -36,6 +37,7 @@ document.addEventListener("DOMContentLoaded", () => {
     event.preventDefault();
     const user = findUser(emailInput.value);
     if (!user) return popup("error", "Không tìm thấy tài khoản", "Email chưa được đăng ký.");
+    if (user.biKhoa === true || user.trangThai === "blocked") return popup("warning", "Tài khoản bị khóa", "Tài khoản của bạn đã bị khóa. Vui lòng liên hệ quản trị.");
     if (newPasswordInput.value.length < 8) {
       return popup("error", "Mật khẩu không hợp lệ", "Mật khẩu mới phải có ít nhất 8 ký tự.");
     }
@@ -43,8 +45,8 @@ document.addEventListener("DOMContentLoaded", () => {
       return popup("error", "Mật khẩu không khớp", "Vui lòng nhập lại mật khẩu mới.");
     }
     try {
-      await window.UserOtp.verify(user.email, "forgot-password", otpInput.value.trim());
-      window.UserSession.saveUser({ ...user, password: newPasswordInput.value }, user);
+      await window.UserOtp.verify(user.thuDienTu, "forgot-password", otpInput.value.trim());
+      window.UserSession.saveUser({ ...user, matKhau: newPasswordInput.value }, user, { silent: true, passwordChange: true });
       await popup("success", "Đổi mật khẩu thành công", "Vui lòng đăng nhập lại.");
       window.location.href = "pages/login.html";
     } catch (error) {

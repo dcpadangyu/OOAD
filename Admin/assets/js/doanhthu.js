@@ -21,29 +21,29 @@
 
       // Chuyển đổi đơn user sang cấu trúc admin để merge (đảm bảo luôn có đơn mới nhất dù chưa sync)
       const converted = (userOrders || [])
-        .filter((o) => o && o.id && Array.isArray(o.product) && o.product.length)
+        .filter((o) => o && o.maDonHang && Array.isArray(o.chiTiet) && o.chiTiet.length)
         .map((o) => {
-          const userObj = o.user || {};
-          const extractedUserName = o.userName || userObj.userName || userObj.username || userObj.name || "";
+          const userObj = o.khachHang || {};
+          const extractedUserName = userObj.hoTen || "";
           return {
-            id: o.id,
-            date: o.orderDate || new Date().toISOString(),
-            customerName: o.info && o.info.name ? o.info.name : (extractedUserName || "Khách vãng lai"),
-            items: (o.product || []).map((p) => ({
-              productId: p.id,
-              name: p.name,
-              qty: p.quantity,
-              price: p.priceValue,
+            maDonHang: o.maDonHang,
+            ngayDat: o.ngayDat || new Date().toISOString(),
+            tenNguoiNhan: o.tenNguoiNhan ? o.tenNguoiNhan : (extractedUserName || "Khách vãng lai"),
+            chiTiet: (o.chiTiet || []).map((p) => ({
+              maSanPham: p.maSanPham,
+              tenSanPham: p.tenSanPham,
+              soLuong: p.soLuong,
+              donGia: p.donGia,
             })),
-            total: o.totalPrice || 0,
-            status: o.status || (o.trangthai === "da-huy" ? "huy" : "moiDat"),
+            tongTien: o.tongTien || 0,
+            trangThaiQuanTri: o.trangThaiQuanTri || (window.ShopCore && window.ShopCore.USER_TO_ADMIN ? window.ShopCore.USER_TO_ADMIN[o.trangThai] : "") || (o.trangThai === "da-huy" ? "huy" : "moiDat"),
           };
         });
 
       // Merge: đơn admin (đã cập nhật trạng thái) ở trước, đơn user chỉ thêm nếu chưa có id
       const byId = new Map();
-      adminOrders.forEach((o) => o && o.id && byId.set(o.id, o));
-      converted.forEach((o) => { if (!byId.has(o.id)) byId.set(o.id, o); });
+      adminOrders.forEach((o) => o && o.maDonHang && byId.set(o.maDonHang, o));
+      converted.forEach((o) => { if (!byId.has(o.maDonHang)) byId.set(o.maDonHang, o); });
       return Array.from(byId.values());
     } catch (e) {
       return [];
@@ -51,36 +51,34 @@
   }
 
   function getItems(o) {
-    if (Array.isArray(o.items) && o.items.length) return o.items;
-    if (Array.isArray(o.product) && o.product.length) return o.product;
+    if (Array.isArray(o.chiTiet) && o.chiTiet.length) return o.chiTiet;
     return [];
   }
 
-  // Báo cáo chỉ tính các dòng sản phẩm thuộc danh mục giày hiện tại (productsLocal),
-  // loại bỏ các item legacy của web cũ (vd: đồng hồ) khỏi doanh thu
-  function getCatalog() {
-    try {
-      const list = JSON.parse(localStorage.getItem("productsLocal") || "[]");
-      return Array.isArray(list) ? list : [];
-    } catch (e) {
-      return [];
-    }
+  function esc(v) {
+    if (window.ShopCore && typeof window.ShopCore.esc === "function") return window.ShopCore.esc(v);
+    return String(v == null ? "" : v)
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#39;");
   }
 
+  // Dùng chính các dòng của đơn (tenSanPham/maSanPham trên dòng), KHÔNG lọc theo productsLocal
+  // để sản phẩm đã bị xóa vẫn được tính -> bảng theo sản phẩm khớp tổng doanh thu.
   function getSaleItems(o) {
-    const items = getItems(o);
-    const catalog = getCatalog();
-    if (!items.length || !catalog.length) return items;
-    const known = new Set(catalog.map((p) => String(p.id)));
-    return items.filter((it) => {
-      const key = it.productId || it.id || it.name || "";
-      return known.has(String(key)) || known.has(String(it.name || ""));
-    });
+    return getItems(o).filter((it) => it && typeof it === "object");
   }
 
-  function isCancelled(o) {
-    if (o.status === "huy" || o.trangthai === "da-huy" || o.status === "daHuy") return true;
-    return false;
+  // Doanh thu của 1 đơn = tổng donGia * soLuong của chiTiet (không tính phí vận chuyển)
+  function orderRevenue(o) {
+    return getSaleItems(o).reduce((s, it) => s + (Number(it.donGia) || 0) * (Number(it.soLuong) || 0), 0);
+  }
+
+  // Báo cáo chỉ tính đơn đã giao
+  function isDelivered(o) {
+    return !!o && o.trangThaiQuanTri === "daGiao";
   }
 
   function buildLayout(root) {
@@ -133,32 +131,56 @@
     `;
   }
 
+  // Parse "YYYY-MM-DD" (giá trị input type=date) theo giờ ĐỊA PHƯƠNG
+  function parseLocalDate(str) {
+    const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(String(str || ""));
+    if (m) return new Date(Number(m[1]), Number(m[2]) - 1, Number(m[3]));
+    return new Date(str);
+  }
+
   function within(dateISO, fromISO, toISO) {
     const d = new Date(dateISO).getTime();
+    if (!Number.isFinite(d)) return false;
     if (fromISO) {
-      const f = new Date(fromISO).setHours(0, 0, 0, 0);
+      const f = parseLocalDate(fromISO).setHours(0, 0, 0, 0);
       if (d < f) return false;
     }
     if (toISO) {
-      const t = new Date(toISO).setHours(23, 59, 59, 999);
+      const t = parseLocalDate(toISO).setHours(23, 59, 59, 999);
       if (d > t) return false;
     }
     return true;
   }
 
+  function pad2(n) {
+    return String(n).padStart(2, "0");
+  }
+
+  // Tuần ISO-8601 theo giờ địa phương, khóa có đệm 0 (vd "2026-W07") để sắp xếp đúng thời gian
+  function isoWeekParts(date) {
+    const d = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+    const dayNum = (d.getDay() + 6) % 7; // Thứ Hai = 0
+    d.setDate(d.getDate() - dayNum + 3); // Thứ Năm của tuần này
+    const weekYear = d.getFullYear();
+    const firstThursday = new Date(weekYear, 0, 4);
+    const firstDayNum = (firstThursday.getDay() + 6) % 7;
+    firstThursday.setDate(firstThursday.getDate() - firstDayNum + 3);
+    const week = 1 + Math.round((d.getTime() - firstThursday.getTime()) / (7 * 86400000));
+    return { year: weekYear, week: week };
+  }
+
   function periodKey(date, viewType) {
     switch (viewType) {
       case "week": {
-        const firstDayOfYear = new Date(date.getFullYear(), 0, 1);
-        const weekNumber = Math.ceil((((date - firstDayOfYear) / 86400000) + firstDayOfYear.getDay() + 1) / 7);
-        return `${date.getFullYear()}-W${weekNumber}`;
+        const w = isoWeekParts(date);
+        return `${w.year}-W${pad2(w.week)}`;
       }
       case "month":
-        return date.toISOString().slice(0, 7);
+        return `${date.getFullYear()}-${pad2(date.getMonth() + 1)}`;
       case "year":
         return String(date.getFullYear());
       default:
-        return date.toISOString().slice(0, 10);
+        return `${date.getFullYear()}-${pad2(date.getMonth() + 1)}-${pad2(date.getDate())}`;
     }
   }
 
@@ -182,8 +204,9 @@
   }
 
   function compute(orders, from, to) {
-    const filtered = orders.filter((o) => within(o.date, from, to) && !isCancelled(o));
-    const total = filtered.reduce((s, o) => s + (o.total || 0), 0);
+    // Chỉ tính đơn ĐÃ GIAO có ngày đặt hợp lệ; bỏ qua đơn có ngày lỗi
+    const filtered = orders.filter((o) => isDelivered(o) && within(o.ngayDat, from, to));
+    const total = filtered.reduce((s, o) => s + orderRevenue(o), 0);
     const count = filtered.length;
     const avg = count ? Math.round(total / count) : 0;
 
@@ -193,14 +216,14 @@
     let totalQty = 0;
 
     filtered.forEach((o) => {
-      const key = periodKey(new Date(o.date), viewType);
-      timeData[key] = (timeData[key] || 0) + (o.total || 0);
+      const key = periodKey(new Date(o.ngayDat), viewType);
+      timeData[key] = (timeData[key] || 0) + orderRevenue(o);
 
       getSaleItems(o).forEach((it) => {
-        const qty = it.qty || it.quantity || 0;
-        const price = it.price || it.priceValue || 0;
-        const idKey = it.productId || it.id || it.name || "?";
-        if (!prod[idKey]) prod[idKey] = { id: idKey, name: it.name || "Sản phẩm", qty: 0, rev: 0, price: price };
+        const qty = it.soLuong || 0;
+        const price = it.donGia || 0;
+        const idKey = it.maSanPham || it.tenSanPham || "?";
+        if (!prod[idKey]) prod[idKey] = { id: idKey, name: it.tenSanPham || "Sản phẩm", qty: 0, rev: 0, price: price };
         prod[idKey].qty += qty;
         prod[idKey].rev += qty * price;
         prod[idKey].price = price || prod[idKey].price;
@@ -278,7 +301,7 @@
           ? '<span class="BCDT_rank best">' + (i + 1) + ' <i class="fa-solid fa-crown" aria-hidden="true"></i></span>'
           : '<span class="BCDT_rank">' + (i + 1) + "</span>") +
         "</td>" +
-        "<td>" + t.name + "</td>" +
+        "<td>" + esc(t.name) + "</td>" +
         "<td>" + t.qty + (isBest ? ' <small class="BCDT_bestTag">Bán chạy nhất</small>' : "") + "</td>" +
         "<td>" + currency(t.rev) + "</td>";
       tb.appendChild(tr);
@@ -296,8 +319,8 @@
       const tr = document.createElement("tr");
       tr.innerHTML =
         "<td>" + (i + 1) + "</td>" +
-        "<td>" + p.id + "</td>" +
-        "<td>" + p.name + "</td>" +
+        "<td>" + esc(p.id) + "</td>" +
+        "<td>" + esc(p.name) + "</td>" +
         "<td>" + p.qty + "</td>" +
         "<td>" + currency(p.price) + "</td>" +
         "<td>" + currency(p.rev) + "</td>" +

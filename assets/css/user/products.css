@@ -312,3 +312,8 @@ main {
     width: 100%;
   }
 }
+
+/* Phân trang: Trang đầu / < 1 2 3 4 > / Trang cuối */
+.pagination { flex-wrap: wrap; align-items: center; }
+.pagination button.page-nav { font-weight: 600; padding-left: 14px; padding-right: 14px; }
+.pagination button:disabled { opacity: .4; cursor: not-allowed; pointer-events: none; }

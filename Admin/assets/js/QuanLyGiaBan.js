@@ -1,23 +1,24 @@
 // ==================== QUẢN LÝ GIÁ BÁN ====================
 (function () {
   const SECTION_ID = "page-prices";
+  const esc = (value) => ShopCore.esc(value);
 
   function currency(v) {
-    return (v || 0).toLocaleString("vi-VN") + "₫";
+    return (Number(v) || 0).toLocaleString("vi-VN") + "₫";
   }
 
-  function getLocalProducts() {
-    const data = localStorage.getItem("productsLocal");
-    if (data) return JSON.parse(data);
-    if (typeof products !== "undefined") {
-      localStorage.setItem("productsLocal", JSON.stringify(products));
-      return products;
+  // Đọc/ghi dùng hàm dùng chung của database/products-shoes.js (saveLocalProducts trả về true/false)
+  function readProducts() {
+    try {
+      return getLocalProducts() || [];
+    } catch (error) {
+      console.error("Không đọc được sản phẩm:", error);
+      return [];
     }
-    return [];
   }
 
-  function saveLocalProducts(data) {
-    localStorage.setItem("productsLocal", JSON.stringify(data));
+  function writeProducts(data) {
+    return saveLocalProducts(data) === true;
   }
 
   function buildLayout(root) {
@@ -39,11 +40,6 @@
       <div class="QLGB_filters">
         <select id="QLGB_locDanhMuc">
           <option value="all">Tất cả</option>
-          <option value="Nike">Nike</option>
-          <option value="Adidas">Adidas</option>
-          <option value="Converse">Converse</option>
-          <option value="MLB">MLB</option>
-          <option value="Vans">Vans</option>
         </select>
         <input type="text" id="QLGB_timId" placeholder="Tìm theo mã/tên..." />
         <div class="QLGB_inline">
@@ -78,9 +74,27 @@
     `;
   }
 
+  // Bộ lọc danh mục: lấy từ key "categories" + các maLoai đang có trên sản phẩm (không cố định theo hãng)
+  function buildCategoryOptions() {
+    const select = document.getElementById("QLGB_locDanhMuc");
+    if (!select) return;
+    const current = select.value || "all";
+    const names = [];
+    const add = (name) => {
+      const text = String(name === undefined || name === null ? "" : name).trim();
+      if (text && !names.some((x) => x.toLowerCase() === text.toLowerCase())) names.push(text);
+    };
+    ShopCore.readList("categories").forEach((cat) => cat && add(cat.tenLoai || cat.maLoai));
+    readProducts().forEach((p) => add(p.maLoai));
+    select.innerHTML =
+      `<option value="all">Tất cả</option>` +
+      names.map((name) => `<option value="${esc(name)}">${esc(name)}</option>`).join("");
+    select.value = names.indexOf(current) !== -1 ? current : "all";
+  }
+
   function calcPercent(p) {
-    const cost = Number(p.importPrice || 0);
-    const sell = Number(p.priceValue || 0);
+    const cost = Number(p.giaNhap || 0);
+    const sell = Number(p.giaBan || 0);
     if (!cost) return 0;
     return Math.round(((sell - cost) / cost) * 100);
   }
@@ -91,10 +105,10 @@
   }
 
   function updatePriceFromPercent(p, percent) {
-    const cost = Number(p.importPrice || 0);
+    const cost = Number(p.giaNhap || 0);
     const sell = Math.max(0, Math.round(cost * (1 + (Number(percent) || 0) / 100)));
-    p.priceValue = sell;
-    p.price = formatPriceValue(sell);
+    p.giaBan = sell;
+    p.giaHienThi = formatPriceValue(sell);
   }
 
   // Pagination variables
@@ -103,13 +117,16 @@
 
   function renderTable(list) {
     const wrap = document.querySelector(`#${SECTION_ID} .QLGB_table-content`);
+    if (!wrap) return;
     wrap.innerHTML = "";
     const table = document.createElement("table");
     table.className = "QLGB_admin-table";
     const tbody = document.createElement("tbody");
 
-    // Calculate pagination
-    const totalPages = Math.ceil(list.length / itemsPerPage);
+    // Calculate pagination (kẹp trang hiện tại sau khi lọc/xóa)
+    const totalPages = Math.max(1, Math.ceil(list.length / itemsPerPage));
+    if (currentPage > totalPages) currentPage = totalPages;
+    if (currentPage < 1) currentPage = 1;
     const startIndex = (currentPage - 1) * itemsPerPage;
     const endIndex = Math.min(startIndex + itemsPerPage, list.length);
     const pageItems = list.slice(startIndex, endIndex);
@@ -122,24 +139,27 @@
     
     const prevBtn = document.getElementById('QLGB_prevPage');
     const nextBtn = document.getElementById('QLGB_nextPage');
-    if (prevBtn) prevBtn.disabled = currentPage === 1;
-    if (nextBtn) nextBtn.disabled = currentPage === totalPages;
+    if (prevBtn) prevBtn.disabled = currentPage <= 1;
+    if (nextBtn) nextBtn.disabled = currentPage >= totalPages;
 
     pageItems.forEach((p, i) => {
       const tr = document.createElement("tr");
-      tr.dataset.id = p.id;
+      tr.dataset.id = p.maSanPham;
       const percent = calcPercent(p);
+      const hinhAnh = String(p.hinhAnh || "");
+      const imgSrc = hinhAnh.startsWith("data:") || hinhAnh.startsWith("http") ? hinhAnh : "../" + hinhAnh;
+      const ma = esc(p.maSanPham);
       tr.innerHTML = `
         <td>${startIndex + i + 1}</td>
-        <td>${p.id}</td>
-        <td>${p.image ? `<img src="${p.image.startsWith('data:') || p.image.startsWith('http') ? p.image : '../' + p.image}" alt="${p.name}" class="QLGB_img" />` : ""}</td>
-        <td>${p.name}</td>
-        <td>${currency(p.importPrice)}</td>
+        <td>${ma}</td>
+        <td>${hinhAnh ? `<img src="${esc(imgSrc)}" alt="${esc(p.tenSanPham)}" class="QLGB_img" />` : ""}</td>
+        <td>${esc(p.tenSanPham)}</td>
+        <td>${currency(p.giaNhap)}</td>
         <td>${percent}%</td>
-        <td>${currency(p.priceValue)}</td>
+        <td>${currency(p.giaBan)}</td>
         <td>
-          <button class="QLGB_btn-edit-percent" data-id="${p.id}">Sửa %LN</button>
-          <button class="QLGB_btn-edit-price" data-id="${p.id}">Sửa giá</button>
+          <button class="QLGB_btn-edit-percent" data-id="${ma}">Sửa %LN</button>
+          <button class="QLGB_btn-edit-price" data-id="${ma}">Sửa giá</button>
         </td>`;
       tbody.appendChild(tr);
     });
@@ -156,15 +176,21 @@
   }
 
   function currentFiltered() {
-    const products = getLocalProducts();
-    const cat = document.getElementById("QLGB_locDanhMuc").value;
-    const q = document.getElementById("QLGB_timId").value.trim().toLowerCase();
+    const products = readProducts();
+    const catEl = document.getElementById("QLGB_locDanhMuc");
+    const qEl = document.getElementById("QLGB_timId");
+    const cat = catEl ? catEl.value.toLowerCase() : "all";
+    const q = qEl ? qEl.value.trim().toLowerCase() : "";
     return products.filter((p) => {
-      const okCat = cat === "all" || p.catalog === cat;
-      const text = `${p.id} ${p.name}`.toLowerCase();
+      const okCat = cat === "all" || String(p.maLoai || "").toLowerCase() === cat;
+      const text = `${p.maSanPham} ${p.tenSanPham}`.toLowerCase();
       const okQ = !q || text.includes(q);
       return okCat && okQ;
     });
+  }
+
+  function findRowById(id) {
+    return Array.from(document.querySelectorAll(`#${SECTION_ID} tr[data-id]`)).find((tr) => tr.dataset.id === id);
   }
 
   function showInlineEditor(id, mode) {
@@ -173,18 +199,17 @@
       .querySelectorAll(".QLGB_inlineEditor")
       .forEach((row) => row.remove());
 
-    const list = getLocalProducts();
-    const p = list.find((x) => x.id === id);
+    const p = readProducts().find((x) => x.maSanPham === id);
     if (!p) return;
 
-    const hostRow = document.querySelector(`tr[data-id="${id}"]`);
+    const hostRow = findRowById(id);
     if (!hostRow) return;
 
     const editorRow = document.createElement("tr");
     editorRow.className = "QLGB_inlineEditor";
     const colSpan = hostRow.children.length; // span entire row
     const currentPercent = calcPercent(p);
-    const currentPrice = p.priceValue || 0;
+    const currentPrice = Number(p.giaBan) || 0;
 
     const label = mode === "percent" ? "% lợi nhuận" : "Giá bán (VNĐ)";
     const value = mode === "percent" ? currentPercent : currentPrice;
@@ -193,7 +218,7 @@
       <td colspan="${colSpan}">
         <div class="QLGB_editorWrap">
           <span class="QLGB_editorLabel">${label}:</span>
-          <input type="number" class="QLGB_editorInput" id="QLGB_editorInput" value="${value}" min="0" />
+          <input type="number" class="QLGB_editorInput" id="QLGB_editorInput" value="${esc(value)}" min="0" />
           <button class="QLGB_editorSave" id="QLGB_editorSave">Lưu</button>
           <button class="QLGB_editorCancel" id="QLGB_editorCancel">Hủy</button>
         </div>
@@ -203,16 +228,30 @@
 
     editorRow.querySelector("#QLGB_editorSave").addEventListener("click", () => {
       const raw = editorRow.querySelector("#QLGB_editorInput").value;
-      const num = Math.max(0, Math.round(Number(raw) || 0));
+      const num = Number(raw);
+      if (raw === "" || isNaN(num)) return alert("Giá trị không hợp lệ!");
+
+      // Đọc lại dữ liệu mới nhất rồi mới sửa
+      const list = readProducts();
+      const sp = list.find((x) => x.maSanPham === id);
+      if (!sp) return alert("Không tìm thấy sản phẩm!");
+      const cost = Number(sp.giaNhap) || 0;
+
       if (mode === "percent") {
-        updatePriceFromPercent(p, num);
+        if (num < 0) return alert("% lợi nhuận phải lớn hơn hoặc bằng 0!");
+        if (cost <= 0) return alert("Sản phẩm chưa có giá nhập (giá vốn) nên không thể tính giá bán theo % lợi nhuận!");
+        updatePriceFromPercent(sp, Math.round(num));
       } else {
-        p.priceValue = num;
-        p.price = formatPriceValue(num);
+        const gia = Math.round(num);
+        if (gia <= 0) return alert("Giá bán phải lớn hơn 0!");
+        if (gia < cost) {
+          return alert(`Giá bán (${formatPriceValue(gia)}) không được thấp hơn giá nhập (${formatPriceValue(cost)})!`);
+        }
+        sp.giaBan = gia;
+        sp.giaHienThi = formatPriceValue(gia);
       }
-      saveLocalProducts(list);
-      // thông báo toàn cục để các trang khác đồng bộ ngay
-      window.dispatchEvent(new CustomEvent("productsUpdated"));
+      if (!writeProducts(list)) return; // saveLocalProducts đã báo lỗi
+      // saveLocalProducts đã phát "productsUpdated" để các trang khác đồng bộ
       renderTable(currentFiltered());
     });
 
@@ -249,22 +288,39 @@
     });
 
     document.getElementById("QLGB_btnApDung").addEventListener("click", () => {
-      const val = Number(document.getElementById("QLGB_percentDefault").value || 0);
+      const val = Number(document.getElementById("QLGB_percentDefault").value);
       if (isNaN(val) || val < 0) return alert("% lợi nhuận không hợp lệ");
-      const all = getLocalProducts();
-      const filtered = currentFiltered().map((p) => p.id);
+      const all = readProducts();
+      const filtered = currentFiltered().map((p) => p.maSanPham);
+      let daApDung = 0;
+      let boQua = 0;
       all.forEach((p) => {
-        if (filtered.includes(p.id)) updatePriceFromPercent(p, val);
+        if (!filtered.includes(p.maSanPham)) return;
+        if (!(Number(p.giaNhap) > 0)) {
+          boQua++; // không có giá nhập thì không thể tính giá bán theo % lợi nhuận
+          return;
+        }
+        updatePriceFromPercent(p, val);
+        daApDung++;
       });
-      saveLocalProducts(all);
-      window.dispatchEvent(new CustomEvent("productsUpdated"));
+      if (daApDung === 0) {
+        return alert(
+          boQua > 0
+            ? `Không áp dụng được: ${boQua} sản phẩm trong danh sách chưa có giá nhập (giá vốn).`
+            : "Danh sách hiện tại không có sản phẩm nào!"
+        );
+      }
+      if (!writeProducts(all)) return;
       renderTable(currentFiltered());
-      alert("Đã áp dụng % lợi nhuận cho danh sách hiện tại!");
+      alert(
+        `Đã áp dụng % lợi nhuận cho ${daApDung} sản phẩm.` +
+          (boQua > 0 ? ` Đã bỏ qua ${boQua} sản phẩm chưa có giá nhập (giá vốn).` : "")
+      );
     });
     document.getElementById("QLGB_btnLookup").addEventListener("click", () => {
       const id = document.getElementById("QLGB_lookupId").value.trim();
-      const list = getLocalProducts();
-      const p = list.find((x) => x.id === id);
+      const list = readProducts();
+      const p = list.find((x) => x.maSanPham === id);
       const box = document.getElementById("QLGB_lookupResult");
       if (!p) {
         box.innerHTML = `<div class="QLGB_notfound">Không tìm thấy sản phẩm!</div>`;
@@ -273,10 +329,10 @@
       const percent = calcPercent(p);
       box.innerHTML = `
         <div class="QLGB_card">
-          <div><strong>${p.id}</strong> - ${p.name}</div>
-          <div>Giá vốn: <strong>${currency(p.importPrice)}</strong></div>
+          <div><strong>${esc(p.maSanPham)}</strong> - ${esc(p.tenSanPham)}</div>
+          <div>Giá vốn: <strong>${currency(p.giaNhap)}</strong></div>
           <div>% lợi nhuận: <strong>${percent}%</strong></div>
-          <div>Giá bán: <strong>${currency(p.priceValue)}</strong></div>
+          <div>Giá bán: <strong>${currency(p.giaBan)}</strong></div>
         </div>`;
     });
   }
@@ -289,11 +345,23 @@
       bindEvents();
       sec.dataset.bound = "1";
     }
+    buildCategoryOptions();
+    renderTable(currentFiltered());
+  }
+
+  // Đồng bộ khi sản phẩm/loại thay đổi (giữ nguyên bộ lọc và trang hiện tại)
+  function refreshIfMounted() {
+    const sec = document.getElementById(SECTION_ID);
+    if (!sec || !sec.dataset.bound) return;
+    buildCategoryOptions();
     renderTable(currentFiltered());
   }
 
   window.addEventListener("hashchange", ensureMounted);
+  window.addEventListener("productsUpdated", refreshIfMounted);
+  window.addEventListener("categoriesUpdated", refreshIfMounted);
+  window.addEventListener("storage", (event) => {
+    if (event && (event.key === "productsLocal" || event.key === "categories")) refreshIfMounted();
+  });
   document.addEventListener("DOMContentLoaded", ensureMounted);
 })();
-
-

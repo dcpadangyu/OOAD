@@ -11,6 +11,22 @@
     huy: "Hủy",
   };
 
+  const PAYMENT_STATUS = {
+    paid: "Đã thanh toán",
+    unpaid: "Chưa thanh toán",
+    refund: "Cần hoàn tiền",
+  };
+
+  function esc(v) {
+    if (window.ShopCore && typeof window.ShopCore.esc === "function") return window.ShopCore.esc(v);
+    return String(v == null ? "" : v)
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#39;");
+  }
+
   function currency(v) {
     return (v || 0).toLocaleString("vi-VN") + "₫";
   }
@@ -19,63 +35,22 @@
     const key = "ordersLocal";
     const raw = localStorage.getItem(key);
     if (raw) {
-      const orders = JSON.parse(raw);
-      // Filter out any sample orders by checking if they have corresponding user orders
-      const userOrders = JSON.parse(localStorage.getItem('DanhSachDatHang') || '[]');
-      const realOrders = orders.filter(order => userOrders.some(uo => uo.id === order.id));
-      return realOrders;
+      try {
+        const orders = JSON.parse(raw);
+        if (!Array.isArray(orders)) return [];
+        // Filter out any sample orders by checking if they have corresponding user orders
+        const userOrders = JSON.parse(localStorage.getItem('DanhSachDatHang') || '[]');
+        const realOrders = orders.filter(order => order && userOrders.some(uo => uo.maDonHang === order.maDonHang));
+        return realOrders;
+      } catch (e) {
+        return [];
+      }
     }
     return [];
   }
 
   function saveLocalOrders(list) {
     localStorage.setItem("ordersLocal", JSON.stringify(list));
-  }
-
-  // Đơn hàng "đồng hồ" là đơn có toàn bộ sản phẩm KHÔNG thuộc catalog giày hiện tại
-  function QLDH_laDonDongHo(o) {
-    const items = Array.isArray(o.product) ? o.product : Array.isArray(o.items) ? o.items : [];
-    if (!items.length) return false;
-    const catalog = JSON.parse(localStorage.getItem("productsLocal") || "[]");
-    const known = new Set(catalog.map((p) => String(p.id)));
-    const shoeHit = items.some((it) => {
-      const key = String(it.productId || it.id || it.name || "");
-      return key.toUpperCase().startsWith("SH-") || known.has(key) || known.has(String(it.name || ""));
-    });
-    // Có ít nhất 1 sản phẩm giày → giữ đơn
-    return !shoeHit;
-  }
-
-  // Xóa toàn bộ đơn hàng đồng hồ khỏi cả 2 key (user + admin)
-  function QLDH_xoaDonDongHo() {
-    try {
-      let changed = false;
-
-      const userOrders = JSON.parse(localStorage.getItem("DanhSachDatHang") || "[]");
-      if (Array.isArray(userOrders) && userOrders.length) {
-        const keptU = userOrders.filter((o) => !QLDH_laDonDongHo(o));
-        if (keptU.length !== userOrders.length) {
-          localStorage.setItem("DanhSachDatHang", JSON.stringify(keptU));
-          changed = true;
-        }
-      }
-
-      const adminOrders = JSON.parse(localStorage.getItem("ordersLocal") || "[]");
-      if (Array.isArray(adminOrders) && adminOrders.length) {
-        const keptA = adminOrders.filter((o) => !QLDH_laDonDongHo(o));
-        if (keptA.length !== adminOrders.length) {
-          localStorage.setItem("ordersLocal", JSON.stringify(keptA));
-          changed = true;
-        }
-      }
-
-      if (changed) {
-        window.dispatchEvent(new Event("userOrdersUpdated"));
-        window.dispatchEvent(new Event("ordersCleaned"));
-      }
-    } catch (e) {
-      /* noop */
-    }
   }
 
   const itemsPerPage = 10;
@@ -138,6 +113,7 @@
                 <p><strong>Khách hàng:</strong> <span id="QLDH_md_customer"></span></p>
                 <p><strong>Tài khoản:</strong> <span id="QLDH_md_username"></span></p>
                 <p><strong>Số điện thoại:</strong> <span id="QLDH_md_phone"></span></p>
+                <p><strong>Thanh toán:</strong> <span id="QLDH_md_payment"></span></p>
               </div>
               <div class="QLDH_md_col">
                 <p><strong>Địa chỉ giao hàng:</strong></p>
@@ -174,7 +150,8 @@
   }
 
   function renderPagination(list) {
-    const totalPages = Math.ceil(list.length / itemsPerPage);
+    const totalPages = Math.max(1, Math.ceil(list.length / itemsPerPage));
+    if (currentPage > totalPages) currentPage = totalPages;
     
     // Update pagination controls
     const pageInfo = document.getElementById('QLDH_pageInfo');
@@ -190,10 +167,16 @@
 
   function renderTable(list) {
     const wrap = document.querySelector(`#${SECTION_ID} .QLDH_table-content`);
+    if (!wrap) return;
     wrap.innerHTML = "";
     const table = document.createElement("table");
     table.className = "QLDH_admin-table";
     const tbody = document.createElement("tbody");
+
+    // Giới hạn trang hiện tại TRƯỚC khi cắt danh sách
+    const totalPages = Math.max(1, Math.ceil(list.length / itemsPerPage));
+    if (currentPage > totalPages) currentPage = totalPages;
+    if (currentPage < 1) currentPage = 1;
 
     const startIndex = (currentPage - 1) * itemsPerPage;
     const pageItems = list.slice(startIndex, startIndex + itemsPerPage);
@@ -202,12 +185,12 @@
       const tr = document.createElement("tr");
       tr.innerHTML = `
         <td>${startIndex + idx + 1}</td>
-        <td>${o.id}</td>
-        <td>${new Date(o.date).toLocaleString("vi-VN")}</td>
-        <td>${o.customerName || "--"}</td>
-        <td>${currency(o.total)}</td>
-        <td>${ORDER_STATUS[o.status] || o.status}</td>
-        <td><button class="QLDH_btn-detail" data-id="${o.id}">Xem</button></td>`;
+        <td>${esc(o.maDonHang)}</td>
+        <td>${esc(new Date(o.ngayDat).toLocaleString("vi-VN"))}</td>
+        <td>${esc(o.tenNguoiNhan || "--")}</td>
+        <td>${esc(currency(o.tongTien))}</td>
+        <td>${esc(ORDER_STATUS[o.trangThaiQuanTri] || o.trangThaiQuanTri)}</td>
+        <td><button class="QLDH_btn-detail" data-id="${esc(o.maDonHang)}">Xem</button></td>`;
       tbody.appendChild(tr);
     });
 
@@ -228,11 +211,12 @@
     const stVal = document.getElementById("QLDH_filterStatus").value;
     const idText = document.getElementById("QLDH_searchId").value.trim().toLowerCase();
 
-    return list.filter((o) => {
+    const filtered = list.filter((o) => {
       // Lọc theo khoảng ngày
       let okDate = true;
       if (dateFrom || dateTo) {
-        const orderDate = new Date(o.date).toISOString().slice(0, 10);
+        const d = new Date(o.ngayDat);
+        const orderDate = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
         if (dateFrom && dateTo) {
           okDate = orderDate >= dateFrom && orderDate <= dateTo;
         } else if (dateFrom) {
@@ -241,164 +225,94 @@
           okDate = orderDate <= dateTo;
         }
       }
-      const okStatus = stVal === "all" || o.status === stVal;
-      const okId = !idText || (o.id || "").toLowerCase().includes(idText);
+      const okStatus = stVal === "all" || o.trangThaiQuanTri === stVal;
+      const okId = !idText || (o.maDonHang || "").toLowerCase().includes(idText);
       return okDate && okStatus && okId;
     });
+
+    // Mới nhất lên đầu (theo ngayDat giảm dần; ngày không hợp lệ xuống cuối)
+    const ts = (o) => {
+      const t = new Date(o.ngayDat).getTime();
+      return Number.isFinite(t) ? t : -Infinity;
+    };
+    return filtered
+      .map((o, i) => ({ o, i }))
+      .sort((a, b) => {
+        const ta = ts(a.o);
+        const tb = ts(b.o);
+        if (ta === tb) return a.i - b.i;
+        return tb > ta ? 1 : -1;
+      })
+      .map((x) => x.o);
   }
 
   function openDetail(id) {
     const orders = getLocalOrders();
-    const o = orders.find((x) => x.id === id);
+    const o = orders.find((x) => x.maDonHang === id);
     if (!o) return;
 
     // Cập nhật thông tin cơ bản
-    document.getElementById("QLDH_md_id").textContent = o.id;
-    document.getElementById("QLDH_md_date").textContent = new Date(o.date).toLocaleString("vi-VN");
-    document.getElementById("QLDH_md_customer").textContent = o.customerName || "--";
-    document.getElementById("QLDH_md_username").textContent = o.userName || "--";
-    document.getElementById("QLDH_md_phone").textContent = o.phone || "--";
+    document.getElementById("QLDH_md_id").textContent = o.maDonHang;
+    document.getElementById("QLDH_md_date").textContent = new Date(o.ngayDat).toLocaleString("vi-VN");
+    document.getElementById("QLDH_md_customer").textContent = o.tenNguoiNhan || "--";
+    document.getElementById("QLDH_md_username").textContent = o.hoTen || "--";
+    document.getElementById("QLDH_md_phone").textContent = o.soDienThoaiNhan || "--";
 
     // Cập nhật địa chỉ và ghi chú
     const addressEl = document.getElementById("QLDH_md_address");
-    if (o.address) {
-      const addr = [];
-      if (o.address.street) addr.push(o.address.street);
-      if (o.address.ward) addr.push(o.address.ward);
-      if (o.address.district) addr.push(o.address.district);
-      if (o.address.city) addr.push(o.address.city);
-      addressEl.textContent = addr.join(", ");
-    } else {
-      addressEl.textContent = "--";
-    }
-    document.getElementById("QLDH_md_note").textContent = o.note || "--";
+    addressEl.textContent = o.diaChiGiaoHang || "--";
+    const payLabel = { COD: "Thanh toán khi nhận hàng", PayBank: "Chuyển khoản ngân hàng", Shop: "Nhận tại cửa hàng" }[o.phuongThucThanhToan] || o.phuongThucThanhToan || "--";
+    const payStatusLabel = PAYMENT_STATUS[o.trangThaiThanhToan] || "";
+    document.getElementById("QLDH_md_payment").textContent = payLabel + (payStatusLabel ? ` (${payStatusLabel})` : "");
+    const noteParts = [o.ghiChu, `Phí vận chuyển: ${currency(o.tienVanChuyen)}`, o.thuDienTuNguoiNhan ? `Email: ${o.thuDienTuNguoiNhan}` : ""].filter(Boolean);
+    // textContent: tự động an toàn trước XSS (không cần esc, tránh escape 2 lần)
+    document.getElementById("QLDH_md_note").textContent = noteParts.join(" | ");
 
     // Cập nhật bảng sản phẩm
     const tbody = document.getElementById("QLDH_md_tbody");
     tbody.innerHTML = "";
-    o.items.forEach((it, i) => {
+    (o.chiTiet || []).forEach((it, i) => {
       const tr = document.createElement("tr");
-      const returned = it.returned || 0;
-      const remaining = Math.max(0, (it.qty || 0) - returned);
-      const tt = remaining * (it.price || 0);
-      tr.innerHTML = `<td>${i + 1}</td><td>${it.productId}</td><td>${it.name || ""}</td><td>${it.qty} <small>(còn: ${remaining})</small></td><td>${currency(it.price)}</td><td>${currency(tt)}</td>`;
+      const returned = it.daTra || 0;
+      const remaining = Math.max(0, (it.soLuong || 0) - returned);
+      const tt = remaining * (it.donGia || 0);
+      tr.innerHTML = `<td>${i + 1}</td><td>${esc(it.maSanPham)}</td><td>${esc(it.tenSanPham || "")}${it.kichCoDaChon ? " (size " + esc(it.kichCoDaChon) + ")" : ""}</td><td>${esc(it.soLuong)} <small>(còn: ${remaining})</small></td><td>${esc(currency(it.donGia))}</td><td>${esc(currency(tt))}</td>`;
       tbody.appendChild(tr);
     });
 
-    document.getElementById("QLDH_md_total").textContent = currency(o.total);
+    document.getElementById("QLDH_md_total").textContent = currency(o.tongTien);
     
     // Cập nhật dropdown trạng thái và lưu ID đơn hàng
+    // Chỉ cho chọn trạng thái hiện tại + các trạng thái kế tiếp hợp lệ
     const statusSelect = document.getElementById("QLDH_md_statusSelect");
-    statusSelect.value = o.status;
+    const current = o.trangThaiQuanTri || "moiDat";
+    const next = window.ShopCore && typeof window.ShopCore.nextStatuses === "function"
+      ? window.ShopCore.nextStatuses(current)
+      : [];
+    const allowed = [current, ...next.filter((s) => s !== current)];
+    statusSelect.innerHTML = allowed
+      .map((s) => `<option value="${esc(s)}">${esc(ORDER_STATUS[s] || s)}</option>`)
+      .join("");
+    statusSelect.value = current;
     statusSelect.dataset.orderId = id;
+    const isFinal = next.length === 0;
+    statusSelect.disabled = isFinal;
+    document.getElementById("QLDH_md_btnUpdate").disabled = isFinal;
     
     document.getElementById("QLDH_modal").style.display = "flex";
   }
 
   function updateStatus(id, newStatus) {
-    // Cập nhật trạng thái trong admin orders
-    const orders = getLocalOrders();
-    const idx = orders.findIndex((x) => x.id === id);
-    if (idx === -1) return;
-    
-    const order = orders[idx];
-    const oldStatus = order.status;
-    order.status = newStatus;
-    
-    // Xử lý cập nhật số lượng đã bán khi trạng thái đơn hàng thay đổi
-    if (newStatus === 'daGiao' && oldStatus !== 'daGiao') {
-      // Khi đơn hàng được chuyển sang trạng thái "Đã giao"
-      const products = JSON.parse(localStorage.getItem('productsLocal') || '[]');
-      order.items.forEach(item => {
-        const productIdx = products.findIndex(p => p.id === item.productId);
-        if (productIdx !== -1) {
-          // Khởi tạo soldQuantity nếu chưa có
-          if (!products[productIdx].soldQuantity) {
-            products[productIdx].soldQuantity = 0;
-          }
-          // Cộng dồn số lượng đã bán
-          products[productIdx].soldQuantity += item.qty;
-        }
-      });
-      localStorage.setItem('productsLocal', JSON.stringify(products));
-      // Thông báo cập nhật tồn kho
-      window.dispatchEvent(new Event('productsUpdated'));
-    } else if (oldStatus === 'daGiao' && newStatus !== 'daGiao') {
-      // Khi đơn hàng bị chuyển từ trạng thái "Đã giao" sang trạng thái khác
-      const products = JSON.parse(localStorage.getItem('productsLocal') || '[]');
-      order.items.forEach(item => {
-        const productIdx = products.findIndex(p => p.id === item.productId);
-        if (productIdx !== -1 && products[productIdx].soldQuantity) {
-          // Trừ đi số lượng đã bán
-          products[productIdx].soldQuantity = Math.max(0, products[productIdx].soldQuantity - item.qty);
-        }
-      });
-      localStorage.setItem('productsLocal', JSON.stringify(products));
-      // Thông báo cập nhật tồn kho
-      window.dispatchEvent(new Event('productsUpdated'));
+    // ShopCore cập nhật cả 2 kho (ordersLocal + DanhSachDatHang), hoàn/trừ tồn kho và số lượng đã bán.
+    const result = window.ShopCore
+      ? window.ShopCore.setOrderStatus(id, newStatus)
+      : { ok: false, message: "Thiếu module ShopCore (database/products-shoes.js)." };
+    if (!result.ok) {
+      alert(result.message || "Không thể cập nhật trạng thái đơn hàng.");
+      return false;
     }
-
-    // Hủy đơn hoàn lại số lượng đã trừ lúc khách đặt hàng.
-    if (newStatus === 'huy' && oldStatus !== 'huy') {
-      const products = JSON.parse(localStorage.getItem('productsLocal') || '[]');
-      order.items.forEach(item => {
-        const product = products.find(p => p.id === item.productId);
-        if (product) product.quantity = (product.quantity || 0) + (item.qty || 0);
-      });
-      localStorage.setItem('productsLocal', JSON.stringify(products));
-      window.dispatchEvent(new Event('productsUpdated'));
-    } else if (oldStatus === 'huy' && newStatus !== 'huy') {
-      const products = JSON.parse(localStorage.getItem('productsLocal') || '[]');
-      order.items.forEach(item => {
-        const product = products.find(p => p.id === item.productId);
-        if (product) product.quantity = Math.max(0, (product.quantity || 0) - (item.qty || 0));
-      });
-      localStorage.setItem('productsLocal', JSON.stringify(products));
-      window.dispatchEvent(new Event('productsUpdated'));
-    }
-    
-    // Lưu cập nhật đơn hàng
-    saveLocalOrders(orders);
-
-    // Cập nhật trạng thái trong user orders (đồng bộ sang cấu trúc user-side)
-    const userOrders = JSON.parse(localStorage.getItem('DanhSachDatHang') || '[]');
-    const userOrderIdx = userOrders.findIndex(o => o.id === id);
-    if (userOrderIdx !== -1) {
-        // Lưu trạng thái admin (dành cho back-office) và đồng thời cập nhật trường 'trangthai' để user UI có thể đọc
-        userOrders[userOrderIdx].status = newStatus;
-
-        // Map trạng thái admin -> trạng thái hiển thị ở user
-        let userTrangThai = 'cho-xac-nhan';
-        switch (newStatus) {
-          case 'moiDat':
-            userTrangThai = 'cho-xac-nhan';
-            break;
-          case 'daXuLy':
-            userTrangThai = 'dang-giao';
-            break;
-          case 'daGiao':
-            userTrangThai = 'thanh-cong';
-            break;
-          case 'huy':
-            userTrangThai = 'da-huy';
-            break;
-          default:
-            userTrangThai = 'cho-xac-nhan';
-        }
-
-        userOrders[userOrderIdx].trangthai = userTrangThai;
-        localStorage.setItem('DanhSachDatHang', JSON.stringify(userOrders));
-
-        // Gửi sự kiện để thông báo thay đổi (custom event)
-        const event = new Event('orderStatusChanged');
-        event.orderId = id;
-        event.newStatus = newStatus;
-        window.dispatchEvent(event);
-    }
-
-    // re-render with current filters
-    const filtered = filterOrders(orders);
-    renderTable(filtered);
+    renderTable(filterOrders(getLocalOrders()));
+    return true;
   }
 
   function attachEvents() {
@@ -445,12 +359,8 @@
       const statusSelect = document.getElementById("QLDH_md_statusSelect");
       const orderId = statusSelect.dataset.orderId;
       const newStatus = statusSelect.value;
-      if (orderId) {
-        updateStatus(orderId, newStatus);
-        // Đóng modal sau khi cập nhật
-        setTimeout(() => {
-          document.getElementById("QLDH_modal").style.display = "none";
-        }, 500);
+      if (orderId && updateStatus(orderId, newStatus)) {
+        document.getElementById("QLDH_modal").style.display = "none";
       }
     });
     
@@ -472,63 +382,67 @@
     renderTable(filterOrders(getLocalOrders()));
   }
 
-  // Sync with user orders
+  // Chuyển đơn User -> định dạng Admin
+  function toAdminOrder(o) {
+    const userObj = o.khachHang || {};
+    const extractedUserName = userObj.hoTen || "";
+    const shippingFee = Number.isFinite(Number(o.tienVanChuyen)) ? Number(o.tienVanChuyen) : (o.phiVanChuyen === "30.000đ" ? 30000 : 0);
+    return {
+      maDonHang: o.maDonHang,
+      ngayDat: o.ngayDat || new Date().toISOString(),
+      tenNguoiNhan: o.tenNguoiNhan ? o.tenNguoiNhan : (extractedUserName || "Khách vãng lai"),
+      soDienThoaiNhan: o.soDienThoaiNhan ? o.soDienThoaiNhan : "",
+      diaChiGiaoHang: o.diaChiGiaoHang ? o.diaChiGiaoHang : "",
+      thuDienTuNguoiNhan: o.thuDienTuNguoiNhan ? o.thuDienTuNguoiNhan : "",
+      chiTiet: (o.chiTiet || []).map(p => ({
+        maSanPham: p.maSanPham,
+        tenSanPham: p.tenSanPham,
+        kichCoDaChon: p.kichCoDaChon || "",
+        soLuong: p.soLuong,
+        donGia: p.donGia,
+        daTra: 0
+      })),
+      tongTien: o.tongTien,
+      trangThaiQuanTri: o.trangThaiQuanTri || (window.ShopCore ? window.ShopCore.USER_TO_ADMIN[o.trangThai] : "") || "moiDat",
+      phuongThucThanhToan: o.phuongThucThanhToan,
+      trangThaiThanhToan: o.trangThaiThanhToan || "",
+      daTruKho: o.daTruKho,
+      ...(o.ghiChu ? { ghiChu: o.ghiChu } : {}),
+      tienVanChuyen: shippingFee,
+      maKhachHang: o.maKhachHang || userObj.maKhachHang || null,
+      hoTen: extractedUserName
+    };
+  }
+
+  // Sync with user orders: thêm đơn mới và cập nhật trạng thái đơn đã có
   function syncUserOrders() {
     const userOrders = JSON.parse(localStorage.getItem('DanhSachDatHang') || '[]');
     const adminOrders = getLocalOrders();
-    
-  // Lấy tất cả đơn hàng từ user-side (bao gồm cả đơn không đăng nhập)
-  const validUserOrders = userOrders.filter(order => order && order.id && order.product && order.product.length);
-    
-    // Find new orders from users
-    const newOrders = validUserOrders.filter(uo => !adminOrders.some(ao => ao.id === uo.id));
-    
+
+    // Lấy tất cả đơn hàng từ user-side (bao gồm cả đơn không đăng nhập)
+    const validUserOrders = userOrders.filter(order => order && order.maDonHang && order.chiTiet && order.chiTiet.length);
+
+    const newOrders = validUserOrders.filter(uo => !adminOrders.some(ao => ao.maDonHang === uo.maDonHang));
     if (newOrders.length) {
-      // Convert user orders to admin format
-      const formattedOrders = newOrders.map(o => {
-        // try to extract username from different possible shapes
-        const userObj = o.user || {};
-        const extractedUserName =
-          o.userName || userObj.userName || userObj.username || userObj.name || "";
-        const userId = userObj.id || null;
-
-        return {
-          id: o.id,
-          date: o.orderDate || new Date().toISOString(),
-          customerName: o.info && o.info.name ? o.info.name : (extractedUserName || "Khách vãng lai"),
-          phone: o.info && o.info.phone ? o.info.phone : "",
-          address: {
-            street: o.info && o.info.address ? o.info.address : "",
-            email: o.info && o.info.email ? o.info.email : ""
-          },
-          items: (o.product || []).map(p => ({
-            productId: p.id,
-            name: p.name,
-            qty: p.quantity,
-            price: p.priceValue,
-            returned: 0
-          })),
-          total: o.totalPrice,
-          status: 'moiDat',
-          paymentMethod: o.payment,
-          shippingFee: o.priceShip === '30.000đ' ? 30000 : 0,
-          userId: userId,  // Thêm ID người dùng nếu có
-          userName: extractedUserName // tên đăng nhập/hiển thị của người đặt (nếu có)
-        };
-      });
-
-      // Add new orders to admin list
-      saveLocalOrders([...adminOrders, ...formattedOrders]);
-      
-      // Re-render with current filters
-      renderTable(filterOrders(getLocalOrders()));
+      saveLocalOrders([...adminOrders, ...newOrders.map(toAdminOrder)]);
     }
+
+    // Đơn User đã hủy nhưng bản Admin chưa biết (đơn cũ) -> đồng bộ hủy + hoàn kho.
+    validUserOrders.forEach(uo => {
+      if (uo.trangThai === 'da-huy' && uo.trangThaiQuanTri !== 'huy' && window.ShopCore) {
+        window.ShopCore.setOrderStatus(uo.maDonHang, 'huy', { force: true });
+      }
+    });
+
+    renderTable(filterOrders(getLocalOrders()));
   }
 
   // Listen for changes in user orders
   window.addEventListener('storage', (e) => {
     if (e.key === 'DanhSachDatHang') {
       syncUserOrders();
+    } else if (e.key === 'ordersLocal') {
+      renderTable(filterOrders(getLocalOrders()));
     }
   });
 
@@ -536,11 +450,9 @@
   window.addEventListener('userOrdersUpdated', () => {
     syncUserOrders();
   });
-
   // re-render when route changes
   window.addEventListener("hashchange", ensureMounted);
   document.addEventListener("DOMContentLoaded", () => {
-    QLDH_xoaDonDongHo();
     ensureMounted();
     syncUserOrders(); // Initial sync
   });

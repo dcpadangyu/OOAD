@@ -33,7 +33,7 @@ function handleLogin(username, password) {
   return new Promise((resolve) => {
     setTimeout(() => {
       const emp = findNhanVienByUsername(username);
-      if (!emp || emp.password !== password) {
+      if (!emp || emp.matKhau !== password) {
         resolve({ success: false, message: "Tên đăng nhập hoặc mật khẩu không đúng!" });
         return;
       }
@@ -84,6 +84,7 @@ function setLoadingState(loading) {
 
 loginForm.addEventListener("submit", async function(e) {
   e.preventDefault();
+  if (loginBtn.disabled) return; // đang xử lý một lần đăng nhập
 
   const username = usernameInput.value.trim();
   const password = passwordInput.value;
@@ -99,6 +100,11 @@ loginForm.addEventListener("submit", async function(e) {
     if (result.success) {
       saveLoginInfo(username, remember);
       showNotification(result.message, "success");
+
+      // Xóa phiên admin còn sót lại trong cùng tab (để getCurrentAdmin() trả về đúng nhân viên)
+      sessionStorage.removeItem("adminLoggedIn");
+      sessionStorage.removeItem("adminUsername");
+      sessionStorage.removeItem("loginTime");
 
       employeeSession.logout();
       employeeSession.login(result.employee);
@@ -140,11 +146,7 @@ passwordInput.addEventListener("input", function() {
   }
 });
 
-passwordInput.addEventListener("keypress", function(e) {
-  if (e.key === "Enter") {
-    loginForm.dispatchEvent(new Event("submit"));
-  }
-});
+// Phím Enter: dùng submit gốc của form (nút type="submit"), không tự phát sự kiện submit lần nữa
 
 document.querySelector(".login-footer a") &&
   document.querySelector(".login-footer a").addEventListener("click", function(e) {

@@ -1,12 +1,12 @@
 // Du lieu mau phieu nhap giay dung chung cho khu vuc admin.
 const dsPhieuNhapHang = Array.from({ length: 10 }, (_, receiptIndex) => {
   const start = receiptIndex * 5;
-  const chiTiet = products.slice(start, start + 5).map((product, itemIndex) => {
+  const chiTiet = products.slice(start, start + 5).map((sanPham, itemIndex) => {
     const soLuongNhap = 10 + ((receiptIndex + itemIndex) % 4) * 5;
-    const giaNhap = product.importPrice || Math.round(product.priceValue * 0.7);
+    const giaNhap = sanPham.giaNhap || Math.round(sanPham.giaBan * 0.7);
     return {
-      maSanPham: product.id,
-      tenSanPham: product.name,
+      maSanPham: sanPham.maSanPham,
+      tenSanPham: sanPham.tenSanPham,
       soLuongNhap,
       giaNhap,
       thanhTien: soLuongNhap * giaNhap,

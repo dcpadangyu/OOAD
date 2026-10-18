@@ -1,0 +1,92 @@
+/* ===== Đánh giá sản phẩm (User): form, lịch sử đơn hàng, popup sản phẩm ===== */
+:root { --fb-star: #f5a623; --fb-line: #e5e7eb; --fb-ink: #111827; --fb-muted: #6b7280; --fb-accent: #111827; }
+body.fb-lock { overflow: hidden; }
+
+/* ---- Form ---- */
+.fb-overlay { position: fixed; inset: 0; z-index: 10000; background: rgba(17, 24, 39, .62); display: flex; align-items: center; justify-content: center; padding: 16px; }
+.fb-modal { position: relative; width: 520px; max-width: 100%; max-height: 92vh; overflow-y: auto; background: #fff; border-radius: 14px; padding: 24px; box-shadow: 0 24px 60px rgba(0, 0, 0, .3); font-family: inherit; color: var(--fb-ink); }
+.fb-modal h3 { margin: 0 0 14px; font-size: 20px; }
+.fb-close { position: absolute; top: 10px; right: 14px; border: 0; background: transparent; font-size: 28px; line-height: 1; cursor: pointer; color: var(--fb-muted); }
+.fb-close:hover { color: #dc2626; }
+.fb-product { display: flex; gap: 12px; align-items: center; padding: 10px; border: 1px solid var(--fb-line); border-radius: 10px; background: #f9fafb; margin-bottom: 16px; }
+.fb-product img { width: 64px; height: 64px; object-fit: contain; background: #fff; border-radius: 8px; border: 1px solid var(--fb-line); }
+.fb-product div { display: flex; flex-direction: column; gap: 2px; font-size: 13px; }
+.fb-product strong { font-size: 14px; }
+.fb-product span { color: var(--fb-muted); }
+.fb-rate { display: flex; align-items: center; gap: 14px; margin-bottom: 14px; flex-wrap: wrap; }
+.fb-stars { display: inline-flex; gap: 2px; }
+.fb-star { border: 0; background: transparent; font-size: 38px; line-height: 1; color: #d1d5db; cursor: pointer; padding: 0 2px; transition: transform .1s, color .1s; }
+.fb-star.on { color: var(--fb-star); }
+.fb-star:hover { transform: scale(1.12); }
+.fb-rate-label { font-size: 14px; font-weight: 600; color: var(--fb-muted); }
+.fb-field { display: block; margin-bottom: 14px; font-size: 14px; font-weight: 600; position: relative; }
+.fb-field small { font-weight: 400; color: var(--fb-muted); }
+.fb-field textarea { width: 100%; margin-top: 6px; padding: 10px 12px; border: 1px solid #d1d5db; border-radius: 10px; font: inherit; font-weight: 400; resize: vertical; box-sizing: border-box; }
+.fb-field textarea:focus { outline: none; border-color: var(--fb-accent); box-shadow: 0 0 0 3px rgba(17, 24, 39, .08); }
+.fb-counter { display: block; text-align: right; font-size: 11px; color: var(--fb-muted); font-weight: 400; }
+.fb-upload { display: inline-flex; align-items: center; margin-top: 6px; padding: 9px 14px; border: 1px dashed #9ca3af; border-radius: 10px; cursor: pointer; font-weight: 600; color: var(--fb-ink); background: #fafafa; }
+.fb-upload:hover { background: #f3f4f6; }
+.fb-previews { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+.fb-preview { position: relative; width: 82px; height: 82px; border-radius: 8px; overflow: hidden; border: 1px solid var(--fb-line); background: #000; }
+.fb-preview img, .fb-preview video { width: 100%; height: 100%; object-fit: cover; display: block; }
+.fb-preview-remove { position: absolute; top: 2px; right: 2px; width: 22px; height: 22px; border: 0; border-radius: 50%; background: rgba(0, 0, 0, .7); color: #fff; cursor: pointer; line-height: 1; font-size: 15px; padding: 0; }
+.fb-preview-tag { position: absolute; left: 3px; bottom: 3px; font-size: 9px; font-weight: 700; color: #fff; background: rgba(0, 0, 0, .65); padding: 2px 4px; border-radius: 4px; }
+.fb-error { margin-bottom: 12px; padding: 8px 12px; border-radius: 8px; background: #fef2f2; border: 1px solid #fecaca; color: #b91c1c; font-size: 13px; }
+.fb-actions { display: flex; justify-content: flex-end; gap: 10px; }
+.fb-btn { border: 0; border-radius: 10px; padding: 11px 20px; font-weight: 700; font-size: 14px; cursor: pointer; background: var(--fb-accent); color: #fff; }
+.fb-btn:hover { opacity: .9; }
+.fb-btn:disabled { opacity: .5; cursor: wait; }
+.fb-btn-ghost { background: #e5e7eb; color: var(--fb-ink); }
+
+/* ---- Trong lịch sử đơn hàng ---- */
+.fb-slot { margin: 4px 0 12px; }
+.fb-open-btn { border: 1px solid var(--fb-star); background: #fffbeb; color: #92400e; border-radius: 8px; padding: 8px 14px; font-weight: 700; cursor: pointer; font-size: 13px; }
+.fb-open-btn:hover { background: var(--fb-star); color: #fff; }
+.fb-done { border: 1px solid var(--fb-line); border-radius: 10px; padding: 10px 12px; background: #fafafa; font-size: 13px; }
+.fb-done-head { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.fb-stars-static { color: var(--fb-star); font-size: 17px; letter-spacing: 1px; }
+.fb-done small { color: var(--fb-muted); }
+.fb-badge { padding: 2px 9px; border-radius: 999px; font-size: 11px; font-weight: 700; }
+.fb-st-moi { background: #dbeafe; color: #1d4ed8; }
+.fb-st-dangXuLy { background: #fef3c7; color: #92400e; }
+.fb-st-daXuLy { background: #dcfce7; color: #166534; }
+.fb-comment { margin: 8px 0 0; white-space: normal; }
+.fb-thumbs { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+.fb-thumb { width: 72px; height: 72px; object-fit: cover; border-radius: 8px; border: 1px solid var(--fb-line); cursor: zoom-in; background: #000; }
+.fb-thumbs video.fb-thumb { cursor: default; }
+.fb-reply { margin-top: 10px; padding: 9px 12px; border-left: 3px solid #16a34a; background: #f0fdf4; border-radius: 0 8px 8px 0; }
+.fb-reply p { margin: 4px 0; }
+.fb-wait { margin: 8px 0 0; color: var(--fb-muted); font-style: italic; }
+.fb-lightbox { position: fixed; inset: 0; z-index: 10001; background: rgba(0, 0, 0, .85); display: flex; align-items: center; justify-content: center; cursor: zoom-out; }
+.fb-lightbox img { max-width: 92vw; max-height: 92vh; border-radius: 8px; }
+
+/* ---- Popup sản phẩm: danh sách đánh giá ---- */
+.product-reviews { margin-top: 24px; padding-top: 18px; border-top: 1px solid var(--fb-line); }
+.product-reviews h3 { margin: 0 0 12px; }
+.pr-empty { color: var(--fb-muted); font-style: italic; }
+.pr-summary { display: flex; gap: 24px; align-items: center; flex-wrap: wrap; margin-bottom: 12px; }
+.pr-score { text-align: center; min-width: 110px; }
+.pr-score strong { display: block; font-size: 38px; line-height: 1; }
+.pr-score small { color: var(--fb-muted); }
+.pr-stars { color: var(--fb-star); letter-spacing: 1px; }
+.pr-bars { flex: 1; min-width: 200px; }
+.pr-bar { display: flex; align-items: center; gap: 8px; font-size: 12px; margin: 3px 0; }
+.pr-bar span { width: 24px; }
+.pr-bar i { flex: 1; height: 8px; background: #e5e7eb; border-radius: 99px; overflow: hidden; }
+.pr-bar b { display: block; height: 100%; background: var(--fb-star); }
+.pr-bar em { width: 22px; text-align: right; font-style: normal; color: var(--fb-muted); }
+.pr-filters { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px; }
+.pr-filter { border: 1px solid #d1d5db; background: #fff; border-radius: 999px; padding: 4px 12px; font-size: 12px; cursor: pointer; }
+.pr-filter.active { background: var(--fb-ink); color: #fff; border-color: var(--fb-ink); }
+.pr-item { padding: 12px 0; border-bottom: 1px solid #f3f4f6; }
+.pr-head { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; font-size: 13px; }
+.pr-head small { color: var(--fb-muted); }
+.pr-comment { margin: 6px 0; font-size: 14px; }
+.pr-media { display: flex; flex-wrap: wrap; gap: 6px; margin: 6px 0; }
+.pr-thumb { width: 84px; height: 84px; object-fit: cover; border-radius: 8px; border: 1px solid var(--fb-line); cursor: zoom-in; background: #000; }
+video.pr-thumb { width: 150px; height: 100px; cursor: default; }
+.pr-reply { margin-top: 6px; padding: 8px 12px; background: #f0fdf4; border-left: 3px solid #16a34a; border-radius: 0 8px 8px 0; font-size: 13px; }
+.pr-more { margin-top: 10px; border: 1px solid #d1d5db; background: #fff; border-radius: 8px; padding: 8px 16px; cursor: pointer; font-weight: 600; }
+.card-rating { padding: 0 14px 12px; font-size: 13px; font-weight: 700; color: var(--fb-ink); }
+.card-rating span { color: var(--fb-star); }
+.card-rating small { color: var(--fb-muted); font-weight: 400; }

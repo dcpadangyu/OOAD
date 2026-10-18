@@ -1,125 +1,54 @@
-// Du lieu san pham giay dung chung cho cua hang va khu vuc admin.
-const shoeImagePaths = [
-  "Adidas/adidas-samba-og-black-white.jpg", "Adidas/adidas-samba-og-white-black.jpg", "Adidas/adidas-campus-00s-black-white.jpg", "Adidas/adidas-campus-00s-grey.jpg", "Adidas/adidas-gazelle-bold-pink.jpg", "Adidas/adidas-gazelle-indoor-blue.jpg", "Adidas/adidas-forum-low-white-black.jpg", "Adidas/adidas-superstar-black-white.jpg", "Adidas/adidas-ultraboost-light-black.jpg", "Adidas/adidas-duramo-sl-white.jpg",
-  "Converse/converse-chuck-70-high-black.jpg", "Converse/converse-chuck-70-high-red.jpg", "Converse/converse-chuck-70-high-white.jpg", "Converse/converse-chuck-70-low-black.jpg", "Converse/converse-chuck-70-low-white.jpg", "Converse/converse-one-star-black.jpg", "Converse/converse-one-star-white.jpg", "Converse/converse-run-star-hike-black.jpg", "Converse/converse-run-star-motion-white.jpg", "Converse/converse-pro-leather-black.jpg",
-  "Mlb/mlb-big-ball-chunky-black.jpg", "Mlb/mlb-big-ball-chunky-white.jpg", "Mlb/mlb-big-ball-chunky-beige.jpg", "Mlb/mlb-big-ball-chunky-pink.jpg", "Mlb/mlb-big-ball-chunky-green.jpg", "Mlb/mlb-chunky-classic-los-angeles-black.jpg", "Mlb/mlb-chunky-classic-los-angeles-white.jpg", "Mlb/mlb-chunky-classic-new-york-black.jpg", "Mlb/mlb-playball-origin-new-york-black.jpg", "Mlb/mlb-playball-origin-los-angeles-white.jpg",
-  "Nike/nike-air-force-1-black.jpg", "Nike/nike-air-force-1-white.jpg", "Nike/nike-air-jordan-1-low-black.jpg", "Nike/nike-air-jordan-1-low-white.jpg", "Nike/nike-air-jordan-1-mid-black.jpg", "Nike/nike-air-jordan-1-mid-red.jpg", "Nike/nike-air-max-270-black.jpg", "Nike/nike-air-max-90-white.jpg", "Nike/nike-dunk-low-grey.jpg", "Nike/nike-pegasus-41-black.jpg",
-  "Vans/vans-authentic-black.jpg", "Vans/vans-authentic-white.jpg", "Vans/vans-authentic-red.jpg", "Vans/vans-era-black-white.jpg", "Vans/vans-era-white-black.jpg", "Vans/vans-knu-skool-black.jpg", "Vans/vans-old-skool-navy.jpg", "Vans/vans-old-skool-red.jpg", "Vans/vans-sk8-hi-black-white.jpg", "Vans/vans-slip-on-checkerboard.jpg"
-];
+// Giao dien cua hang (User). Du lieu san pham, ton kho va don hang dung chung nam o database/products-shoes.js (nap truoc file nay).
 
-function shoeColor(path) {
-  const value = path.split("/").pop().replace(/\.jpg$/i, "");
-  if (value.includes("white")) return "Trắng";
-  if (value.includes("black")) return "Đen";
-  if (value.includes("red")) return "Đỏ";
-  if (value.includes("blue") || value.includes("navy")) return "Xanh dương";
-  if (value.includes("green")) return "Xanh lá";
-  if (value.includes("pink")) return "Hồng";
-  if (value.includes("beige")) return "Be";
-  if (value.includes("grey")) return "Xám";
-  return "Đen";
-}
+const esc = ShopCore.esc;
+const FALLBACK_IMAGE = "assets/img/no-image.png";
 
-function shoeName(path) {
-  const file = path.split("/").pop().replace(/\.jpg$/i, "");
-  return file.split("-").map((part) => part.charAt(0).toUpperCase() + part.slice(1)).join(" ");
-}
-
-function createSizeStock(total, start = 36, end = 50) {
-  const count = end - start + 1;
-  const base = Math.floor(Math.max(0, Number(total) || 0) / count);
-  let remainder = Math.max(0, Number(total) || 0) % count;
-  return Object.fromEntries(
-    Array.from({ length: count }, (_, index) => [String(start + index), base + (remainder-- > 0 ? 1 : 0)])
-  );
-}
-
-const products = shoeImagePaths.map((imagePath, index) => {
-  const catalogFolder = imagePath.split("/")[0];
-  const catalog = catalogFolder.toLowerCase() === "mlb" ? "MLB" : catalogFolder;
-  const name = shoeName(imagePath);
-  const priceValue = 1290000 + (index % 10) * 270000;
-  const material = catalog === "Converse" || catalog === "Vans" ? "Vải" : index % 3 === 0 ? "Da" : "Da tổng hợp";
-  return {
-    id: `SH-${String(index + 1).padStart(3, "0")}`,
-    catalog,
-    name,
-    gender: index % 5 === 0 ? "Unisex" : index % 3 === 0 ? "Nữ" : "Nam",
-    desc: `Giày ${catalog} chính hãng, thiết kế thời trang và bền bỉ`,
-    color: shoeColor(imagePath),
-    material,
-    style: index % 3 === 0 ? "Thời trang" : index % 3 === 1 ? "Thể thao" : "Casual",
-    size: "36 - 50",
-    sizeStock: createSizeStock(20 + (index % 6) * 5),
-    priceValue,
-    price: `${priceValue.toLocaleString("vi-VN")}₫`,
-    image: `assets/images/products/${imagePath}`,
-    importPrice: Math.round(priceValue * 0.7),
-    quantity: 20 + (index % 6) * 5,
-    importQuantity: 20 + (index % 6) * 5,
-    soldQuantity: 0,
-    visibility: "visible",
-    description: `Mẫu ${name} mang lại cảm giác thoải mái khi di chuyển, phù hợp cho phong cách hằng ngày và các hoạt động năng động.`,
-    origin: "Việt Nam"
-  };
-});
-
-function getLocalProducts() {
-  try {
-    const stored = JSON.parse(localStorage.getItem("productsLocal") || "null");
-    const isShoeCatalog = Array.isArray(stored) && stored.length > 0 && stored.every((product) => product && product.id && product.name && product.image);
-    if (isShoeCatalog) {
-      const normalized = stored.map(normalizeLocalProduct);
-      localStorage.setItem("productsLocal", JSON.stringify(normalized));
-      return normalized;
-    }
-  } catch (error) {
-    console.error("Loi khi doc san pham:", error);
-  }
-  localStorage.setItem("productsLocal", JSON.stringify(products));
-  return products;
-}
-
-function normalizeLocalProduct(product) {
-  if (!product || typeof product !== "object") return product;
-  const normalized = { ...product };
-  if (!normalized.sizeStock && normalized.size) {
-    const sizes = String(normalized.size).match(/(\d+)\s*[-–]\s*(\d+)/);
-    if (sizes) {
-      const start = Number(sizes[1]);
-      const end = Number(sizes[2]);
-      if (end >= start && end - start <= 30) {
-        normalized.sizeStock = createSizeStock(normalized.quantity, start, end);
-      }
-    }
-  }
-  if (normalized.sizeStock && typeof normalized.sizeStock === "object" && !Array.isArray(normalized.sizeStock)) {
-    const sizeStock = {};
-    Object.entries(normalized.sizeStock).forEach(([size, quantity]) => {
-      if (/^\d+(?:\.\d+)?$/.test(size) && Number.isFinite(Number(quantity))) {
-        sizeStock[size] = Math.max(0, Math.floor(Number(quantity)));
-      }
-    });
-    if (Object.keys(sizeStock).length) {
-      normalized.sizeStock = sizeStock;
-      normalized.quantity = Object.values(sizeStock).reduce((total, quantity) => total + quantity, 0);
-    } else {
-      delete normalized.sizeStock;
-    }
-  }
-  return normalized;
+function imgFallbackAttr() {
+  return `onerror="this.onerror=null;this.src='${FALLBACK_IMAGE}'"`;
 }
 
 const PER_PAGE = 15;
 let currentPage = 1;
-let currentList = getLocalProducts();
-let localproducts = getLocalProducts();
+// Tập tên loại (chữ thường) đang bị ẩn trong localStorage "categories" ({ maLoai, tenLoai, trangThai: "active" | "hidden" }).
+function getHiddenCategorySet() {
+  const hidden = new Set();
+  try {
+    const list = JSON.parse(localStorage.getItem("categories") || "[]");
+    if (Array.isArray(list)) {
+      list.forEach((category) => {
+        if (!category || category.trangThai !== "hidden") return;
+        [category.tenLoai, category.maLoai].forEach((name) => {
+          if (name !== undefined && name !== null && String(name).trim()) hidden.add(String(name).trim().toLowerCase());
+        });
+      });
+    }
+  } catch (error) {
+    // Dữ liệu loại hỏng: coi như không có loại nào bị ẩn.
+  }
+  return hidden;
+}
+
+function isStorefrontVisible(product, hiddenCategories) {
+  // Chỉ hiện sản phẩm chưa ẩn, loại chưa bị ẩn, đã có giá và còn hàng (hết sạch số lượng/size thì không hiển thị).
+  if (!product || product.trangThaiHienThi === "hidden" || !(Number(product.giaBan) > 0) || !(Number(product.soLuongTon) > 0)) return false;
+  const hidden = hiddenCategories instanceof Set ? hiddenCategories : getHiddenCategorySet();
+  return !hidden.has(String(product.maLoai ?? "").trim().toLowerCase());
+}
+
+function loadStorefrontProducts() {
+  const hidden = getHiddenCategorySet();
+  return getLocalProducts().filter((product) => isStorefrontVisible(product, hidden));
+}
+
+let currentList = loadStorefrontProducts();
+let localproducts = loadStorefrontProducts();
 let currentCatalog = null;
 
 function createProductCard(product) {
   const card = document.createElement("div");
   card.className = "product-card";
-  card.innerHTML = `<img src="${product.image}" alt="${product.name}"><h3 class="desc">${product.name}</h3><p class="price">${product.price}</p>`;
+  card.dataset.productId = product.maSanPham;
+  card.innerHTML = `<img src="${esc(product.hinhAnh)}" alt="${esc(product.tenSanPham)}" loading="lazy" ${imgFallbackAttr()}><h3 class="desc">${esc(product.tenSanPham)}</h3><p class="price">${esc(product.giaHienThi)}</p>`;
   card.addEventListener("click", () => openProductPopup(product));
   return card;
 }
@@ -127,22 +56,29 @@ function createProductCard(product) {
 function renderProducts(list, page = 1) {
   const grid = document.getElementById("product-grid");
   if (!grid) return;
-  const visibleList = (list || getLocalProducts()).filter((product) => product.visibility !== "hidden");
+  const hiddenCategories = getHiddenCategorySet();
+  const visibleList = (list || getLocalProducts()).filter((product) => isStorefrontVisible(product, hiddenCategories));
   currentList = visibleList;
   const totalPages = Math.max(1, Math.ceil(visibleList.length / PER_PAGE));
   currentPage = Math.min(Math.max(page, 1), totalPages);
   grid.innerHTML = "";
+  if (!visibleList.length) {
+    grid.innerHTML = '<p class="no-products" style="grid-column:1/-1;text-align:center;padding:40px 12px;">Không tìm thấy sản phẩm phù hợp</p>';
+    renderPagination(0, 1);
+    return;
+  }
   visibleList.slice((currentPage - 1) * PER_PAGE, currentPage * PER_PAGE).forEach((product) => grid.appendChild(createProductCard(product)));
+  window.ProductReviews?.decorateCards();
   renderPagination(totalPages, currentPage);
 }
 
 function getProductSizes(product) {
-  if (product?.sizeStock && typeof product.sizeStock === "object" && !Array.isArray(product.sizeStock)) {
-    const declaredSizes = getProductSizes({ size: product.size });
-    const stockSizes = Object.keys(product.sizeStock).map(Number).filter(Number.isFinite);
+  if (product?.tonKhoTheoSize && typeof product.tonKhoTheoSize === "object" && !Array.isArray(product.tonKhoTheoSize)) {
+    const declaredSizes = getProductSizes({ kichCo: product.kichCo });
+    const stockSizes = Object.keys(product.tonKhoTheoSize).map(Number).filter(Number.isFinite);
     return [...new Set([...declaredSizes, ...stockSizes])].sort((a, b) => a - b);
   }
-  const value = product?.sizes ?? product?.availableSizes ?? product?.size;
+  const value = product?.sizes ?? product?.availableSizes ?? product?.kichCo;
   if (Array.isArray(value)) {
     return [...new Set(value.map((size) => Number(size)).filter(Number.isFinite))].sort((a, b) => a - b);
   }
@@ -159,13 +95,24 @@ function getProductSizes(product) {
   return [...new Set(text.split(/[,;/|]+/).map((size) => Number(size.trim())).filter(Number.isFinite))].sort((a, b) => a - b);
 }
 
+// Size còn hàng: có tonKhoTheoSize thì chỉ lấy size có tồn kho > 0; không thì dùng size khai báo.
+function getInStockSizes(product) {
+  const stock = product?.tonKhoTheoSize;
+  if (stock && typeof stock === "object" && !Array.isArray(stock) && Object.keys(stock).length > 0) {
+    return Object.keys(stock).filter((key) => Number(stock[key]) > 0).map(Number).filter(Number.isFinite).sort((a, b) => a - b);
+  }
+  return getProductSizes(product);
+}
+
 function renderAvailableSizeFilter() {
   const filter = document.getElementById("sizeFilter");
   const group = filter?.closest(".filter-group");
   if (!filter || !group) return;
-  const sizes = [...new Set(localproducts.flatMap(getProductSizes))].sort((a, b) => a - b);
+  const previous = filter.value;
+  const sizes = [...new Set(localproducts.flatMap(getInStockSizes))].sort((a, b) => a - b);
   filter.replaceChildren(new Option("Tất cả size", ""));
   sizes.forEach((size) => filter.appendChild(new Option(String(size), String(size))));
+  if (previous && sizes.some((size) => String(size) === previous)) filter.value = previous;
   group.hidden = sizes.length === 0;
 }
 
@@ -174,8 +121,8 @@ function openProductPopup(product) {
   const detail = document.getElementById("popup-details");
   if (!popup || !detail) return;
   const sizeOptions = getProductSizes(product);
-  const stockForSize = (size) => product.sizeStock && typeof product.sizeStock === "object"
-    ? Math.max(0, Number(product.sizeStock[String(size)]) || 0)
+  const stockForSize = (size) => product.tonKhoTheoSize && typeof product.tonKhoTheoSize === "object"
+    ? Math.max(0, Number(product.tonKhoTheoSize[String(size)]) || 0)
     : null;
   const firstAvailableSize = sizeOptions.find((size) => stockForSize(size) === null || stockForSize(size) > 0);
   const sizePicker = sizeOptions.length
@@ -187,7 +134,8 @@ function openProductPopup(product) {
     }).join("")}</div></div>`
     : "";
   const sizeDescription = sizeOptions.length ? `<p><strong>Kích thước:</strong> ${sizeOptions.join(", ")}</p>` : "";
-  detail.innerHTML = `<div class="product-info"><div class="left"><img src="${product.image}" alt="${product.name}"></div><div class="right"><p class="desc">${product.desc}</p><h2>${product.name}</h2><p><strong>Màu sắc:</strong> ${product.color}</p><p><strong>Chất liệu:</strong> ${product.material}</p><p><strong>Phong cách:</strong> ${product.style}</p><p><strong>Giới tính:</strong> ${product.gender}</p>${sizePicker}<p class="price">${product.price}</p><div class="actions"><button id="add-to-cart">Thêm vào giỏ hàng</button><button id="buy-now">Mua ngay</button></div></div></div><div class="description"><h3>Mô tả sản phẩm</h3><p>${product.description}</p><h3>Thông số giày</h3><p><strong>Chất liệu:</strong> ${product.material}</p><p><strong>Phong cách:</strong> ${product.style}</p>${sizeDescription}<p><strong>Xuất xứ:</strong> ${product.origin}</p></div>`;
+  detail.innerHTML = `<div class="product-info"><div class="left"><img src="${esc(product.hinhAnh)}" alt="${esc(product.tenSanPham)}" ${imgFallbackAttr()}></div><div class="right"><p class="desc">${esc(product.moTaNgan)}</p><h2>${esc(product.tenSanPham)}</h2><p><strong>Màu sắc:</strong> ${esc(product.mauSac)}</p><p><strong>Chất liệu:</strong> ${esc(product.chatLieu)}</p><p><strong>Phong cách:</strong> ${esc(product.phongCach)}</p><p><strong>Giới tính:</strong> ${esc(product.gioiTinh)}</p>${sizePicker}<p class="price">${esc(product.giaHienThi)}</p><div class="actions"><button id="add-to-cart">Thêm vào giỏ hàng</button><button id="buy-now">Mua ngay</button></div></div></div><div class="description"><h3>Mô tả sản phẩm</h3><p>${esc(product.moTa)}</p><h3>Thông số giày</h3><p><strong>Chất liệu:</strong> ${esc(product.chatLieu)}</p><p><strong>Phong cách:</strong> ${esc(product.phongCach)}</p>${sizeDescription}<p><strong>Xuất xứ:</strong> ${esc(product.xuatXu)}</p></div><div class="product-reviews" data-product="${esc(product.maSanPham)}"></div>`;
+  window.ProductReviews?.render(detail.querySelector(".product-reviews"), product.maSanPham);
   popup.style.display = "flex";
   document.body.style.overflow = "hidden";
   let selectedSize = firstAvailableSize == null ? "" : String(firstAvailableSize);
@@ -201,45 +149,98 @@ function openProductPopup(product) {
       });
     });
   });
-  const addToCart = () => {
-    const latestProduct = getLocalProducts().find((item) => item.id === product.id) || product;
+  const addToCart = (options) => {
+    const latestProduct = getLocalProducts().find((item) => item.maSanPham === product.maSanPham);
+    // Kiểm tra lại sản phẩm mới nhất: chưa ẩn, loại chưa ẩn, có giá và còn hàng.
+    if (!latestProduct || !isStorefrontVisible(latestProduct)) {
+      alert("Sản phẩm này hiện không còn được bán.");
+      return false;
+    }
     if (sizeOptions.length && !selectedSize) {
       alert("Sản phẩm hiện đã hết hàng ở tất cả size.");
       return false;
     }
     const cart = JSON.parse(localStorage.getItem("cart") || "[]");
-    const existing = cart.find((item) => item.id === product.id && String(item.selectedSize || "") === selectedSize);
-    const requestedQuantity = Number(existing?.quantity || 0) + 1;
-    const availableQuantity = selectedSize && latestProduct.sizeStock
-      ? Math.max(0, Number(latestProduct.sizeStock[selectedSize]) || 0)
-      : Math.max(0, Number(latestProduct.quantity) || 0);
+    const existing = cart.find((item) => item.maSanPham === product.maSanPham && String(item.kichCoDaChon || "") === selectedSize);
+    const requestedQuantity = options && options.keepExisting && existing ? Number(existing.soLuong) : Number(existing?.soLuong || 0) + 1;
+    const availableQuantity = selectedSize && latestProduct.tonKhoTheoSize
+      ? Math.max(0, Number(latestProduct.tonKhoTheoSize[selectedSize]) || 0)
+      : Math.max(0, Number(latestProduct.soLuongTon) || 0);
     if (requestedQuantity > availableQuantity) {
-      alert(`Sản phẩm không đủ. Size ${selectedSize || "này"} chỉ còn ${availableQuantity}.`);
+      const trongGio = Number(existing?.soLuong || 0);
+      alert(`Sản phẩm không đủ. Size ${selectedSize || "này"} chỉ còn ${availableQuantity}` + (trongGio ? ` (bạn đã có ${trongGio} trong giỏ hàng).` : "."));
       return false;
     }
-    if (existing) existing.quantity = requestedQuantity;
-    else cart.push({ ...latestProduct, ...(selectedSize ? { selectedSize } : {}), quantity: 1 });
-    localStorage.setItem("cart", JSON.stringify(cart));
-    alert("Đã thêm giày vào giỏ hàng!");
+    if (existing) existing.soLuong = requestedQuantity;
+    else cart.push({ maSanPham: latestProduct.maSanPham, tenSanPham: latestProduct.tenSanPham, maLoai: latestProduct.maLoai, hinhAnh: latestProduct.hinhAnh, giaHienThi: latestProduct.giaHienThi, giaBan: latestProduct.giaBan, ...(selectedSize ? { kichCoDaChon: selectedSize } : {}), soLuong: 1 });
+    try {
+      localStorage.setItem("cart", JSON.stringify(cart));
+    } catch (error) {
+      alert("Không thể lưu giỏ hàng (bộ nhớ trình duyệt đã đầy).");
+      return false;
+    }
+    if (!(options && options.silent === true)) alert("Đã thêm giày vào giỏ hàng!");
     return true;
   };
-  document.getElementById("add-to-cart").addEventListener("click", addToCart);
-  document.getElementById("buy-now").addEventListener("click", () => { if (addToCart()) { popup.style.display = "none"; document.body.style.overflow = "auto"; document.getElementById("open-cart-btn")?.click(); } });
+  document.getElementById("add-to-cart").addEventListener("click", () => addToCart());
+  // Mua ngay: thêm vào giỏ, chỉ chọn đúng dòng vừa thêm rồi chuyển sang trang thanh toán (checkout.js tự chuyển đến đăng nhập nếu cần).
+  document.getElementById("buy-now").addEventListener("click", () => {
+    if (!addToCart({ silent: true, keepExisting: true })) return;
+    localStorage.setItem("selectedCartItems", JSON.stringify([`${product.maSanPham}::${selectedSize}`]));
+    popup.style.display = "none";
+    document.body.style.overflow = "auto";
+    window.location.href = "pages/checkout.html";
+  });
+}
+
+// Phân trang: chỉ hiện 4 số trang mỗi nhóm; ">" / "<" chuyển từng trang, có "Trang đầu" và "Trang cuối".
+const PAGE_WINDOW = 4;
+
+function scrollToCatalog() {
+  const heading = document.getElementById("sanpham");
+  if (!heading) return;
+  const header = document.querySelector(".store-header");
+  const offset = header ? header.getBoundingClientRect().height : 0;
+  window.scrollTo({ top: Math.max(0, heading.getBoundingClientRect().top + window.scrollY - offset - 12), behavior: "smooth" });
 }
 
 function renderPagination(totalPages, page) {
   const container = document.getElementById("pagination");
   if (!container) return;
   container.innerHTML = "";
-  for (let index = 1; index <= totalPages; index += 1) {
-    const button = document.createElement("button");
-    button.textContent = index;
-    button.classList.toggle("active", index === page);
-    button.addEventListener("click", () => renderProducts(currentList, index));
-    container.appendChild(button);
-  }
-}
+  if (totalPages <= 1) return;
 
+  const goTo = (target) => {
+    renderProducts(currentList, target);
+    scrollToCatalog();
+  };
+  const addButton = (label, target, options = {}) => {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.textContent = label;
+    if (options.title) button.title = options.title;
+    if (options.className) button.className = options.className;
+    if (options.active) button.classList.add("active");
+    if (options.disabled) button.disabled = true;
+    else button.addEventListener("click", () => goTo(target));
+    container.appendChild(button);
+  };
+
+  const start = Math.floor((page - 1) / PAGE_WINDOW) * PAGE_WINDOW + 1;
+  const end = Math.min(totalPages, start + PAGE_WINDOW - 1);
+
+  // Đang ở nhóm trang đầu (1-4) thì không hiện "Trang đầu" và "<".
+  if (start > 1) {
+    addButton("Trang đầu", 1, { className: "page-nav" });
+    addButton("<", page - 1, { className: "page-nav", title: "Trang trước" });
+  }
+  for (let index = start; index <= end; index += 1) {
+    addButton(String(index), index, { active: index === page });
+  }
+
+  addButton(">", page + 1, { className: "page-nav", title: "Trang sau", disabled: page === totalPages });
+  addButton("Trang cuối", totalPages, { className: "page-nav", disabled: page === totalPages });
+}
 function applyAllFilters() {
   const price = document.getElementById("priceFilter")?.value || "";
   const color = document.getElementById("colorFilter")?.value.toLowerCase() || "";
@@ -249,10 +250,11 @@ function applyAllFilters() {
   const size = document.getElementById("sizeFilter")?.value || "";
   const search = document.getElementById("searchInput")?.value.trim().toLowerCase() || "";
   const filtered = localproducts.filter((product) => {
-    const matchesPrice = !price || (price === "duoi1" ? product.priceValue < 1000000 : price === "tren4" ? product.priceValue > 4000000 : product.priceValue >= Number(price.split("-")[0]) * 1000000 && product.priceValue <= Number(price.split("-")[1]) * 1000000);
-    const productSizes = getProductSizes(product);
-    const matchesSize = !size || productSizes.includes(Number(size));
-    return (!currentCatalog || String(product.catalog).toLowerCase() === String(currentCatalog).toLowerCase()) && (!search || `${product.name} ${product.catalog}`.toLowerCase().includes(search)) && matchesPrice && (!color || product.color.toLowerCase() === color) && (!material || product.material.toLowerCase() === material) && (!style || product.style.toLowerCase() === style) && (!gender || product.gender.toLowerCase() === gender) && matchesSize;
+    // Khoảng giá không chồng lấn: [min, max) ; "tren4" là >= 4.000.000.
+    const giaBan = Number(product.giaBan);
+    const matchesPrice = !price || (price === "duoi1" ? giaBan < 1000000 : price === "tren4" ? giaBan >= 4000000 : giaBan >= Number(price.split("-")[0]) * 1000000 && giaBan < Number(price.split("-")[1]) * 1000000);
+    const matchesSize = !size || getInStockSizes(product).includes(Number(size));
+    return (!currentCatalog || String(product.maLoai).toLowerCase() === String(currentCatalog).toLowerCase()) && (!search || `${product.tenSanPham} ${product.maLoai}`.toLowerCase().includes(search)) && matchesPrice && (!color || product.mauSac.toLowerCase() === color) && (!material || product.chatLieu.toLowerCase() === material) && (!style || product.phongCach.toLowerCase() === style) && (!gender || product.gioiTinh.toLowerCase() === gender) && matchesSize;
   });
   renderProducts(filtered, 1);
 }
@@ -277,21 +279,24 @@ function renderSearchSuggestions() {
   if (!input || !container) return;
   const query = input.value.trim().toLowerCase();
   const history = getSearchHistory();
-  const matches = query ? localproducts.filter(product => `${product.name} ${product.catalog}`.toLowerCase().includes(query)).slice(0, 6).map(product => product.name) : [];
+  const matches = query ? localproducts.filter(product => `${product.tenSanPham} ${product.maLoai}`.toLowerCase().includes(query)).slice(0, 6).map(product => product.tenSanPham) : [];
   const items = query ? matches : history;
   if (!items.length) { container.innerHTML = ""; container.style.display = "none"; return; }
-  container.innerHTML = `${query ? "<div class=\"search-suggestion-label\">Gợi ý tìm kiếm</div>" : "<div class=\"search-suggestion-label\">Lịch sử tìm kiếm</div>"}${items.map(item => `<button type="button" class="search-suggestion" data-query="${item.replace(/"/g, "&quot;")}">${query ? "⌕" : "↻"}<span>${item}</span></button>`).join("")}${!query ? '<button type="button" class="search-history-clear">Xóa lịch sử</button>' : ""}`;
+  container.innerHTML = `${query ? "<div class=\"search-suggestion-label\">Gợi ý tìm kiếm</div>" : "<div class=\"search-suggestion-label\">Lịch sử tìm kiếm</div>"}${items.map(item => `<button type="button" class="search-suggestion" data-query="${esc(item)}">${query ? "⌕" : "↻"}<span>${esc(item)}</span></button>`).join("")}${!query ? '<button type="button" class="search-history-clear">Xóa lịch sử</button>' : ""}`;
   container.style.display = "block";
 }
 
 function searchProducts() { applyAllFilters(); renderSearchSuggestions(); }
 function renderProductsByCatalog(catalog) { currentCatalog = catalog; applyAllFilters(); }
 
-window.addEventListener("productsUpdated", () => {
-  localproducts = getLocalProducts();
+function refreshStorefront() {
+  localproducts = loadStorefrontProducts();
   renderAvailableSizeFilter();
-  renderProducts(localproducts, 1);
-});
+  applyAllFilters();
+}
+window.addEventListener("productsUpdated", refreshStorefront);
+window.addEventListener("storage", (event) => { if (event.key === "productsLocal" || event.key === "categories") refreshStorefront(); });
+window.addEventListener("categoriesUpdated", refreshStorefront);
 document.addEventListener("DOMContentLoaded", () => {
   const heroCta = document.querySelector(".hero-cta");
   const productHeading = document.getElementById("sanpham");

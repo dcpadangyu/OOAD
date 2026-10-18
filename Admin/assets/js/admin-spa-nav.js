@@ -125,6 +125,41 @@
         showRoute(initial);
     });
 
+    // Kiểm tra định kỳ (60s): phiên hết hạn (24h), nhân viên bị khóa/xóa/đổi chức vụ -> chuyển về trang đăng nhập phù hợp
+    const SESSION_CHECK_MS = 60 * 1000;
+    let watchTimer = null;
+
+    function startSessionWatch() {
+        if (typeof adminSession === 'undefined' || watchTimer) return;
+        const startedAsStaff = isStaff();
+        const startRole = startedAsStaff ? adminSession.getCurrentRole() : null;
+
+        watchTimer = setInterval(function() {
+            let wasStaff = startedAsStaff;
+            if (typeof adminSession.hadStaffSession === 'function') {
+                wasStaff = wasStaff || adminSession.hadStaffSession();
+            }
+            // isLoggedIn() đã bao gồm kiểm tra hết hạn và xác thực lại hồ sơ nhân viên
+            const valid = adminSession.isLoggedIn();
+            const stillStaff = valid && isStaff();
+            if (!valid || (startedAsStaff && !stillStaff)) {
+                clearInterval(watchTimer);
+                watchTimer = null;
+                adminSession.logout();
+                adminSession.redirectToLogin(wasStaff);
+                return;
+            }
+            // Đổi chức vụ -> nạp lại để menu / quyền truy cập theo chức vụ mới
+            if (startedAsStaff && adminSession.getCurrentRole() !== startRole) {
+                clearInterval(watchTimer);
+                watchTimer = null;
+                location.reload();
+            }
+        }, SESSION_CHECK_MS);
+    }
+
+    document.addEventListener('DOMContentLoaded', startSessionWatch);
+
     window.adminSpa = {
         showRoute,
         routeToId,

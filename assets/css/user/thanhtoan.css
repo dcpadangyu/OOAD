@@ -486,3 +486,71 @@
     transform: none;
     box-shadow: none;
 }
+
+/* Gio hang o che do chi doc (thanh toan / bien lai): khong co o chon, nut x, + / - */
+.modal_cart.readonly-cart .cart-col-select {
+    display: none;
+}
+.modal_cart.readonly-cart .item-info,
+.modal_cart.readonly-cart .all-cart {
+    grid-template-columns: minmax(0, 1fr) 110px 80px;
+}
+.modal_cart.readonly-cart .cart-product {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-width: 0;
+}
+.modal_cart.readonly-cart .item-img {
+    grid-column: auto;
+    flex: 0 0 72px;
+}
+.modal_cart.readonly-cart .item-quantity-all {
+    margin-top: 0;
+}
+
+/* Tom tat thanh toan: tam tinh / phi van chuyen / tong */
+.checkout-summary {
+    margin-top: 14px;
+}
+.checkout-summary-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 12px;
+    padding: 6px 0;
+}
+.checkout-summary-row span:last-child {
+    font-weight: 700;
+}
+.checkout-summary-note {
+    margin: 2px 0 8px;
+    color: #64748b;
+    font-size: 12px;
+    line-height: 1.5;
+}
+.checkout-summary-total span:last-child {
+    color: #dc2626;
+    font-size: 18px;
+}
+
+/* Gio hang chi-doc tren trang chuyen khoan / cua hang: dong chi co 3 phan tu (san pham | gia | so luong),
+   ghi de cac luoi 4 cot cua giao dien cu (cot dau 72px danh cho o chon) */
+#ThanhToan_ChuyenKhoan .list_danhsach .modal_cart.readonly-cart .item-info,
+#ThanhToan_CuaHang .list_danhsach .modal_cart.readonly-cart .item-info,
+#ThanhToan_ChuyenKhoan .list_danhsach .modal_cart.readonly-cart .all-cart,
+#ThanhToan_CuaHang .list_danhsach .modal_cart.readonly-cart .all-cart {
+    grid-template-columns: minmax(0, 1fr) 112px 76px !important;
+}
+#ThanhToan_ChuyenKhoan .list_danhsach .modal_cart.readonly-cart .item-info div:nth-child(4),
+#ThanhToan_CuaHang .list_danhsach .modal_cart.readonly-cart .item-info div:nth-child(4) {
+    display: block;
+}
+@media (max-width: 860px) {
+    #ThanhToan_ChuyenKhoan .list_danhsach .modal_cart.readonly-cart .item-info,
+    #ThanhToan_CuaHang .list_danhsach .modal_cart.readonly-cart .item-info,
+    #ThanhToan_ChuyenKhoan .list_danhsach .modal_cart.readonly-cart .all-cart,
+    #ThanhToan_CuaHang .list_danhsach .modal_cart.readonly-cart .all-cart {
+        grid-template-columns: minmax(0, 1fr) 92px 56px !important;
+    }
+}

@@ -43,19 +43,8 @@ function updateDashboardMetrics() {
             productsCount = JSON.parse(localStorage.getItem('productsLocal')).length || 0;
         }
 
-        // Orders
-        let ordersCount = 0;
-        if (typeof getLocalOrders === 'function') {
-            ordersCount = getLocalOrders().length;
-        } else if (localStorage.getItem('ordersLocal')) {
-            ordersCount = JSON.parse(localStorage.getItem('ordersLocal')).length || 0;
-        }
-
-        // Revenue: prefer actual sales orders (ordersLocal / getLocalOrders) first.
-        // Fallback to phieuNhapHang receipts (dsPhieuNhapHang) only if no orders found.
-        let revenue = 0;
-
-        // helper to safely parse numeric values (strip currency symbols/commas)
+        // Orders: đếm đơn chưa hủy. Doanh thu: chỉ đơn ĐÃ GIAO, công thức như báo cáo doanh thu
+        // (tổng donGia * soLuong của chiTiet, KHÔNG gồm phí vận chuyển).
         const toNumber = (v) => {
             if (v == null) return 0;
             if (typeof v === 'number') return v;
@@ -63,26 +52,41 @@ function updateDashboardMetrics() {
             const n = Number(cleaned);
             return isFinite(n) ? n : 0;
         };
+        const readList = (key) => {
+            try {
+                const list = JSON.parse(localStorage.getItem(key) || '[]');
+                return Array.isArray(list) ? list : [];
+            } catch (e) { return []; }
+        };
+        // Gộp đơn Admin (ordersLocal, ưu tiên) + đơn User chưa được đồng bộ (DanhSachDatHang)
+        const userToAdmin = (window.ShopCore && window.ShopCore.USER_TO_ADMIN) || { 'cho-xac-nhan': 'moiDat', 'dang-giao': 'daXuLy', 'thanh-cong': 'daGiao', 'da-huy': 'huy' };
+        const byId = new Map();
+        readList('ordersLocal').forEach(o => { if (o && o.maDonHang) byId.set(o.maDonHang, o); });
+        readList('DanhSachDatHang').forEach(o => {
+            if (o && o.maDonHang && !byId.has(o.maDonHang)) {
+                byId.set(o.maDonHang, Object.assign({}, o, { trangThaiQuanTri: o.trangThaiQuanTri || userToAdmin[o.trangThai] || 'moiDat' }));
+            }
+        });
+        const allOrders = Array.from(byId.values());
+        const activeOrders = allOrders.filter(o => o.trangThaiQuanTri !== 'huy' && o.trangThai !== 'da-huy');
+        const ordersCount = activeOrders.length;
+        const revenue = allOrders
+            .filter(o => o.trangThaiQuanTri === 'daGiao')
+            .reduce((s, o) => s + (Array.isArray(o.chiTiet) ? o.chiTiet : []).reduce((t, it) => t + toNumber(it && it.donGia) * toNumber(it && it.soLuong), 0), 0);
 
-        // Try orders from API/helper or localStorage first
-        let orders = [];
-        if (typeof getLocalOrders === 'function') {
-            try { orders = getLocalOrders() || []; } catch (e) { orders = []; }
-        }
-        if ((!orders || orders.length === 0) && localStorage.getItem('ordersLocal')) {
-            try { orders = JSON.parse(localStorage.getItem('ordersLocal')) || []; } catch (e) { orders = []; }
-        }
-
-        if (orders && orders.length) {
-            revenue = orders.reduce((s, o) => s + toNumber(o.total), 0);
-        } else if (typeof dsPhieuNhapHang !== 'undefined' && Array.isArray(dsPhieuNhapHang)) {
-            // fallback: sum purchase receipts (tongTien)
-            revenue = dsPhieuNhapHang.reduce((s, r) => s + toNumber(r.tongTien), 0);
-        }
+        // Doanh thu & số khách hàng chỉ hiển thị cho admin thật (ẩn với nhân viên)
+        const isStaffUser = typeof adminSession !== 'undefined' && typeof adminSession.isNhanVien === 'function' && adminSession.isNhanVien();
+        const hideForStaff = (el) => {
+            const card = el && (el.closest('.stat-card') || el.parentElement);
+            if (card) card.style.display = isStaffUser ? 'none' : '';
+        };
 
         // Update DOM (if elements exist)
         const cEl = document.getElementById('dashboardCustomersCount');
-        if (cEl) cEl.textContent = formatNumber(customersCount);
+        if (cEl) {
+            cEl.textContent = formatNumber(customersCount);
+            hideForStaff(cEl);
+        }
 
         const pEl = document.getElementById('dashboardProductsCount');
         if (pEl) pEl.textContent = formatNumber(productsCount);
@@ -91,7 +95,10 @@ function updateDashboardMetrics() {
         if (oEl) oEl.textContent = formatNumber(ordersCount);
 
         const rEl = document.getElementById('dashboardRevenueAmount');
-        if (rEl) rEl.textContent = formatCurrency(revenue);
+        if (rEl) {
+            rEl.textContent = formatCurrency(revenue);
+            hideForStaff(rEl);
+        }
 
         return { customersCount, productsCount, ordersCount, revenue };
     } catch (err) {
@@ -240,6 +247,17 @@ function formatDate(date) {
     }).format(new Date(date));
 }
 
+// Escape HTML cho nội dung thông báo (chống XSS)
+function escapeMessage(value) {
+    if (window.ShopCore && typeof window.ShopCore.esc === "function") return window.ShopCore.esc(value);
+    return String(value == null ? "" : value)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#39;");
+}
+
 // Hàm hiển thị thông báo
 function showNotification(message, type = "info") {
     const notification = document.createElement("div");
@@ -258,7 +276,7 @@ function showNotification(message, type = "info") {
     notification.innerHTML = `
             <div class="admin-notification-content">
             <div class="admin-notification-icon">${iconHtml}</div>
-            <div class="admin-notification-message">${message}</div>
+            <div class="admin-notification-message">${escapeMessage(message)}</div>
             <button class="admin-notification-close" aria-label="Đóng">
                 <i class="fa-solid fa-xmark" aria-hidden="true"></i>
             </button>
@@ -379,17 +397,23 @@ function showNotification(message, type = "info") {
 
     document.body.appendChild(notification);
 
+    const dismiss = () => {
+        clearTimeout(autoTimer);
+        notification.style.animation = "slideOutRight 0.3s ease";
+        setTimeout(() => {
+            if (notification.parentNode) {
+                notification.parentNode.removeChild(notification);
+            }
+        }, 300);
+    };
+
+    // Tự đóng sau ~4 giây
+    const autoTimer = setTimeout(dismiss, 4000);
+
     // Add close button handler
     const closeBtn = notification.querySelector(".admin-notification-close");
     if (closeBtn) {
-        closeBtn.addEventListener("click", () => {
-            notification.style.animation = "slideOutRight 0.3s ease";
-            setTimeout(() => {
-                if (notification.parentNode) {
-                    notification.parentNode.removeChild(notification);
-                }
-            }, 300);
-        });
+        closeBtn.addEventListener("click", dismiss);
     }
 }
 

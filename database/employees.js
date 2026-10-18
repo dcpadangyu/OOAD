@@ -10,11 +10,11 @@ const DEFAULT_EMPLOYEES = [
     maNhanVien: "NV001",
     tenNhanVien: "Nguyễn Văn An",
     gioiTinh: "Nam",
-    sdt: "0901234567",
+    soDienThoai: "0901234567",
     diaChi: "12 Nguyễn Trãi, Thanh Xuân, Hà Nội",
     chucVu: "Nhân viên bán hàng",
-    username: "nhanvien01",
-    password: "123456",
+    tenDangNhap: "nhanvien01",
+    matKhau: "123456",
     ngayTao: new Date().toISOString().split("T")[0],
     trangThai: "hoatdong"
   },
@@ -22,11 +22,11 @@ const DEFAULT_EMPLOYEES = [
     maNhanVien: "NV002",
     tenNhanVien: "Trần Thị Bình",
     gioiTinh: "Nữ",
-    sdt: "0912345678",
+    soDienThoai: "0912345678",
     diaChi: "5 Lý Thường Kiệt, Hoàn Kiếm, Hà Nội",
     chucVu: "Nhân viên kho",
-    username: "nhanvien02",
-    password: "123456",
+    tenDangNhap: "nhanvien02",
+    matKhau: "123456",
     ngayTao: new Date().toISOString().split("T")[0],
     trangThai: "hoatdong"
   },
@@ -34,11 +34,11 @@ const DEFAULT_EMPLOYEES = [
     maNhanVien: "NV003",
     tenNhanVien: "Lê Văn Cường",
     gioiTinh: "Nam",
-    sdt: "0923456789",
+    soDienThoai: "0923456789",
     diaChi: "88 Nguyễn Huệ, Quận 1, TP.HCM",
     chucVu: "Nhân viên CSKH",
-    username: "nhanvien03",
-    password: "123456",
+    tenDangNhap: "nhanvien03",
+    matKhau: "123456",
     ngayTao: new Date().toISOString().split("T")[0],
     trangThai: "hoatdong"
   }
@@ -73,7 +73,7 @@ function generateMaNhanVien(list) {
 function findNhanVienByUsername(username) {
   if (!username) return null;
   return (getLocalEmployees() || []).find(
-    (emp) => String(emp.username || "").toLowerCase() === String(username).toLowerCase()
+    (emp) => String(emp.tenDangNhap || "").toLowerCase() === String(username).toLowerCase()
   ) || null;
 }
 

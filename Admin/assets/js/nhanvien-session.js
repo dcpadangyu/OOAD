@@ -10,7 +10,7 @@ class EmployeeSession {
 
   login(employee) {
     sessionStorage.setItem(this.sessionKey, "true");
-    sessionStorage.setItem(this.usernameKey, employee.username);
+    sessionStorage.setItem(this.usernameKey, employee.tenDangNhap);
     sessionStorage.setItem(this.fullNameKey, employee.tenNhanVien);
     sessionStorage.setItem(this.chucVuKey, employee.chucVu);
     sessionStorage.setItem(this.loginTimeKey, new Date().toISOString());
@@ -26,6 +26,30 @@ class EmployeeSession {
         this.logout();
         return false;
       }
+    }
+    return this.revalidate();
+  }
+
+  // Đọc lại hồ sơ nhân viên mỗi lần kiểm tra: bị xóa / bị khóa -> đăng xuất;
+  // đổi chức vụ -> cập nhật sessionStorage để quyền theo chức vụ mới.
+  revalidate() {
+    if (typeof findNhanVienByUsername !== "function") return true;
+    const username = sessionStorage.getItem(this.usernameKey);
+    let record = null;
+    try {
+      record = findNhanVienByUsername(username);
+    } catch (e) {
+      return true; // không đọc được dữ liệu -> không đăng xuất oan
+    }
+    if (!record || record.trangThai === "khoa") {
+      this.logout();
+      return false;
+    }
+    if (record.chucVu && sessionStorage.getItem(this.chucVuKey) !== record.chucVu) {
+      sessionStorage.setItem(this.chucVuKey, record.chucVu);
+    }
+    if (record.tenNhanVien && sessionStorage.getItem(this.fullNameKey) !== record.tenNhanVien) {
+      sessionStorage.setItem(this.fullNameKey, record.tenNhanVien);
     }
     return true;
   }

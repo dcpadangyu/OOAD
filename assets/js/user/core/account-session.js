@@ -16,24 +16,41 @@
   function normalizeUser(user) {
     if (!user || typeof user !== "object") return null;
     const normalized = { ...user };
-    // username is the immutable login identity; userName/displayName is editable.
-    normalized.username = String(user.username || user.loginUsername || user.userName || user.name || "").trim();
-    normalized.userName = String(user.displayName || user.name || user.userName || normalized.username || "").trim();
-    normalized.displayName = normalized.userName;
-    normalized.email = String(user.email || "").trim();
-    normalized.phone = String(user.phone || "").trim();
-    normalized.address = String(user.address || "").trim();
-    normalized.avatar = user.avatar || DEFAULT_AVATAR;
-    normalized.addresses = Array.isArray(user.addresses) ? user.addresses : [];
-    if (!normalized.id) {
-      const identity = (normalized.email || normalized.username || "user").toLowerCase();
-      normalized.id = `user_${identity.replace(/[^a-z0-9]+/g, "_")}`;
+    // tenDangNhap is the immutable login identity; hoTen is the editable display name.
+    normalized.tenDangNhap = String(user.tenDangNhap || user.hoTen || "").trim();
+    normalized.hoTen = String(user.hoTen || normalized.tenDangNhap || "").trim();
+    normalized.thuDienTu = String(user.thuDienTu || "").trim();
+    normalized.soDienThoai = String(user.soDienThoai || "").trim();
+    normalized.diaChi = String(user.diaChi || "").trim();
+    normalized.anhDaiDien = user.anhDaiDien || DEFAULT_AVATAR;
+    normalized.diaChiPhu = Array.isArray(user.diaChiPhu) ? user.diaChiPhu : [];
+    if (!normalized.maKhachHang) {
+      const identity = (normalized.thuDienTu || normalized.tenDangNhap || "user").toLowerCase();
+      normalized.maKhachHang = `user_${identity.replace(/[^a-z0-9]+/g, "_")}`;
     }
     return normalized;
   }
 
+  function isLockedRecord(user) {
+    return !!user && (user.biKhoa === true || user.trangThai === "blocked");
+  }
+
+  // Phiên đăng nhập được kiểm tra lại với userList: tài khoản bị Admin khóa sẽ bị đăng xuất ngay.
   function getCurrentUser() {
-    return normalizeUser(parseJSON("currentUser", null));
+    const sessionCopy = normalizeUser(parseJSON("currentUser", null));
+    if (!sessionCopy) return null;
+    const stored = getUserList().find((user) => userMatches(user, sessionCopy));
+    if (isLockedRecord(stored)) {
+      clearSession();
+      return null;
+    }
+    if (!stored) return sessionCopy;
+    // userList là nguồn dữ liệu mới nhất (Admin có thể đã sửa/đặt lại mật khẩu): bản đã lưu được ưu tiên.
+    const fresh = normalizeUser({ ...sessionCopy, ...stored });
+    if (JSON.stringify(fresh) !== JSON.stringify(sessionCopy)) {
+      try { localStorage.setItem("currentUser", JSON.stringify(fresh)); } catch (_) { /* ignore quota */ }
+    }
+    return fresh;
   }
 
   function getUserList() {
@@ -43,12 +60,12 @@
 
   function userMatches(a, b) {
     if (!a || !b) return false;
-    if (a.id && b.id && a.id === b.id) return true;
-    const aEmail = String(a.email || "").trim().toLowerCase();
-    const bEmail = String(b.email || "").trim().toLowerCase();
+    if (a.maKhachHang && b.maKhachHang && a.maKhachHang === b.maKhachHang) return true;
+    const aEmail = String(a.thuDienTu || "").trim().toLowerCase();
+    const bEmail = String(b.thuDienTu || "").trim().toLowerCase();
     if (aEmail && bEmail && aEmail === bEmail) return true;
-    const aName = String(a.username || a.loginUsername || a.userName || a.name || "").trim().toLowerCase();
-    const bName = String(b.username || b.loginUsername || b.userName || b.name || "").trim().toLowerCase();
+    const aName = String(a.tenDangNhap || a.hoTen || "").trim().toLowerCase();
+    const bName = String(b.tenDangNhap || b.hoTen || "").trim().toLowerCase();
     return !!aName && !!bName && aName === bName;
   }
 
@@ -62,17 +79,34 @@
     return normalized;
   }
 
-  function saveUser(user, previousIdentity) {
+  // Các trường do Admin quản lý: người dùng tự lưu hồ sơ không được ghi đè.
+  const ADMIN_FIELDS = ["trangThai", "biKhoa", "ngayKhoa", "maKH", "daDatLaiMatKhau", "ngayDatLaiMatKhau", "ngayTao"];
+
+  // options.silent = true: chỉ cập nhật userList, không tạo/ghi đè phiên đăng nhập.
+  // options.passwordChange = true: chỉ khi đó mới được thay matKhau đã lưu (đổi/quên mật khẩu).
+  function saveUser(user, previousIdentity, options) {
     const normalized = normalizeUser(user);
     if (!normalized) return null;
     const users = getUserList();
     const index = previousIdentity
       ? users.findIndex((u) => userMatches(u, previousIdentity))
       : users.findIndex((u) => userMatches(u, normalized));
-    if (index >= 0) users[index] = normalized;
-    else users.push(normalized);
+    if (index >= 0) {
+      const stored = users[index];
+      ADMIN_FIELDS.forEach((key) => {
+        if (key in stored) normalized[key] = stored[key];
+        else delete normalized[key];
+      });
+      if (!(options && options.passwordChange === true)) {
+        if ("matKhau" in stored) normalized.matKhau = stored.matKhau;
+        else delete normalized.matKhau;
+      }
+      users[index] = normalized;
+    } else {
+      users.push(normalized);
+    }
     localStorage.setItem("userList", JSON.stringify(users));
-    setCurrentUser(normalized);
+    if (!(options && options.silent)) setCurrentUser(normalized);
     return normalized;
   }
 

@@ -16,7 +16,8 @@
     <link rel="stylesheet" href="assets/css/TonKho.css" />
     <link rel="stylesheet" href="assets/css/QuanLyGiaBan.css" />
     <link rel="stylesheet" href="assets/css/QuanLyDonHang.css" />
-    <link rel="stylesheet" href="assets/css/QuanLyDanhGia.css" />
+    
+    <link rel="stylesheet" href="assets/css/QuanLyDanhGia.css?v=1" />
     <link rel="stylesheet" href="assets/css/BaoCaoDoanhThu.css" />
     <link rel="stylesheet" href="assets/css/QuanLyNhanVien.css" />
     <link rel="stylesheet" href="assets/css/admin-luxury-theme.css" />
@@ -117,9 +118,6 @@
               </li>
             </ul>
           </div>
-          
-          <div
-          
 
           <div class="nav-section">
             <h3>Quản lý kho hàng</h3>
@@ -393,7 +391,8 @@
                     <th>ID</th>
                     <th>Tên loại</th>
                     <th>Mô tả</th>
-                    <th>Số sản phẩm</th>
+                    <th title="Tổng số sản phẩm thuộc loại này (kể cả đang ẩn / hết hàng)">Số sản phẩm</th>
+                    <th title="Số sản phẩm đang được bán trên trang chủ: chưa ẩn, đã có giá, còn hàng và loại đang hiện">Đang bán</th>
                     <th>Trạng thái</th>
                     <th>Ngày tạo</th>
                     <th>Thao tác</th>
@@ -517,17 +516,15 @@
                     <option value="Xanh dương">Xanh dương</option>
                   </select>
 
-                  <label for="QLSP_spGlass">Chất liệu giày</label>
-                  <select id="QLSP_spGlass">
+                  <label for="QLSP_spMaterial">Chất liệu giày</label>
+                  <select id="QLSP_spMaterial">
                     <option value="Da">Da</option>
                     <option value="Vải">Vải</option>
                     <option value="Da tổng hợp">Da tổng hợp</option>
-                    <option value="Kim loại">Kim loại</option>
-                    <option value="Nhựa">Nhựa</option>
                   </select>
 
-                  <label for="QLSP_spStrap">Phong cách giày</label>
-                  <select id="QLSP_spStrap">
+                  <label for="QLSP_spStyle">Phong cách giày</label>
+                  <select id="QLSP_spStyle">
                     <option value="Casual">Casual</option>
                     <option value="Thể thao">Thể thao</option>
                   </select>
@@ -537,10 +534,9 @@
 
                   <hr />
 
-                  <label for="QLSP_spSize">Size</label>
-                  <input type="text" id="QLSP_spSize" />
-                  <label for="QLSP_spSizeStock">Tồn kho theo size <small>(VD: 36:2, 37:0, 38:5)</small></label>
-                  <input type="text" id="QLSP_spSizeStock" placeholder="36:2, 37:0, 38:5" />
+                  <label>Size &amp; tồn kho theo size</label>
+                  <input type="hidden" id="QLSP_spSize" />
+                  <div id="QLSP_spSizeEditor"></div>
 
                   <label for="QLSP_spDescription">Mô tả chi tiết</label>
                   <textarea id="QLSP_spDescription" rows="3"></textarea>
@@ -624,27 +620,24 @@
                   <option value="hidden">Ẩn</option>
                 </select>
 
-                <label for="QLSP_editGlass">Chất liệu giày</label>
-                <select id="QLSP_editGlass">
+                <label for="QLSP_editMaterial">Chất liệu giày</label>
+                <select id="QLSP_editMaterial">
                   <option value="Da">Da</option>
                   <option value="Vải">Vải</option>
                   <option value="Da tổng hợp">Da tổng hợp</option>
-                  <option value="Kim loại">Kim loại</option>
-                  <option value="Nhựa">Nhựa</option>
                 </select>
 
-                <label for="QLSP_editStrap">Phong cách giày</label>
-                <select id="QLSP_editStrap">
+                <label for="QLSP_editStyle">Phong cách giày</label>
+                <select id="QLSP_editStyle">
                   <option value="Casual">Casual</option>
                   <option value="Thể thao">Thể thao</option>
                 </select>
 
                 <hr />
 
-                <label for="QLSP_editSize">Size</label>
-                <input type="text" id="QLSP_editSize" />
-                <label for="QLSP_editSizeStock">Tồn kho theo size <small>(VD: 36:2, 37:0, 38:5)</small></label>
-                <input type="text" id="QLSP_editSizeStock" placeholder="36:2, 37:0, 38:5" />
+                <label>Size &amp; tồn kho theo size</label>
+                <input type="hidden" id="QLSP_editSize" />
+                <div id="QLSP_editSizeEditor"></div>
 
                 <label for="QLSP_editDescription">Mô tả chi tiết</label>
                 <textarea id="QLSP_editDescription" rows="3"></textarea>
@@ -925,14 +918,15 @@
                 <thead>
                   <tr>
                     <th style="width: 5%">STT</th>
-                    <th style="width: 12%">Mã</th>
-                    <th style="width: 10%">Ảnh</th>
-                    <th style="width: 15%">Tên sản phẩm</th>
-                    <th style="width: 10%">Tồn kho</th>
-                    <th style="width: 10%">Nhập</th>
-                    <th style="width: 10%">Đã bán</th>
-                    <th style="width: 10%">Giá bán</th>
-                    <th style="width: 18%">Giá trị tồn kho</th>
+                    <th style="width: 10%">Mã</th>
+                    <th style="width: 8%">Ảnh</th>
+                    <th style="width: 13%">Tên sản phẩm</th>
+                    <th style="width: 7%">Tồn kho</th>
+                    <th style="width: 24%" title="Mỗi ô: số size và số đôi còn lại. Đỏ = hết, vàng = còn 2 đôi trở xuống">Tồn theo size</th>
+                    <th style="width: 6%">Nhập</th>
+                    <th style="width: 6%">Đã bán</th>
+                    <th style="width: 9%">Giá bán</th>
+                    <th style="width: 12%">Giá trị tồn kho</th>
                   </tr>
                 </thead>
                 <tbody id="TK_table-content"></tbody>
@@ -1111,29 +1105,33 @@
     </div>
 
     <!-- Load core admin scripts (no API calls) -->
-    <script src="assets/js/admin-session.js"></script>
-    <script src="assets/js/admin.js"></script>
+    <script src="../database/migrate-schema.js?v=vi2"></script>
+    <script src="assets/js/admin-session.js?v=vi2"></script>
+    <script src="assets/js/admin.js?v=vi2"></script>
 
-    <script src="../database/products-shoes.js"></script>
-    <script src="../database/phieuNhapHang.js"></script>
-    <script src="../database/employees.js"></script>
-    <script src="../database/reviews.js"></script>
+    <script src="../database/products-shoes.js?v=vi2"></script>
+    <script src="../database/feedback-store.js?v=vi2"></script>
+    <script src="../database/phieuNhapHang.js?v=vi2"></script>
+    <script src="../database/employees.js?v=vi2"></script>
+    
     <!-- Per-page scripts (kept client-side, no API) -->
-    <script src="assets/js/doanhthu.js"></script>
-    <script src="assets/js/quanlydonhang.js"></script>
-    <script src="assets/js/quanlydanhgia.js"></script>
-    <script src="assets/js/quanlyloaisanpham.js"></script>
-    <script src="assets/js/quanlynguoidung.js"></script>
-    <script src="assets/js/QuanLyNhapHang.js"></script>
-    <script src="assets/js/QuanLySanPham.js"></script>
-    <script src="assets/js/TonKho.js"></script>
-    <script src="assets/js/QuanLyGiaBan.js"></script>
-    <script src="assets/js/nhanvien-session.js"></script>
-    <script src="assets/js/QuanLyNhanVien.js"></script>
-    <script src="assets/js/nhanvien-info.js"></script>
-    <script src="assets/js/admin-info.js"></script>
+    <script src="assets/js/doanhthu.js?v=vi2"></script>
+    <script src="assets/js/quanlydonhang.js?v=vi2"></script>
+    <script src="assets/js/quanlydanhgia.js?v=vi4"></script>
+    
+    <script src="assets/js/quanlyloaisanpham.js?v=vi4"></script>
+    <script src="assets/js/quanlynguoidung.js?v=vi2"></script>
+    <script src="assets/js/QuanLyNhapHang.js?v=vi2"></script>
+    <script src="assets/js/size-editor.js?v=vi2"></script>
+    <script src="assets/js/QuanLySanPham.js?v=vi2"></script>
+    <script src="assets/js/TonKho.js?v=vi2"></script>
+    <script src="assets/js/QuanLyGiaBan.js?v=vi2"></script>
+    <script src="assets/js/nhanvien-session.js?v=vi2"></script>
+    <script src="assets/js/QuanLyNhanVien.js?v=vi2"></script>
+    <script src="assets/js/nhanvien-info.js?v=vi2"></script>
+    <script src="assets/js/admin-info.js?v=vi2"></script>
 
     <!-- SPA navigation (hash/query-based; works with file:// and http://) -->
-    <script src="assets/js/admin-spa-nav.js"></script>
+    <script src="assets/js/admin-spa-nav.js?v=vi2"></script>
   </body>
 </html>

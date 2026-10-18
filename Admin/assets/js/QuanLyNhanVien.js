@@ -11,6 +11,19 @@ let QLNV_trangHienTai = 1;
 let QLNV_soDongMoiTrang = 10;
 let QLNV_dangSuaMa = null;
 
+// Tên đăng nhập dành riêng cho quản trị viên (xem adminCredentials trong DangNhap_Admin.js) -> không cho nhân viên dùng
+const QLNV_TEN_ADMIN = ["admin", "admin01", "admin02", "admin03"];
+
+function QLNV_esc(value) {
+  if (window.ShopCore && typeof window.ShopCore.esc === "function") return window.ShopCore.esc(value);
+  return String(value == null ? "" : value)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+}
+
 QLNV_onReady(function() {
   QLNV_danhSach = getLocalEmployees() || [];
   QLNV_doDanhSachChucVu();
@@ -46,7 +59,7 @@ function QLNV_layDanhSachLoc() {
       return (
         String(nv.maNhanVien || "").toLowerCase().includes(key) ||
         String(nv.tenNhanVien || "").toLowerCase().includes(key) ||
-        String(nv.sdt || "").toLowerCase().includes(key) ||
+        String(nv.soDienThoai || "").toLowerCase().includes(key) ||
         String(nv.chucVu || "").toLowerCase().includes(key)
       );
     });
@@ -68,28 +81,33 @@ function QLNV_veBang() {
     const row = document.createElement("tr");
     const trangThai = nv.trangThai === "hoatdong";
     row.innerHTML = `
-      <td>${nv.maNhanVien}</td>
-      <td>${nv.tenNhanVien}</td>
-      <td>${nv.gioiTinh}</td>
-      <td>${nv.sdt}</td>
-      <td>${nv.diaChi}</td>
-      <td>${nv.chucVu}</td>
-      <td>${nv.username}</td>
+      <td>${QLNV_esc(nv.maNhanVien)}</td>
+      <td>${QLNV_esc(nv.tenNhanVien)}</td>
+      <td>${QLNV_esc(nv.gioiTinh)}</td>
+      <td>${QLNV_esc(nv.soDienThoai)}</td>
+      <td>${QLNV_esc(nv.diaChi)}</td>
+      <td>${QLNV_esc(nv.chucVu)}</td>
+      <td>${QLNV_esc(nv.tenDangNhap)}</td>
       <td><span class="QLNV_badge ${trangThai ? "QLNV_badge-active" : "QLNV_badge-khoa"}">${trangThai ? "Hoạt động" : "Đã khóa"}</span></td>
       <td>
         <div class="action-buttons">
-          <button class="btn-icon btn-edit" onclick="QLNV_moModalSua('${nv.maNhanVien}')" title="Sửa">
+          <button class="btn-icon btn-edit" data-ma="${QLNV_esc(nv.maNhanVien)}" title="Sửa">
             <i class="fa-solid fa-pen" aria-hidden="true"></i>
           </button>
-          <button class="btn-icon btn-toggle" onclick="QLNV_khoaMoKhoa('${nv.maNhanVien}')" title="${trangThai ? "Khóa tài khoản" : "Mở khóa tài khoản"}">
+          <button class="btn-icon btn-toggle" data-ma="${QLNV_esc(nv.maNhanVien)}" title="${trangThai ? "Khóa tài khoản" : "Mở khóa tài khoản"}">
             ${trangThai ? '<i class="fa-solid fa-lock" aria-hidden="true"></i>' : '<i class="fa-solid fa-lock-open" aria-hidden="true"></i>'}
           </button>
-          <button class="btn-icon btn-delete" onclick="QLNV_xoa('${nv.maNhanVien}')" title="Xóa">
+          <button class="btn-icon btn-delete" data-ma="${QLNV_esc(nv.maNhanVien)}" title="Xóa">
             <i class="fa-solid fa-trash" aria-hidden="true"></i>
           </button>
         </div>
       </td>
     `;
+    // Gắn sự kiện bằng addEventListener (không nội suy dữ liệu vào thuộc tính onclick)
+    const maNv = nv.maNhanVien;
+    row.querySelector(".btn-edit").addEventListener("click", function() { QLNV_moModalSua(maNv); });
+    row.querySelector(".btn-toggle").addEventListener("click", function() { QLNV_khoaMoKhoa(maNv); });
+    row.querySelector(".btn-delete").addEventListener("click", function() { QLNV_xoa(maNv); });
     tbody.appendChild(row);
   });
 
@@ -192,10 +210,10 @@ function QLNV_moModalSua(ma) {
   document.getElementById("QLNV_maNhanVien").value = nv.maNhanVien;
   document.getElementById("QLNV_tenNhanVien").value = nv.tenNhanVien || "";
   document.getElementById("QLNV_gioiTinh").value = nv.gioiTinh || "Nam";
-  document.getElementById("QLNV_sdt").value = nv.sdt || "";
+  document.getElementById("QLNV_sdt").value = nv.soDienThoai || "";
   document.getElementById("QLNV_diaChi").value = nv.diaChi || "";
   document.getElementById("QLNV_chucVu").value = CHUC_VU_NHAN_VIEN.includes(nv.chucVu) ? nv.chucVu : CHUC_VU_NHAN_VIEN[0];
-  document.getElementById("QLNV_username").value = nv.username || "";
+  document.getElementById("QLNV_username").value = nv.tenDangNhap || "";
   document.getElementById("QLNV_password").value = "";
   document.getElementById("QLNV_password").placeholder = "Để trống nếu giữ mật khẩu cũ";
   document.getElementById("QLNV_passwordRow").style.display = "";
@@ -225,9 +243,16 @@ function QLNV_luuNhanVien() {
 
   const isEdit = !!QLNV_dangSuaMa;
   const trungUsername = QLNV_danhSach.some(
-    (e) => e.maNhanVien !== ma && String(e.username).toLowerCase() === String(username).toLowerCase()
+    (e) => e.maNhanVien !== ma && String(e.tenDangNhap).toLowerCase() === String(username).toLowerCase()
   );
   if (trungUsername) return QLNV_notify("Tên đăng nhập đã tồn tại!", "error");
+  if (QLNV_TEN_ADMIN.indexOf(username.toLowerCase()) !== -1) {
+    return QLNV_notify("Tên đăng nhập này dành cho quản trị viên, vui lòng chọn tên khác!", "error");
+  }
+  const trungSdt = QLNV_danhSach.some(
+    (e) => e.maNhanVien !== ma && String(e.soDienThoai || "").trim() === sdt
+  );
+  if (trungSdt) return QLNV_notify("Số điện thoại đã được dùng cho nhân viên khác!", "error");
 
   if (!isEdit) {
     if (password.length < 6) return QLNV_notify("Mật khẩu phải có ít nhất 6 ký tự!", "error");
@@ -240,11 +265,11 @@ function QLNV_luuNhanVien() {
     if (index === -1) return;
     QLNV_danhSach[index].tenNhanVien = ten;
     QLNV_danhSach[index].gioiTinh = gioiTinh;
-    QLNV_danhSach[index].sdt = sdt;
+    QLNV_danhSach[index].soDienThoai = sdt;
     QLNV_danhSach[index].diaChi = diaChi;
     QLNV_danhSach[index].chucVu = chucVu;
-    QLNV_danhSach[index].username = username;
-    if (password) QLNV_danhSach[index].password = password;
+    QLNV_danhSach[index].tenDangNhap = username;
+    if (password) QLNV_danhSach[index].matKhau = password;
     saveLocalEmployees(QLNV_danhSach);
     QLNV_notify("Đã cập nhật nhân viên!", "success");
   } else {
@@ -252,11 +277,11 @@ function QLNV_luuNhanVien() {
       maNhanVien: ma,
       tenNhanVien: ten,
       gioiTinh: gioiTinh,
-      sdt: sdt,
+      soDienThoai: sdt,
       diaChi: diaChi,
       chucVu: chucVu,
-      username: username,
-      password: password,
+      tenDangNhap: username,
+      matKhau: password,
       ngayTao: new Date().toISOString().split("T")[0],
       trangThai: "hoatdong"
     });

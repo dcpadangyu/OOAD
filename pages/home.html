@@ -12,13 +12,14 @@
   <link rel="stylesheet" href="assets/css/user/footer.css">
 
 <link rel="stylesheet" href="assets/css/user/banner.css">
-<link rel="stylesheet" href="assets/css/user/products.css">
+<link rel="stylesheet" href="assets/css/user/products.css?v=20261018-4">
 <link rel="stylesheet" href="assets/css/user/chitietsanpham.css">
 <link rel="stylesheet" href="assets/css/user/indexGIoHang.css">
 <link rel="stylesheet" href="assets/css/user/TrangHienThi.css">
   <link rel="stylesheet" href="assets/css/user/theme.css">
   <link rel="stylesheet" href="assets/css/user/modern.css">
 <link rel="stylesheet" href="assets/css/user/redesign.css?v=20260923-2317">
+<link rel="stylesheet" href="assets/css/user/feedback.css?v=1">
 </head>
 <body>
 <div data-user-component="header"></div>
@@ -84,6 +85,9 @@
             <option value="hồng">Hồng</option>
             <option value="xanh lá">Xanh lá</option>
             <option value="xanh dương">Xanh dương</option>
+            <option value="đỏ">Đỏ</option>
+            <option value="xám">Xám</option>
+            <option value="be">Be</option>
           </select>
         </div>
 
@@ -157,10 +161,14 @@
 
 
 <div data-user-component="footer"></div>
-  <script src="assets/js/user/core/site-shell.js"></script>
-  <script src="assets/js/user/core/account-session.js"></script>
-  <script src="assets/js/user/core/site-header.js"></script>
+  <script src="database/migrate-schema.js?v=vi2"></script>
+  <script src="assets/js/user/core/site-shell.js?v=vi2"></script>
+  <script src="assets/js/user/core/account-session.js?v=vi2"></script>
+  <script src="assets/js/user/core/site-header.js?v=vi2"></script>
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-  <script src="assets/js/user/product/products.js?v=20260923-2218"></script>
+  <script src="database/products-shoes.js?v=vi2"></script>
+  <script src="database/feedback-store.js?v=vi2"></script>
+  <script src="assets/js/user/product/reviews.js?v=vi2"></script>
+  <script src="assets/js/user/product/products.js?v=vi3"></script>
 </body>
 </html>

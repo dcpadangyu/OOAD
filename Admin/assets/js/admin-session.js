@@ -90,12 +90,22 @@ class AdminSession {
     }
 
     // Chuyển hướng đến trang đăng nhập phù hợp (admin / nhân viên)
-    redirectToLogin() {
+    // forceStaff: true khi phiên vừa bị hủy là phiên nhân viên (hết hạn / bị khóa / bị xóa)
+    redirectToLogin(forceStaff) {
         let target = 'DangNhap_Admin.html';
-        if (typeof employeeSession !== 'undefined' && employeeSession.isLoggedIn()) {
+        if (forceStaff === true || (typeof employeeSession !== 'undefined' && employeeSession.isLoggedIn())) {
             target = 'DangNhap_NhanVien.html';
         }
         window.location.href = target;
+    }
+
+    // Có phiên nhân viên đang được lưu (chưa kiểm tra hợp lệ) hay không
+    hadStaffSession() {
+        try {
+            return sessionStorage.getItem('nvLoggedIn') === 'true';
+        } catch (e) {
+            return false;
+        }
     }
 
     // Đăng xuất và quay về đúng trang đăng nhập của tài khoản hiện tại
@@ -130,8 +140,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Nếu chưa đăng nhập, chuyển hướng ngay tới trang đăng nhập.
     // Điều này ngăn truy cập trực tiếp vào TrangChu_Admin.html mà không đi qua DangNhap_Admin.html
+    const wasStaff = adminSession.hadStaffSession();
     if (!adminSession.isLoggedIn()) {
-        adminSession.redirectToLogin();
+        adminSession.redirectToLogin(wasStaff);
     }
 });
 

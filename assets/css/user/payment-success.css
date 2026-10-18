@@ -361,3 +361,8 @@ body:has(#ThanhToan_ThanhCong) {
     padding-right: 20px;
   }
 }
+
+/* Hoa don: hien anh san pham (quy tac cu cua .list_danhsach an anh) */
+#ThanhToan_ThanhCong .list_danhsach .invoice_cart .item-img {
+  display: block !important;
+}

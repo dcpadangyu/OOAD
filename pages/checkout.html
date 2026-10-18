@@ -15,7 +15,7 @@
 <link rel="stylesheet" href="assets/css/user/GioHang.css">
 <link rel="stylesheet" href="assets/css/user/TrangThaiThanhToan.css">
 <link rel="stylesheet" href="assets/css/user/TrangHienThi.css">
-<link rel="stylesheet" href="assets/css/user/thanhtoan.css">
+<link rel="stylesheet" href="assets/css/user/thanhtoan.css?v=2">
   <link rel="stylesheet" href="assets/css/user/theme.css">
   <link rel="stylesheet" href="assets/css/user/modern.css">
 <link rel="stylesheet" href="assets/css/user/redesign.css?v=20260923-2317">
@@ -43,7 +43,12 @@
 <div id="all-right-thanhtoan">
 <div id="element_center_right-thanhtoan">
 <div class="list_danhsach danhsach"></div>
-<div class="Tongtien_thanhtoan">Tổng: <span class="SumCart SumCart-thanhtoan_tong"></span></div>
+<div class="checkout-summary" id="CheckoutSummary">
+<div class="checkout-summary-row"><span>Tạm tính</span><span class="SumCart" id="CheckoutSubtotal"></span></div>
+<div class="checkout-summary-row"><span>Phí vận chuyển</span><span id="CheckoutShipFee"></span></div>
+<div class="checkout-summary-note" id="CheckoutShipNote">30.000đ cho COD/chuyển khoản, miễn phí từ 10.000.000đ hoặc nhận tại cửa hàng.</div>
+<div class="checkout-summary-row checkout-summary-total"><span>Tổng</span><span id="CheckoutTotal"></span></div>
+</div>
 <input checked="" class="payment-radio-hidden" id="cod" name="phuong-thuc-tt" type="radio"/>
 <input class="payment-radio-hidden" id="paybank" name="phuong-thuc-tt" type="radio"/>
 <input class="payment-radio-hidden" id="inshop" name="phuong-thuc-tt" type="radio"/>
@@ -93,13 +98,15 @@
 </div>
 </div>
 <div data-user-component="footer"></div>
-<script src="assets/js/user/core/site-shell.js"></script>
-<script src="assets/js/user/core/account-session.js"></script>
-<script src="assets/js/user/core/site-header.js"></script>
+<script src="database/migrate-schema.js?v=vi2"></script>
+<script src="assets/js/user/core/site-shell.js?v=vi2"></script>
+<script src="assets/js/user/core/account-session.js?v=vi2"></script>
+<script src="assets/js/user/core/site-header.js?v=vi2"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<script src="assets/js/user/cart/cart.js"></script>
-<script src="assets/js/user/payment/payment.js"></script>
-  <script src="assets/js/user/payment/checkout.js"></script>
+<script src="database/products-shoes.js?v=vi2"></script>
+<script src="assets/js/user/cart/cart.js?v=vi2"></script>
+<script src="assets/js/user/payment/payment.js?v=vi2"></script>
+  <script src="assets/js/user/payment/checkout.js?v=vi2"></script>
 </body>
 </html>
 

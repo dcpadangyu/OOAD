@@ -106,6 +106,7 @@ function setLoadingState(loading) {
 // Event listener cho form submit
 loginForm.addEventListener('submit', async function(e) {
     e.preventDefault();
+    if (loginBtn.disabled) return; // đang xử lý một lần đăng nhập
 
     const username = usernameInput.value.trim();
     const password = passwordInput.value;
@@ -129,6 +130,14 @@ loginForm.addEventListener('submit', async function(e) {
 
             // Hiển thị thông báo thành công
             showNotification(result.message, 'success');
+
+            // Xóa phiên nhân viên còn sót lại trong cùng tab (để getCurrentAdmin() trả về đúng admin)
+            if (typeof employeeSession !== 'undefined' && typeof employeeSession.logout === 'function') {
+                employeeSession.logout();
+            }
+            ['nvLoggedIn', 'nvUsername', 'nvFullName', 'nvChucVu', 'nvLoginTime'].forEach(function(key) {
+                sessionStorage.removeItem(key);
+            });
 
             // Lưu session và chuyển hướng
             sessionStorage.setItem('adminLoggedIn', 'true');
@@ -203,12 +212,7 @@ passwordInput.addEventListener('blur', function() {
     }
 });
 
-// Event listener cho Enter key
-passwordInput.addEventListener('keypress', function(e) {
-    if (e.key === 'Enter') {
-        loginForm.dispatchEvent(new Event('submit'));
-    }
-});
+// Phím Enter: dùng submit gốc của form (nút type="submit"), không tự phát sự kiện submit lần nữa
 
 // Event listener cho forgot password
 document.querySelector('.forgot-password').addEventListener('click', function(e) {

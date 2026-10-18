@@ -34,9 +34,9 @@ document.addEventListener("DOMContentLoaded", () => {
     const normalized = String(account || "").trim().toLowerCase();
     const users = getUsers();
     let user = users.find((item) => {
-      const email = String(item.email || "").trim().toLowerCase();
-      const name = String(item.username || item.loginUsername || item.userName || "").trim().toLowerCase();
-      return (email === normalized || name === normalized) && String(item.password ?? "") === password;
+      const email = String(item.thuDienTu || "").trim().toLowerCase();
+      const name = String(item.tenDangNhap || "").trim().toLowerCase();
+      return (email === normalized || name === normalized) && String(item.matKhau ?? "") === password;
     });
 
     // Legacy data source compatibility: only consult customers when there is no matching userList identity.
@@ -45,9 +45,9 @@ document.addEventListener("DOMContentLoaded", () => {
         const customers = JSON.parse(localStorage.getItem("customers") || "[]");
         if (Array.isArray(customers)) {
           user = customers.find((item) => {
-            const email = String(item.email || "").trim().toLowerCase();
-            const name = String(item.username || item.loginUsername || item.userName || item.name || "").trim().toLowerCase();
-            return (email === normalized || name === normalized) && String(item.password ?? "") === password;
+            const email = String(item.thuDienTu || "").trim().toLowerCase();
+            const name = String(item.tenDangNhap || item.hoTen || "").trim().toLowerCase();
+            return (email === normalized || name === normalized) && String(item.matKhau ?? "") === password;
           }) || null;
         }
       } catch (_) {}
@@ -55,7 +55,7 @@ document.addEventListener("DOMContentLoaded", () => {
     return user || null;
   }
 
-  function isLocked(user) { return user?.locked === true || user?.status === "blocked"; }
+  function isLocked(user) { return user?.biKhoa === true || user?.trangThai === "blocked"; }
 
   form.addEventListener("submit", (event) => {
     event.preventDefault();
@@ -81,7 +81,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const currentUser = window.UserSession?.setCurrentUser?.(user);
     if (!currentUser) return;
-    popup("success", "Đăng nhập thành công!", `Chào mừng ${currentUser.userName || currentUser.email}`, () => {
+    // Xoa du lieu con sot cua nguoi dung truoc (dia chi dang chon, don chuyen khoan dang cho).
+    localStorage.removeItem("selectedAddress");
+    localStorage.removeItem("CurrDanhSachDatHang");
+    popup("success", "Đăng nhập thành công!", `Chào mừng ${currentUser.hoTen || currentUser.thuDienTu}`, () => {
       window.updateHeaderUI?.();
       window.location.href = "index.html";
     });

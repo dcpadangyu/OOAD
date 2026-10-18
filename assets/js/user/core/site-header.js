@@ -24,11 +24,11 @@
       navLogin.hidden = true;
       userAvatar.hidden = false;
       userAvatar.style.display = "inline-flex";
-      if (usernameDisplay) usernameDisplay.textContent = currentUser.userName || currentUser.email || "Người dùng";
+      if (usernameDisplay) usernameDisplay.textContent = currentUser.hoTen || currentUser.thuDienTu || "Người dùng";
       const img = userAvatar.querySelector("img");
       if (img) {
-        img.src = currentUser.avatar || DEFAULT_AVATAR;
-        img.alt = currentUser.userName || "Avatar";
+        img.src = currentUser.anhDaiDien || DEFAULT_AVATAR;
+        img.alt = currentUser.hoTen || "Avatar";
       }
     } else {
       navLogin.hidden = false;
@@ -45,6 +45,8 @@
       localStorage.removeItem("currentUser");
       localStorage.removeItem("selectedAddress");
     }
+    localStorage.removeItem("selectedAddress");
+    localStorage.removeItem("CurrDanhSachDatHang");
     window.location.href = "index.html";
   }
 

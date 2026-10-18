@@ -1,143 +1,54 @@
   //lich su mua hang  
 document.addEventListener("DOMContentLoaded",function(){
-        // Lắng nghe sự kiện thay đổi trạng thái từ admin
-        window.addEventListener('orderStatusChanged', function(e) {
-            const orderId = e.orderId;
-            const newStatus = e.newStatus;
-            // Cập nhật UI khi có thay đổi
-            updateOrderStatus(orderId, newStatus);
-        });
-
-    function updateOrderStatus(orderId, adminStatus) {
-            // Chuyển đổi trạng thái từ admin sang user
-            let userStatus;
-            switch(adminStatus) {
-                case 'moiDat':
-                    userStatus = 'cho-xac-nhan';
-                    break;
-                case 'daXuLy':
-                    userStatus = 'dang-giao';
-                    break;
-                case 'daGiao':
-                    userStatus = 'thanh-cong';
-                    break;
-                case 'huy':
-                    userStatus = 'da-huy';
-                    break;
-                default:
-                    userStatus = 'cho-xac-nhan';
-            }
-
-            const thanhcong_faile = document.getElementById(`track-step-${orderId}`);
-            if (thanhcong_faile) {
-                if (userStatus === 'da-huy') {
-                    thanhcong_faile.textContent = "=> Đã hủy";
-                    thanhcong_faile.style.color = "red";
-                    thanhcong_faile.style.fontWeight = "bold";
-                } else if (userStatus === 'thanh-cong') {
-                    thanhcong_faile.textContent = "=> Thành công";
-                    thanhcong_faile.style.color = '#28a745';
-                    thanhcong_faile.style.fontWeight = '';
-                } else if (userStatus === 'dang-giao') {
-                    // Display wording 'Đang giao' for 'dang-giao'
-                    thanhcong_faile.textContent = "=> Đang giao đến bạn";
-                    thanhcong_faile.style.color = '#6c757d';
-                    thanhcong_faile.style.fontWeight = '';
-                } else {
-                    thanhcong_faile.textContent = "=> Đang xử lý";
-                    thanhcong_faile.style.color = '#6c757d';
-                    thanhcong_faile.style.fontWeight = '';
-        }
-    }
-
-            // Cập nhật nút hủy đơn nếu trạng thái không còn là chờ xác nhận
-            if (userStatus !== 'cho-xac-nhan') {
-                const nuthuy = document.querySelector(`.huyDon-btn[data-id="${orderId}"]`)?.parentElement;
-                if (nuthuy) {
-                    nuthuy.style.display = 'none';
-                }
-            }
-
-            // Cập nhật trạng thái hiển thị
-            let displayText = '';
-            switch (userStatus) {
-                    case 'cho-xac-nhan':
-                        displayText = 'Chờ xác nhận';
-                        break;
-                    case 'dang-giao':
-                        displayText = 'Đang giao';
-                        break;
-                    case 'thanh-cong':
-                        displayText = 'Thành công';
-                        break;
-                    case 'da-huy':
-                        displayText = 'Đã hủy';
-                        break;
-                    default:
-                        displayText = userStatus.replace(/-/g, ' ');
-                        displayText = displayText.charAt(0).toUpperCase() + displayText.slice(1);
-            }
-
-            const statusSpan = document.querySelector(`[data-order-id="${orderId}"] .trangthai_waitting`);
-            if (statusSpan) {
-                statusSpan.className = `trangthai_${userStatus.replace(/-/g, '_')}`;
-                statusSpan.textContent = displayText;
-            } else {
-                // Fallback: try to find the order block by cancel button data-id and update the displayed status there
-                const btn = document.querySelector(`.huyDon-btn[data-id="${orderId}"]`);
-                const altSpan = btn?.closest('.cart_LichSu')?.querySelector('.maLichSu span');
-                if (altSpan) {
-                    altSpan.className = `trangthai_${userStatus.replace(/-/g, '_')}`;
-                    altSpan.textContent = ' ' + displayText;
-                }
-            }
-        }
-
-        // Đồng bộ hóa trạng thái đơn hàng từ localStorage vào định dạng hiển thị của user
+        // Dong bo trang thai: moi thay doi (Admin/User) di qua ShopCore.setOrderStatus nen 2 kho luu tru luon khop.
+        // Chi can xu ly don cu: user da huy (da-huy) nhung ban admin chua cap nhat.
         function normalizeAndSyncOrders() {
             try {
-                const key = 'DanhSachDatHang';
-                const ds = JSON.parse(localStorage.getItem(key) || '[]');
-                let changedOrders = [];
-                if (!Array.isArray(ds)) return;
-
+                const ds = window.getDanhSachDatHang();
                 ds.forEach(o => {
-                    if (!o) return;
-                    // Nếu có trường admin 'status', map sang 'trangthai' user
-                    if (o.status) {
-                        let mapped = 'cho-xac-nhan';
-                        switch(o.status) {
-                            case 'moiDat': mapped = 'cho-xac-nhan'; break;
-                            case 'daXuLy': mapped = 'dang-giao'; break;
-                            case 'daGiao': mapped = 'thanh-cong'; break;
-                            case 'huy': mapped = 'da-huy'; break;
-                            default: mapped = o.trangthai || 'cho-xac-nhan';
-                        }
-                        if (o.trangthai !== mapped) {
-                            o.trangthai = mapped;
-                            changedOrders.push({ id: o.id, newStatus: o.status });
+                    if (!o || !o.maDonHang) return;
+                    if (o.trangThai === 'da-huy' && o.trangThaiQuanTri !== 'huy' && window.ShopCore) {
+                        // Dong bo du lieu cu (legacy): bo qua kiem tra chuyen trang thai.
+                        window.ShopCore.setOrderStatus(o.maDonHang, 'huy', { force: true });
+                    } else if (o.trangThaiQuanTri && window.ShopCore) {
+                        const mapped = window.ShopCore.mapUserStatus(o.trangThaiQuanTri);
+                        if (o.trangThai !== mapped) {
+                            const all = window.getDanhSachDatHang();
+                            const target = all.find(x => x.maDonHang === o.maDonHang);
+                            if (target) {
+                                target.trangThai = mapped;
+                                localStorage.setItem('DanhSachDatHang', JSON.stringify(all));
+                            }
                         }
                     }
-
                 });
-
-                if (changedOrders.length) {
-                    localStorage.setItem(key, JSON.stringify(ds));
-                    // Phát event cho từng đơn đã thay đổi để các tab khác cập nhật UI ngay
-                    changedOrders.forEach(ch => {
-                        const ev = new Event('orderStatusChanged');
-                        ev.orderId = ch.id;
-                        ev.newStatus = ch.newStatus;
-                        window.dispatchEvent(ev);
-                    });
-                }
             } catch (err) {
                 console.error('normalizeAndSyncOrders error', err);
             }
         }
+
+        // Admin doi trang thai (cung cua so hoac tab khac) => ve lai danh sach.
+        window.addEventListener('orderStatusChanged', function () { window.lichsumuahang && window.lichsumuahang(); });
+        window.addEventListener('storage', function (e) {
+            if (e.key === 'DanhSachDatHang') window.lichsumuahang && window.lichsumuahang();
+        });
         // Pagination settings for order history (3 orders per page)
         let ls_currentPage = 1;
         const ls_itemsPerPage = 3;
+
+        // Thoat HTML cho moi gia tri chen vao innerHTML (ShopCore.esc, co ban du phong).
+        function esc(value) {
+            if (window.ShopCore && typeof window.ShopCore.esc === 'function') return window.ShopCore.esc(value);
+            return String(value ?? '').replace(/[&<>"']/g, (ch) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[ch]);
+        }
+
+        // Ngay dat: uu tien order.ngayDat; chi dung moc thoi gian trong ma don khi ngayDat thieu/khong hop le.
+        function formatOrderDate(order) {
+            const fromField = order.ngayDat ? new Date(order.ngayDat) : null;
+            if (fromField && !Number.isNaN(fromField.getTime())) return fromField.toLocaleDateString('vi-VN');
+            const fromId = new Date(Number(String(order.maDonHang || '').replace('DH', '')));
+            return Number.isNaN(fromId.getTime()) ? '' : fromId.toLocaleDateString('vi-VN');
+        }
 
         function containerOrRedirectToLogin() {
             if (typeof Swal !== 'undefined') {
@@ -155,28 +66,33 @@ document.addEventListener("DOMContentLoaded",function(){
                 return;
             }
 
-            // Filter by stable user id first; keep legacy snapshots compatible by email/username fallback.
-            const userId = userlogin.id || null;
-            const userEmail = String(userlogin.email || '').trim().toLowerCase();
-            const userName = String(userlogin.userName || userlogin.username || '').trim().toLowerCase();
+            // Chi khop don hang theo maKhachHang (khong yeu cau order.khachHang).
+            const userId = userlogin.maKhachHang || null;
             const userOrders = danhsach
                 .filter((order) => {
-                    if (!order?.user) return false;
-                    if (userId && order.userId && order.userId === userId) return true;
-                    const orderEmail = String(order.user.email || '').trim().toLowerCase();
-                    const orderName = String(order.user.userName || order.user.username || order.user.name || '').trim().toLowerCase();
-                    return !!((userEmail && orderEmail === userEmail) || (userName && orderName === userName));
+                    if (!order) return false;
+                    if (userId && order.maKhachHang === userId) return true;
+                    // Don cu/da doi ma khach: khop them theo email cua khach da luu cung don (email la duy nhat).
+                    const emailDon = String((order.khachHang && order.khachHang.thuDienTu) || order.thuDienTuNguoiNhan || '').trim().toLowerCase();
+                    const emailKhach = String(userlogin.thuDienTu || '').trim().toLowerCase();
+                    return !!emailKhach && !!order.khachHang && emailDon === emailKhach;
                 })
-                .sort((a, b) => String(b.id || '').localeCompare(String(a.id || '')));
-
-            // save any normalization back
-            localStorage.setItem('DanhSachDatHang', JSON.stringify(danhsach));
+                .sort((a, b) => String(b.maDonHang || '').localeCompare(String(a.maDonHang || '')));
 
             const container = document.querySelector('.lichsumuahanglist');
             if (!container) return;
 
+            // Don chuyen khoan chua xac nhan (chua tao don chinh thuc, chua tru kho): nhac khach tiep tuc thanh toan.
+            let thongBaoChoThanhToan = '';
+            try {
+                const cho = JSON.parse(localStorage.getItem('CurrDanhSachDatHang') || '[]')[0];
+                if (cho && cho.maKhachHang === userId && Number(cho.hetHanLuc) > Date.now()) {
+                    thongBaoChoThanhToan = `<div class="fb-wait" style="margin:0 0 14px;padding:12px 16px;border:1px solid #fde68a;background:#fffbeb;border-radius:10px;font-style:normal">Bạn có đơn chuyển khoản <b>${esc(cho.maDonHang)}</b> (${esc(cho.giaHienThi)}) chưa xác nhận thanh toán nên chưa được ghi nhận. <a href="pages/payment-bank.html">Tiếp tục thanh toán</a></div>`;
+                }
+            } catch (_) {}
+
             if (userOrders.length === 0) {
-                container.innerHTML = `<h2>Bạn chưa đặt đơn hàng nào hết</h2>`;
+                container.innerHTML = thongBaoChoThanhToan + `<h2>Bạn chưa đặt đơn hàng nào hết</h2>`;
                 return;
             }
 
@@ -190,72 +106,76 @@ document.addEventListener("DOMContentLoaded",function(){
             // render HTML for page items
             let LichSuHTML = '';
             pageItems.forEach(order => {
-                if (!order.trangthai) order.trangthai = 'cho-xac-nhan';
+                if (!order.trangThai) order.trangThai = 'cho-xac-nhan';
                 let trangthaiTEXT = '', trangthaiclass = '';
-                switch(order.trangthai){
+                switch(order.trangThai){
                     case 'cho-xac-nhan': trangthaiTEXT='Chờ xác nhận'; trangthaiclass='trangthai_waitting'; break;
                     case 'dang-giao': trangthaiTEXT='Đang giao'; trangthaiclass='trangthai_shipping'; break;
                     case 'thanh-cong': trangthaiTEXT='Thành công'; trangthaiclass='trangthai_succes'; break;
                     case 'da-huy': trangthaiTEXT='Đã hủy'; trangthaiclass='trangthai_cancel color-red'; break;
-                    default: trangthaiTEXT=order.trangthai; trangthaiclass='trangthai_waitting';
+                    default: trangthaiTEXT=esc(order.trangThai); trangthaiclass='trangthai_waitting';
                 }
 
                 LichSuHTML += `<div class="cart_LichSu">
                     <div class="maLichSu">
-                        <div>Mã đơn hàng:<span>${order.id}</span></div>
-                        <div>Ngày đặt:<span>${new Date(Number(String(order.id || '').replace('DH',''))).toLocaleDateString('vi-VN')}</span></div>
+                        <div>Mã đơn hàng:<span>${esc(order.maDonHang)}</span></div>
+                        <div>Ngày đặt:<span>${esc(formatOrderDate(order))}</span></div>
                         <div> Trạng Thái: <span class="${trangthaiclass}"> ${trangthaiTEXT}</span></div>
                     </div>
                     <div>`;
 
-                (order.product || []).forEach(item => {
+                (order.chiTiet || []).forEach(item => {
                     LichSuHTML += `<div class="all-cart">
-                            <img src="${item.image}" alt="${item.name}" class="item-img">
+                            <img src="${esc(item.hinhAnh)}" alt="${esc(item.tenSanPham)}" class="item-img">
                             <div class="name-price-quantity">
-                                <div class="item-name">${item.name}</div>
-                                <div class="item-price">${item.price}</div>
+                                <div class="item-name">${esc(item.tenSanPham)}</div>
+                                <div class="item-price">${esc(item.giaHienThi)}</div>
                                 <div class="item-quantity-all">
-                                    <div class="quantity">${item.quantity}</div>
+                                    <div class="quantity">${esc(item.soLuong)}</div>
                                 </div>
                             </div>
                         </div>`;
+                    if (order.trangThai === 'thanh-cong') {
+                        LichSuHTML += `<div class="fb-slot" data-order="${esc(order.maDonHang)}" data-product="${esc(item.maSanPham)}" data-size="${esc(item.kichCoDaChon || '')}"></div>`;
+                    }
                 });
 
                 LichSuHTML += `
-                        <div class="color-red" style="text-align:end">tổng: ${order.price}</div>
+                        ${order.trangThai === 'dang-giao' || order.trangThai === 'cho-xac-nhan' ? `<div class="fb-wait">Bạn có thể đánh giá sản phẩm sau khi đơn hàng được giao thành công.</div>` : ''}
+                        <div class="color-red" style="text-align:end">tổng: ${esc(order.giaHienThi)}</div>
                     </div>
                     <button class="xemthembtn">Xem thêm</button>
                     <div class="diachixemthem" style="display:none">
                         <div class="address_all" disableb>
                             <div class="nguoi_nhan">
                                 <div>Tên người nhận: </div>
-                                <div>${order.info?.name || ''}</div>
+                                <div>${esc(order.tenNguoiNhan || '')}</div>
                             </div>
                             <div class="sdt_nhan">
                                 <div>Sdt người nhận:</div>
-                                <div>${order.info?.phone || ''}</div>
+                                <div>${esc(order.soDienThoaiNhan || '')}</div>
                             </div>
                             <div class="gmail_nhan">
                                 <div>Gmail người nhận: </div>
-                                <div>${order.info?.email || ''}</div>
+                                <div>${esc(order.thuDienTuNguoiNhan || '')}</div>
                             </div>
                             <div class="diachi_nhan">
                                 <div>Địa chỉ người nhận: </div>
-                                <div>${order.info?.address || ''}</div>
+                                <div>${esc(order.diaChiGiaoHang || '')}</div>
                             </div>
                             <div class="thanhtoanby">
-                                <div>Phương thức thanh toán:${order.payment}</div>
+                                <div>Phương thức thanh toán: ${esc(({ COD: "Thanh toán khi nhận hàng", PayBank: "Chuyển khoản ngân hàng", Shop: "Nhận tại cửa hàng" })[order.phuongThucThanhToan] || order.phuongThucThanhToan || "")}</div>
                             </div>
                         </div>
                         <div> Trạng Thái đơn hàng</div>
                         <div class="trangThaiDonHang">
-                            <div class="track-step" ${order.trangthai==='cho-xac-nhan'?'style="color:#28a745"':'style="color:#6c757d"'}>Chờ xác nhận</div>
-                            <div class="track-step" ${order.trangthai==='dang-giao'?'style="color:#28a745"':'style="color:#6c757d"'}>=> Đang giao đến bạn</div>
-                            <div class="track-step" id="track-step-${order.id}" style="${order.trangthai === 'thanh-cong' ? 'color:#28a745' : (order.trangthai === 'da-huy' ? 'color:red; font-weight:bold' : 'color:#6c757d')}">
-                                ${order.trangthai === 'da-huy' ? '=> Đã hủy' : '=> Thành công'}
+                            <div class="track-step" ${order.trangThai==='cho-xac-nhan'?'style="color:#28a745"':'style="color:#6c757d"'}>Chờ xác nhận</div>
+                            <div class="track-step" ${order.trangThai==='dang-giao'?'style="color:#28a745"':'style="color:#6c757d"'}>=> Đang giao đến bạn</div>
+                            <div class="track-step" id="track-step-${esc(order.maDonHang)}" style="${order.trangThai === 'thanh-cong' ? 'color:#28a745' : (order.trangThai === 'da-huy' ? 'color:red; font-weight:bold' : 'color:#6c757d')}">
+                                ${order.trangThai === 'da-huy' ? '=> Đã hủy' : '=> Thành công'}
                             </div>
                         </div>
-                        ${order.trangthai === 'cho-xac-nhan' ? `<div class="dkhuy"><button class="huyDon-btn" data-id="${order.id}">Hủy đơn hàng</button></div>` : ''}
+                        ${order.trangThai === 'cho-xac-nhan' ? `<div class="dkhuy"><button class="huyDon-btn" data-id="${esc(order.maDonHang)}">Hủy đơn hàng</button></div>` : ''}
                     </div>
                 `;
             });
@@ -273,7 +193,8 @@ document.addEventListener("DOMContentLoaded",function(){
                 <button class="ls-next" ${ls_currentPage===totalPages?'disabled':''}>›</button>
             </div>`;
 
-            container.innerHTML = LichSuHTML;
+            container.innerHTML = thongBaoChoThanhToan + LichSuHTML;
+            if (window.UserFeedback) window.UserFeedback.decorate(container);
 
             // bind toggle xem them
             container.querySelectorAll('.xemthembtn').forEach(btn => {
@@ -317,25 +238,15 @@ document.addEventListener("DOMContentLoaded",function(){
 
         function huydonhang(donhuyid){
             const danhsach = window.getDanhSachDatHang();
-            const donHang = danhsach.find(dh => dh.id === donhuyid);
-            if(donHang && donHang.trangthai === 'cho-xac-nhan'){
-                donHang.trangthai='da-huy';
-                localStorage.setItem('DanhSachDatHang',JSON.stringify(danhsach));
+            const donHang = danhsach.find(dh => dh.maDonHang === donhuyid);
+            if(donHang && donHang.trangThai === 'cho-xac-nhan'){
+                // Doi trang thai o ca 2 kho luu tru (User + Admin) va hoan lai ton kho.
+                const result = window.ShopCore.setOrderStatus(donhuyid, 'huy');
+                if (!result || result.ok === false) { alert((result && result.message) || 'Không thể hủy đơn hàng.'); return false; }
                 alert('đã hủy đơn thành công');
-                const thanhcong_faile = document.getElementById(`track-step-${donhuyid}`);
-                if (thanhcong_faile) {
-                    thanhcong_faile.textContent = "=> Đã hủy"; 
-                    thanhcong_faile.style.color = "red";      
-                    thanhcong_faile.style.fontWeight = "bold"; 
-                }
-                const nuthuy = document.querySelector(`.huyDon-btn[data-id="${donhuyid}"]`)?.parentElement;
-                if (nuthuy) {
-                    nuthuy.style.display = 'none';
-                }
-            
+                return true;
             }else{
                 alert("không thể hủy đơn do đơn hàng đã giao hoặc đã được vận chuyển.");
             }
         }
-
     });
