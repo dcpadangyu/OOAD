@@ -311,8 +311,8 @@ QLSP_btnClose.addEventListener("click", QLSP_closeModal);
 QLSP_btnCancel.addEventListener("click", QLSP_closeModal);
 
 // Trình nhập size + tồn kho (thêm / sửa sản phẩm)
-const QLSP_addSizeEditor = SizeEditor.create(document.getElementById("QLSP_spSizeEditor"));
-const QLSP_editSizeEditor = SizeEditor.create(document.getElementById("QLSP_editSizeEditor"));
+const QLSP_addSizeEditor = SizeEditor.create(document.getElementById("QLSP_spSizeEditor"), { sizeOnly: true });
+const QLSP_editSizeEditor = SizeEditor.create(document.getElementById("QLSP_editSizeEditor"), { lockQty: true });
 
 function QLSP_closeModal() {
   QLSP_modal.style.display = "none";
@@ -392,8 +392,14 @@ QLSP_form.addEventListener("submit", function (e) {
     return;
   }
 
-  const newSizeStock = QLSP_addSizeEditor.getStock();
-  const tonBanDau = newSizeStock ? QLSP_totalSizeStock(newSizeStock) : 0;
+  // Sản phẩm mới chỉ khai báo size; tồn kho = 0 và chỉ tăng khi hoàn thành Phiếu nhập hàng.
+  const sizeChon = QLSP_addSizeEditor.getStock();
+  if (!sizeChon) {
+    alert("Hãy chọn ít nhất một size cho sản phẩm!");
+    return;
+  }
+  const newSizeStock = Object.fromEntries(Object.keys(sizeChon).map((size) => [size, 0]));
+  const tonBanDau = 0;
   const spMoi = {
     maSanPham: idValue,
     maLoai: document.getElementById("QLSP_spCatalog").value,
@@ -583,9 +589,25 @@ document
     const editImageInput = document.getElementById("QLSP_editImage");
     let imageData = editImageInput.dataset.imageData || dsSanPham[index].hinhAnh;
 
+    const giaBanHienTai = Number(dsSanPham[index].giaBan) || 0;
+    if (giaBanHienTai > 0 && giaSuaValue > giaBanHienTai && !confirm(`Giá nhập mới (${giaSuaValue.toLocaleString("vi-VN")}₫) cao hơn giá bán hiện tại (${giaBanHienTai.toLocaleString("vi-VN")}₫) nên sẽ bị lỗ. Vẫn lưu? (Nhớ cập nhật giá bán ở Quản lý giá bán.)`)) {
+      return;
+    }
+
+    // Tồn kho KHÔNG sửa ở đây (chỉ tăng qua Phiếu nhập hàng, giảm khi bán). Chỉ được thêm size mới hoặc bỏ size đang hết hàng.
     const editedSizeStock = QLSP_editSizeEditor.getStock();
-    const hadSizes = !!(dsSanPham[index].tonKhoTheoSize && Object.keys(dsSanPham[index].tonKhoTheoSize).length);
-    if (!editedSizeStock && hadSizes && !confirm("Sản phẩm sẽ không còn size nào và tồn kho về 0. Tiếp tục?")) {
+    const tonCu = dsSanPham[index].tonKhoTheoSize || {};
+    const hadSizes = Object.keys(tonCu).length > 0;
+    const sizeBiXoaConHang = Object.keys(tonCu).filter((s) => !(editedSizeStock && s in editedSizeStock) && Number(tonCu[s]) > 0);
+    if (sizeBiXoaConHang.length) {
+      alert(`Không thể bỏ size ${sizeBiXoaConHang.join(", ")} vì còn hàng trong kho. Chỉ bỏ được size đã hết hàng.`);
+      return;
+    }
+    if (editedSizeStock) {
+      // Giữ đúng số lượng cũ cho size đã có; size mới = 0
+      Object.keys(editedSizeStock).forEach((s) => { editedSizeStock[s] = Number(tonCu[s]) || 0; });
+    }
+    if (!editedSizeStock && hadSizes && !confirm("Sản phẩm sẽ không còn size nào. Tiếp tục?")) {
       return;
     }
     dsSanPham[index] = {

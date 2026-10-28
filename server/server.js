@@ -56,9 +56,16 @@ function createOtp() {
   return String(crypto.randomInt(100000, 1000000));
 }
 
+// Che do thu (OTP_DEV_MODE=true trong server/.env): KHONG gui email, in ma OTP ra cua so server de dang ky thu.
+const DEV_MODE = String(process.env.OTP_DEV_MODE || "").toLowerCase() === "true";
+
 async function sendOtpEmail(email, code, purpose) {
+  if (DEV_MODE) {
+    console.log(`[OTP_DEV_MODE] Ma OTP (${purpose}) cho ${email}: ${code}`);
+    return;
+  }
   if (!process.env.RESEND_API_KEY || !process.env.EMAIL_FROM) {
-    throw new Error("Email service is not configured. Create server/.env first.");
+    throw new Error("Server chua cau hinh gui email. Hay tao file server/.env (RESEND_API_KEY, EMAIL_FROM) hoac dat OTP_DEV_MODE=true de thu.");
   }
   const purposeText = purpose === "register"
     ? "xác thực đăng ký tài khoản"
@@ -124,7 +131,10 @@ async function sendOtpEmail(email, code, purpose) {
   });
   if (!result.ok) {
     const detail = await result.json().catch(() => ({}));
-    const providerMessage = detail.message || detail.name || `HTTP ${result.status}`;
+    let providerMessage = detail.message || detail.name || `HTTP ${result.status}`;
+    if (/testing emails|own email|verify a domain/i.test(providerMessage)) {
+      providerMessage += " (Resend ban thu chi gui duoc toi email dung de dang ky tai khoan Resend; muon gui cho email khac hay xac minh ten mien trong Resend > Domains)";
+    }
     throw new Error(`Không gửi được email OTP: ${providerMessage}. Kiểm tra RESEND_API_KEY và EMAIL_FROM trong server/.env.`);
   }
 }
@@ -170,7 +180,8 @@ const server = http.createServer(async (request, response) => {
   if (request.method === "GET" && request.url === "/api/health") {
     return json(response, 200, {
       ok: true,
-      emailConfigured: Boolean(process.env.RESEND_API_KEY && process.env.EMAIL_FROM)
+      emailConfigured: DEV_MODE || Boolean(process.env.RESEND_API_KEY && process.env.EMAIL_FROM),
+      devMode: DEV_MODE
     });
   }
   if (request.method !== "POST" || !request.url.startsWith("/api/otp/")) {

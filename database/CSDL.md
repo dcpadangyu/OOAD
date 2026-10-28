@@ -86,7 +86,7 @@
 | `khachHang` | JSON | Snapshot `{ maKhachHang, hoTen, thuDienTu, soDienThoai }` lúc đặt (đơn User) |
 | `chiTiet[]` | ARRAY | **FK → CHI_TIET_DON_HANG** |
 | `phuongThucThanhToan` | STRING | CHECK (COD / PayBank / Shop) |
-| `trangThaiThanhToan` | STRING | `unpaid` / `paid` |
+| `trangThaiThanhToan` | STRING | `unpaid` / `paid` / `refund` (đã trả tiền rồi hủy, chờ hoàn) / `refunded` (đã hoàn tiền) |
 | `tamTinh` | NUMBER | Tổng tiền hàng |
 | `tienVanChuyen` | NUMBER | Phí ship (số) |
 | `giaHienThi` | STRING | Tổng tiền hiển thị có đơn vị |
@@ -96,6 +96,7 @@
 | `trangThai` | STRING | CHECK (cho-xac-nhan / dang-giao / thanh-cong / da-huy) |
 | `trangThaiQuanTri` | STRING | CHECK (moiDat / daXuLy / daGiao / huy) — luôn khớp `trangThai` |
 | `daTruKho` | BOOLEAN | Đã trừ kho (tránh trừ/hoàn hai lần) |
+| `ngayGiao`, `ngayHuy`, `ngayHoanTien` | STRING | Mốc thời gian (ISO) do Admin ghi khi giao / hủy / xác nhận hoàn tiền. Báo cáo doanh thu tính theo `ngayGiao` |
 
 **Ánh xạ trạng thái:** `cho-xac-nhan` ↔ `moiDat` · `dang-giao` ↔ `daXuLy` · `thanh-cong` ↔ `daGiao` · `da-huy` ↔ `huy`
 
@@ -111,6 +112,7 @@
 | `kichCoDaChon` | STRING | Size khách chọn |
 | `soLuong` | NUMBER | > 0 |
 | `donGia` | NUMBER | > 0 |
+| `giaVon` | NUMBER | Giá vốn 1 đôi, Admin chốt lúc giao (= `giaNhap` của sản phẩm tại thời điểm đó); dùng tính giá vốn hàng bán và lợi nhuận gộp |
 | `daTra` | NUMBER | Số lượng đã trả (đơn Admin) |
 
 ## 7. Bảng `GIO_HANG` — key `cart`
@@ -129,7 +131,10 @@
 | `maPhieuNhap` | STRING | **PK** (tự sinh `PN...`) |
 | `ngayNhap` | STRING | NOT NULL (ISO) |
 | `tongTien` | NUMBER | ≥ 0 |
-| `trangThai` | STRING | CHECK (hoanThanh / chuaHoanThanh) |
+| `nhaCungCap` | STRING | Nhà cung cấp (bắt buộc khi lập/sửa phiếu) |
+| `nguoiLap`, `nguoiDuyet` | STRING | Người lập phiếu / người hoàn thành phiếu |
+| `ngayHoanThanh`, `ngayHuy`, `nguoiHuy` | STRING | Mốc hoàn thành / hủy phiếu |
+| `trangThai` | STRING | CHECK (hoanThanh / chuaHoanThanh / daHuy) |
 | `chiTiet[]` | ARRAY | **FK → CHI_TIET_PHIEU_NHAP** |
 
 ## 9. Bảng `CHI_TIET_PHIEU_NHAP` (lồng trong `phieu.chiTiet`)
@@ -137,6 +142,7 @@
 | Thuộc tính | Kiểu dữ liệu | Ràng buộc |
 |---|---|---|
 | `maSanPham` | STRING | **FK → SAN_PHAM.maSanPham** |
+| `kichCo` | STRING | Size nhập ('' nếu sản phẩm không chia size); khóa chính gồm maSanPham + kichCo |
 | `tenSanPham` | STRING | NOT NULL |
 | `soLuongNhap` | NUMBER | > 0 |
 | `giaNhap` | NUMBER | > 0 |

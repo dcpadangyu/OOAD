@@ -145,6 +145,11 @@
             if (!valid || (startedAsStaff && !stillStaff)) {
                 clearInterval(watchTimer);
                 watchTimer = null;
+                // Tai khoan nhan vien vua bi khoa/xoa: hien popup thay vi chuyen trang im lang.
+                if (window.employeeSession && sessionStorage.getItem('nvBiNgung') === '1' && typeof employeeSession.showSuspendedPopup === 'function') {
+                    employeeSession.showSuspendedPopup();
+                    return;
+                }
                 adminSession.logout();
                 adminSession.redirectToLogin(wasStaff);
                 return;

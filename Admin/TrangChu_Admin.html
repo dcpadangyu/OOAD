@@ -534,7 +534,7 @@
 
                   <hr />
 
-                  <label>Size &amp; tồn kho theo size</label>
+                  <label>Size sẽ bán <small>(số lượng tồn nhập qua <b>Phiếu nhập hàng</b>)</small></label>
                   <input type="hidden" id="QLSP_spSize" />
                   <div id="QLSP_spSizeEditor"></div>
 
@@ -635,7 +635,7 @@
 
                 <hr />
 
-                <label>Size &amp; tồn kho theo size</label>
+                <label>Size <small>(thêm/bớt size; số lượng tồn chỉ đổi qua <b>Phiếu nhập hàng</b> hoặc khi bán)</small></label>
                 <input type="hidden" id="QLSP_editSize" />
                 <div id="QLSP_editSizeEditor"></div>
 
@@ -679,6 +679,7 @@
                 <option value="all">Tất cả</option>
                 <option value="hoanThanh">Hoàn thành</option>
                 <option value="chuaHoanThanh">Chưa hoàn thành</option>
+                <option value="daHuy">Đã hủy</option>
               </select>
 
               <input
@@ -746,6 +747,7 @@
                     Ngày nhập:
                     <span id="QLNH_chiTietNgayNhap">--/--/----</span>
                   </p>
+                  <p class="QLNH_ngay-nhap" id="QLNH_chiTietThongTin"></p>
 
                   <table class="QLNH_chitiet-table">
                     <thead>
@@ -788,6 +790,11 @@
                   </div>
 
                   <div class="QLNH_form-group">
+                    <label for="QLNH_nhaCungCap">Nhà cung cấp:</label>
+                    <input type="text" id="QLNH_nhaCungCap" maxlength="150" placeholder="Tên nhà cung cấp / nhà phân phối" autocomplete="off" />
+                  </div>
+
+                  <div class="QLNH_form-group">
                     <label for="QLNH_trangThaiPhieu">Trạng thái:</label>
                     <select id="QLNH_trangThaiPhieu">
                       <option value="hoanThanh">Hoàn thành</option>
@@ -804,6 +811,7 @@
                         <tr>
                           <th>Nhập mã</th>
                           <th>Tên sản phẩm</th>
+                          <th>Size</th>
                           <th>Giá nhập</th>
                           <th>Nhập số lượng</th>
                           <th>Thành tiền</th>
@@ -922,9 +930,10 @@
                     <th style="width: 8%">Ảnh</th>
                     <th style="width: 13%">Tên sản phẩm</th>
                     <th style="width: 7%">Tồn kho</th>
-                    <th style="width: 24%" title="Mỗi ô: số size và số đôi còn lại. Đỏ = hết, vàng = còn 2 đôi trở xuống">Tồn theo size</th>
-                    <th style="width: 6%">Nhập</th>
-                    <th style="width: 6%">Đã bán</th>
+                    <th style="width: 21%" title="Mỗi ô: số size và số đôi còn lại. Đỏ = hết, vàng = còn 2 đôi trở xuống">Tồn theo size</th>
+                    <th style="width: 6%" title="Tổng đã nhập qua phiếu nhập hoàn thành">Nhập</th>
+                    <th style="width: 6%" title="Đã giao thành công">Đã bán</th>
+                    <th style="width: 6%" title="Đơn đã đặt nhưng chưa giao (đã trừ khỏi tồn kho). Nhập − Đã bán − Chờ giao = Tồn">Chờ giao</th>
                     <th style="width: 9%">Giá bán</th>
                     <th style="width: 12%">Giá trị tồn kho</th>
                   </tr>
@@ -1105,33 +1114,33 @@
     </div>
 
     <!-- Load core admin scripts (no API calls) -->
-    <script src="../database/migrate-schema.js?v=vi2"></script>
-    <script src="assets/js/admin-session.js?v=vi2"></script>
-    <script src="assets/js/admin.js?v=vi2"></script>
+    <script src="../database/migrate-schema.js?v=vi6"></script>
+    <script src="assets/js/admin-session.js?v=vi6"></script>
+    <script src="assets/js/admin.js?v=vi6"></script>
 
-    <script src="../database/products-shoes.js?v=vi2"></script>
-    <script src="../database/feedback-store.js?v=vi2"></script>
-    <script src="../database/phieuNhapHang.js?v=vi2"></script>
-    <script src="../database/employees.js?v=vi2"></script>
+    <script src="../database/products-shoes.js?v=vi6"></script>
+    <script src="../database/feedback-store.js?v=vi6"></script>
+    <script src="../database/phieuNhapHang.js?v=vi6"></script>
+    <script src="../database/employees.js?v=vi6"></script>
     
     <!-- Per-page scripts (kept client-side, no API) -->
-    <script src="assets/js/doanhthu.js?v=vi2"></script>
-    <script src="assets/js/quanlydonhang.js?v=vi2"></script>
-    <script src="assets/js/quanlydanhgia.js?v=vi4"></script>
+    <script src="assets/js/doanhthu.js?v=vi6"></script>
+    <script src="assets/js/quanlydonhang.js?v=vi6"></script>
+    <script src="assets/js/quanlydanhgia.js?v=vi6"></script>
     
-    <script src="assets/js/quanlyloaisanpham.js?v=vi4"></script>
-    <script src="assets/js/quanlynguoidung.js?v=vi2"></script>
-    <script src="assets/js/QuanLyNhapHang.js?v=vi2"></script>
-    <script src="assets/js/size-editor.js?v=vi2"></script>
-    <script src="assets/js/QuanLySanPham.js?v=vi2"></script>
-    <script src="assets/js/TonKho.js?v=vi2"></script>
-    <script src="assets/js/QuanLyGiaBan.js?v=vi2"></script>
-    <script src="assets/js/nhanvien-session.js?v=vi2"></script>
-    <script src="assets/js/QuanLyNhanVien.js?v=vi2"></script>
-    <script src="assets/js/nhanvien-info.js?v=vi2"></script>
-    <script src="assets/js/admin-info.js?v=vi2"></script>
+    <script src="assets/js/quanlyloaisanpham.js?v=vi6"></script>
+    <script src="assets/js/quanlynguoidung.js?v=vi6"></script>
+    <script src="assets/js/QuanLyNhapHang.js?v=nh1"></script>
+    <script src="assets/js/size-editor.js?v=nh2"></script>
+    <script src="assets/js/QuanLySanPham.js?v=nh2"></script>
+    <script src="assets/js/TonKho.js?v=vi6"></script>
+    <script src="assets/js/QuanLyGiaBan.js?v=vi6"></script>
+    <script src="assets/js/nhanvien-session.js?v=vi6"></script>
+    <script src="assets/js/QuanLyNhanVien.js?v=vi6"></script>
+    <script src="assets/js/nhanvien-info.js?v=vi6"></script>
+    <script src="assets/js/admin-info.js?v=vi6"></script>
 
     <!-- SPA navigation (hash/query-based; works with file:// and http://) -->
-    <script src="assets/js/admin-spa-nav.js?v=vi2"></script>
+    <script src="assets/js/admin-spa-nav.js?v=vi6"></script>
   </body>
 </html>

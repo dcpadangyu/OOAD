@@ -15,7 +15,51 @@
     paid: "Đã thanh toán",
     unpaid: "Chưa thanh toán",
     refund: "Cần hoàn tiền",
+    refunded: "Đã hoàn tiền",
   };
+
+  // Nhân viên CSKH chỉ được HỦY đơn (xử lý khiếu nại); xác nhận/giao hàng do bộ phận bán hàng và Admin
+  function laCSKH() {
+    try {
+      return typeof adminSession !== "undefined" && adminSession.isNhanVien() && /CSKH/i.test(String(adminSession.getCurrentRole() || ""));
+    } catch (e) {
+      return false;
+    }
+  }
+
+  // Ghi mốc thời gian + chốt giá vốn lúc GIAO hàng (để báo cáo lợi nhuận đúng theo giá vốn tại thời điểm bán)
+  function ghiDauMoc(id, newStatus) {
+    const now = new Date().toISOString();
+    let products = [];
+    try { products = typeof getLocalProducts === "function" ? getLocalProducts() : []; } catch (e) { products = []; }
+    ["ordersLocal", "DanhSachDatHang"].forEach((key) => {
+      const list = ShopCore.readList(key);
+      const o = list.find((x) => x && x.maDonHang === id);
+      if (!o) return;
+      if (newStatus === "daGiao") {
+        o.ngayGiao = now;
+        (o.chiTiet || []).forEach((l) => {
+          const sp = products.find((p) => p.maSanPham === l.maSanPham);
+          if (sp && Number(sp.giaNhap) > 0) l.giaVon = Number(sp.giaNhap);
+        });
+      } else if (newStatus === "huy") {
+        o.ngayHuy = now;
+      }
+      try { localStorage.setItem(key, JSON.stringify(list)); } catch (e) { /* noop */ }
+    });
+  }
+
+  function xacNhanDaHoanTien(id) {
+    const now = new Date().toISOString();
+    ["ordersLocal", "DanhSachDatHang"].forEach((key) => {
+      const list = ShopCore.readList(key);
+      const o = list.find((x) => x && x.maDonHang === id);
+      if (!o || o.trangThaiThanhToan !== "refund") return;
+      o.trangThaiThanhToan = "refunded";
+      o.ngayHoanTien = now;
+      try { localStorage.setItem(key, JSON.stringify(list)); } catch (e) { /* noop */ }
+    });
+  }
 
   function esc(v) {
     if (window.ShopCore && typeof window.ShopCore.esc === "function") return window.ShopCore.esc(v);
@@ -189,7 +233,7 @@
         <td>${esc(new Date(o.ngayDat).toLocaleString("vi-VN"))}</td>
         <td>${esc(o.tenNguoiNhan || "--")}</td>
         <td>${esc(currency(o.tongTien))}</td>
-        <td>${esc(ORDER_STATUS[o.trangThaiQuanTri] || o.trangThaiQuanTri)}</td>
+        <td>${esc(ORDER_STATUS[o.trangThaiQuanTri] || o.trangThaiQuanTri)}<br><small style="color:${o.trangThaiThanhToan === "refund" ? "#dc2626" : "#64748b"}">${esc(PAYMENT_STATUS[o.trangThaiThanhToan] || "")}</small></td>
         <td><button class="QLDH_btn-detail" data-id="${esc(o.maDonHang)}">Xem</button></td>`;
       tbody.appendChild(tr);
     });
@@ -276,7 +320,7 @@
       const returned = it.daTra || 0;
       const remaining = Math.max(0, (it.soLuong || 0) - returned);
       const tt = remaining * (it.donGia || 0);
-      tr.innerHTML = `<td>${i + 1}</td><td>${esc(it.maSanPham)}</td><td>${esc(it.tenSanPham || "")}${it.kichCoDaChon ? " (size " + esc(it.kichCoDaChon) + ")" : ""}</td><td>${esc(it.soLuong)} <small>(còn: ${remaining})</small></td><td>${esc(currency(it.donGia))}</td><td>${esc(currency(tt))}</td>`;
+      tr.innerHTML = `<td>${i + 1}</td><td>${esc(it.maSanPham)}</td><td>${esc(it.tenSanPham || "")}${it.kichCoDaChon ? " (size " + esc(it.kichCoDaChon) + ")" : ""}</td><td>${esc(it.soLuong)}${returned > 0 ? ` <small>(còn: ${remaining})</small>` : ""}</td><td>${esc(currency(it.donGia))}</td><td>${esc(currency(tt))}</td>`;
       tbody.appendChild(tr);
     });
 
@@ -289,20 +333,50 @@
     const next = window.ShopCore && typeof window.ShopCore.nextStatuses === "function"
       ? window.ShopCore.nextStatuses(current)
       : [];
-    const allowed = [current, ...next.filter((s) => s !== current)];
+    const cskh = laCSKH();
+    const nextQuyen = cskh ? next.filter((s) => s === "huy") : next;
+    const allowed = [current, ...nextQuyen.filter((s) => s !== current)];
     statusSelect.innerHTML = allowed
       .map((s) => `<option value="${esc(s)}">${esc(ORDER_STATUS[s] || s)}</option>`)
       .join("");
     statusSelect.value = current;
     statusSelect.dataset.orderId = id;
-    const isFinal = next.length === 0;
+    const isFinal = nextQuyen.length === 0;
     statusSelect.disabled = isFinal;
     document.getElementById("QLDH_md_btnUpdate").disabled = isFinal;
     
+    // Nút xác nhận đã hoàn tiền (chỉ hiện với đơn đã thanh toán rồi bị hủy)
+    const box = document.querySelector("#QLDH_modal .QLDH_md_status-update");
+    let refundBtn = document.getElementById("QLDH_md_btnRefund");
+    if (!refundBtn && box) {
+      refundBtn = document.createElement("button");
+      refundBtn.id = "QLDH_md_btnRefund";
+      refundBtn.type = "button";
+      refundBtn.className = "QLDH_md_btnUpdate";
+      refundBtn.style.marginLeft = "8px";
+      refundBtn.textContent = "Xác nhận đã hoàn tiền";
+      refundBtn.addEventListener("click", () => {
+        const oid = refundBtn.dataset.orderId;
+        if (!oid || !confirm("Xác nhận đã hoàn tiền cho khách của đơn " + oid + "?")) return;
+        xacNhanDaHoanTien(oid);
+        document.getElementById("QLDH_modal").style.display = "none";
+        renderTable(filterOrders(getLocalOrders()));
+      });
+      box.appendChild(refundBtn);
+    }
+    if (refundBtn) {
+      refundBtn.dataset.orderId = id;
+      refundBtn.style.display = o.trangThaiThanhToan === "refund" ? "" : "none";
+    }
+
     document.getElementById("QLDH_modal").style.display = "flex";
   }
 
   function updateStatus(id, newStatus) {
+    if (laCSKH() && newStatus !== "huy") {
+      alert("Nhân viên CSKH chỉ được hủy đơn. Việc xác nhận/giao hàng do bộ phận bán hàng hoặc Admin thực hiện.");
+      return false;
+    }
     // ShopCore cập nhật cả 2 kho (ordersLocal + DanhSachDatHang), hoàn/trừ tồn kho và số lượng đã bán.
     const result = window.ShopCore
       ? window.ShopCore.setOrderStatus(id, newStatus)
@@ -311,6 +385,7 @@
       alert(result.message || "Không thể cập nhật trạng thái đơn hàng.");
       return false;
     }
+    if (!result.unchanged) ghiDauMoc(id, newStatus);
     renderTable(filterOrders(getLocalOrders()));
     return true;
   }

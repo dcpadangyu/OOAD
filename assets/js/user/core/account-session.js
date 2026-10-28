@@ -42,6 +42,7 @@
     const stored = getUserList().find((user) => userMatches(user, sessionCopy));
     if (isLockedRecord(stored)) {
       clearSession();
+      showSuspendedPopup();
       return null;
     }
     if (!stored) return sessionCopy;
@@ -109,6 +110,61 @@
     if (!(options && options.silent)) setCurrentUser(normalized);
     return normalized;
   }
+
+  // Popup chan man hinh khi Admin khoa tai khoan khach dang dang nhap, sau do ve trang dang nhap.
+  let popupShown = false;
+  function onAuthPage() {
+    return /\/(login|register|forgot-password)\.html$/i.test(location.pathname);
+  }
+  function showSuspendedPopup() {
+    if (popupShown || onAuthPage() || !document.body) return;
+    popupShown = true;
+    ["cart", "selectedCartItems", "CurrDanhSachDatHang"].forEach((k) => localStorage.removeItem(k));
+    const goLogin = () => { window.location.href = new URL("pages/login.html", document.baseURI).href; };
+    const overlay = document.createElement("div");
+    overlay.setAttribute("role", "alertdialog");
+    overlay.setAttribute("aria-modal", "true");
+    overlay.style.cssText = "position:fixed;inset:0;z-index:2147483647;background:rgba(15,23,42,.72);display:flex;align-items:center;justify-content:center;padding:16px;font-family:'Segoe UI',Tahoma,sans-serif";
+    overlay.innerHTML = '<div style="background:#fff;border-radius:14px;max-width:380px;width:100%;padding:28px 26px;text-align:center;box-shadow:0 24px 60px rgba(0,0,0,.35)">' +
+      '<div style="width:56px;height:56px;border-radius:50%;background:#fee2e2;color:#dc2626;font-size:30px;line-height:56px;margin:0 auto 14px;font-weight:700">!</div>' +
+      '<h3 style="margin:0 0 8px;font-size:19px;color:#0f172a">Tài khoản đã bị ngừng hoạt động</h3>' +
+      '<p style="margin:0 0 20px;color:#475569;font-size:14px;line-height:1.5">Bạn đã bị đăng xuất. Vui lòng liên hệ cửa hàng để được hỗ trợ.</p>' +
+      '<button type="button" style="border:0;background:#2563eb;color:#fff;border-radius:10px;padding:10px 26px;font-size:14px;font-weight:700;cursor:pointer">Đã hiểu</button></div>';
+    const btn = overlay.querySelector("button");
+    btn.addEventListener("click", goLogin);
+    document.body.appendChild(overlay);
+    setTimeout(goLogin, 6000);
+    btn.focus();
+  }
+
+  // Theo doi khach dang dang nhap: Admin khoa/xoa -> dang xuat + popup (tuc thi o tab khac nho su kien storage).
+  let watchedId = null;
+  function checkNow() {
+    if (!watchedId) return;
+    const stored = getUserList().find((u) => u.maKhachHang === watchedId);
+    // Bi khoa HOAC bi Admin xoa khoi danh sach (ban ghi da ton tai luc bat dau theo doi) => popup + dang xuat.
+    if (isLockedRecord(stored) || !stored) {
+      clearSession();
+      showSuspendedPopup();
+      watchedId = null;
+      return;
+    }
+    // Phien bi xoa o tab khac (dang xuat binh thuong): ngung theo doi, khong hien popup.
+    if (!parseJSON("currentUser", null)) watchedId = null;
+  }
+  function startWatch() {
+    const cur = getCurrentUser();
+    if (!cur) return;
+    // Chi theo doi khi tai khoan co trong userList (tai khoan cu ngoai danh sach khong bi dang xuat oan).
+    if (!getUserList().some((u) => u.maKhachHang === cur.maKhachHang)) return;
+    watchedId = cur.maKhachHang;
+    window.addEventListener("storage", (e) => { if (e.key === "userList" || e.key === null) checkNow(); });
+    window.addEventListener("focus", checkNow);
+    document.addEventListener("visibilitychange", () => { if (!document.hidden) checkNow(); });
+    setInterval(checkNow, 3000);
+  }
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", startWatch);
+  else startWatch();
 
   function clearSession() {
     localStorage.removeItem("currentUser");

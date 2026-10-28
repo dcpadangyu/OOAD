@@ -592,3 +592,19 @@
 .SZ-footer { display: flex; justify-content: space-between; align-items: center; margin-top: 10px; padding-top: 8px; border-top: 1px solid #e2e8f0; font-size: 13px; color: #334155; }
 .SZ-link { border: 0; background: transparent; color: #dc2626; font-size: 12px; cursor: pointer; text-decoration: underline; padding: 0; }
 .SZ-error { margin-top: 8px; font-size: 12px; color: #b91c1c; background: #fef2f2; border: 1px solid #fecaca; border-radius: 8px; padding: 6px 10px; }
+
+/* Trinh nhap size che do "chi chon size" (them san pham moi): an so luong, kho tang qua Phieu nhap hang */
+.SZ-sizeonly .SZ-stepper,
+.SZ-sizeonly .SZ-add,
+.SZ-sizeonly .SZ-tools label:nth-child(3) { display: none !important; }
+.SZ-sizeonly .SZ-cell.SZ-zero { background: #fff; border-color: #dbe3ef; }
+.SZ-sizeonly .SZ-cell { padding-bottom: 8px; }
+
+/* Sua san pham: hien ton kho tung size o dang chi doc (khong sua tay) */
+.SZ-ro { display: none; font-size: 12px; color: #475569; }
+.SZ-lockqty .SZ-ro { display: block; }
+.SZ-lockqty .SZ-stepper,
+.SZ-lockqty .SZ-add,
+.SZ-lockqty .SZ-tools label:nth-child(3) { display: none !important; }
+.SZ-lockqty .SZ-cell.SZ-zero { background: #fff; border-color: #dbe3ef; }
+.SZ-lockqty .SZ-cell.SZ-zero .SZ-ro { color: #b91c1c; }

@@ -39,7 +39,9 @@ document.addEventListener("DOMContentLoaded", () => {
     error.style.display = message ? "block" : "none";
   }
   function validate(key) {
-    const value = input[key]?.value.trim() || "";
+    // Mat khau KHONG cat khoang trang (gia tri luu va gia tri kiem tra phai giong nhau).
+    const raw = input[key]?.value || "";
+    const value = (key === "password" || key === "confirmPassword") ? raw : raw.trim();
     const users = getUsers();
     if (!value && key === "otp") return "Vui lòng nhập mã OTP";
     if (!value) return `${key === "username" ? "Tên đăng nhập" : key === "email" ? "Email" : key === "phone" ? "Số điện thoại" : key === "address" ? "Địa chỉ" : "Mật khẩu"} không được để trống.`;
@@ -57,7 +59,7 @@ document.addEventListener("DOMContentLoaded", () => {
       if (users.some((u) => String(u.soDienThoai || "") === value)) return "Số điện thoại đã được đăng ký!";
     }
     if (key === "password" && value.length < 8) return "Mật khẩu phải có ít nhất 8 ký tự.";
-    if (key === "confirmPassword" && value !== input.password.value.trim()) return "Mật khẩu nhập lại không khớp.";
+    if (key === "confirmPassword" && value !== input.password.value) return "Mật khẩu nhập lại không khớp.";
     if (key === "address" && value.length < 10) return "Vui lòng nhập địa chỉ chi tiết hơn (ít nhất 10 ký tự).";
     if (key === "otp" && !/^\d{6}$/.test(value)) return "Vui lòng nhập mã OTP gồm 6 chữ số.";
     return null;
@@ -108,15 +110,22 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
+  let submitting = false;
   form.addEventListener("submit", async (event) => {
     event.preventDefault();
+    if (submitting) return; // chong bam dang ky 2 lan (OTP chi dung duoc 1 lan)
     if (!validateAll()) {
       popup({ icon: "error", title: "Lỗi dữ liệu!", text: "Vui lòng kiểm tra lại các trường bị lỗi." });
       return;
     }
+    submitting = true;
+    const submitButton = document.getElementById("nutdky");
+    if (submitButton) submitButton.disabled = true;
+    const release = () => { submitting = false; if (submitButton) submitButton.disabled = false; };
     try {
       await window.UserOtp.verify(input.email.value.trim(), "register", input.otp.value.trim());
     } catch (error) {
+      release();
       setError("otp", error.message);
       popup({ icon: "error", title: "OTP không hợp lệ", text: error.message });
       return;
@@ -133,11 +142,27 @@ document.addEventListener("DOMContentLoaded", () => {
       diaChi: input.address.value.trim(),
       diaChiPhu: [],
       anhDaiDien: "assets/img/Avatar/avtuser.jpg",
+      trangThai: "active",
+      biKhoa: false,
       isLoggedIn: false
     };
+    // Kiem tra lai trung lap ngay truoc khi luu (co the tab khac vua dang ky cung thong tin trong luc cho OTP).
+    const trung = ["username", "email", "phone"].map((key) => ({ key, message: validate(key) })).find((item) => item.message);
+    if (trung) {
+      release();
+      setError(trung.key, trung.message);
+      popup({ icon: "error", title: "Thông tin đã tồn tại", text: trung.message });
+      return;
+    }
     const users = getUsers();
     users.push(user);
-    localStorage.setItem("userList", JSON.stringify(users));
+    try {
+      localStorage.setItem("userList", JSON.stringify(users));
+    } catch (error) {
+      release();
+      popup({ icon: "error", title: "Không lưu được tài khoản", text: "Bộ nhớ trình duyệt đã đầy. Hãy xóa bớt dữ liệu rồi thử lại." });
+      return;
+    }
     form.reset();
     if (passwordRules) passwordRules.style.display = "none";
     Object.keys(input).forEach((key) => setError(key, ""));

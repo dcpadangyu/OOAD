@@ -34,6 +34,8 @@
     let stock = {};
 
     container.classList.add("SZ-box");
+    if (opts.lockQty) container.classList.add("SZ-lockqty"); // sửa sản phẩm: giữ nguyên tồn kho từng size, chỉ thêm/bớt size
+    if (opts.sizeOnly) container.classList.add("SZ-sizeonly"); // chỉ chọn size, không nhập số lượng (kho tăng qua Phiếu nhập hàng)
     container.innerHTML = `
       <div class="SZ-presets">
         <span class="SZ-hint">Tạo nhanh:</span>
@@ -76,7 +78,7 @@
       const sizes = sortedSizes();
       const total = sizes.reduce((sum, size) => sum + (Number(stock[size]) || 0), 0);
       totalEl.innerHTML = sizes.length
-        ? `Tổng: <strong>${total}</strong> đôi · <strong>${sizes.length}</strong> size`
+        ? (opts.lockQty ? `<strong>${sizes.length}</strong> size · tồn hiện có <strong>${total}</strong> đôi (đổi qua Phiếu nhập hàng)` : opts.sizeOnly ? `Đã chọn <strong>${sizes.length}</strong> size` : `Tổng: <strong>${total}</strong> đôi · <strong>${sizes.length}</strong> size`)
         : "Chưa có size nào";
       if (typeof opts.onChange === "function") opts.onChange(api);
     }
@@ -92,6 +94,7 @@
         <div class="SZ-cell${Number(stock[size]) === 0 ? " SZ-zero" : ""}" data-size="${size}">
           <button type="button" class="SZ-remove" title="Xóa size ${size}" aria-label="Xóa size ${size}">&times;</button>
           <div class="SZ-size">Size ${size}</div>
+          <div class="SZ-ro">Tồn: <b>${Number(stock[size]) || 0}</b></div>
           <div class="SZ-stepper">
             <button type="button" class="SZ-step" data-delta="-1" aria-label="Giảm">&minus;</button>
             <input type="number" class="SZ-cellqty" min="0" max="${MAX_QTY}" value="${Number(stock[size]) || 0}" aria-label="Số lượng size ${size}">
@@ -120,7 +123,7 @@
       }
       if (a > b) return showError("Size bắt đầu phải nhỏ hơn hoặc bằng size kết thúc.");
       if (b - a > MAX_RANGE) return showError(`Chỉ tạo tối đa ${MAX_RANGE + 1} size một lần.`);
-      const amount = clampQty(qty);
+      const amount = opts.sizeOnly || opts.lockQty ? 0 : clampQty(qty);
       for (let size = a; size <= b; size += 1) {
         const key = String(size);
         if (!(key in stock)) stock[key] = amount;

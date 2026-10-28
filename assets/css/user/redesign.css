@@ -91,7 +91,7 @@ body { background:var(--ooda-paper)!important; color:var(--ooda-ink)!important; 
 .store-footer .footer-brand span { color:var(--ooda-yellow); }
 .store-footer .footer-intro { max-width:210px; margin-bottom:26px!important; line-height:1.7; }
 #section-register .main-content,#section-login .login-box { box-sizing:border-box; }
-#section-register .image-side { background-image:linear-gradient(rgba(21,21,21,.08),rgba(21,21,21,.4)),url("../../img/background-login.jpg"); }
+#section-register .image-side { background-image:linear-gradient(135deg, #151515 0%, #2a2a2a 55%, #f4c542 140%); }
 #section-register #send-register-otp { margin-top:8px; background:var(--ooda-yellow); color:var(--ooda-ink); border:1px solid #c99d1d; border-radius:3px; padding:11px 14px; font-size:12px; font-weight:800; }
 #section-register #send-register-otp:disabled { opacity:.6; cursor:wait; }
 #GioHang { min-height:calc(100vh - 106px)!important; margin-top:0!important; padding:34px clamp(18px,5vw,72px) 70px!important; background:#f3f1eb!important; box-sizing:border-box; }
@@ -1804,3 +1804,8 @@ body:has(#ThanhToan_ThanhCong) #ThanhToan_ThanhCong {
     text-align: left !important;
   }
 }
+
+/* Trang dang ky: bo khung anh ben phai, can giua form */
+#section-register .image-side { display:none!important; }
+#section-register .main-content { display:block!important; width:100%!important; max-width:520px!important; margin:0 auto!important; overflow:hidden; }
+#section-register .form-container { width:100%!important; min-width:0!important; box-sizing:border-box; }

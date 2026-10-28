@@ -180,7 +180,7 @@ label.required::after {
 
 .image-side {
     flex: 1.2;
-    background: url("../img/background-login.jpg") center/cover no-repeat;
+    background: linear-gradient(135deg, #151515 0%, #2a2a2a 55%, #f4c542 140%);
     min-height: 500px;
 }
 
@@ -313,7 +313,7 @@ label.required::after {
 }
 
 #section-register .image-side {
-    background-image: linear-gradient(rgba(23, 23, 23, 0.12), rgba(23, 23, 23, 0.42)), url("../img/background-login.jpg");
+    background-image: linear-gradient(135deg, #151515 0%, #2a2a2a 55%, #f4c542 140%);
     background-position: center;
 }
 

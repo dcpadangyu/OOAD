@@ -114,6 +114,9 @@ Dòng chi tiết (`chiTiet[]`, dùng chung cho cả đơn User lẫn đơn Admin
 | userName | hoTen |
 | note | ghiChu |
 
+## Thuộc tính bổ sung cho đơn hàng Admin (`ordersLocal` / `DanhSachDatHang`)
+Do Admin ghi khi đổi trạng thái đơn (không có tên cũ): `ngayGiao` (khi giao, doanh thu tính theo ngày này), `ngayHuy`, `ngayHoanTien`; `chiTiet[].giaVon` (giá nhập chốt lúc giao, dùng tính lợi nhuận gộp); `trangThaiThanhToan` có thêm giá trị `refunded` (đã hoàn tiền) sau `refund` (cần hoàn tiền).
+
 ## Khách hàng (`userList`, `currentUser`) — KHACH_HANG
 | Cũ | Mới |
 |---|---|
@@ -154,7 +157,7 @@ Dòng chi tiết (`chiTiet[]`, dùng chung cho cả đơn User lẫn đơn Admin
 | maNhanVien, tenNhanVien, gioiTinh, diaChi, chucVu, ngayTao, trangThai | giữ nguyên |
 
 ## Phiếu nhập (`phieuNhapLocal`) — PHIEU_NHAP_HANG + CHI_TIET_PHIEU_NHAP
-Đã là tiếng Việt, **giữ nguyên**: `maPhieuNhap, ngayNhap, chiTiet[{maSanPham, tenSanPham, soLuongNhap, giaNhap, thanhTien}], tongTien, trangThai`.
+Đã là tiếng Việt: `maPhieuNhap, ngayNhap, chiTiet[{maSanPham, kichCo, tenSanPham, soLuongNhap, giaNhap, thanhTien}], tongTien, trangThai (hoanThanh/chuaHoanThanh/daHuy)`. Thuộc tính mới: `nhaCungCap, nguoiLap, nguoiDuyet, ngayHoanThanh, ngayHuy, nguoiHuy` và `kichCo` ở dòng chi tiết (phiếu mẫu cũ không có `kichCo` → khi hoàn thành số lượng được chia đều các size).
 
 ## Đánh giá (IndexedDB `ooad_feedback`)
 | Cũ | Mới |

@@ -129,7 +129,10 @@
 | `maPhieuNhap` | STRING | **PK** (tự sinh `PN...`) |
 | `ngayNhap` | STRING | NOT NULL (ISO) |
 | `tongTien` | NUMBER | ≥ 0 |
-| `trangThai` | STRING | CHECK (hoanThanh / chuaHoanThanh) |
+| `nhaCungCap` | STRING | Nhà cung cấp (bắt buộc khi lập/sửa phiếu) |
+| `nguoiLap`, `nguoiDuyet` | STRING | Người lập phiếu / người hoàn thành phiếu |
+| `ngayHoanThanh`, `ngayHuy`, `nguoiHuy` | STRING | Mốc hoàn thành / hủy phiếu |
+| `trangThai` | STRING | CHECK (hoanThanh / chuaHoanThanh / daHuy) |
 | `chiTiet[]` | ARRAY | **FK → CHI_TIET_PHIEU_NHAP** |
 
 ## 9. Bảng `CHI_TIET_PHIEU_NHAP` (lồng trong `phieu.chiTiet`)
@@ -137,6 +140,7 @@
 | Thuộc tính | Kiểu dữ liệu | Ràng buộc |
 |---|---|---|
 | `maSanPham` | STRING | **FK → SAN_PHAM.maSanPham** |
+| `kichCo` | STRING | Size nhập ('' nếu sản phẩm không chia size); khóa chính gồm maSanPham + kichCo |
 | `tenSanPham` | STRING | NOT NULL |
 | `soLuongNhap` | NUMBER | > 0 |
 | `giaNhap` | NUMBER | > 0 |

@@ -1,4 +1,4 @@
-﻿CREATE DATABASE CuaHangGiay;
+CREATE DATABASE CuaHangGiay;
 GO
 USE CuaHangGiay;
 GO
@@ -101,6 +101,9 @@ CREATE TABLE DON_HANG (
   phiVanChuyen         VARCHAR(30)   NULL,
   ngayDat              DATETIME      NOT NULL DEFAULT CURRENT_TIMESTAMP,
   trangThai            NVARCHAR(15)   NOT NULL DEFAULT 'cho-xac-nhan',
+  ngayGiao             DATETIME      NULL,               -- Admin ghi khi chuyển sang đã giao (doanh thu tính theo ngày này)
+  ngayHuy              DATETIME      NULL,
+  ngayHoanTien         DATETIME      NULL,               -- Admin xác nhận đã hoàn tiền
   CONSTRAINT kn_dh_kh FOREIGN KEY (maKhachHang) REFERENCES KHACH_HANG(maKhachHang),
   CONSTRAINT rb_dh_thanhToan CHECK (phuongThucThanhToan IN ('COD','PayBank','PayStore')),
   CONSTRAINT rb_dh_tongTien  CHECK (tongTien >= 0),
@@ -115,6 +118,7 @@ CREATE TABLE CHI_TIET_DON_HANG (
   tenSanPham  NVARCHAR(255)  NOT NULL,
   soLuong     INT           NOT NULL,
   donGia      DECIMAL(15,0) NOT NULL,
+  giaVon      DECIMAL(15,0) NULL,                    -- giá vốn 1 đôi chốt lúc giao (tính lợi nhuận gộp)
   thanhTien    AS (soLuong * donGia),
   PRIMARY KEY (maDonHang, maSanPham),
   CONSTRAINT kn_ctdh_dh FOREIGN KEY (maDonHang) REFERENCES DON_HANG(maDonHang)
@@ -140,21 +144,28 @@ CREATE TABLE GIO_HANG (
 CREATE TABLE PHIEU_NHAP_HANG (
   maPhieuNhap VARCHAR(20)   PRIMARY KEY,                 -- PN...
   ngayNhap    DATETIME      NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  nhaCungCap  NVARCHAR(150)  NULL,                       -- nhà cung cấp
+  nguoiLap    NVARCHAR(100)  NULL,                       -- người lập phiếu
+  nguoiDuyet  NVARCHAR(100)  NULL,                       -- người hoàn thành (duyệt) phiếu
+  ngayHoanThanh DATETIME     NULL,
+  ngayHuy     DATETIME       NULL,
+  nguoiHuy    NVARCHAR(100)  NULL,
   tongTien    DECIMAL(17,0) NOT NULL DEFAULT 0,
   trangThai   NVARCHAR(15)   NOT NULL DEFAULT 'chuaHoanThanh',
   CONSTRAINT rb_pn_tongTien  CHECK (tongTien >= 0),
-  CONSTRAINT rb_pn_trangThai CHECK (trangThai IN ('hoanThanh','chuaHoanThanh'))
+  CONSTRAINT rb_pn_trangThai CHECK (trangThai IN ('hoanThanh','chuaHoanThanh','daHuy'))
 );
 
 -- 9. CHI_TIET_PHIEU_NHAP
 CREATE TABLE CHI_TIET_PHIEU_NHAP (
   maPhieuNhap  VARCHAR(20)   NOT NULL,
   maSanPham    VARCHAR(20)   NOT NULL,
+  kichCo       VARCHAR(10)   NOT NULL DEFAULT '',        -- size nhập ('' = sản phẩm không chia size)
   tenSanPham   NVARCHAR(255)  NOT NULL,
   soLuongNhap  INT           NOT NULL,
   giaNhap      DECIMAL(15,0) NOT NULL,
   thanhTien     AS (soLuongNhap * giaNhap),
-  PRIMARY KEY (maPhieuNhap, maSanPham),
+  PRIMARY KEY (maPhieuNhap, maSanPham, kichCo),
   CONSTRAINT kn_ctpn_pn FOREIGN KEY (maPhieuNhap) REFERENCES PHIEU_NHAP_HANG(maPhieuNhap)
     ON DELETE CASCADE,
   CONSTRAINT kn_ctpn_sp FOREIGN KEY (maSanPham) REFERENCES SAN_PHAM(maSanPham),

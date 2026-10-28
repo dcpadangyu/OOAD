@@ -144,17 +144,20 @@ function TK_veBangTonKho(data) {
   const start = (TK_currentPage - 1) * TK_itemsPerPage;
   const end = start + TK_itemsPerPage;
   const pageData = data.slice(start, end);
+  const giu = TK_dangGiu();
 
   // Dòng tổng (chỉ hiện ở trang đầu)
   if (TK_currentPage === 1 && data.length > 0) {
     let tongSoLuong = 0;
     let tongSoLuongNhap = 0;
     let tongDaBan = 0;
+    let tongGiu = 0;
     let tongGiaTri = 0;
     data.forEach((sp) => {
       tongSoLuong += Number(sp.soLuongTon) || 0;
       tongSoLuongNhap += Number(sp.tongDaNhap) || 0;
       tongDaBan += Number(sp.tongDaBan) || 0;
+      tongGiu += giu[sp.maSanPham] || 0;
       tongGiaTri += TK_giaTriTon(sp);
     });
     const trTong = document.createElement("tr");
@@ -166,6 +169,7 @@ function TK_veBangTonKho(data) {
       <td></td>
       <td><strong>${tongSoLuongNhap}</strong></td>
       <td><strong>${tongDaBan}</strong></td>
+      <td><strong>${tongGiu}</strong></td>
       <td></td>
       <td><strong>${tongGiaTri.toLocaleString()}₫</strong></td>
     `;
@@ -206,6 +210,7 @@ function TK_veBangTonKho(data) {
       <td class="TK_size-cell">${TK_sizeCells(sp)}</td>
       <td><strong>${Number(sp.tongDaNhap) || 0}</strong></td>
       <td><strong>${Number(sp.tongDaBan) || 0}</strong></td>
+      <td title="Đơn đã đặt, chưa giao">${giu[sp.maSanPham] || 0}</td>
       <td>${(Number(sp.giaBan) || 0).toLocaleString()}₫</td>
       <td title="Giá nhập × tồn kho">${giaTriTon.toLocaleString()}₫</td>
     `;
@@ -245,13 +250,37 @@ function toDateOnly(d) {
   return new Date(date.getFullYear(), date.getMonth(), date.getDate());
 }
 
+// Đơn hàng gộp (ordersLocal ưu tiên vì có ngày giao; đơn user chưa đồng bộ thì lấy từ DanhSachDatHang)
+function TK_donHangGop() {
+  const map = new Map();
+  ShopCore.readList("ordersLocal").forEach((o) => o && o.maDonHang && map.set(o.maDonHang, o));
+  ShopCore.readList("DanhSachDatHang").forEach((o) => {
+    if (o && o.maDonHang && !map.has(o.maDonHang)) {
+      map.set(o.maDonHang, Object.assign({}, o, { trangThaiQuanTri: o.trangThaiQuanTri || (ShopCore.USER_TO_ADMIN && ShopCore.USER_TO_ADMIN[o.trangThai]) || "moiDat" }));
+    }
+  });
+  return Array.from(map.values());
+}
+
+// Số đôi đang "giữ chỗ" ở đơn chưa giao (đã trừ kho lúc đặt nhưng chưa tính là bán): Nhập − Đã bán − Chờ giao = Tồn
+function TK_dangGiu() {
+  const giu = {};
+  TK_donHangGop().forEach((o) => {
+    if (o.trangThaiQuanTri !== "moiDat" && o.trangThaiQuanTri !== "daXuLy") return;
+    (o.chiTiet || []).forEach((l) => {
+      giu[l.maSanPham] = (giu[l.maSanPham] || 0) + (Number(l.soLuong) || 0);
+    });
+  });
+  return giu;
+}
+
 // Chế độ lọc theo ngày: số nhập/bán TRONG KỲ thay cho số tổng, chỉ giữ sản phẩm có phát sinh.
 function TK_danhSachTheoKhoangNgay(tu, den) {
   const fromDate = tu ? toDateOnly(tu) : null;
   const toDate = den ? toDateOnly(den) : null;
 
   const phieuNhapLocal = ShopCore.readList("phieuNhapLocal");
-  const donHangLocal = ShopCore.readList("DanhSachDatHang");
+  const donHangLocal = TK_donHangGop();
 
   const importMap = {};
   phieuNhapLocal.forEach((phieu) => {
@@ -267,13 +296,9 @@ function TK_danhSachTheoKhoangNgay(tu, den) {
   const saleMap = {};
   donHangLocal.forEach((don) => {
     if (!don) return;
-    const ngay = toDateOnly(don.ngayDat);
-    if (
-      (!fromDate || ngay >= fromDate) &&
-      (!toDate || ngay <= toDate) &&
-      don.trangThai !== "da-huy" &&
-      don.trangThaiQuanTri !== "huy"
-    ) {
+    // "Đã bán" = đơn đã GIAO thành công, tính theo ngày giao (cùng nghĩa với cột Đã bán ở chế độ thường)
+    const ngay = toDateOnly(don.ngayGiao || don.ngayDat);
+    if ((!fromDate || ngay >= fromDate) && (!toDate || ngay <= toDate) && don.trangThaiQuanTri === "daGiao") {
       (don.chiTiet || []).forEach((sp) => {
         saleMap[sp.maSanPham] = (saleMap[sp.maSanPham] || 0) + (Number(sp.soLuong) || 0);
       });

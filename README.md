@@ -187,13 +187,14 @@ Giá/tên/ảnh được lấy lại từ `productsLocal` mỗi lần đọc gi�
   khachHang: { maKhachHang, hoTen, thuDienTu, soDienThoai },           // Không lưu mật khẩu
   chiTiet: [ { maSanPham, tenSanPham, maLoai, hinhAnh, giaHienThi, donGia, kichCoDaChon, soLuong } ],
   phuongThucThanhToan: "COD" | "PayBank" | "Shop",
-  trangThaiThanhToan: "unpaid" | "paid" | "refund", // PayBank xác nhận = "paid"; giao thành công = "paid"; hủy đơn đã trả tiền = "refund"
+  trangThaiThanhToan: "unpaid" | "paid" | "refund" | "refunded", // PayBank xác nhận = "paid"; giao thành công = "paid"; hủy đơn đã trả tiền = "refund"; Admin xác nhận đã hoàn tiền = "refunded"
   tamTinh: 1290000, tienVanChuyen: 30000,
   giaHienThi: "1.320.000đ", tongTien: 1320000, phiVanChuyen: "30.000đ",
   ngayDat: "2026-09-15T...",
   trangThai: "cho-xac-nhan" | "dang-giao" | "thanh-cong" | "da-huy",
   trangThaiQuanTri: "moiDat" | "daXuLy" | "daGiao" | "huy",   // Luôn khớp với trangThai
-  daTruKho: true                                    // Đã trừ kho chưa (tránh trừ/hoàn kho hai lần)
+  daTruKho: true,                                   // Đã trừ kho chưa (tránh trừ/hoàn kho hai lần)
+  ngayGiao, ngayHuy, ngayHoanTien                   // Admin ghi khi giao / hủy / xác nhận hoàn tiền (ISO)
 }
 ```
 
@@ -201,8 +202,9 @@ Giá/tên/ảnh được lấy lại từ `productsLocal` mỗi lần đọc gi�
 ```js
 {
   maDonHang, ngayDat, tenNguoiNhan, soDienThoaiNhan, diaChiGiaoHang, thuDienTuNguoiNhan,
-  chiTiet: [ { maSanPham, tenSanPham, kichCoDaChon, soLuong, donGia, daTra } ],
+  chiTiet: [ { maSanPham, tenSanPham, kichCoDaChon, soLuong, donGia, giaVon, daTra } ],   // giaVon: giá nhập chốt lúc giao
   tongTien, trangThaiQuanTri, phuongThucThanhToan, trangThaiThanhToan, daTruKho,
+  ngayGiao, ngayHuy, ngayHoanTien,
   tienVanChuyen, maKhachHang, hoTen, ghiChu
 }
 ```
@@ -230,10 +232,13 @@ Giá/tên/ảnh được lấy lại từ `productsLocal` mỗi lần đọc gi�
   maPhieuNhap: "PN1726500000000",
   ngayNhap: "2026-09-15",
   chiTiet: [
-    { maSanPham: "SH-001", tenSanPham: "...", soLuongNhap: 10, giaNhap: 903000, thanhTien: 9030000 }
+    { maSanPham: "SH-001", kichCo: "40", tenSanPham: "...", soLuongNhap: 10, giaNhap: 903000, thanhTien: 9030000 }
   ],
   tongTien: 45150000,
-  trangThai: "hoanThanh" | "chuaHoanThanh"
+  nhaCungCap: "Công ty ABC", nguoiLap: "admin",           // bắt buộc khi lập phiếu
+  trangThai: "hoanThanh" | "chuaHoanThanh" | "daHuy",
+  nguoiDuyet, ngayHoanThanh,                       // khi hoàn thành
+  ngayHuy, nguoiHuy                                // khi hủy phiếu đã hoàn thành
 }
 ```
 
@@ -308,7 +313,7 @@ Giá/tên/ảnh được lấy lại từ `productsLocal` mỗi lần đọc gi�
 ┌─────────────────────────────────────────────────────────────────────┐
 │ 2. ADMIN TẠO PHIẾU NHẬP HÀNG (gõ mã SP, nhập số lượng, hoàn thành) │
 │    Khi phiếu chuyển sang "Hoàn thành" (chỉ lần đầu):                │
-│       ShopCore.adjustStock(sp, "", +SL) → chia đều vào các size     │
+│       ShopCore.adjustStock(sp, size, +SL) → cộng đúng size dòng   
 │       tongDaNhap += SL                                          │
 └────────────────────────────┬────────────────────────────────────────┘
                              ▼
@@ -532,7 +537,7 @@ Trang thành công / hóa đơn luôn hiển thị **đơn mới nhất của ch
 
 | Thao tác | Chi tiết |
 |---|---|
-| **Thêm mới** | Modal: ảnh (nén ≤ 400px, lưu base64), mã SP (check trùng), tên, danh mục, giới tính, màu, chất liệu, phong cách, giá nhập, mô tả và **Size & tồn kho theo size**. Sản phẩm mới có `priceValue: 0` nên chưa hiện ở User cho tới khi đặt giá |
+| **Thêm mới** | Modal: ảnh (nén ≤ 400px, lưu base64), mã SP (check trùng), tên, danh mục, giới tính, màu, chất liệu, phong cách, giá nhập (> 0), mô tả và **danh sách size sẽ bán** (phải chọn ít nhất 1 size). **Không nhập tồn kho ở đây**: sản phẩm mới có `soLuongTon = 0`, `tongDaNhap = 0`, `giaBan = 0`; hàng chỉ vào kho qua **Phiếu nhập hàng** |
 | **Chỉnh sửa** | Modal sửa thông tin + ảnh; mở ra hiển thị đúng các size đang có; nếu giá trị có trong dữ liệu mà chưa có trong ô chọn (màu Đỏ/Xám/Be, "Thời trang", "Unisex"...) vẫn được giữ, không bị lưu thành rỗng |
 | **Xóa** | Confirm → xóa khỏi danh sách |
 | **Ẩn/Hiện** | Click ô ✔/trống để đổi `trangThaiHienThi` |
@@ -541,7 +546,7 @@ Trang thành công / hóa đơn luôn hiển thị **đơn mới nhất của ch
 - **Tạo nhanh:** nút *Nữ 35–40*, *Nam 38–44*, *Phổ thông 36–44*, *Rộng 35–45*.
 - **Khoảng size:** nhập *Từ size / Đến size / SL mỗi size* rồi bấm **Tạo size** (SL mỗi size là số lượng ban đầu cho các size mới tạo; size đã có giữ nguyên số lượng).
 - **Từng size:** ô số lượng có nút **−/+**, nhập trực tiếp, nút **×** xóa size; Enter nhảy sang size kế tiếp; size 0 đôi tô đỏ nhạt.
-- **Đặt tất cả = N → Áp dụng:** gán cùng một số lượng cho mọi size; **Xóa hết size**.
+- **Đặt tất cả = N → Áp dụng:** gán cùng một số lượng cho mọi size; **Xóa hết size**. Trình này **không cho sửa số lượng tồn** ở cả form **Thêm** (chỉ chọn size) lẫn form **Sửa** (hiện "Tồn: N" chỉ đọc; chỉ được thêm size mới = 0, hoặc bỏ size đã hết hàng — bỏ size còn hàng bị chặn). Tồn kho chỉ tăng qua **Phiếu nhập hàng** và giảm khi bán/hủy đơn.
 - Dòng tổng kết: *Tổng N đôi · M size*. `kichCo` (vd "38 - 44") và `soLuongTon` được tự tính.
 - Xóa hết size của sản phẩm đang có size sẽ hỏi xác nhận rồi đưa tồn kho về 0.
 
@@ -553,20 +558,25 @@ Trang thành công / hóa đơn luôn hiển thị **đơn mới nhất của ch
 
 - Bảng phiếu 10/trang (phiếu "chưa hoàn thành" lên trên); lọc theo trạng thái, mã phiếu, khoảng ngày; xem chi tiết.
 
-**Tạo phiếu:** chọn ngày → nhập mã SP (autocomplete theo mã/tên) → nhập số lượng → thành tiền tự tính → "+ Thêm dòng" → chọn trạng thái → Lưu.
+**Tạo phiếu:** chọn ngày nhập (không được ở tương lai) → nhập **nhà cung cấp** (bắt buộc) → mỗi dòng: mã SP (autocomplete) → **chọn size** (bắt buộc nếu sản phẩm có size) → **giá nhập của lô** (gợi ý từ giá vốn hiện tại, sửa được) → số lượng (số nguyên > 0) → thành tiền tự tính → "+ Thêm dòng" → chọn trạng thái → Lưu. Phiếu ghi `nguoiLap`.
 
 **Khi phiếu chuyển sang "Hoàn thành" (chỉ tính lần đầu, lưu lại nhiều lần không cộng trùng):**
-- Số lượng nhập được **chia đều vào các size đang có hàng** của sản phẩm (nếu chưa size nào có hàng thì chia đều mọi size; `ShopCore.adjustStock`), nên khách thật sự thấy thêm hàng; `soLuongTon` luôn bằng tổng `tonKhoTheoSize`.
-- `tongDaNhap += soLuongNhap`; nếu sản phẩm chưa có giá bán thì tự đặt giá theo % lợi nhuận mặc định.
+- Số lượng cộng **đúng size của dòng** (`ShopCore.adjustStock`); `soLuongTon` luôn bằng tổng `tonKhoTheoSize`. Dòng của phiếu mẫu cũ không có size thì chia đều vào các size đang có hàng.
+- `tongDaNhap += soLuongNhap`; ghi `nguoiDuyet`, `ngayHoanThanh`.
+- **Giá vốn bình quân gia quyền:** `giaNhap mới = (tồn cũ × giá vốn cũ + SL nhập × giá lô) / (tồn cũ + SL nhập)` (tồn cũ = 0 thì lấy giá lô).
+- Sản phẩm chưa có giá bán → tự đặt giá theo % lợi nhuận mặc định; sản phẩm đã có giá bán thấp hơn giá vốn mới → hiện cảnh báo cập nhật ở Quản lý giá bán.
+- Nếu một dòng trỏ tới sản phẩm không còn tồn tại thì **chặn hoàn thành** (không bỏ qua im lặng).
 
-**Sửa phiếu:** chỉ sửa được phiếu "Chưa hoàn thành"; giữ giá nhập lịch sử. **Xóa phiếu:** có confirm.
+**Sửa / xóa:** chỉ phiếu "Chưa hoàn thành" sửa và xóa được.
+
+**Hủy phiếu đã hoàn thành** (nút "Hủy phiếu"): trừ lại đúng số lượng đã nhập ở đúng size và giảm `tongDaNhap`; **chỉ hủy được khi kho còn đủ** (hàng đã bán/xuất thì từ chối và nói rõ sản phẩm, size còn bao nhiêu). Phiếu chuyển `daHuy` (ghi `ngayHuy`, `nguoiHuy`), không sửa/xóa/hoàn thành lại; giá vốn không bị tính lại. Danh sách có bộ lọc "Đã hủy"; "Xem" hiển thị nhà cung cấp, người lập, người duyệt, trạng thái.
 
 ### 7.5 Quản Lý Tồn Kho
 
 **Section:** `page-inventory` · **File JS:** `TonKho.js`
 
 - **Ngưỡng sắp hết hàng** (1–1000, mặc định 10) lưu ở `nguongSapHet`.
-- **Bảng tồn kho** 10/trang: Mã SP + trạng thái, ảnh, tên, **Tồn kho**, **Tồn theo size**, Nhập, Đã bán, Giá bán, Giá trị tồn (**theo giá nhập**: `giaNhap × soLuongTon`).
+- **Bảng tồn kho** 10/trang: Mã SP + trạng thái, ảnh, tên, **Tồn kho**, **Tồn theo size**, Nhập, Đã bán (đơn đã giao), **Chờ giao** (đơn đã đặt nhưng chưa giao, đã bị trừ khỏi tồn kho; có `Nhập − Đã bán − Chờ giao = Tồn`), Giá bán, Giá trị tồn (**theo giá nhập**: `giaNhap × soLuongTon`). Lọc theo ngày: "Đã bán" = đơn **đã giao** trong khoảng ngày giao.
 - **Cột "Tồn theo size":** mỗi size là một ô nhỏ *size + số đôi*: xanh = bình thường, vàng = còn ≤ 2 đôi, đỏ (gạch size) = hết; dòng tóm tắt "N size · còn hàng X/N".
 - **Bộ lọc kết hợp được với nhau:** danh mục, trạng thái (Bình thường / Sắp hết / Hết hàng), **"Còn hàng size …"**, tìm theo mã/tên (lọc ngay khi gõ), lọc theo ngày nhập/bán; khi dữ liệu thay đổi, bộ lọc đang chọn được giữ nguyên.
 - Cập nhật realtime khi có thay đổi (đặt hàng, nhập hàng, hủy đơn, tab khác).
@@ -589,6 +599,9 @@ Trang thành công / hóa đơn luôn hiển thị **đơn mới nhất của ch
   - `daGiao`: cộng `tongDaBan`; rời `daGiao` thì trừ lại.
   - `huy`: **hoàn kho đúng size** (chỉ một lần nhờ cờ `daTruKho`); khôi phục đơn đã hủy sẽ kiểm tra còn đủ hàng rồi trừ kho lại.
   - Cập nhật cả `trangThaiQuanTri` lẫn `trangThai` của User và phát `orderStatusChanged`.
+- **Mốc thời gian & giá vốn (Admin ghi thêm sau khi đổi trạng thái):** `daGiao` → `ngayGiao` + `chiTiet[].giaVon` (giá nhập tại thời điểm giao, dùng cho báo cáo lợi nhuận); `huy` → `ngayHuy`.
+- **Phân quyền:** nhân viên **CSKH chỉ được hủy đơn** (xử lý khiếu nại); xác nhận/giao hàng do Admin hoặc bộ phận bán hàng.
+- **Hoàn tiền:** đơn đã thanh toán rồi bị hủy có `trangThaiThanhToan = "refund"` (hiện trong bảng và chi tiết); nút **"Xác nhận đã hoàn tiền"** chuyển sang `refunded` + `ngayHoanTien`.
 - Admin không còn tự động xóa đơn khi mở trang.
 
 ### 7.8 Quản Lý Khách Hàng
@@ -610,7 +623,7 @@ Trang thành công / hóa đơn luôn hiển thị **đơn mới nhất của ch
 
 **Section:** `page-reports` · **File JS:** `doanhthu.js`
 
-- **Thẻ thống kê:** tổng doanh thu, số đơn, giá trị TB/đơn, số lượng bán.
+- **Thẻ thống kê:** tổng doanh thu, số đơn, giá trị TB/đơn, số lượng bán, **giá vốn hàng bán** và **lợi nhuận gộp** (doanh thu − giá vốn, kèm biên %). Doanh thu tính theo **ngày giao hàng** (`ngayGiao`; đơn cũ chưa có thì dùng ngày đặt). Giá vốn từng dòng hàng được **chốt lúc Admin chuyển đơn sang "Đã giao"** (`chiTiet[].giaVon` = giá nhập lúc đó); dòng chưa có thì ước tính theo giá nhập hiện tại và báo rõ trên màn hình.
 - **Biểu đồ cột** doanh thu theo ngày/tuần/tháng/năm; **Top sản phẩm bán chạy**; **chi tiết doanh thu từng sản phẩm** (chỉ tính sản phẩm thuộc danh mục hiện tại).
 - Lọc theo khoảng thời gian; loại trừ đơn `huy`/`da-huy`; hỗ trợ cả `items` và `product`; tự refresh khi có đơn mới.
 
@@ -758,8 +771,8 @@ Dùng để vẽ **Use Case Diagram** đầy đủ cho 2 hệ thống con: **Use
 | UC-18 | Đăng nhập Admin | Ghi nhớ đăng nhập, timeout 24h |
 | UC-19 | Xem Dashboard | Khách, sản phẩm, đơn hàng, doanh thu |
 | UC-20 | Quản lý sản phẩm | Thêm/sửa/xóa/Ẩn-Hiện; nhập size & tồn kho theo size |
-| UC-21 | Quản lý phiếu nhập hàng | Tạo/sửa/xóa/xem; autocomplete chọn SP |
-| UC-22 | Hoàn thành phiếu nhập | Cộng tồn kho vào các size + `tongDaNhap` |
+| UC-21 | Quản lý phiếu nhập hàng | Tạo/sửa/xóa/xem theo size, giá lô, nhà cung cấp; hủy phiếu đã hoàn thành |
+| UC-22 | Hoàn thành phiếu nhập | Cộng tồn kho đúng size + `tongDaNhap`, cập nhật giá vốn bình quân gia quyền |
 | UC-23 | Quản lý tồn kho | Tồn theo size, ngưỡng sắp hết, lọc theo size/ngày |
 | UC-24 | Quản lý giá bán | % lợi nhuận, cập nhật đồng loạt |
 | UC-25 | Quản lý đơn hàng | Xem/lọc, đổi trạng thái, hủy đơn (hoàn kho theo size) |
@@ -856,7 +869,7 @@ Mô tả từng bước chạy của từng chức năng, chia theo phía **User
 #### U-09. Đăng nhập / đăng xuất
 1. `login.html`: nhập email hoặc tên đăng nhập + mật khẩu → so khớp `userList`.
 2. Tài khoản bị khóa (`biKhoa` hoặc `trangThai = blocked`) → chặn. Thành công → `setCurrentUser`, xóa địa chỉ đã chọn và đơn chuyển khoản tạm của người trước → về trang chủ.
-3. Mỗi lần gọi `getCurrentUser()`: lấy bản ghi mới nhất trong `userList` (bản ghi Admin sửa luôn thắng), nếu đã bị khóa thì đăng xuất ngay.
+3. Mỗi lần gọi `getCurrentUser()`: lấy bản ghi mới nhất trong `userList` (bản ghi Admin sửa luôn thắng). **Khi Admin khóa/xóa tài khoản đang đăng nhập** (phát hiện tức thì ở tab khác nhờ sự kiện `storage`, ngoài ra kiểm tra mỗi 3 giây): khách bị đăng xuất ngay và hiện popup **"Tài khoản đã bị ngừng hoạt động"**, bấm "Đã hiểu" hoặc sau 6 giây tự chuyển về `login.html` (giỏ hàng tạm cũng được xóa).
 4. Đăng xuất (header, có xác nhận): xóa phiên, địa chỉ đã chọn, đơn chuyển khoản tạm.
 
 #### U-10. Quên mật khẩu / đổi mật khẩu
@@ -884,7 +897,7 @@ Mô tả từng bước chạy của từng chức năng, chia theo phía **User
 #### A-01. Đăng nhập, phân quyền và phiên làm việc
 1. Admin vào `DangNhap_Admin.html`; nhân viên vào `DangNhap_NhanVien.html` (kiểm tra `employeeList`, chặn tài khoản khóa). Mỗi bên đăng nhập sẽ xóa phiên của bên kia.
 2. Vào `TrangChu_Admin.html` (SPA): `admin-spa-nav.js` ẩn menu và chặn route không thuộc chức vụ (bán hàng, kho, CSKH, kiểm kho); truy cập thẳng route cấm tự về trang chính.
-3. Phiên có hạn 24 giờ; mỗi 60 giây và mỗi lần đọc phiên, hệ thống kiểm tra lại nhân viên: bị khóa/xóa → đăng xuất; đổi chức vụ → quyền đổi theo.
+3. Phiên có hạn 24 giờ. Hệ thống kiểm tra lại nhân viên khi Admin lưu danh sách nhân viên (sự kiện `storage`, tức thì ở tab khác), mỗi 3 giây, khi quay lại tab và mỗi lần đọc phiên: **tài khoản bị khóa/xóa → đăng xuất ngay và hiện popup "Tài khoản đã bị ngừng hoạt động"** (bấm "Đã hiểu" hoặc tự chuyển sau 6 giây về `DangNhap_NhanVien.html`); đổi chức vụ → quyền đổi theo.
 4. Đăng xuất → về đúng trang đăng nhập của vai trò.
 
 #### A-02. Dashboard
@@ -892,7 +905,7 @@ Mô tả từng bước chạy của từng chức năng, chia theo phía **User
 2. Thẻ doanh thu và số khách chỉ hiện với Admin, ẩn với nhân viên.
 
 #### A-03. Quản lý sản phẩm
-1. **Thêm:** bấm thêm → nhập mã (không trùng), tên, loại, giới tính, màu, chất liệu, phong cách, giá nhập (> 0), mô tả, ảnh (nén ≤ 400px), **size & tồn kho** bằng trình chọn size → lưu (`giaBan = 0` nên chưa hiện ở User).
+1. **Thêm:** bấm thêm → nhập mã (không trùng), tên, loại, giới tính, màu, chất liệu, phong cách, giá nhập (> 0), mô tả, ảnh (nén ≤ 400px), **danh sách size sẽ bán** (phải chọn ≥ 1 size; **không nhập tồn kho**, kho = 0) → lưu (`giaBan = 0` nên chưa hiện ở User; hàng vào kho qua Phiếu nhập hàng).
 2. **Sửa:** mở form với dữ liệu hiện có (giữ cả giá trị không có trong ô chọn) → lưu.
 3. **Xóa:** bị chặn nếu sản phẩm nằm trong đơn chưa hoàn tất hoặc phiếu nhập chưa hoàn thành; chỉ nằm trong lịch sử thì xác nhận rồi xóa.
 4. **Ẩn/Hiện:** bấm ô ✔ đổi `trangThaiHienThi`. Sản phẩm "hiện" nhưng chưa lên cửa hàng (chưa có giá / hết hàng / loại bị ẩn) có nhãn giải thích.
@@ -904,12 +917,12 @@ Mô tả từng bước chạy của từng chức năng, chia theo phía **User
 3. Lưu → `tonKhoTheoSize`, `soLuongTon` (= tổng) và `kichCo` được tự tính.
 
 #### A-05. Phiếu nhập hàng
-1. **Tạo phiếu:** chọn ngày → gõ mã/tên sản phẩm (gợi ý) → nhập số lượng → thành tiền tự tính → thêm dòng → chọn trạng thái → lưu.
-2. **Hoàn thành** (chọn trạng thái "Hoàn thành" khi lưu, hoặc bấm ô "Hoàn thành" của phiếu đang chờ): chỉ tính **một lần** → số lượng chia vào các size đang có hàng, `tongDaNhap` tăng; sản phẩm chưa có giá thì tự đặt giá theo % lợi nhuận mặc định.
-3. Phiếu chưa hoàn thành sửa / xóa được; phiếu đã hoàn thành chỉ xem. Sửa phiếu rồi thêm phiếu mới không còn ghi đè phiếu cũ.
+1. **Tạo phiếu:** chọn ngày (không tương lai) → nhập nhà cung cấp → gõ mã/tên sản phẩm (gợi ý) → chọn size → nhập giá nhập của lô → nhập số lượng → thành tiền tự tính → thêm dòng → chọn trạng thái → lưu.
+2. **Hoàn thành** (chọn trạng thái "Hoàn thành" khi lưu, hoặc bấm ô "Hoàn thành" của phiếu đang chờ): chỉ tính **một lần** → cộng đúng size, `tongDaNhap` tăng, giá vốn tính bình quân gia quyền; sản phẩm chưa có giá thì tự đặt giá theo % lợi nhuận, đã có giá nhưng thấp hơn giá vốn mới thì cảnh báo.
+3. Phiếu chưa hoàn thành sửa / xóa được; phiếu đã hoàn thành chỉ xem hoặc **Hủy phiếu** (trừ lại kho nếu còn đủ hàng). Sửa phiếu rồi thêm phiếu mới không còn ghi đè phiếu cũ.
 
 #### A-06. Tồn kho
-1. Bảng tồn kho hiển thị tồn tổng, tồn theo từng size (xanh / vàng ≤ 2 đôi / đỏ hết), đã nhập, đã bán, giá bán và giá trị tồn (theo giá nhập).
+1. Bảng tồn kho hiển thị tồn tổng, tồn theo từng size (xanh / vàng ≤ 2 đôi / đỏ hết), đã nhập, đã bán (đơn đã giao), **chờ giao** (đơn đã đặt chưa giao, đã trừ khỏi tồn), giá bán và giá trị tồn (theo giá nhập).
 2. Bộ lọc **kết hợp**: loại, trạng thái (bình thường / sắp hết theo ngưỡng / hết hàng), "còn hàng size …", từ khóa mã hoặc tên, khoảng ngày nhập/bán.
 3. Dữ liệu đổi (đặt hàng, nhập hàng, hủy đơn, tab khác) → bảng vẽ lại nhưng giữ bộ lọc.
 
@@ -928,7 +941,8 @@ Mô tả từng bước chạy của từng chức năng, chia theo phía **User
 2. Danh sách mới nhất trước; lọc theo ngày, trạng thái, mã đơn; "Xem" mở chi tiết (khách, địa chỉ, sản phẩm kèm size, thanh toán, phí ship).
 3. **Đổi trạng thái** chỉ theo chiều hợp lệ: `moiDat → daXuLy | huy`, `daXuLy → daGiao | huy`; `daGiao` và `huy` là cuối. Thực hiện qua `ShopCore.setOrderStatus`:
    - `daGiao`: cộng `tongDaBan`, đánh dấu `paid`.
-   - `huy`: hoàn kho đúng size một lần; đơn đã trả tiền chuyển `refund`.
+   - `huy`: hoàn kho đúng size một lần; đơn đã trả tiền chuyển `refund`, Admin bấm "Xác nhận đã hoàn tiền" khi đã trả lại khách (`refunded`).
+   - Khi giao: ghi `ngayGiao` và chốt `giaVon` từng dòng. CSKH chỉ được hủy đơn.
 4. Cập nhật cả `trangThai` (User) lẫn `trangThaiQuanTri` → phát `orderStatusChanged` → lịch sử đơn của khách tự cập nhật.
 
 #### A-10. Khách hàng
@@ -943,8 +957,9 @@ Mô tả từng bước chạy của từng chức năng, chia theo phía **User
 3. Khóa hoặc đổi chức vụ có hiệu lực ngay với phiên nhân viên đang mở (xem A-01).
 
 #### A-12. Báo cáo doanh thu
-1. Chọn kỳ (ngày / tuần / tháng / năm) và khoảng thời gian → lọc đơn **đã giao** theo giờ địa phương.
-2. Doanh thu = tổng `donGia × soLuong` các dòng (không tính ship). Hiển thị: tổng doanh thu, số đơn, giá trị TB/đơn, số lượng bán, biểu đồ cột, top sản phẩm bán chạy và doanh thu từng sản phẩm (giữ cả sản phẩm đã xóa).
+1. Chọn kỳ (ngày / tuần / tháng / năm) và khoảng thời gian → lọc đơn **đã giao** theo **ngày giao** (`ngayGiao`; đơn cũ chưa có thì dùng ngày đặt), giờ địa phương.
+2. Doanh thu = tổng `donGia × soLuong` các dòng (không tính ship). Hiển thị: tổng doanh thu, số đơn, giá trị TB/đơn, số lượng bán, **giá vốn hàng bán**, **lợi nhuận gộp** (= doanh thu − giá vốn, kèm biên %), biểu đồ cột, top sản phẩm bán chạy và doanh thu + lợi nhuận từng sản phẩm (giữ cả sản phẩm đã xóa).
+3. Giá vốn từng dòng lấy từ `chiTiet[].giaVon` (chốt lúc Admin bấm "Đã giao"). Dòng chưa có thì ước tính theo giá nhập hiện tại, dòng không xác định được thì tính 0; cả hai trường hợp đều có ghi chú dưới các thẻ.
 
 #### A-13. Phản hồi và đánh giá (CSKH / Admin)
 1. Vào **Phản hồi đánh giá** (huy hiệu đỏ báo số đánh giá mới): lọc theo trạng thái, số sao, ảnh/video, người xử lý, từ khóa; sắp xếp; 8 phản hồi/trang.
@@ -1039,6 +1054,7 @@ RESEND_API_KEY=re_xxxxxxxxx
 EMAIL_FROM=Shoe Store <onboarding@resend.dev>
 OTP_TTL_SECONDS=300
 OTP_MAX_ATTEMPTS=5
+OTP_DEV_MODE=false
 ```
 
 Ý nghĩa các biến:
@@ -1048,6 +1064,8 @@ OTP_MAX_ATTEMPTS=5
 - `EMAIL_FROM`: địa chỉ và tên người gửi; phải là địa chỉ/domain được Resend chấp nhận.
 - `OTP_TTL_SECONDS`: thời gian OTP còn hiệu lực, mặc định 300 giây.
 - `OTP_MAX_ATTEMPTS`: số lần nhập OTP sai tối đa, mặc định 5 lần.
+- `OTP_DEV_MODE`: đặt `true` để **thử không cần Resend**: server không gửi email mà **in mã OTP ra cửa sổ chạy server** (`[OTP_DEV_MODE] Mã OTP ...`), bạn nhập mã đó vào form. Chỉ dùng khi phát triển/thử; khi chạy thật để `false`.
+- Lưu ý Resend bản thử (`onboarding@resend.dev`) **chỉ gửi được tới email dùng đăng ký tài khoản Resend**; gửi cho email khác phải xác minh tên miền trong Resend → Domains.
 
 Không commit `server/.env`, không gửi API key lên GitHub và không đưa API key vào JavaScript frontend. File `server/.gitignore` đã được cấu hình để bỏ qua `.env`.
 

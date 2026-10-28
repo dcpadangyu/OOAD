@@ -29,11 +29,13 @@
             maDonHang: o.maDonHang,
             ngayDat: o.ngayDat || new Date().toISOString(),
             tenNguoiNhan: o.tenNguoiNhan ? o.tenNguoiNhan : (extractedUserName || "Khách vãng lai"),
+            ngayGiao: o.ngayGiao,
             chiTiet: (o.chiTiet || []).map((p) => ({
               maSanPham: p.maSanPham,
               tenSanPham: p.tenSanPham,
               soLuong: p.soLuong,
               donGia: p.donGia,
+              giaVon: p.giaVon,
             })),
             tongTien: o.tongTien || 0,
             trangThaiQuanTri: o.trangThaiQuanTri || (window.ShopCore && window.ShopCore.USER_TO_ADMIN ? window.ShopCore.USER_TO_ADMIN[o.trangThai] : "") || (o.trangThai === "da-huy" ? "huy" : "moiDat"),
@@ -76,6 +78,30 @@
     return getSaleItems(o).reduce((s, it) => s + (Number(it.donGia) || 0) * (Number(it.soLuong) || 0), 0);
   }
 
+  // Ngày ghi nhận doanh thu = ngày GIAO hàng (đơn cũ chưa có ngày giao thì dùng ngày đặt)
+  function ngayTinh(o) {
+    return o.ngayGiao || o.ngayDat;
+  }
+
+  // Giá vốn hiện tại của sản phẩm (dùng ước tính cho dòng hàng chưa lưu giá vốn lúc giao)
+  function layBangGiaVon() {
+    const map = {};
+    try {
+      (typeof getLocalProducts === "function" ? getLocalProducts() : []).forEach((p) => {
+        map[p.maSanPham] = Number(p.giaNhap) || 0;
+      });
+    } catch (e) { /* noop */ }
+    return map;
+  }
+
+  // Giá vốn 1 đơn vị của dòng hàng: ưu tiên giá vốn đã chốt lúc giao; không có thì ước tính theo giá vốn hiện tại
+  function giaVonDong(it, bang) {
+    if (it.giaVon !== undefined && it.giaVon !== null && Number(it.giaVon) > 0) return { cost: Number(it.giaVon), uocTinh: false, thieu: false };
+    const c = bang[it.maSanPham];
+    if (c > 0) return { cost: c, uocTinh: true, thieu: false };
+    return { cost: 0, uocTinh: true, thieu: true };
+  }
+
   // Báo cáo chỉ tính đơn đã giao
   function isDelivered(o) {
     return !!o && o.trangThaiQuanTri === "daGiao";
@@ -108,7 +134,10 @@
         <div class="BCDT_card"><div class="title">Số đơn</div><div id="BCDT_orders" class="value">0</div></div>
         <div class="BCDT_card"><div class="title">Giá trị TB/đơn</div><div id="BCDT_avg" class="value">0₫</div></div>
         <div class="BCDT_card"><div class="title">SL sản phẩm đã bán</div><div id="BCDT_qty" class="value">0</div></div>
+        <div class="BCDT_card"><div class="title">Giá vốn hàng bán</div><div id="BCDT_cogs" class="value">0₫</div></div>
+        <div class="BCDT_card"><div class="title">Lợi nhuận gộp</div><div id="BCDT_profit" class="value">0₫</div></div>
       </div>
+      <div id="BCDT_note" style="margin:-6px 0 14px;font-size:12px;color:#64748b;line-height:1.6"></div>
       <div class="BCDT_twoCols">
         <div class="BCDT_panel">
           <h4 id="BCDT_chartTitle">Doanh thu theo ngày</h4>
@@ -123,7 +152,7 @@
         <h4>Chi tiết doanh thu theo sản phẩm</h4>
         <div class="BCDT_tableWrap">
           <table class="BCDT_table BCDT_table-products">
-            <thead><tr><th>STT</th><th>Mã SP</th><th>Tên sản phẩm</th><th>SL bán</th><th>Giá bán</th><th>Doanh thu</th><th>% doanh thu</th></tr></thead>
+            <thead><tr><th>STT</th><th>Mã SP</th><th>Tên sản phẩm</th><th>SL bán</th><th>Giá bán</th><th>Doanh thu</th><th>% doanh thu</th><th>Lợi nhuận gộp</th></tr></thead>
             <tbody id="BCDT_productDetail"></tbody>
           </table>
         </div>
@@ -205,7 +234,11 @@
 
   function compute(orders, from, to) {
     // Chỉ tính đơn ĐÃ GIAO có ngày đặt hợp lệ; bỏ qua đơn có ngày lỗi
-    const filtered = orders.filter((o) => isDelivered(o) && within(o.ngayDat, from, to));
+    const filtered = orders.filter((o) => isDelivered(o) && within(ngayTinh(o), from, to));
+    const bangGiaVon = layBangGiaVon();
+    let cogs = 0;
+    let dongUocTinh = 0;
+    let dongThieu = 0;
     const total = filtered.reduce((s, o) => s + orderRevenue(o), 0);
     const count = filtered.length;
     const avg = count ? Math.round(total / count) : 0;
@@ -216,14 +249,19 @@
     let totalQty = 0;
 
     filtered.forEach((o) => {
-      const key = periodKey(new Date(o.ngayDat), viewType);
+      const key = periodKey(new Date(ngayTinh(o)), viewType);
       timeData[key] = (timeData[key] || 0) + orderRevenue(o);
 
       getSaleItems(o).forEach((it) => {
         const qty = it.soLuong || 0;
         const price = it.donGia || 0;
         const idKey = it.maSanPham || it.tenSanPham || "?";
-        if (!prod[idKey]) prod[idKey] = { id: idKey, name: it.tenSanPham || "Sản phẩm", qty: 0, rev: 0, price: price };
+        if (!prod[idKey]) prod[idKey] = { id: idKey, name: it.tenSanPham || "Sản phẩm", qty: 0, rev: 0, cogs: 0, price: price };
+        const gv = giaVonDong(it, bangGiaVon);
+        if (gv.thieu) dongThieu += 1;
+        else if (gv.uocTinh) dongUocTinh += 1;
+        cogs += gv.cost * qty;
+        prod[idKey].cogs += gv.cost * qty;
         prod[idKey].qty += qty;
         prod[idKey].rev += qty * price;
         prod[idKey].price = price || prod[idKey].price;
@@ -237,7 +275,9 @@
 
     const top = [...productDetail].sort((a, b) => b.qty - a.qty).slice(0, 8);
 
-    return { total, count, avg, totalQty, timeData, productDetail, top };
+    const profit = total - cogs;
+    const margin = total ? Math.round((profit / total) * 1000) / 10 : 0;
+    return { total, count, avg, totalQty, timeData, productDetail, top, cogs, profit, margin, dongUocTinh, dongThieu };
   }
 
   function renderChart(data) {
@@ -312,7 +352,7 @@
     const tb = document.getElementById("BCDT_productDetail");
     tb.innerHTML = "";
     if (!data.productDetail.length) {
-      tb.innerHTML = '<tr><td colspan="7" class="BCDT_empty">Chưa có dữ liệu bán hàng</td></tr>';
+      tb.innerHTML = '<tr><td colspan="8" class="BCDT_empty">Chưa có dữ liệu bán hàng</td></tr>';
       return;
     }
     data.productDetail.forEach((p, i) => {
@@ -324,7 +364,8 @@
         "<td>" + p.qty + "</td>" +
         "<td>" + currency(p.price) + "</td>" +
         "<td>" + currency(p.rev) + "</td>" +
-        "<td>" + p.share + "%</td>";
+        "<td>" + p.share + "%</td>" +
+        '<td style="' + (p.rev - p.cogs < 0 ? "color:#dc2626" : "") + '">' + currency(p.rev - p.cogs) + "</td>";
       tb.appendChild(tr);
     });
   }
@@ -334,6 +375,14 @@
     document.getElementById("BCDT_orders").textContent = String(data.count);
     document.getElementById("BCDT_avg").textContent = currency(data.avg);
     document.getElementById("BCDT_qty").textContent = String(data.totalQty);
+    document.getElementById("BCDT_cogs").textContent = currency(data.cogs);
+    const profitEl = document.getElementById("BCDT_profit");
+    profitEl.textContent = currency(data.profit) + (data.total ? " (" + data.margin + "%)" : "");
+    profitEl.style.color = data.profit < 0 ? "#dc2626" : "";
+    const notes = ["Doanh thu tính theo <b>ngày giao hàng</b>, chỉ đơn đã giao, không gồm phí vận chuyển. Lợi nhuận gộp = doanh thu − giá vốn hàng bán."];
+    if (data.dongUocTinh) notes.push("Có " + data.dongUocTinh + " dòng hàng chưa chốt giá vốn lúc giao nên giá vốn được <b>ước tính</b> theo giá vốn hiện tại.");
+    if (data.dongThieu) notes.push("Có " + data.dongThieu + " dòng hàng không xác định được giá vốn (sản phẩm đã xóa hoặc chưa có giá nhập) nên chưa tính vào giá vốn, lợi nhuận có thể bị cao hơn thực tế.");
+    document.getElementById("BCDT_note").innerHTML = notes.join("<br>");
     renderChart(data);
     renderTop(data);
     renderProducts(data);

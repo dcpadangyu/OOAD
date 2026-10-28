@@ -82,6 +82,14 @@ function setLoadingState(loading) {
   }
 }
 
+// Neu vua bi dang xuat vi tai khoan bi ngung hoat dong (ma chua kip hien popup), bao tren trang dang nhap.
+try {
+  if (sessionStorage.getItem("nvBiNgung") === "1") {
+    sessionStorage.removeItem("nvBiNgung");
+    showNotification("Tài khoản đã bị ngừng hoạt động. Vui lòng liên hệ quản trị viên.", "error");
+  }
+} catch (e) { /* bo qua */ }
+
 loginForm.addEventListener("submit", async function(e) {
   e.preventDefault();
   if (loginBtn.disabled) return; // đang xử lý một lần đăng nhập
