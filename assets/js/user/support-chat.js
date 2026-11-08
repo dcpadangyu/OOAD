@@ -101,12 +101,12 @@
     document.body.insertAdjacentHTML("beforeend", `
       <button class="support-chat-launcher" id="supportChatLauncher">💬 Hỗ trợ</button>
       <section class="support-chat-panel" id="supportChatPanel" aria-label="Chat hỗ trợ">
-        <div class="support-chat-head"><strong>Hỗ trợ khách hàng</strong><button id="supportChatClose" aria-label="Đóng">×</button></div>
+        <div class="support-chat-head"><strong>Hỗ trợ khách hàng</strong><button id="supportChatClose" style=" background: none; border: none; color: #000; font-size: 1.5em; cursor: pointer;" aria-label="Đóng">×</button></div>
         <div class="support-chat-status" id="supportChatStatus">Đang chờ nhân viên tiếp nhận</div>
         <div class="support-chat-messages" id="supportChatMessages"></div>
         <div class="support-chat-tools">
           <button type="button" id="supportChatImage">Ảnh</button>
-          <button type="button" id="supportChatProduct">Link sản phẩm</button>
+          <button type="button" id="supportChatProduct">Mã sản phẩm</button>
           <button type="button" id="supportChatCall">Gọi miễn phí</button>
           <input type="file" id="supportChatFile" accept="image/*" hidden>
         </div>
