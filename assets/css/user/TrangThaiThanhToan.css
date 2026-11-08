@@ -1,0 +1,638 @@
+#QR {
+    width: 50%;
+    height: 50%;
+}
+
+#color-red-madh {
+    color: red;
+}
+
+.thongtin {
+    font-weight: bold;
+    font-size: 20px;
+}
+
+.in4 {
+    padding-top: 20px;
+    width: 90%;
+}
+
+#Conten1 {
+    display: flex;
+    margin: 0;
+    width: 100%;
+}
+
+#Conten-right {
+    margin-left: 30px;
+    border: 2px solid #EBEBEB;
+    border-radius: 30px;
+    width: 100%;
+    background-color: aqua;
+    min-width: 600px;
+}
+
+#righ-center-conten {
+    margin-top: 20px;
+    margin-left: 20px;
+}
+
+.ck-faile button {
+    color: gray;
+    text-decoration: none;
+    display: block;
+    height: 30px;
+    line-height: 30px;
+    margin-bottom: 20px;
+    width: 100%;
+}
+
+.ck-faile {
+    background-color: #EBEBEB;
+    border-radius: 30px;
+    width: 40%;
+    justify-items: center;
+}
+
+#allck {
+    justify-items: center;
+}
+
+.ck-success button {
+    color: black;
+    text-decoration: none;
+    display: block;
+    height: 30px;
+    line-height: 30px;
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+.ck-success {
+    justify-items: center;
+    background-color: aqua;
+    border-radius: 30px;
+    width: 40%;
+    text-align: center;
+    margin-top: 10px;
+}
+
+.all-righ-center {
+    width: 45%;
+    margin-left: 20px;
+    margin-right: 20px;
+}
+
+#all-right-ck {
+    border: 2px solid #EBEBEB;
+    border-radius: 20px;
+    width: 40%;
+    margin-right: 30px;
+    margin-left: 30px;
+}
+
+#ThanhToan_ChuyenKhoan .item-info {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+#ThanhToan_ChuyenKhoan .item-name {
+    font-weight: bold;
+    width: 70%;
+}
+
+#ThanhToan_ChuyenKhoan .item-price {
+    color: red;
+    width: 15%;
+}
+
+#ThongTinMuaHang-html {
+    margin-bottom: 20px;
+}
+
+#ThanhToan_ChuyenKhaon.item-quantity {
+    width: 15%;
+    text-align: right;
+}
+
+#ThanhToan_ChuyenKhoan .cost-ship-thanhtoan {
+    display: flex;
+}
+
+#ThanhToan_ChuyenKhoan .display-flex-sp {
+    border-bottom: 2px solid #EBEBEB;
+}
+
+#ThanhToan_ChuyenKhoan .display-flex-tt {
+    border-bottom: 2px solid #EBEBEB;
+}
+
+#ThanhToan_ChuyenKhoan .item-name {
+    width: 60%;
+}
+
+#ThanhToan_ChuyenKhoan .SumCart-thanhtoan_tong {
+    width: 0%;
+}
+
+#ThanhToan_ChuyenKhoan .i4-thanhtoan {
+    width: 100%;
+    display: flex;
+}
+
+#ThanhToan_ChuyenKhoan .sumend-thanhtoan {
+    width: 70%;
+}
+
+.ndconten {
+    border: 2px solid #EBEBEB;
+    border-radius: 20px;
+    padding: 10px;
+    width: 95%;
+}
+
+#all-right-ch {
+    border-radius: 20px;
+    width: 25%;
+    margin-right: 30px;
+    margin-left: 30px;
+}
+
+#all-right-ck-end {
+    border-radius: 20px;
+    width: 30%;
+    margin-right: 30px;
+    margin-left: 30px;
+}
+
+#ThanhToan_CuaHang {
+    margin-left: 20px;
+}
+
+.conten-center-cod {
+    width: 100%;
+    display: flex;
+}
+
+.all-left-cod {
+    margin-left: 20px;
+    width: 60%;
+}
+
+.nut-home {
+    background-color: #EBEBEB;
+    width: 40%;
+    height: 40px;
+    text-align: center;
+    border-radius: 30px;
+    justify-items: center;
+}
+
+.nut-home a:hover {
+    background: rgba(0, 0, 0, 0.1);
+}
+
+.Home {
+    color: gray;
+    width: 100%;
+    border-radius: 30px;
+    line-height: 40px;
+    box-sizing: border-box;
+    cursor: pointer;
+    display: block;
+    text-decoration: none;
+}
+
+.all-left-center {
+    border: 2px solid #EBEBEB;
+    border-radius: 20px;
+    width: 55%;
+    margin-left: 30px;
+}
+
+.all-left-center .all-left {
+    width: 50%;
+    padding: 20px;
+}
+
+.all-left-center .all-right {
+    width: 80%;
+    border-radius: 30px;
+}
+
+#ThanhToan_ChuyenKhoan .display-flex {
+    padding: 10px;
+    border-bottom: 1px solid #EBEBEB;
+}
+
+#ThanhToan_TienMat .i4-thanhtoan {
+    width: 100%;
+    display: flex;
+}
+
+#ThanhToan_TienMat .sumend-thanhtoan {
+    width: 70%;
+}
+
+.KetThuc_cod {
+    justify-items: center;
+    width: 100%;
+}
+.conten-center {
+    display: flex;
+}
+
+#temp>div {
+    margin: 10px;
+}
+
+#temp {
+    font-size: 20px;
+    background-color: #EBEBEB;
+    border: 2px solid gray;
+    border-radius: 30px;
+}
+
+#all-left-ch {
+    width: 70%;
+}
+
+#ThanhToan_ThatBai {
+    width: 100%;
+    padding-top: 50px;
+    /* Đẩy xuống 1 chút */
+}
+
+#ThanhToan_ThatBai #tt_failed {
+    max-width: 500px;
+    /* Giới hạn chiều rộng */
+    margin: 0 auto;
+    /* Căn giữa */
+    padding: 40px 30px;
+    border: 1px solid #f0e0e0;
+    /* Viền đỏ nhạt */
+    border-radius: 10px;
+    background: #ffffff;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    text-align: center;
+}
+
+
+/* 2. Style cái icon "mặt mếu" */
+
+#ThanhToan_ThatBai #opss {
+    font-size: 60px;
+    color: #dc3545;
+    /* Màu đỏ "nguy hiểm" */
+    margin-bottom: 20px;
+    line-height: 1;
+    /* Cho nó đỡ chiếm chiều cao */
+}
+
+
+/* 3. Style dòng chữ thông báo */
+
+#ThanhToan_ThatBai #text-failed {
+    font-size: 22px;
+    /* Kích thước chữ chính */
+    color: #333;
+    font-weight: bold;
+    width: 100%;
+    line-height: 1.4;
+}
+
+
+/* 4. Reset cái div #nut (bỏ style cũ) */
+
+#ThanhToan_ThatBai #nut {
+    background-color: transparent;
+    /* Xóa nền xám */
+    border: none;
+    /* Xóa viền */
+    border-radius: 0;
+    width: auto;
+    /* Tự co giãn */
+    margin-top: 30px;
+    /* Khoảng cách với chữ */
+}
+
+
+/* 5. Style cái thẻ <a> (nút) cho đẹp */
+
+#ThanhToan_ThatBai #nut a {
+    display: inline-block;
+    /* Quan trọng: Biến <a> thành nút */
+    background: linear-gradient(90deg, #6c757d, #5a6268);
+    /* Gradient màu xám */
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    text-decoration: none;
+    border-radius: 8px;
+    /* Bo góc */
+    padding: 12px 30px;
+    /* Kích thước nút */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    transition: all 0.25s ease;
+    cursor: pointer;
+}
+
+#ThanhToan_ThatBai #nut a:hover {
+    transform: scale(1.05);
+    /* Hiệu ứng hover */
+    background: linear-gradient(90deg, #5a6268, #495057);
+}
+
+#ThanhToan_ThanhCong #nut {
+    background-color: transparent;
+    /* Xóa nền xám cũ */
+    border: none;
+    /* Xóa viền cũ */
+    border-radius: 0;
+    /* Xóa bo góc cũ */
+    width: auto;
+    /* Để tự co giãn */
+    margin-top: 20px;
+}
+
+#ThanhToan_ThanhCong #nut a {
+    display: inline-block;
+    /* Thay đổi từ block */
+    background: linear-gradient(90deg, #007BFF, #00BFFF);
+    /* Thêm màu gradient */
+    color: white;
+    /* Chữ trắng */
+    font-size: 16px;
+    font-weight: bold;
+    text-decoration: none;
+    border-radius: 8px;
+    /* Bo góc */
+    padding: 12px 30px;
+    /* Thêm padding */
+    box-shadow: 0 4px 10px rgba(0, 123, 255, 0.3);
+    transition: all 0.25s ease;
+    cursor: pointer;
+}
+
+#ThanhToan_ThanhCong #nut a:hover {
+    transform: scale(1.05);
+    /* Hiệu ứng hover */
+    background: linear-gradient(90deg, #0056b3, #0099ff);
+}
+
+#ThanhToan_ThanhCong {
+    width: 100%;
+}
+
+#ThanhToan_ThanhCong #tt_success {
+    max-width: 800px;
+    /* Giới hạn chiều rộng hóa đơn cho dễ đọc */
+    margin: 30px auto;
+    /* Tự động căn giữa */
+    padding: 30px;
+    border: 1px solid #e0e0e0;
+    border-radius: 10px;
+    background: #ffffff;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    text-align: left;
+    /* Căn trái nội dung bên trong */
+}
+
+#ThanhToan_ThanhCong #tick {
+    font-size: 24px;
+    color: #28a745;
+    /* Màu xanh lá thành công */
+    font-weight: bold;
+    text-align: center;
+    /* Căn giữa nội dung tick */
+    margin-bottom: 20px;
+    border-bottom: 1px dashed #ccc;
+    padding-bottom: 20px;
+}
+
+#ThanhToan_ThanhCong #tick div:first-child {
+    font-size: 36px;
+    /* Icon to hơn */
+}
+
+#ThanhToan_ThanhCong h2 {
+    text-align: center;
+    font-size: 22px;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+#ThanhToan_ThanhCong #text-center {
+    text-align: center;
+    /* Căn giữa phần Cảm ơn và nút Quay về */
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 1px dashed #ccc;
+}
+
+
+/* --- (1) KHUNG THÔNG TIN ĐƠN HÀNG (Địa chỉ) --- */
+
+.ndconten-hoadon {
+    background-color: #f9f9f9;
+    /* Xóa màu nền cũ */
+    border: 1px solid #eee;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 25px;
+}
+
+.ndconten-hoadon p {
+    margin: 8px 0;
+    line-height: 1.5;
+    color: #555;
+}
+
+.ndconten-hoadon p strong {
+    color: #333;
+    min-width: 120px;
+    display: inline-block;
+}
+
+.In4-hoadon {
+    font-size: 18px;
+    font-weight: bold;
+    color: #000;
+    margin-top: 0;
+    margin-bottom: 15px;
+}
+
+
+/* --- (2) KHUNG DANH SÁCH SẢN PHẨM --- */
+
+
+/* Header của danh sách (Sản phẩm | Tạm tính | Số lượng) */
+
+.display-flex-sp-hoadon {
+    display: flex;
+    justify-content: space-between;
+    font-weight: bold;
+    color: #333;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #EBEBEB;
+    margin-bottom: 15px;
+    background-color: transparent;
+    /* Xóa màu aqua */
+}
+
+.right-sanpham-donhang-hoadon {
+    width: 60%;
+}
+
+.temp_cost-donhang-hoadon {
+    width: 25%;
+    text-align: right;
+}
+
+.num_donhang-hoadon {
+    width: 15%;
+    text-align: right;
+}
+
+
+
+
+
+
+
+
+/* Tạm tính */
+
+.display-flex-tt-hoadon {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+    padding: 10px 0;
+    font-size: 16px;
+    background-color: transparent;
+    /* Xóa màu */
+}
+
+.sumend-hoadon {
+    font-weight: bold;
+    color: #555;
+}
+
+.SumCart-hoadon {
+    font-weight: bold;
+    color: #333;
+}
+
+
+/* Vận chuyển */
+
+.display-flex-ship-thanhtoan-hoadon {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 0;
+    border-bottom: 2px solid #EBEBEB;
+    font-size: 16px;
+    background-color: transparent;
+    /* Xóa màu */
+}
+
+.ship-hoadon {
+    font-weight: bold;
+    color: #555;
+}
+
+.cost-ship-hoadon {
+    text-align: right;
+}
+
+.cost-ship-hoadon .color-red {
+    font-weight: bold;
+}
+
+
+/* Tổng cuối cùng */
+
+.i4-hoadon {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 15px;
+    padding-top: 15px;
+    font-size: 20px;
+    /* Cho tổng to rõ */
+    font-weight: bold;
+    background-color: transparent;
+    /* Xóa màu */
+}
+
+.SumCart-hoadon_tong {
+    color: #d90000;
+    /* Màu đỏ đậm cho tổng cuối */
+}
+
+.list_danhsach .item-img,
+.list_danhsach .add-quantity,
+.list_danhsach .remove_item,
+.list_danhsach .remove-quantity
+{
+    display: none;
+}.list_danhsach .name-price-quantity,
+.list_danhsach .display-flex{
+    display: flex;
+    width: 90%;    
+}.list_danhsach .all-cart{
+    width: 100%;    
+}.list_danhsach .item-info{
+    display: flex;
+    border-bottom: 2px solid #EBEBEB;
+}
+.list_danhsach .item-info div:nth-child(3){
+    width: 15%;
+}
+.list_danhsach .quantity{
+    text-align: end;
+}.list_danhsach .item-info div:nth-child(2){
+    width: 15%;
+
+}
+.list_danhsach .item-price{
+    width: 20%;
+}.list_danhsach .item-info div:nth-child(1){
+    width: 70%;
+
+}
+.list_danhsach .item-name{
+width: 80%;
+}
+.item-quantity-all{
+    width: 10%;
+}
+
+.all-left-cod .Tongtien_thanhtoan{
+    margin-right: 20px;
+}
+.all-left-cod{
+    min-height: 400px;
+    border-right: 2px solid #EBEBEB;
+}
+#ThanhToan_TienMat .danhsach{
+    min-height: 200px;
+    border-bottom: 2px solid #e0e0e0;
+    margin-right: 20px;
+
+}
+#ThanhToan_CuaHang .danhsach{
+    min-height: 200px;
+    border-bottom: 2px solid #e0e0e0;
+    margin-right: 20px;
+
+}
+.allship div:nth-child(1){
+    width: 65%;
+}
+.allship{
+    display: flex;
+    border-bottom: 2px solid #EBEBEB;
+    margin-top: 10px;
+    margin-right: 20px;
+}

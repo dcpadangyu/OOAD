@@ -1,0 +1,58 @@
+#LichSuMuaHang {
+    max-width: 900px;
+    margin: 30px auto;
+    padding: 20px;
+    font-family: 'Times New Roman', Times, serif;
+}
+
+#LichSuMuaHang .cart_LichSu {
+    background-color: #fff;
+    border: 1px solid #e5e5e5;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    overflow: hidden;
+    font-family: sans-serif;
+}
+
+#LichSuMuaHang .maLichSu {
+    background-color: #f9fafb;
+    padding: 15px 20px;
+    border-bottom: 1px solid #eee;
+    display: flex;
+    flex-wrap: wrap;
+    font-size: 14px;
+    color: #555;
+    justify-content: space-between;
+}
+
+#LichSuMuaHang .all-cart {
+    padding: 15px 20px;
+    border-bottom: 1px dashed #eee;
+    display: flex;
+    align-items: center;
+}
+
+#LichSuMuaHang .item-img {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 5px;
+    border: 1px solid #f0f0f0;
+    margin-right: 20px;
+}
+
+#LichSuMuaHang .name-price-quantity { flex: 1; }
+#LichSuMuaHang .item-name { font-size: 16px; font-weight: 500; color: #333; margin-bottom: 5px; }
+#LichSuMuaHang .item-price { color: #d0021b; font-weight: 600; }
+#LichSuMuaHang .item-quantity-all { font-size: 14px; color: #666; margin-top: 5px; }
+#LichSuMuaHang .xemthembtn { display:block; width:100%; padding:10px; background-color:#f8f9fa; border:none; border-top:1px solid #eee; color:#007bff; cursor:pointer; font-weight:500; }
+#LichSuMuaHang .xemthembtn:hover { background-color:#e9ecef; }
+#LichSuMuaHang .diachixemthem { display:none; padding:20px; background-color:#fafafa; border-top:1px solid #eee; }
+#LichSuMuaHang .address_all > div { display:flex; margin-bottom:8px; font-size:14px; }
+#LichSuMuaHang .address_all > div > div:first-child { width:140px; font-weight:500; color:#666; }
+#LichSuMuaHang .address_all > div > div:last-child { flex:1; color:#333; font-weight:600; }
+#LichSuMuaHang .trangThaiDonHang { display:flex; justify-content:center; align-items:center; padding:20px; background-color:#fff; gap:10px; font-weight:500; width:100%; }
+#LichSuMuaHang .dkhuy { padding:0 20px 20px; text-align:right; }
+#LichSuMuaHang .huyDon-btn { background-color:#dc3545; color:white; border:none; padding:8px 20px; border-radius:4px; cursor:pointer; font-weight:600; transition:background 0.2s; }
+#LichSuMuaHang .huyDon-btn:hover { background-color:#c82333; }

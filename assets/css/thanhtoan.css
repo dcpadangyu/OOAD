@@ -1,0 +1,488 @@
+.Succes{
+    pointer-events: none;
+}body{
+    font-family: 'Times New Roman', Times, serif;
+    background-color: white;
+    box-sizing: border-box;
+}
+#content_center_menu_shop{
+    display: flex;
+    justify-content: center;
+}
+
+#content_center_menu_shop a:hover{
+    color: black;
+}#element_center_shop{
+    display: flex;
+    margin-left: 20px;
+}
+.display-flex{
+    display: flex;
+
+}
+.font-bold{
+    font-weight: bold;
+}
+.ThongTinThanhToan{
+    font-weight: bold;
+    font-size: 18px;
+}
+.HienThiThem{
+    display: none;
+}
+
+.nhapname{
+    height: 30px;
+    border: 1px solid #EBEBEB;
+    width: 100%;
+    border-radius: 2px;
+}
+.box-ten{
+    font-weight: bold;
+    width: 50%;
+}
+#all_left-thanhtoan{
+    width: 55%;
+}
+#ThanhToan_element_center_left{
+    border-top: 2px solid #EBEBEB;
+    margin-right: 20px;
+}
+.temp-name{
+    width: 48%;
+    margin-right: 17px;
+}
+.element-name{
+    display: flex;
+    gap:25px;
+}
+.Nhapin4{
+    width: 98%;
+    height: 30px;
+    border: #EBEBEB 1px solid;
+}
+#note{
+    border: #EBEBEB 1px solid;
+    height: 100px;
+    width: 98%;
+}
+
+#all-right-thanhtoan{
+    border: 2px solid red;
+    width: 40%;
+    height: 60% ;
+}
+#element_center_right-thanhtoan{
+    border-top: 2px solid #EBEBEB;
+    margin-left: 20px;
+    margin-right    : 20px;
+    padding-top: 20px;
+}
+
+.display-block{
+    display: block;
+}
+
+
+.payment-option {
+  margin-left: 20px;
+  margin-bottom: 10px;
+  margin-right: 40px;
+}
+.border-label {
+  font-weight: bold;
+  cursor: pointer;
+  display: inline-block;
+  padding: 10px 0;
+  
+  border-bottom: 1px solid #EBEBEB;
+  width: 100%;
+}
+
+
+#in4cod,#in4paybank,#in4inshop {
+  display: none;
+  
+  margin-top: 10px;
+  padding: 15px;
+  background-color: #f7f7f7;
+  border: 1px solid #eee;
+  border-radius: 5px;
+}
+
+#cod:checked ~.payment-option-cod #in4cod {
+  display: block;
+}
+#paybank:checked ~.payment-option-paybank #in4paybank {
+  display: block;
+}   
+#inshop:checked ~.payment-option-inshop #in4inshop{
+    display: block;
+}
+.payment-radio-hidden {
+  display: none;
+}
+#cod:checked ~ .payment-option-cod .border-label {
+    color: #007BFF;
+}
+#paybank:checked ~ .payment-option-paybank .border-label {
+    color: #007BFF;
+}
+#inshop:checked ~ .payment-option-inshop .border-label {
+    color: #007BFF;
+}
+#dathangck,#dathangch,#dathangCod{
+    height: 56px;
+    border-radius: 28px;
+    text-align: center;
+    text-decoration: none;
+    display: none;
+    margin: 20px auto;
+    width: 90%;
+    cursor: pointer;
+    max-width: 400px;
+    padding: 0;
+}
+
+#dathangck button,
+#dathangch button,
+#dathangCod button {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #2563eb 0%, #4338ca 100%);
+    border: none;
+    border-radius: 28px;
+    color: white;
+    font-size: 18px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
+}
+
+#dathangck button:hover,
+#dathangch button:hover,
+#dathangCod button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(37, 99, 235, 0.35);
+    background: linear-gradient(135deg, #1d4ed8 0%, #3730a3 100%);
+}
+
+#dathangck button:active,
+#dathangch button:active,
+#dathangCod button:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 8px rgba(37, 99, 235, 0.2);
+}
+
+.CK_BTN.chuyenqua_chuyenkhoan,
+.TM_BTN.chuyenqua_tienmat,
+.CH_BTN.chuyenqua_cuahang {
+    height: 100%;
+    width: 100%;
+    cursor: pointer;
+    display: block;
+    outline: none;
+    -webkit-tap-highlight-color: transparent;
+}
+
+
+#paybank:checked~  #dathangck{
+    display: block;
+}
+#cod:checked~ #dathangCod{
+    display: block;
+}
+#inshop:checked~ #dathangch{
+    display: block;
+}
+.KtLogin {
+    position: fixed;
+    z-index: 50000;
+    display: none;
+    justify-items: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(3px);
+}
+
+#KtLogin-model {
+    justify-items: center;
+    background: linear-gradient(145deg, #ffffff, #f7faff);
+    width: 30%;
+    min-width: 320px;
+    height: 200px;
+    text-align: center;
+    padding: 20px;
+    border-radius: 25px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
+    animation: popupShow 0.3s ease;
+}
+
+@keyframes popupShow {
+    from {
+        transform: scale(0.8);
+        opacity: 0;
+    }
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+#ButtonLogin a {
+    display: block;
+    background: linear-gradient(90deg, #007BFF, #00BFFF);
+    color: white;
+    font-size: 18px;
+    font-weight: bold;
+    text-decoration: none;
+    border-radius: 10px;
+    width: 120px;
+    margin: 15px auto;
+    padding: 10px 0;
+    box-shadow: 0 4px 10px rgba(0, 123, 255, 0.3);
+    transition: all 0.25s ease;
+}
+
+#ButtonLogin a:hover {
+    transform: scale(1.05);
+    background: linear-gradient(90deg, #0056b3, #0099ff);
+    box-shadow: 0 6px 15px rgba(0, 123, 255, 0.45);
+}
+
+.ThongTinThanhToan-donhang{
+    margin-top: 20px;
+    border-top: 2px solid #EBEBEB;
+    padding-top: 20px;
+    font-weight: bold;
+    font-size: 18px;
+}
+.display-flex-sp{
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+.right-sanpham-donhang{
+    text-align: left;
+    width: 70%;
+}
+.temp_cost-donhang{
+    font-weight: normal;
+    color: black;
+    width: 15%;
+}
+.num_donhang{
+    font-weight: normal;
+    color: black;
+    width: 15%;
+    text-align: right;
+}
+.display-flex-tt{
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+.sumend{
+    font-weight: bold;
+}   
+.SumCart-thanhtoan{
+    color: red;
+    font-weight: bold;
+}
+.display-flex-ship-thanhtoan{
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+}
+.ship{
+    font-weight: bold;
+}
+.cost-ship-thanhtoan{
+    font-weight: bold;
+}
+.donggia-thanhtoan{
+    font-weight: normal;
+    color: black;
+}
+.color-red{
+    color: red;
+    font-weight: bold;
+}
+.i4-thanhtoan{
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+    border-top: 2px solid #EBEBEB;
+    padding-top: 10px;
+}
+.sumend-thanhtoan{
+    font-weight: bold;
+}
+.SumCart-thanhtoan_tong{
+    font-weight: bold;
+}
+.donhang{
+    margin-bottom: 20px;
+    display: flex;
+    width: 100%;
+}
+.donhang-name{
+    font-weight: bold;
+    color: black;
+    width: 70%;
+}
+.donhang-price{
+    font-weight: bold;
+    color: red;
+    width: 15%;
+}
+#button-continue-thanhtoan{
+    text-align: center;
+    margin-top: 20px;
+}
+.donhang-display-flex{
+    display: flex;
+    justify-content: space-between;
+    
+}
+.donhang-soluong{
+    font-weight: normal;
+    color: black;
+    width: 15%;
+    text-align: right;
+}
+.Tongtien_thanhtoan{
+    margin-top: 10px;
+    font-weight: bold;
+    border-bottom: 2px solid #EBEBEB;
+}
+.SumCart-thanhtoan_tong{
+    color: red;
+    text-align: right;
+    justify-content: right;
+    justify-items: right;
+    float: right;
+    margin-right: 15%;
+}
+.tienhanhthanhtoanBtn.Menu_Center{
+    text-align: center;
+    line-height: 50px;
+    color: black;
+    font-size: 20px;
+}
+.indexgiohangBTN{
+    text-decoration: none;
+    color: black;
+    font-size: 16px;
+}
+.CK_BTN.chuyenqua_chuyenkhoan button{
+    cursor: pointer;
+    color: white;
+    width: 100%;
+    box-sizing: border-box;
+    display: block;
+}
+.TM_BTN .chuyenqua_tienmat button{
+    cursor: pointer;
+    color: white;
+    width: 100%;
+    box-sizing: border-box;
+    display: block;
+}
+.CH_BTN .chuyenqua_cuahang button{
+    cursor: pointer;
+    box-sizing: border-box;
+    display: block;
+    color: white;
+    width: 100%;
+}
+.address_all {
+    background-color: #fff;
+    padding: 20px 25px;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    border: 1px solid #eee;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+.address_all > div {
+    display: flex;           
+    margin-bottom: 12px;
+    align-items: baseline;   
+    font-size: 15px;
+}
+
+.address_all > div:last-child {
+    margin-bottom: 0;
+}
+
+
+.address_all > div > div:first-child {
+    font-weight: 600;       
+    color: #666;             
+    width: 150px;           
+    min-width: 80px;       
+}
+
+.address_all > div > div:last-child {
+    font-weight: 500;
+    color: #222;            
+    flex: 1;                
+    word-break: break-word;  
+}
+
+
+.address_all.disabled {
+    background-color: #f8f9fa;    
+    border-color: #e9ecef;          
+    box-shadow: inset 0 2px 4px rgba(0,0,0,0.05); 
+    cursor: not-allowed;            
+    user-select: none;
+    pointer-events: none;           
+}
+.address_all.disabled > div > div:first-child,
+.address_all.disabled > div > div:last-child {
+    color: #a0a0a0; 
+}
+.more_address {
+    background-color: #fff;
+    color: #007bff;
+    border: 1px solid #007bff;
+    padding: 10px 20px;
+    border-radius: 6px;
+    font-family: 'Segoe UI', sans-serif;
+    font-weight: 500;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    outline: none;
+    display: inline-block;
+    margin-top: 15px;
+}
+
+.more_address:hover {
+    background-color: #007bff;
+    color: #fff;
+    box-shadow: 0 2px 8px rgba(0, 123, 255, 0.25);
+}
+
+.more_address:active {
+    transform: scale(0.98);
+    box-shadow: none;
+}
+
+.more_address:disabled {
+    background-color: #e9ecef;
+    color: #adb5bd;
+    border-color: #dee2e6;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}

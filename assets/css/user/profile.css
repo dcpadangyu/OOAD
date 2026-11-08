@@ -1,0 +1,458 @@
+/*
+   1. Layout chung (Tất cả các trang)
+ */
+.profile-layout {
+  width: 90%;
+  margin: 95px auto;
+  display: flex;
+  gap: 24px;
+  min-height: 70vh;
+}
+
+.profile-sidebar {
+  width: 240px;
+  background: #fff;
+  border-radius: 12px;
+  padding: 16px;
+  border: 1px solid #ddd;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.profile-content {
+  flex: 1;
+  background: #fff;
+  padding: 20px;
+  border-radius: 12px;
+  border: 1px solid #ddd;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+/*
+   2. Avatar & thông tin người dùng (Tất cả trang có sidebar)
+*/
+.user-info img {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  border: 2px solid #0073e6;
+  object-fit: cover;
+}
+
+.user-info h4 {
+  margin-top: 8px;
+  font-size: 15px;
+  color: #111;
+  font-weight: 600;
+}
+
+/*
+   3. Menu sidebar (Tất cả trang có sidebar)
+ */
+.sidebar-menu {
+  list-style: none;
+  padding: 0;
+  margin-top: 18px;
+}
+
+.sidebar-menu li {
+  padding: 10px 8px;
+  border-radius: 8px;
+  margin-bottom: 6px;
+  transition: 0.2s;
+}
+
+.sidebar-menu li a {
+  color: #333;
+  font-weight: 500;
+  text-decoration: none;
+  display: block;
+}
+
+.sidebar-menu li.active,
+.sidebar-menu li:hover {
+  background: #e6f2ff;
+  border-left: 4px solid #0073e6;
+}
+
+.sidebar-menu li.active a {
+  color: #0073e6;
+  font-weight: 700;
+}
+
+/* 
+   4. Tiêu đề section & subtitle (Tất cả trang)
+*/
+.profile-content h2 {
+  color: #0073e6;
+  font-size: 20px;
+  font-weight: 700;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+
+.subtitle {
+  color: #666;
+  font-size: 13px;
+  margin-bottom: 16px;
+}
+
+/*
+   5. Form chung (Thông Tin Cá Nhân, Đổi Mật Khẩu, Địa Chỉ)
+ */
+.profile-form .form-group,
+.address-form .form-group {
+  margin-bottom: 16px;
+}
+
+.profile-form label,
+.address-form label {
+  display: block;
+  margin-bottom: 4px;
+  font-weight: 600;
+  color: #333;
+  font-size: 14px;
+}
+
+.profile-form input,
+.address-form input {
+  width: 50%;
+  padding: 8px 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 14px;
+  transition: 0.25s;
+  background: #f9f9f9;
+}
+
+.profile-form input:focus,
+.address-form input:focus {
+  border-color: #0073e6;
+  box-shadow: 0 0 4px rgba(0,115,230,0.3);
+  outline: none;
+  background: #fff;
+}.address-form {
+  width: 100%;
+}
+
+.address-form .form-group {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.address-form .form-group label {
+  width: 90px;
+  flex: 0 0 90px;
+  margin: 0;
+}
+
+.address-form .form-group input {
+  flex: 1;
+  width: auto;
+  max-width: 520px;
+  min-height: 38px;
+  padding: 8px 12px;
+  box-sizing: border-box;
+}
+
+.address-form .form-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+/* 
+   6. Nút thao tác (Lưu / Hủy / Thêm / Sửa)
+   - Thông Tin Cá Nhân
+   - Đổi Mật Khẩu
+   - Địa Chỉ
+ */
+.save-btn,
+#addAddressBtn,
+#editProfileBtn,
+.cancel-btn,
+#section-thongtin .edit-btn,
+#section-doimatkhau .edit-btn,
+.address-right button {
+  background: #0073e6;
+  color: #fff;
+  padding: 3px 10px;        
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 13px;
+  transition: 0.2s;
+  width: auto;              
+  min-width: unset;         
+  display: inline-block;    
+}
+
+.save-btn:hover,
+#addAddressBtn:hover,
+#editProfileBtn:hover,
+#section-thongtin .edit-btn:hover,
+#section-doimatkhau .edit-btn:hover,
+.address-right button:hover {
+  background: #005bb5;
+  transform: translateY(-1px);
+}
+
+.cancel-btn {
+  background: #f0f0f0;
+  color: #333;
+  border: 1px solid #ccc;
+}
+
+.cancel-btn:hover {
+  background: #e0e0e0;
+}
+
+/*
+   7. Info box hồ sơ (Hồ Sơ, Thông Tin Cá Nhân)
+ */
+.info-box {
+  background: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  padding: 16px 18px;
+}
+
+.info-row {
+  display: flex;
+  gap: 16px;
+  padding: 10px 0;
+  border-bottom: 1px solid #eee;
+}
+
+.info-row:last-child {
+  border-bottom: none;
+}
+
+.info-row label {
+  width: 150px;
+  font-weight: 600;
+  color: #0056b3;
+  font-size: 14px;
+}
+
+.info-row span {
+  flex: 1;
+  color: #333;
+  font-size: 14px;
+}
+
+  /* 8. Header section Thông Tin Cá Nhân & Đổi Mật Khẩu */
+
+#section-thongtin .profile-header,
+#section-doimatkhau .profile-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+#section-thongtin .profile-header h2,
+#section-doimatkhau .profile-header h2 {
+  margin: 0;
+  color: #0073e6;
+  font-size: 20px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+/*
+   9. Section Địa Chỉ
+*/
+.address-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.address-card {
+  background: #fff;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 10px 12px;
+  margin-bottom: 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: 0.2s;
+}
+
+.address-card:hover {
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+}
+
+.address-left {
+  flex: 1;
+}
+
+.address-left .addr-name,
+.address-left .addr-phone,
+.address-left .addr-email,
+.address-left .addr-address {
+  font-size: 13px;
+  color: #333;
+  margin-bottom: 3px;
+}
+
+.address-left strong {
+  color: #000;
+  font-weight: 600;
+  margin-right: 4px;
+}
+
+.address-left .addr-name {
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.address-left .addr-line {
+  font-size: 13px;
+  color: #333;
+}
+
+.addr-badge {
+  background: #e6f2ff;
+  border: 1px solid #bcd8f4;
+  color: #0056b3;
+  padding: 2px 6px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 600;
+  margin-left: 6px;
+}
+
+.address-right button {
+  margin-left: 6px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 500;
+  font-size: 13px;
+  transition: 0.15s;
+  min-width: 65px;
+}
+
+.address-right .set-default-btn,
+.address-right .edit-btn {
+  background: #e6f2ff;
+  color: #0056b3;
+  border: 1px solid #bcd8f4;
+}
+
+.address-right .set-default-btn:hover,
+.address-right .edit-btn:hover {
+  background: #d6eaff;
+}
+
+.address-right .del-btn {
+  background: #ffe6e6;
+  color: #e63946;
+  border: 1px solid #f4bcd8;
+}
+
+.address-right .del-btn:hover {
+  background: #ffd6d6;
+}
+
+/* 
+   10. Message Box (Tất cả trang)
+ */
+#message-box {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  padding: 10px 16px;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 14px;
+  z-index: 9999;
+  display: none;
+  color: #fff;
+}
+
+#message-box.success {
+  background-color: #28a745;
+}
+
+#message-box.error {
+  background-color: #e63946;
+}
+
+/* 
+   11. Responsive (<900px) (Tất cả trang)
+*/
+@media(max-width: 900px) {
+  .profile-layout {
+    display: block;
+    width: 95%;
+    margin: 20px auto;
+  }
+
+  .profile-sidebar {
+    width: 100%;
+    margin-bottom: 16px;
+  }
+
+  .profile-content {
+    width: 100%;
+    padding: 16px;
+  }
+
+  .form-actions {
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .info-row {
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .info-row label {
+    width: auto;
+    font-size: 13px;
+  }
+
+  .address-card {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .address-right {
+    margin-top: 8px;
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    gap: 6px;
+  }
+
+  .addr-email {
+    font-size: 13px;
+    color: #555;
+    margin: 2px 0;
+  }
+
+  #section-thongtin .profile-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  #section-thongtin .edit-btn {
+    align-self: flex-start;
+  }
+}
+
+/* 
+   12. Class helper (Tất cả trang)
+ */
+.hidden {
+  display: none !important;
+}

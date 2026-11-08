@@ -1,0 +1,33 @@
+#indexGioHang {
+    display: none;
+}
+#GioHang {
+    display: none;
+}
+#ThanhToan{
+    display: none;
+}
+#ThanhToan_TienMat{
+    display:none;
+}
+#ThanhToan_ChuyenKhoan{
+    display: none;
+}
+#ThanhToan_CuaHang{
+    display: none;
+}
+#ThanhToan_ThanhCong{
+    display: none;
+}
+#ThanhToan_ThatBai{
+    display: none;
+}
+#LichSuMuaHang{
+    display: none;
+}
+#banner-html{
+    display: none;
+}
+#chitietsanpham-banner-index{
+    display: block;
+}

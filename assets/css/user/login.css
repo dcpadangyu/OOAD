@@ -1,0 +1,248 @@
+/* Page section styles - để sections hoạt động trong index.html */
+.page-section {
+    min-height: calc(100vh - 200px);
+    padding: 40px 20px;
+    background: linear-gradient(135deg, #e0e7ff, #eef2ff);
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+.page-section .login-box {
+    margin: 0 auto;
+}
+
+/* Chỉ áp dụng khi body là trang đăng nhập riêng (không phải trong index.html) */
+body:not(:has(header)):not(:has(footer)) {
+    font-family: Roboto, "Segoe UI", Arial, sans-serif;
+    background: linear-gradient(135deg, #e0e7ff, #eef2ff);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    animation: fadeIn 0.5s ease-in-out;
+}
+
+/* Hiệu ứng xuất hiện mượt */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.login-box {
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    width: 380px;
+    padding: 40px 35px;
+    text-align: center;
+}
+
+h2 {
+    margin-bottom: 8px;
+    font-size: 22px;
+    color: #111;
+}
+
+p.sub {
+    color: #666;
+    font-size: 14px;
+    margin-bottom: 25px;
+}
+
+.input-group {
+    text-align: left;
+    margin-bottom: 20px;
+}
+
+label {
+    font-weight: 600;
+    color: #333;
+    font-size: 14px;
+}
+
+input {
+    width: 93%;
+    padding: 10px 12px;
+    margin-top: 6px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 15px;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+input:focus {
+    border-color: #4f46e5;
+    box-shadow: 0 0 4px #6366f1;
+}
+
+/* Checkbox custom */
+.remember input[type="checkbox"] {
+  display: none;
+}
+
+/* 2. Căn chỉnh container .remember */
+.remember {
+  display: block;
+  position: relative;
+  padding-left: 30px; 
+  margin: 15px 0;
+  cursor: pointer;
+  font-size: 14px;
+  color: #333;
+  user-select: none;
+}
+
+/* 3. Tạo cái hộp "giả" (CHỈ cho label bên trong .remember) */
+.remember label::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 16px;
+  height: 16px;
+  border: 1px solid #ccc;
+  background-color: #fff;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+}
+
+/* 4. Tạo dấu check "giả" (CHỈ cho label bên trong .remember) */
+.remember label::after {
+  content: '✔';
+  position: absolute;
+  left: 3px;
+  top: 50%;
+  transform: translateY(-50%) scale(0.9);
+  font-size: 14px;
+  color: white;
+  opacity: 0; /* Ẩn đi khi chưa check */
+  transition: opacity 0.2s ease;
+}
+
+/* 5. Hiện dấu check (CHỈ khi checkbox bên trong .remember được check) */
+.remember input[type="checkbox"]:checked + label::before {
+  background-color: #007BFF;
+  border-color: #007BFF;
+}
+
+.remember input[type="checkbox"]:checked + label::after {
+  opacity: 1; /* Hiện dấu check */
+}
+
+/* 6. Thêm hiệu ứng focus (CHỈ cho cái bên trong .remember) */
+.remember input[type="checkbox"]:focus + label::before {
+  box-shadow: 0 0 0 3px rgba(0,123,255,0.3);
+}
+#nutdnhap{
+    width: 100%;
+    background-color: #4f46e5;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 12px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: transform 0.15s, background-color 0.3s;
+}
+
+/* Hiệu ứng nhún khi ấn */
+button:active {
+    transform: scale(0.96);
+}
+
+button:hover {
+  filter: brightness(1.2);
+  transform: scale(1.05); 
+}
+
+label.required::after {
+    content: " *";
+    color: red;
+    font-weight: 500;
+}
+
+/* Luxury sneaker palette for authentication screens */
+#section-login.page-section {
+  --auth-ink: #171717;
+  --auth-muted: #6f6b63;
+  --auth-paper: #fbfaf7;
+  --auth-line: #d8d2c7;
+  --auth-gold: #b08d57;
+  --auth-wine: #7c2638;
+  min-height: calc(100vh - 75px);
+  padding: 64px 20px;
+  background: radial-gradient(circle at 12% 12%, rgba(176, 141, 87, 0.18), transparent 34%), linear-gradient(135deg, #171717 0%, #282621 52%, #49352c 100%);
+  align-items: center;
+}
+
+#section-login .login-box {
+  width: min(380px, 100%);
+  padding: 44px 38px;
+  background: rgba(251, 250, 247, 0.98);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  border-radius: 4px;
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.38);
+}
+
+#section-login h2 {
+  color: var(--auth-ink);
+  letter-spacing: 0.08em;
+  font-size: 24px;
+}
+
+#section-login p.sub,
+#section-login .register p {
+  color: var(--auth-muted);
+}
+
+#section-login label {
+  color: var(--auth-ink);
+}
+
+#section-login input {
+  width: 93%;
+  border: 1px solid var(--auth-line);
+  border-radius: 2px;
+  background: #fff;
+  color: var(--auth-ink);
+}
+
+#section-login input:focus {
+  border-color: var(--auth-gold);
+  box-shadow: 0 0 0 3px rgba(176, 141, 87, 0.16);
+}
+
+#section-login .remember {
+  color: var(--auth-muted);
+}
+
+#section-login .remember label::before {
+  border-color: var(--auth-line);
+  border-radius: 2px;
+}
+
+#section-login .remember input[type="checkbox"]:checked + label::before {
+  background-color: var(--auth-gold);
+  border-color: var(--auth-gold);
+}
+
+#section-login #nutdnhap {
+  background: var(--auth-wine);
+  border-radius: 2px;
+  letter-spacing: 0.08em;
+}
+
+#section-login #nutdnhap:hover {
+  background: #5f1c2b;
+  filter: none;
+  transform: translateY(-1px);
+}
+
+#section-login .register a {
+  color: var(--auth-wine);
+  font-weight: 700;
+}

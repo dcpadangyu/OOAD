@@ -1,0 +1,245 @@
+# Thiết Kế Các Bảng Dữ Liệu (Database Design)
+
+> Hệ thống dùng **localStorage** (và IndexedDB cho đánh giá), không có DB thật. Các bảng dưới đây mô hình hóa các entity trong code. **Tên thuộc tính trong code trùng với tên cột trong `database/CuaHangGiay.sql`** (toàn bộ tiếng Việt). Bảng đối chiếu tên cũ → mới: `docs/DOI_TEN_THUOC_TINH.md`. Khóa chính (PK) trong code là chuỗi giả ID (`SH-...`, `NV...`, `PN...`, `DH...`).
+
+## 1. Bảng `SAN_PHAM` — key `productsLocal` (seed: `database/products-shoes.js`)
+
+| Thuộc tính | Kiểu dữ liệu | Ràng buộc |
+|---|---|---|
+| `maSanPham` | STRING | **PK** (ví dụ `SH-001`) |
+| `maLoai` | STRING | **FK → LOAI_SAN_PHAM.maLoai** (giá trị là tên loại/hãng, vd `Nike`) |
+| `tenSanPham` | STRING | NOT NULL |
+| `gioiTinh` | STRING | CHECK (Nam / Nữ / Unisex) |
+| `moTaNgan` | STRING | NULL |
+| `mauSac` | STRING | NOT NULL |
+| `chatLieu` | STRING | NOT NULL |
+| `phongCach` | STRING | NOT NULL |
+| `kichCo` | STRING | NOT NULL (chuỗi mô tả, vd `36 - 44`) |
+| `tonKhoTheoSize` | JSON | `{ "36": 2, "37": 5, ... }` — tồn kho từng size (không có trong SQL) |
+| `giaBan` | NUMBER | > 0 (giá bán) |
+| `giaHienThi` | STRING | NOT NULL (giá hiển thị đã format `₫`) |
+| `hinhAnh` | STRING | NOT NULL |
+| `giaNhap` | NUMBER | > 0 (giá nhập) |
+| `soLuongTon` | NUMBER | ≥ 0 (= tổng `tonKhoTheoSize`) |
+| `tongDaNhap` | NUMBER | ≥ 0 (tổng đã nhập) |
+| `tongDaBan` | NUMBER | ≥ 0 (tổng đã bán) |
+| `trangThaiHienThi` | STRING | CHECK (visible / hidden) |
+| `moTa` | STRING | NULL |
+| `xuatXu` | STRING | NULL |
+
+## 2. Bảng `LOAI_SAN_PHAM` — key `categories`
+
+| Thuộc tính | Kiểu dữ liệu | Ràng buộc |
+|---|---|---|
+| `maLoai` | STRING | **PK** (= tên loại, khóa tự nhiên) |
+| `tenLoai` | STRING | NOT NULL, UNIQUE |
+| `moTa` | STRING | NULL |
+| `soSanPham` | NUMBER | Số lượng thuộc loại (hiển thị) |
+| `trangThai` | STRING | CHECK (active / hidden) |
+| `ngayTao` | STRING | NOT NULL |
+| `hinhAnh` | STRING | NULL |
+
+## 3. Bảng `NHAN_VIEN` — key `employeeList` (seed: `database/employees.js`)
+
+| Thuộc tính | Kiểu dữ liệu | Ràng buộc |
+|---|---|---|
+| `maNhanVien` | STRING | **PK** (tự sinh `NV` + 3 số) |
+| `tenNhanVien` | STRING | NOT NULL |
+| `gioiTinh` | STRING | CHECK (Nam / Nữ) |
+| `soDienThoai` | STRING | **UNIQUE**, dạng `0xxxxxxxxx` |
+| `diaChi` | STRING | NULL |
+| `chucVu` | STRING | CHECK (Nhân viên bán hàng / Nhân viên kho / Nhân viên CSKH / Nhân viên kiểm kho) |
+| `tenDangNhap` | STRING | **UNIQUE** |
+| `matKhau` | STRING | NOT NULL |
+| `ngayTao` | STRING | NOT NULL (ISO) |
+| `trangThai` | STRING | CHECK (hoatdong / khoa) |
+
+## 4. Bảng `KHACH_HANG` — key `userList` (người đang đăng nhập: `currentUser`)
+
+| Thuộc tính | Kiểu dữ liệu | Ràng buộc |
+|---|---|---|
+| `maKhachHang` | STRING | **PK** (sinh khi đăng ký, dạng `user_...`) |
+| `maKH` | STRING | Mã hiển thị do Admin gán (`KH001`, `KH002`...) |
+| `tenDangNhap` | STRING | **UNIQUE** (không đổi) |
+| `hoTen` | STRING | NOT NULL (tên hiển thị, sửa được) |
+| `thuDienTu` | STRING | **UNIQUE** |
+| `matKhau` | STRING | NOT NULL |
+| `soDienThoai` | STRING | **UNIQUE**, dạng `0xxxxxxxxx` |
+| `diaChi` | STRING | NULL |
+| `anhDaiDien` | STRING | NULL |
+| `ngayTao` | STRING | NOT NULL (ISO) |
+| `trangThai` | STRING | `active` / `blocked`... |
+| `biKhoa`, `ngayKhoa` | BOOLEAN / STRING | Do Admin quản lý |
+| `daDatLaiMatKhau` | BOOLEAN | Admin đã reset mật khẩu |
+| `diaChiPhu[]` | ARRAY | Bảng `DIA_CHI_PHU`: `{ maDiaChi, tenNguoiNhan, soDienThoai, thuDienTu, diaChi, macDinh }` |
+
+## 5.1. Bảng `VOUCHER` — cấu hình trong `assets/js/user/payment/voucher.js`
+
+| Thuộc tính | Kiểu dữ liệu | Ràng buộc |
+|---|---|---|
+| `maVoucher` | STRING | **PK**, viết hoa, duy nhất |
+| `tenVoucher` | STRING | NOT NULL |
+| `moTa` | STRING | Mô tả điều kiện áp dụng |
+| `loaiGiam` | STRING | CHECK (`fixed` / `percent`) |
+| `giaTriGiam` | NUMBER | > 0 |
+| `giamToiDa` | NUMBER | NULL; mức giảm tối đa với voucher phần trăm |
+| `donToiThieu` | NUMBER | ≥ 0 |
+| `ngayBatDau`, `ngayKetThuc` | STRING | Khoảng thời gian hiệu lực |
+| `soLuongToiDa`, `soLuongDaDung` | NUMBER | Giới hạn lượt dùng |
+| `trangThai` | STRING | CHECK (`active` / `inactive` / `expired`) |
+
+Mã mẫu: `GIAYMOI10`, `GIAY200K`, `KHACHMOI`. Voucher được kiểm tra theo đơn tối thiểu và chốt giảm giá khi tạo đơn.
+
+## 5. Bảng `DON_HANG` — key `DanhSachDatHang` (user) + `ordersLocal` (admin)
+
+| Thuộc tính | Kiểu dữ liệu | Ràng buộc |
+|---|---|---|
+| `maDonHang` | STRING | **PK** (ví dụ `DH1726500000000`) |
+| `maKhachHang` | STRING | **FK → KHACH_HANG.maKhachHang** |
+| `tenNguoiNhan` | STRING | NOT NULL |
+| `soDienThoaiNhan` | STRING | NOT NULL |
+| `thuDienTuNguoiNhan` | STRING | NULL |
+| `diaChiGiaoHang` | STRING | NOT NULL |
+| `khachHang` | JSON | Snapshot `{ maKhachHang, hoTen, thuDienTu, soDienThoai }` lúc đặt (đơn User) |
+| `chiTiet[]` | ARRAY | **FK → CHI_TIET_DON_HANG** |
+| `phuongThucThanhToan` | STRING | CHECK (COD / PayBank / Shop) |
+| `trangThaiThanhToan` | STRING | `unpaid` / `paid` / `refund` (đã trả tiền rồi hủy, chờ hoàn) / `refunded` (đã hoàn tiền) |
+| `tamTinh` | NUMBER | Tổng tiền hàng |
+| `maVoucher` | STRING | NULL, **FK → VOUCHER.maVoucher** |
+| `giamGia` | NUMBER | ≥ 0; số tiền đã giảm |
+| `tienVanChuyen` | NUMBER | Phí ship (số) |
+| `giaHienThi` | STRING | Tổng tiền hiển thị có đơn vị |
+| `tongTien` | NUMBER | ≥ 0 |
+| `phiVanChuyen` | STRING | Phí ship hiển thị |
+| `ngayDat` | STRING | NOT NULL (ISO) |
+| `trangThai` | STRING | CHECK (cho-xac-nhan / dang-giao / thanh-cong / da-huy) |
+| `trangThaiQuanTri` | STRING | CHECK (moiDat / daXuLy / daGiao / huy) — luôn khớp `trangThai` |
+| `daTruKho` | BOOLEAN | Đã trừ kho (tránh trừ/hoàn hai lần) |
+| `ngayGiao`, `ngayHuy`, `ngayHoanTien` | STRING | Mốc thời gian (ISO) do Admin ghi khi giao / hủy / xác nhận hoàn tiền. Báo cáo doanh thu tính theo `ngayGiao` |
+
+**Ánh xạ trạng thái:** `cho-xac-nhan` ↔ `moiDat` · `dang-giao` ↔ `daXuLy` · `thanh-cong` ↔ `daGiao` · `da-huy` ↔ `huy`
+
+Đơn phía Admin (`ordersLocal`) chỉ lưu `trangThaiQuanTri` (không có `trangThai`), `hoTen` thay cho `khachHang`, thêm `ghiChu`.
+
+## 6. Bảng `CHI_TIET_DON_HANG` (lồng trong `order.chiTiet`)
+
+| Thuộc tính | Kiểu dữ liệu | Ràng buộc |
+|---|---|---|
+| `maSanPham` | STRING | **FK → SAN_PHAM.maSanPham** |
+| `tenSanPham` | STRING | NOT NULL |
+| `maLoai`, `hinhAnh`, `giaHienThi` | STRING | Snapshot (đơn User) |
+| `kichCoDaChon` | STRING | Size khách chọn |
+| `soLuong` | NUMBER | > 0 |
+| `donGia` | NUMBER | > 0 |
+| `giaVon` | NUMBER | Giá vốn 1 đôi, Admin chốt lúc giao (= `giaNhap` của sản phẩm tại thời điểm đó); dùng tính giá vốn hàng bán và lợi nhuận gộp |
+| `daTra` | NUMBER | Số lượng đã trả (đơn Admin) |
+
+## 7. Bảng `GIO_HANG` — key `cart`
+
+| Thuộc tính | Kiểu dữ liệu | Ràng buộc |
+|---|---|---|
+| `maSanPham` | STRING | **FK → SAN_PHAM.maSanPham** |
+| `kichCoDaChon` | STRING | Size đã chọn (cùng sản phẩm khác size là dòng khác nhau) |
+| `soLuong` | NUMBER | > 0 |
+| `tenSanPham`, `maLoai`, `hinhAnh`, `giaHienThi`, `giaBan` | — | Snapshot, luôn được đối chiếu lại với `productsLocal` khi đọc giỏ |
+
+## 8. Bảng `PHIEU_NHAP_HANG` — key `phieuNhapLocal`
+
+| Thuộc tính | Kiểu dữ liệu | Ràng buộc |
+|---|---|---|
+| `maPhieuNhap` | STRING | **PK** (tự sinh `PN...`) |
+| `ngayNhap` | STRING | NOT NULL (ISO) |
+| `tongTien` | NUMBER | ≥ 0 |
+| `nhaCungCap` | STRING | Nhà cung cấp (bắt buộc khi lập/sửa phiếu) |
+| `nguoiLap`, `nguoiDuyet` | STRING | Người lập phiếu / người hoàn thành phiếu |
+| `ngayHoanThanh`, `ngayHuy`, `nguoiHuy` | STRING | Mốc hoàn thành / hủy phiếu |
+| `trangThai` | STRING | CHECK (hoanThanh / chuaHoanThanh / daHuy) |
+| `chiTiet[]` | ARRAY | **FK → CHI_TIET_PHIEU_NHAP** |
+
+## 9. Bảng `CHI_TIET_PHIEU_NHAP` (lồng trong `phieu.chiTiet`)
+
+| Thuộc tính | Kiểu dữ liệu | Ràng buộc |
+|---|---|---|
+| `maSanPham` | STRING | **FK → SAN_PHAM.maSanPham** |
+| `kichCo` | STRING | Size nhập ('' nếu sản phẩm không chia size); khóa chính gồm maSanPham + kichCo |
+| `tenSanPham` | STRING | NOT NULL |
+| `soLuongNhap` | NUMBER | > 0 |
+| `giaNhap` | NUMBER | > 0 |
+| `thanhTien` | NUMBER | = số lượng × đơn giá |
+
+## 10. Bảng `DANH_GIA` — IndexedDB `ooad_feedback` (store `feedback`)
+
+| Thuộc tính | Kiểu dữ liệu | Ràng buộc |
+|---|---|---|
+| `maDanhGia` | STRING | **PK** (`fb_<maDonHang>_<maSanPham>_<size>`) |
+| `maDonHang` | STRING | **FK → DON_HANG.maDonHang** |
+| `maSanPham` | STRING | **FK → SAN_PHAM.maSanPham** |
+| `tenSanPham`, `maLoai`, `kichCoDaChon` | STRING | Snapshot |
+| `maKhachHang` | STRING | **FK → KHACH_HANG.maKhachHang** |
+| `hoTen` | STRING | Tên khách lúc đánh giá |
+| `soSao` | NUMBER | CHECK (1..5) |
+| `binhLuan` | STRING | NULL |
+| `tepDinhKem[]` | ARRAY | `{ loai: image/video, ten, tep: Blob }` |
+| `ngayTao` | STRING | NOT NULL (ISO) |
+| `trangThai` | STRING | CHECK (moi / dangXuLy / daXuLy) |
+| `nguoiXuLy` | JSON | `{ tenDangNhap, hoTen }` hoặc null (nhân viên CSKH đang xử lý) |
+| `ngayTiepNhan` | STRING | NULL |
+| `phanHoi` | JSON | `{ noiDung, nguoiGui, tenDangNhap, thoiGian }` hoặc null |
+| `daAn` | BOOLEAN | Ẩn khỏi trang sản phẩm |
+
+## 11. Bảng `HO_TRO_CHAT` — key `supportThreads`
+
+Trong bản demo, mỗi phần tử của `supportThreads` là một phiên chat và chứa cả danh sách `tinNhan`.
+
+| Thuộc tính | Kiểu dữ liệu | Ràng buộc |
+|---|---|---|
+| `id` | STRING | **PK** giả, ví dụ `CHAT_...` |
+| `customerId` | STRING | **FK → KHACH_HANG.maKhachHang** |
+| `customerName` | STRING | Snapshot tên khách |
+| `assignedTo` | STRING | Nhân viên đang xử lý, có thể NULL |
+| `status` | STRING | `open` / `closed` |
+| `messages[]` | ARRAY | Danh sách tin nhắn hỗ trợ |
+| `createdAt`, `updatedAt` | STRING | ISO timestamp |
+
+### 11.1. Tin nhắn hỗ trợ
+
+| Thuộc tính | Kiểu dữ liệu | Ràng buộc |
+|---|---|---|
+| `id` | STRING | PK giả, ví dụ `MSG_...` |
+| `senderType` | STRING | `customer` / `staff` |
+| `senderId`, `senderName` | STRING | Người gửi |
+| `type` | STRING | `text` / `image` / `product` |
+| `text` | STRING | Nội dung chữ hoặc tên file |
+| `data` | STRING | Data URL ảnh, tối đa 2MB trong demo |
+| `productId` | STRING | FK → `SAN_PHAM.maSanPham`, NULL nếu không phải link SP |
+| `name`, `url` | STRING | Tên/link sản phẩm |
+| `createdAt` | STRING | ISO timestamp |
+
+### 11.2. Cuộc gọi hỗ trợ
+
+Cuộc gọi không lưu âm thanh; hệ thống tạo `roomName = OOAD-Support-<threadId>` và nhúng Jitsi External API trong modal. Chế độ hiện tại là **audio-only**, tự tắt camera và chỉ giữ microphone, chat, cài đặt, kết thúc cuộc gọi. Jitsi là dịch vụ bên ngoài; nếu triển khai thật cần backend quản lý phòng, quyền truy cập và signaling.
+
+## 12. Sơ đồ quan hệ (ER)
+
+```
+SAN_PHAM (1) ──── (N) CHI_TIET_DON_HANG (N) ──── (1) DON_HANG (N) ──── (1) KHACH_HANG
+     │                                                     
+     ├── (N) LOAI_SAN_PHAM (1)  ── SAN_PHAM.maLoai
+     │
+     ├── (1) CHI_TIET_PHIEU_NHAP (N) ──── (1) PHIEU_NHAP_HANG
+     │
+     └── (1) DANH_GIA (N) ──── (1) KHACH_HANG
+
+KHACH_HANG (1) ──── (N) HO_TRO_CHAT (1) ──── (N) TIN_NHAN
+                                      └──── (N) CUOC_GOI Jitsi audio-only
+```
+
+## 13. Ghi chú thiết kế
+
+- **Không dùng khóa tự tăng thật** — chỉ fake ID dạng chuỗi (`SH`, `NV`, `KH`, `PN`, `DH`) do giới hạn localStorage.
+- **`chiTiet` bị lồng trong mảng** đơn hàng / phiếu nhập. Nếu muốn chuẩn 3NF nên tách thành bảng con `CHI_TIET_DON_HANG`, `CHI_TIET_PHIEU_NHAP` (đã có trong `CuaHangGiay.sql`).
+- **Tồn kho theo size** (`tonKhoTheoSize`) là mở rộng so với bảng SQL: khi chuyển sang CSDL thật nên tách thành bảng `TON_KHO_SIZE(maSanPham, kichCo, soLuong)`.
+- **Trạng thái phiếu nhập** mặc định nên để `chuaHoanThanh`; khi chuyển sang `hoanThanh` mới cộng tồn kho.
+- Đơn hàng lưu `maVoucher` và `giamGia` để lịch sử không thay đổi khi shop cập nhật voucher.
+- Mỗi entity tương ứng với **một localStorage key** (riêng đánh giá nằm trong IndexedDB). Dữ liệu cũ tên tiếng Anh được `database/migrate-schema.js` tự chuyển sang tên mới.
+- `supportThreads` chỉ phù hợp bản demo cùng origin; ảnh đang lưu Data URL trong localStorage nên giới hạn 2MB. Bản thật nên tách `HO_TRO_CHAT`, `TIN_NHAN`, `TEP_DINH_KEM`, `CUOC_GOI`, dùng object storage và WebSocket.

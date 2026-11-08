@@ -1,0 +1,65 @@
+/* BANNER */
+.banner {
+    position: relative;
+    width: 100%;
+    height: 800px;
+    overflow: hidden;
+}
+
+.banner-video {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    min-width: 100%;
+    min-height: 100%;
+    width: auto;
+    height: auto;
+    transform: translate(-50%, -50%);
+    object-fit: cover;
+    z-index: 1;
+}
+
+.banner-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.4);
+    /* mờ để chữ nổi bật */
+    z-index: 2;
+}
+
+.banner-content {
+    position: relative;
+    z-index: 3;
+    color: white;
+    text-align: center;
+    top: 50%;
+    transform: translateY(-50%);
+    padding: 0 20px;
+}
+
+.banner-content h1 {
+    font-size: 3rem;
+    margin-bottom: 15px;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
+}
+
+.banner-content p {
+    font-size: 1.2rem;
+    margin-bottom: 20px;
+    text-shadow: 0 1px 5px rgba(0, 0, 0, 0.6);
+}
+
+.banner-content .btn {
+    display: inline-block;
+    padding: 12px 30px;
+    background-color: #4f46e5;
+    color: white;
+    font-weight: 500;
+    border-radius: 25px;
+    text-decoration: none;
+    transition: 0.3s;
+}
+
+.banner-content .btn:hover {
+    background-color: #3730a3;
+}
