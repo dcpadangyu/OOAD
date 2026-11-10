@@ -27,6 +27,12 @@
     }
   }
 
+  // Hủy đơn cần quyền order.cancel; các bước xác nhận / giao cần order.process.
+  function quyenChuyen(status) {
+    if (typeof adminSession === "undefined") return true;
+    return adminSession.can(status === "huy" ? "order.cancel" : "order.process");
+  }
+
   // Ghi mốc thời gian + chốt giá vốn lúc GIAO hàng (để báo cáo lợi nhuận đúng theo giá vốn tại thời điểm bán)
   function ghiDauMoc(id, newStatus) {
     const now = new Date().toISOString();
@@ -75,6 +81,43 @@
     return (v || 0).toLocaleString("vi-VN") + "₫";
   }
 
+  const PAY_METHOD = { COD: "Thanh toán khi nhận hàng", PayBank: "Chuyển khoản ngân hàng", Shop: "Nhận tại cửa hàng" };
+
+  // Đơn Admin có thể thiếu trường voucher (đơn cũ): bổ sung từ bản đơn của khách.
+  function withUserFields(o) {
+    if (!o || (o.giamGia !== undefined && o.tamTinh !== undefined)) return o;
+    try {
+      const uo = (JSON.parse(localStorage.getItem("DanhSachDatHang") || "[]") || []).find((x) => x && x.maDonHang === o.maDonHang);
+      if (uo) return Object.assign({}, o, { tamTinh: uo.tamTinh, giamGia: uo.giamGia, maVoucher: uo.maVoucher || "" });
+    } catch (e) { /* noop */ }
+    return o;
+  }
+
+  function statusChip(o) {
+    const key = o.trangThaiQuanTri || "moiDat";
+    return `<span class="QLDH_chip QLDH_chip-${esc(key)}">${esc(ORDER_STATUS[key] || key)}</span>`;
+  }
+
+  function payChip(o) {
+    const key = o.trangThaiThanhToan;
+    if (!key) return "";
+    return `<span class="QLDH_pay QLDH_pay-${esc(key)}">${esc(PAYMENT_STATUS[key] || key)}</span>`;
+  }
+
+  function renderSummary(orders) {
+    const box = document.getElementById("QLDH_summary");
+    if (!box) return;
+    const count = (k) => orders.filter((o) => o.trangThaiQuanTri === k).length;
+    const refund = orders.filter((o) => o.trangThaiThanhToan === "refund").length;
+    const revenue = orders.filter((o) => o.trangThaiQuanTri === "daGiao").reduce((sum, o) => sum + (Number(o.tongTien) || 0), 0);
+    box.innerHTML = `
+      <div class="QLDH_card"><strong>${count("moiDat")}</strong><span>Chờ xử lý</span></div>
+      <div class="QLDH_card"><strong>${count("daXuLy")}</strong><span>Đang giao</span></div>
+      <div class="QLDH_card"><strong>${count("daGiao")}</strong><span>Đã giao</span></div>
+      <div class="QLDH_card ${refund ? "QLDH_card-warn" : ""}"><strong>${refund}</strong><span>Cần hoàn tiền</span></div>
+      <div class="QLDH_card"><strong>${currency(revenue)}</strong><span>Doanh thu đã giao</span></div>`;
+  }
+
   function getLocalOrders() {
     const key = "ordersLocal";
     const raw = localStorage.getItem(key);
@@ -107,6 +150,8 @@
         <p>Tra cứu theo ngày & trạng thái, xem chi tiết & cập nhật trạng thái</p>
       </div>
 
+      <div class="QLDH_summary" id="QLDH_summary"></div>
+
       <div class="QLDH_filters">
         <label>Từ ngày: <input type="date" id="QLDH_filterDateFrom" /></label>
         <label>Đến ngày: <input type="date" id="QLDH_filterDateTo" /></label>
@@ -117,7 +162,14 @@
           <option value="daGiao">Đã giao</option>
           <option value="huy">Hủy</option>
         </select>
-        <input type="text" id="QLDH_searchId" placeholder="Tìm theo mã đơn..." />
+        <select id="QLDH_filterPay">
+          <option value="all">Mọi thanh toán</option>
+          <option value="paid">Đã thanh toán</option>
+          <option value="unpaid">Chưa thanh toán</option>
+          <option value="refund">Cần hoàn tiền</option>
+          <option value="refunded">Đã hoàn tiền</option>
+        </select>
+        <input type="text" id="QLDH_searchId" placeholder="Tìm theo mã đơn / tên / SĐT..." />
         <button id="QLDH_btnSearch">Tìm</button>
       </div>
 
@@ -174,7 +226,8 @@
               </thead>
               <tbody id="QLDH_md_tbody"></tbody>
             </table>
-            <div class="QLDH_md_total">Tổng tiền: <span id="QLDH_md_total"></span></div>
+            <div class="QLDH_md_breakdown" id="QLDH_md_breakdown"></div>
+            <div class="QLDH_md_total">Khách phải trả: <span id="QLDH_md_total"></span></div>
             
             <!-- Phần cập nhật trạng thái -->
             <div class="QLDH_md_status-update">
@@ -210,6 +263,7 @@
   }
 
   function renderTable(list) {
+    renderSummary(getLocalOrders());
     const wrap = document.querySelector(`#${SECTION_ID} .QLDH_table-content`);
     if (!wrap) return;
     wrap.innerHTML = "";
@@ -231,9 +285,9 @@
         <td>${startIndex + idx + 1}</td>
         <td>${esc(o.maDonHang)}</td>
         <td>${esc(new Date(o.ngayDat).toLocaleString("vi-VN"))}</td>
-        <td>${esc(o.tenNguoiNhan || "--")}</td>
-        <td>${esc(currency(o.tongTien))}</td>
-        <td>${esc(ORDER_STATUS[o.trangThaiQuanTri] || o.trangThaiQuanTri)}<br><small style="color:${o.trangThaiThanhToan === "refund" ? "#dc2626" : "#64748b"}">${esc(PAYMENT_STATUS[o.trangThaiThanhToan] || "")}</small></td>
+        <td>${esc(o.tenNguoiNhan || "--")}<br><small class="QLDH_sub">${esc(o.soDienThoaiNhan || "")}</small></td>
+        <td><strong>${esc(currency(o.tongTien))}</strong>${Number(o.giamGia) > 0 ? `<br><small class="QLDH_sub">Voucher ${esc(o.maVoucher || "")}</small>` : ""}</td>
+        <td>${statusChip(o)}<br>${payChip(o)}</td>
         <td><button class="QLDH_btn-detail" data-id="${esc(o.maDonHang)}">Xem</button></td>`;
       tbody.appendChild(tr);
     });
@@ -254,6 +308,7 @@
     const dateTo = document.getElementById("QLDH_filterDateTo").value;
     const stVal = document.getElementById("QLDH_filterStatus").value;
     const idText = document.getElementById("QLDH_searchId").value.trim().toLowerCase();
+    const payVal = document.getElementById("QLDH_filterPay").value;
 
     const filtered = list.filter((o) => {
       // Lọc theo khoảng ngày
@@ -270,8 +325,10 @@
         }
       }
       const okStatus = stVal === "all" || o.trangThaiQuanTri === stVal;
-      const okId = !idText || (o.maDonHang || "").toLowerCase().includes(idText);
-      return okDate && okStatus && okId;
+      const okPay = payVal === "all" || o.trangThaiThanhToan === payVal;
+      const hay = `${o.maDonHang || ""} ${o.tenNguoiNhan || ""} ${o.soDienThoaiNhan || ""}`.toLowerCase();
+      const okId = !idText || hay.includes(idText);
+      return okDate && okStatus && okPay && okId;
     });
 
     // Mới nhất lên đầu (theo ngayDat giảm dần; ngày không hợp lệ xuống cuối)
@@ -292,8 +349,9 @@
 
   function openDetail(id) {
     const orders = getLocalOrders();
-    const o = orders.find((x) => x.maDonHang === id);
-    if (!o) return;
+    const found = orders.find((x) => x.maDonHang === id);
+    if (!found) return;
+    const o = withUserFields(found);
 
     // Cập nhật thông tin cơ bản
     document.getElementById("QLDH_md_id").textContent = o.maDonHang;
@@ -305,10 +363,10 @@
     // Cập nhật địa chỉ và ghi chú
     const addressEl = document.getElementById("QLDH_md_address");
     addressEl.textContent = o.diaChiGiaoHang || "--";
-    const payLabel = { COD: "Thanh toán khi nhận hàng", PayBank: "Chuyển khoản ngân hàng", Shop: "Nhận tại cửa hàng" }[o.phuongThucThanhToan] || o.phuongThucThanhToan || "--";
+    const payLabel = PAY_METHOD[o.phuongThucThanhToan] || o.phuongThucThanhToan || "--";
     const payStatusLabel = PAYMENT_STATUS[o.trangThaiThanhToan] || "";
     document.getElementById("QLDH_md_payment").textContent = payLabel + (payStatusLabel ? ` (${payStatusLabel})` : "");
-    const noteParts = [o.ghiChu, `Phí vận chuyển: ${currency(o.tienVanChuyen)}`, o.thuDienTuNguoiNhan ? `Email: ${o.thuDienTuNguoiNhan}` : ""].filter(Boolean);
+    const noteParts = [o.ghiChu, o.thuDienTuNguoiNhan ? `Email: ${o.thuDienTuNguoiNhan}` : ""].filter(Boolean);
     // textContent: tự động an toàn trước XSS (không cần esc, tránh escape 2 lần)
     document.getElementById("QLDH_md_note").textContent = noteParts.join(" | ");
 
@@ -324,6 +382,13 @@
       tbody.appendChild(tr);
     });
 
+    const itemsTotal = (o.chiTiet || []).reduce((sum, it) => sum + (Number(it.soLuong) || 0) * (Number(it.donGia) || 0), 0);
+    const sub = Number(o.tamTinh) || itemsTotal;
+    const rows = [["Tiền hàng", currency(sub)]];
+    if (Number(o.giamGia) > 0) rows.push([`Giảm giá voucher ${o.maVoucher || ""}`, "-" + currency(o.giamGia)]);
+    rows.push(["Phí vận chuyển", Number(o.tienVanChuyen) > 0 ? currency(o.tienVanChuyen) : "Miễn phí"]);
+    document.getElementById("QLDH_md_breakdown").innerHTML = rows
+      .map(([label, value]) => `<div><span>${esc(label)}</span><span>${esc(value)}</span></div>`).join("");
     document.getElementById("QLDH_md_total").textContent = currency(o.tongTien);
     
     // Cập nhật dropdown trạng thái và lưu ID đơn hàng
@@ -333,8 +398,7 @@
     const next = window.ShopCore && typeof window.ShopCore.nextStatuses === "function"
       ? window.ShopCore.nextStatuses(current)
       : [];
-    const cskh = laCSKH();
-    const nextQuyen = cskh ? next.filter((s) => s === "huy") : next;
+    const nextQuyen = next.filter((s) => quyenChuyen(s));
     const allowed = [current, ...nextQuyen.filter((s) => s !== current)];
     statusSelect.innerHTML = allowed
       .map((s) => `<option value="${esc(s)}">${esc(ORDER_STATUS[s] || s)}</option>`)
@@ -373,10 +437,23 @@
   }
 
   function updateStatus(id, newStatus) {
-    if (laCSKH() && newStatus !== "huy") {
-      alert("Nhân viên CSKH chỉ được hủy đơn. Việc xác nhận/giao hàng do bộ phận bán hàng hoặc Admin thực hiện.");
+    if (!quyenChuyen(newStatus)) {
+      alert(newStatus === "huy"
+        ? "Bạn không có quyền hủy đơn hàng."
+        : "Bạn không có quyền xác nhận/giao đơn. Việc này do nhân viên bán hàng hoặc Admin thực hiện (CSKH chỉ được hủy đơn).");
       return false;
     }
+    const order = getLocalOrders().find((o) => o && o.maDonHang === id);
+    const current = order ? order.trangThaiQuanTri : "";
+    if (current && current === newStatus) return true;
+    let question = `Chuyển đơn ${id} sang "${ORDER_STATUS[newStatus] || newStatus}"?`;
+    if (newStatus === "huy") {
+      const daThu = order && order.trangThaiThanhToan === "paid";
+      question = `HỦY đơn ${id}? Hàng đã trừ kho sẽ được hoàn lại.` + (daThu ? "\nĐơn đã thanh toán nên sẽ chuyển sang trạng thái \"Cần hoàn tiền\"." : "") + "\nThao tác không thể hoàn tác.";
+    } else if (newStatus === "daGiao") {
+      question = `Xác nhận đơn ${id} ĐÃ GIAO thành công? Hệ thống sẽ chốt giá vốn, cộng số lượng đã bán và gửi tin cảm ơn cho khách.`;
+    }
+    if (!window.confirm(question)) return false;
     // ShopCore cập nhật cả 2 kho (ordersLocal + DanhSachDatHang), hoàn/trừ tồn kho và số lượng đã bán.
     const result = window.ShopCore
       ? window.ShopCore.setOrderStatus(id, newStatus)
@@ -386,6 +463,16 @@
       return false;
     }
     if (!result.unchanged) ghiDauMoc(id, newStatus);
+    // Khi đơn được xác nhận ĐÃ GIAO: gửi tin cảm ơn vào khung chat của khách.
+    if (!result.unchanged && newStatus === "daGiao") {
+      const order = getLocalOrders().find((o) => o && o.maDonHang === id);
+      const customerId = order?.maKhachHang || order?.khachHang?.maKhachHang;
+      const customerName = order?.khachHang?.hoTen || order?.tenNguoiNhan || "";
+      if (customerId && window.SupportChatAdmin?.sendSystemMessage) {
+        const text = `Cảm ơn quý khách đã mua hàng tại OOAD Shop! Đơn hàng ${id} của quý khách đã được giao thành công. Rất mong quý khách hài lòng với sản phẩm và dịch vụ của shop. Quý khách nhớ vào phần Lịch sử đơn hàng để đánh giá sản phẩm vừa mua giúp shop nhé, đánh giá của quý khách là động lực rất lớn để shop phục vụ tốt hơn. Nếu cần hỗ trợ, quý khách cứ nhắn tin ngay tại đây hoặc gọi hotline 0354 109 892. Trân trọng!`;
+        window.SupportChatAdmin.sendSystemMessage(customerId, customerName, text);
+      }
+    }
     renderTable(filterOrders(getLocalOrders()));
     return true;
   }
@@ -418,6 +505,14 @@
       renderTable(filterOrders(getLocalOrders()));
     });
     document.getElementById("QLDH_filterDateTo").addEventListener("change", () => {
+      currentPage = 1;
+      renderTable(filterOrders(getLocalOrders()));
+    });
+    document.getElementById("QLDH_filterPay").addEventListener("change", () => {
+      currentPage = 1;
+      renderTable(filterOrders(getLocalOrders()));
+    });
+    document.getElementById("QLDH_searchId").addEventListener("input", () => {
       currentPage = 1;
       renderTable(filterOrders(getLocalOrders()));
     });
@@ -478,6 +573,9 @@
         daTra: 0
       })),
       tongTien: o.tongTien,
+      tamTinh: o.tamTinh,
+      giamGia: o.giamGia,
+      maVoucher: o.maVoucher || "",
       trangThaiQuanTri: o.trangThaiQuanTri || (window.ShopCore ? window.ShopCore.USER_TO_ADMIN[o.trangThai] : "") || "moiDat",
       phuongThucThanhToan: o.phuongThucThanhToan,
       trangThaiThanhToan: o.trangThaiThanhToan || "",

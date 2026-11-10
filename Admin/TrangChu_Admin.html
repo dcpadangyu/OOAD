@@ -8,19 +8,20 @@
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
     />
-    <link rel="stylesheet" href="assets/css/admin.css" />
+    <link rel="stylesheet" href="assets/css/admin.css?v=4" />
     <link rel="stylesheet" href="assets/css/DangNhap_Admin.css" />
     <link rel="stylesheet" href="assets/css/admin-spa.css" />
-    <link rel="stylesheet" href="assets/css/QuanLySanPham.css" />
+    <link rel="stylesheet" href="assets/css/QuanLySanPham.css?v=6" />
     <link rel="stylesheet" href="assets/css/QuanLyNhapHang.css" />
-    <link rel="stylesheet" href="assets/css/TonKho.css" />
-    <link rel="stylesheet" href="assets/css/QuanLyGiaBan.css" />
-    <link rel="stylesheet" href="assets/css/QuanLyDonHang.css" />
+    <link rel="stylesheet" href="assets/css/TonKho.css?v=2" />
+    <link rel="stylesheet" href="assets/css/QuanLyGiaBan.css?v=b2" />
+    <link rel="stylesheet" href="assets/css/QuanLyDonHang.css?v=b2" />
     
     <link rel="stylesheet" href="assets/css/QuanLyDanhGia.css?v=1" />
+    <link rel="stylesheet" href="assets/css/QuanLyVoucher.css?v=2" />
     <link rel="stylesheet" href="assets/css/BaoCaoDoanhThu.css" />
     <link rel="stylesheet" href="assets/css/QuanLyNhanVien.css" />
-    <link rel="stylesheet" href="assets/css/SupportChat.css" />
+    <link rel="stylesheet" href="assets/css/SupportChat.css?v=5" />
     <link rel="stylesheet" href="assets/css/admin-luxury-theme.css" />
   </head>
 
@@ -157,6 +158,17 @@
           </div>
 
           <div class="nav-section" data-role="admin">
+            <h3>Khuyến mãi</h3>
+            <ul>
+              <li class="menu-item">
+                <a href="#" data-route="/vouchers" class="nav-link" data-role="admin">
+                  <i class="fa-solid fa-ticket"></i> Quản lý voucher
+                </a>
+              </li>
+            </ul>
+          </div>
+
+          <div class="nav-section" data-role="admin">
             <h3>Quản lý nhân viên</h3>
             <ul>
               <li class="menu-item">
@@ -233,6 +245,9 @@
                 </div>
               </div>
             </div>
+
+            <!-- Việc cần xử lý (admin.js render) -->
+            <div class="dashboard-todo" id="dashboardTodo"></div>
 
             <!-- Quick Actions -->
             <div class="quick-actions">
@@ -487,32 +502,38 @@
                 <hr />
 
                 <form id="QLSP_formThemSP">
-                  <label for="QLSP_spId">Mã sản phẩm</label>
-                  <input type="text" id="QLSP_spId" required />
+                  <div class="QLSP_field">
+                    <label for="QLSP_spId">Mã sản phẩm</label>
+                    <input type="text" id="QLSP_spId" required />
+                  </div>
 
-                  <label for="QLSP_spCatalog">Danh mục</label>
-                  <select id="QLSP_spCatalog">
+                  <div class="QLSP_field">
+                    <label for="QLSP_spCatalog">Danh mục</label>
+                    <select id="QLSP_spCatalog">
                     <option value="Nike">Nike</option>
                     <option value="Adidas">Adidas</option>
                     <option value="Converse">Converse</option>
                     <option value="MLB">MLB</option>
                     <option value="Vans">Vans</option>
                   </select>
+                  </div>
 
-                  <label for="QLSP_spName">Tên sản phẩm</label>
-                  <input type="text" id="QLSP_spName" required />
+                  <div class="QLSP_field QLSP_field-full">
+                    <label for="QLSP_spName">Tên sản phẩm</label>
+                    <input type="text" id="QLSP_spName" required />
+                  </div>
 
-                  <label for="QLSP_spGender">Giới tính</label>
-                  <select id="QLSP_spGender">
+                  <div class="QLSP_field">
+                    <label for="QLSP_spGender">Giới tính</label>
+                    <select id="QLSP_spGender">
                     <option value="Nam">Nam</option>
                     <option value="Nữ">Nữ</option>
                   </select>
+                  </div>
 
-                  <label for="QLSP_spDesc">Mô tả</label>
-                  <textarea id="QLSP_spDesc" rows="3"></textarea>
-
-                  <label for="QLSP_spColor">Màu sắc</label>
-                  <select id="QLSP_spColor">
+                  <div class="QLSP_field">
+                    <label for="QLSP_spColor">Màu sắc</label>
+                    <select id="QLSP_spColor">
                     <option value="Đen" selected>Đen</option>
                     <option value="Trắng">Trắng</option>
                     <option value="Vàng">Vàng</option>
@@ -521,22 +542,34 @@
                     <option value="Xanh lá">Xanh lá</option>
                     <option value="Xanh dương">Xanh dương</option>
                   </select>
+                  </div>
 
-                  <label for="QLSP_spMaterial">Chất liệu giày</label>
-                  <select id="QLSP_spMaterial">
+                  <div class="QLSP_field">
+                    <label for="QLSP_spMaterial">Chất liệu giày</label>
+                    <select id="QLSP_spMaterial">
                     <option value="Da">Da</option>
                     <option value="Vải">Vải</option>
                     <option value="Da tổng hợp">Da tổng hợp</option>
                   </select>
+                  </div>
 
-                  <label for="QLSP_spStyle">Phong cách giày</label>
-                  <select id="QLSP_spStyle">
+                  <div class="QLSP_field">
+                    <label for="QLSP_spStyle">Phong cách giày</label>
+                    <select id="QLSP_spStyle">
                     <option value="Casual">Casual</option>
                     <option value="Thể thao">Thể thao</option>
                   </select>
+                  </div>
 
-                  <label for="QLSP_spImportPrice">Giá nhập (VNĐ)</label>
-                  <input type="number" id="QLSP_spImportPrice" required />
+                  <div class="QLSP_field">
+                    <label for="QLSP_spImportPrice">Giá nhập (VNĐ)</label>
+                    <input type="number" id="QLSP_spImportPrice" required />
+                  </div>
+
+                  <div class="QLSP_field QLSP_field-full">
+                    <label for="QLSP_spDesc">Mô tả</label>
+                    <textarea id="QLSP_spDesc" rows="3"></textarea>
+                  </div>
 
                   <hr />
 
@@ -544,8 +577,10 @@
                   <input type="hidden" id="QLSP_spSize" />
                   <div id="QLSP_spSizeEditor"></div>
 
-                  <label for="QLSP_spDescription">Mô tả chi tiết</label>
-                  <textarea id="QLSP_spDescription" rows="3"></textarea>
+                  <div class="QLSP_field QLSP_field-full">
+                    <label for="QLSP_spDescription">Mô tả chi tiết</label>
+                    <textarea id="QLSP_spDescription" rows="3"></textarea>
+                  </div>
 
                   <label class="QLSP_file-upload-label">
                     <span>📷 Chọn ảnh sản phẩm</span>
@@ -582,32 +617,38 @@
                   >
                 </div>
 
-                <label for="QLSP_editId">Mã sản phẩm</label>
-                <input type="text" id="QLSP_editId" readonly />
+                <div class="QLSP_field">
+                  <label for="QLSP_editId">Mã sản phẩm</label>
+                  <input type="text" id="QLSP_editId" readonly />
+                </div>
 
-                <label for="QLSP_editCatalog">Danh mục</label>
-                <select id="QLSP_editCatalog">
+                <div class="QLSP_field">
+                  <label for="QLSP_editCatalog">Danh mục</label>
+                  <select id="QLSP_editCatalog">
                   <option value="Nike" selected>Nike</option>
                   <option value="Adidas">Adidas</option>
                   <option value="Converse">Converse</option>
                   <option value="MLB">MLB</option>
                   <option value="Vans">Vans</option>
                 </select>
+                </div>
 
-                <label for="QLSP_editName">Tên sản phẩm</label>
-                <input type="text" id="QLSP_editName" />
+                <div class="QLSP_field QLSP_field-full">
+                  <label for="QLSP_editName">Tên sản phẩm</label>
+                  <input type="text" id="QLSP_editName" />
+                </div>
 
-                <label for="QLSP_editGender">Giới tính</label>
-                <select id="QLSP_editGender">
+                <div class="QLSP_field">
+                  <label for="QLSP_editGender">Giới tính</label>
+                  <select id="QLSP_editGender">
                   <option value="Nam">Nam</option>
                   <option value="Nữ">Nữ</option>
                 </select>
+                </div>
 
-                <label for="QLSP_editDesc">Mô tả</label>
-                <textarea id="QLSP_editDesc" rows="2"></textarea>
-
-                <label for="QLSP_editColor">Màu sắc</label>
-                <select id="QLSP_editColor">
+                <div class="QLSP_field">
+                  <label for="QLSP_editColor">Màu sắc</label>
+                  <select id="QLSP_editColor">
                   <option value="Đen" selected>Đen</option>
                   <option value="Trắng">Trắng</option>
                   <option value="Vàng">Vàng</option>
@@ -616,28 +657,42 @@
                   <option value="Xanh lá">Xanh lá</option>
                   <option value="Xanh dương">Xanh dương</option>
                 </select>
+                </div>
 
-                <label for="QLSP_editImportPrice">Giá nhập (VNĐ)</label>
-                <input type="number" id="QLSP_editImportPrice" />
-
-                <label for="QLSP_editVisibility">Hiển thị</label>
-                <select id="QLSP_editVisibility">
-                  <option value="visible">Hiển thị</option>
-                  <option value="hidden">Ẩn</option>
-                </select>
-
-                <label for="QLSP_editMaterial">Chất liệu giày</label>
-                <select id="QLSP_editMaterial">
+                <div class="QLSP_field">
+                  <label for="QLSP_editMaterial">Chất liệu giày</label>
+                  <select id="QLSP_editMaterial">
                   <option value="Da">Da</option>
                   <option value="Vải">Vải</option>
                   <option value="Da tổng hợp">Da tổng hợp</option>
                 </select>
+                </div>
 
-                <label for="QLSP_editStyle">Phong cách giày</label>
-                <select id="QLSP_editStyle">
+                <div class="QLSP_field">
+                  <label for="QLSP_editStyle">Phong cách giày</label>
+                  <select id="QLSP_editStyle">
                   <option value="Casual">Casual</option>
                   <option value="Thể thao">Thể thao</option>
                 </select>
+                </div>
+
+                <div class="QLSP_field">
+                  <label for="QLSP_editImportPrice">Giá nhập (VNĐ)</label>
+                  <input type="number" id="QLSP_editImportPrice" />
+                </div>
+
+                <div class="QLSP_field">
+                  <label for="QLSP_editVisibility">Hiển thị</label>
+                  <select id="QLSP_editVisibility">
+                  <option value="visible">Hiển thị</option>
+                  <option value="hidden">Ẩn</option>
+                </select>
+                </div>
+
+                <div class="QLSP_field QLSP_field-full">
+                  <label for="QLSP_editDesc">Mô tả</label>
+                  <textarea id="QLSP_editDesc" rows="2"></textarea>
+                </div>
 
                 <hr />
 
@@ -645,8 +700,10 @@
                 <input type="hidden" id="QLSP_editSize" />
                 <div id="QLSP_editSizeEditor"></div>
 
-                <label for="QLSP_editDescription">Mô tả chi tiết</label>
-                <textarea id="QLSP_editDescription" rows="3"></textarea>
+                <div class="QLSP_field QLSP_field-full">
+                  <label for="QLSP_editDescription">Mô tả chi tiết</label>
+                  <textarea id="QLSP_editDescription" rows="3"></textarea>
+                </div>
 
                 <label class="QLSP_file-upload-label">
                   <span>📷 Chọn ảnh sản phẩm</span>
@@ -871,6 +928,9 @@
               </p>
             </div>
 
+            <!-- Tổng quan tồn kho (TonKho.js render) -->
+            <div class="TK_summary" id="TK_summary"></div>
+
             <div class="TK_boLoc">
               <select name="locDanhMuc" id="TK_locDanhMuc">
                 <option value="all">Tất cả sản phẩm</option>
@@ -899,12 +959,21 @@
               <label
                 >Đến ngày: <input type="date" id="TK_filterDateTo"
               /></label>
-              <button id="TK_btnFilter">Lọc dữ liệu</button>
+              <button id="TK_btnFilter">Lọc</button>
+              <select id="TK_sapXep" title="Sắp xếp danh sách">
+                <option value="">Sắp xếp: Mặc định</option>
+                <option value="tonTang">Tồn kho: ít → nhiều</option>
+                <option value="tonGiam">Tồn kho: nhiều → ít</option>
+                <option value="giaTriGiam">Giá trị tồn: cao → thấp</option>
+                <option value="banGiam">Đã bán: nhiều → ít</option>
+                <option value="ten">Tên A → Z</option>
+              </select>
+              <button id="TK_btnExport" type="button" title="Tải danh sách đang hiển thị (đã lọc) về file CSV mở được bằng Excel">Xuất CSV</button>
             </div>
 
             <!-- Bộ chọn loại hàng -->
             <div class="TK_tab-status">
-              <button class="TK_active" data-type="all">Tất cả</button>
+              <button class="active TK_active" data-type="all">Tất cả</button>
               <button data-type="binhThuong">Bình thường</button>
               <button data-type="sapHetHang">Sắp hết hàng</button>
               <button data-type="hetHang">Hết hàng</button>
@@ -922,8 +991,15 @@
                   class="nguong-input"
                   placeholder="VD: 10"
                 />
-                <span class="nguong-donvi">sản phẩm</span>
+                <span class="nguong-donvi" title="Sản phẩm có tổng tồn nhỏ hơn số này được tính là sắp hết hàng">đôi (tổng tồn)</span>
               </div>
+            </div>
+
+            <div class="TK_legend">
+              <span><i class="TK_dot TK_dot-ok"></i> Size còn từ 3 đôi</span>
+              <span><i class="TK_dot TK_dot-low"></i> Size còn 1–2 đôi</span>
+              <span><i class="TK_dot TK_dot-out"></i> Size đã hết</span>
+              <span class="TK_legend-note">“Chờ giao” là hàng đã trừ kho nhưng đơn chưa giao. Nhập − Đã bán − Chờ giao = Tồn.</span>
             </div>
 
             <!-- Tiêu đề bảng -->
@@ -970,10 +1046,14 @@
             <!-- Nội dung sẽ được JS (quanlydanhgia.js) render -->
           </section>
 
+          <section id="page-vouchers" class="spa-page">
+            <!-- Nội dung sẽ được JS (QuanLyVoucher.js) render -->
+          </section>
+
           <section id="page-support" class="spa-page">
             <div class="page-header">
               <h1>Hỗ trợ khách hàng</h1>
-              <p>Chat, gửi ảnh, chia sẻ sản phẩm và gọi miễn phí với khách hàng.</p>
+              <p>Chat, gửi ảnh và chia sẻ sản phẩm với khách hàng.</p>
             </div>
             <div id="supportAdminRoot"></div>
           </section>
@@ -1128,9 +1208,9 @@
     </div>
 
     <!-- Load core admin scripts (no API calls) -->
-    <script src="../database/migrate-schema.js?v=vi6"></script>
-    <script src="assets/js/admin-session.js?v=vi6"></script>
-    <script src="assets/js/admin.js?v=vi6"></script>
+    <script src="../database/migrate-schema.js?v=vi7"></script>
+    <script src="assets/js/admin-session.js?v=p3"></script>
+    <script src="assets/js/admin.js?v=tvi7"></script>
 
     <script src="../database/products-shoes.js?v=vi6"></script>
     <script src="../database/feedback-store.js?v=vi6"></script>
@@ -1138,24 +1218,27 @@
     <script src="../database/employees.js?v=vi6"></script>
     
     <!-- Per-page scripts (kept client-side, no API) -->
-    <script src="assets/js/doanhthu.js?v=vi6"></script>
-    <script src="assets/js/quanlydonhang.js?v=vi6"></script>
+    <script src="assets/js/doanhthu.js?v=vi7"></script>
+    <script src="assets/js/quanlydonhang.js?v=p2"></script>
     <script src="assets/js/quanlydanhgia.js?v=vi6"></script>
-    <script src="assets/js/support-chat.js?v=1"></script>
+<script src="../database/password-util.js?v=1"></script>
+<script src="../database/vouchers.js?v=2"></script>
+<script src="assets/js/QuanLyVoucher.js?v=3"></script>
+    <script src="assets/js/support-chat.js?v=11"></script>
     
-    <script src="assets/js/quanlyloaisanpham.js?v=vi6"></script>
-    <script src="assets/js/quanlynguoidung.js?v=vi6"></script>
-    <script src="assets/js/QuanLyNhapHang.js?v=nh1"></script>
-    <script src="assets/js/size-editor.js?v=nh2"></script>
-    <script src="assets/js/QuanLySanPham.js?v=nh2"></script>
-    <script src="assets/js/TonKho.js?v=vi6"></script>
-    <script src="assets/js/QuanLyGiaBan.js?v=vi6"></script>
+    <script src="assets/js/quanlyloaisanpham.js?v=b2"></script>
+    <script src="assets/js/quanlynguoidung.js?v=b3"></script>
+    <script src="assets/js/QuanLyNhapHang.js?v=p2"></script>
+    <script src="assets/js/size-editor.js?v=nh3"></script>
+    <script src="assets/js/QuanLySanPham.js?v=p3"></script>
+    <script src="assets/js/TonKho.js?v=t2"></script>
+    <script src="assets/js/QuanLyGiaBan.js?v=b2"></script>
     <script src="assets/js/nhanvien-session.js?v=vi6"></script>
-    <script src="assets/js/QuanLyNhanVien.js?v=vi6"></script>
-    <script src="assets/js/nhanvien-info.js?v=vi6"></script>
+    <script src="assets/js/QuanLyNhanVien.js?v=p3"></script>
+    <script src="assets/js/nhanvien-info.js?v=p2"></script>
     <script src="assets/js/admin-info.js?v=vi6"></script>
 
     <!-- SPA navigation (hash/query-based; works with file:// and http://) -->
-    <script src="assets/js/admin-spa-nav.js?v=vi6"></script>
+    <script src="assets/js/admin-spa-nav.js?v=vi7"></script>
   </body>
 </html>

@@ -38,13 +38,21 @@
               giaVon: p.giaVon,
             })),
             tongTien: o.tongTien || 0,
+            giamGia: o.giamGia,
             trangThaiQuanTri: o.trangThaiQuanTri || (window.ShopCore && window.ShopCore.USER_TO_ADMIN ? window.ShopCore.USER_TO_ADMIN[o.trangThai] : "") || (o.trangThai === "da-huy" ? "huy" : "moiDat"),
           };
         });
 
       // Merge: đơn admin (đã cập nhật trạng thái) ở trước, đơn user chỉ thêm nếu chưa có id
       const byId = new Map();
-      adminOrders.forEach((o) => o && o.maDonHang && byId.set(o.maDonHang, o));
+      const discountById = new Map();
+      (userOrders || []).forEach((o) => { if (o && o.maDonHang) discountById.set(o.maDonHang, Number(o.giamGia) || 0); });
+      adminOrders.forEach((o) => {
+        if (!o || !o.maDonHang) return;
+        // Đơn Admin tạo trước khi có voucher không lưu giamGia: bổ sung từ đơn của khách.
+        if (o.giamGia === undefined && discountById.has(o.maDonHang)) o = Object.assign({}, o, { giamGia: discountById.get(o.maDonHang) });
+        byId.set(o.maDonHang, o);
+      });
       converted.forEach((o) => { if (!byId.has(o.maDonHang)) byId.set(o.maDonHang, o); });
       return Array.from(byId.values());
     } catch (e) {
@@ -74,8 +82,19 @@
   }
 
   // Doanh thu của 1 đơn = tổng donGia * soLuong của chiTiet (không tính phí vận chuyển)
-  function orderRevenue(o) {
+  // Tiền hàng theo giá niêm yết (chưa trừ voucher, chưa gồm phí vận chuyển)
+  function orderGross(o) {
     return getSaleItems(o).reduce((s, it) => s + (Number(it.donGia) || 0) * (Number(it.soLuong) || 0), 0);
+  }
+
+  // Tiền voucher đã giảm cho đơn (không vượt tiền hàng)
+  function orderDiscount(o) {
+    return Math.min(orderGross(o), Math.max(0, Number(o.giamGia) || 0));
+  }
+
+  // Doanh thu thực của đơn = tiền hàng − giảm giá voucher
+  function orderRevenue(o) {
+    return orderGross(o) - orderDiscount(o);
   }
 
   // Ngày ghi nhận doanh thu = ngày GIAO hàng (đơn cũ chưa có ngày giao thì dùng ngày đặt)
@@ -131,6 +150,7 @@
       </div>
       <div class="BCDT_cards">
         <div class="BCDT_card"><div class="title">Tổng doanh thu</div><div id="BCDT_total" class="value">0₫</div></div>
+        <div class="BCDT_card"><div class="title">Voucher đã giảm cho khách</div><div id="BCDT_discount" class="value">0₫</div></div>
         <div class="BCDT_card"><div class="title">Số đơn</div><div id="BCDT_orders" class="value">0</div></div>
         <div class="BCDT_card"><div class="title">Giá trị TB/đơn</div><div id="BCDT_avg" class="value">0₫</div></div>
         <div class="BCDT_card"><div class="title">SL sản phẩm đã bán</div><div id="BCDT_qty" class="value">0</div></div>
@@ -152,7 +172,7 @@
         <h4>Chi tiết doanh thu theo sản phẩm</h4>
         <div class="BCDT_tableWrap">
           <table class="BCDT_table BCDT_table-products">
-            <thead><tr><th>STT</th><th>Mã SP</th><th>Tên sản phẩm</th><th>SL bán</th><th>Giá bán</th><th>Doanh thu</th><th>% doanh thu</th><th>Lợi nhuận gộp</th></tr></thead>
+            <thead><tr><th>STT</th><th>Mã SP</th><th>Tên sản phẩm</th><th>SL bán</th><th>Giá bán</th><th>Doanh thu (sau voucher)</th><th>% doanh thu</th><th>Lợi nhuận gộp</th></tr></thead>
             <tbody id="BCDT_productDetail"></tbody>
           </table>
         </div>
@@ -248,9 +268,13 @@
     const prod = {};
     let totalQty = 0;
 
+    let totalDiscount = 0;
     filtered.forEach((o) => {
       const key = periodKey(new Date(ngayTinh(o)), viewType);
       timeData[key] = (timeData[key] || 0) + orderRevenue(o);
+      const gross = orderGross(o);
+      const discount = orderDiscount(o);
+      totalDiscount += discount;
 
       getSaleItems(o).forEach((it) => {
         const qty = it.soLuong || 0;
@@ -263,12 +287,15 @@
         cogs += gv.cost * qty;
         prod[idKey].cogs += gv.cost * qty;
         prod[idKey].qty += qty;
-        prod[idKey].rev += qty * price;
+        // Phân bổ giảm giá voucher theo tỷ trọng giá trị dòng hàng trong đơn
+        const share = gross > 0 ? (qty * price) / gross : 0;
+        prod[idKey].rev += qty * price - discount * share;
         prod[idKey].price = price || prod[idKey].price;
         totalQty += qty;
       });
     });
 
+    Object.values(prod).forEach((p) => { p.rev = Math.round(p.rev); });
     const productDetail = Object.values(prod)
       .map((p) => ({ ...p, share: total ? Math.round((p.rev / total) * 100 * 10) / 10 : 0 }))
       .sort((a, b) => b.rev - a.rev);
@@ -277,7 +304,7 @@
 
     const profit = total - cogs;
     const margin = total ? Math.round((profit / total) * 1000) / 10 : 0;
-    return { total, count, avg, totalQty, timeData, productDetail, top, cogs, profit, margin, dongUocTinh, dongThieu };
+    return { total, totalDiscount, count, avg, totalQty, timeData, productDetail, top, cogs, profit, margin, dongUocTinh, dongThieu };
   }
 
   function renderChart(data) {
@@ -372,6 +399,7 @@
 
   function render(data) {
     document.getElementById("BCDT_total").textContent = currency(data.total);
+    document.getElementById("BCDT_discount").textContent = currency(data.totalDiscount);
     document.getElementById("BCDT_orders").textContent = String(data.count);
     document.getElementById("BCDT_avg").textContent = currency(data.avg);
     document.getElementById("BCDT_qty").textContent = String(data.totalQty);
@@ -379,7 +407,7 @@
     const profitEl = document.getElementById("BCDT_profit");
     profitEl.textContent = currency(data.profit) + (data.total ? " (" + data.margin + "%)" : "");
     profitEl.style.color = data.profit < 0 ? "#dc2626" : "";
-    const notes = ["Doanh thu tính theo <b>ngày giao hàng</b>, chỉ đơn đã giao, không gồm phí vận chuyển. Lợi nhuận gộp = doanh thu − giá vốn hàng bán."];
+    const notes = ["Doanh thu tính theo <b>ngày giao hàng</b>, chỉ đơn đã giao, <b>đã trừ giảm giá voucher</b>, không gồm phí vận chuyển. Lợi nhuận gộp = doanh thu − giá vốn hàng bán."];
     if (data.dongUocTinh) notes.push("Có " + data.dongUocTinh + " dòng hàng chưa chốt giá vốn lúc giao nên giá vốn được <b>ước tính</b> theo giá vốn hiện tại.");
     if (data.dongThieu) notes.push("Có " + data.dongThieu + " dòng hàng không xác định được giá vốn (sản phẩm đã xóa hoặc chưa có giá nhập) nên chưa tính vào giá vốn, lợi nhuận có thể bị cao hơn thực tế.");
     document.getElementById("BCDT_note").innerHTML = notes.join("<br>");

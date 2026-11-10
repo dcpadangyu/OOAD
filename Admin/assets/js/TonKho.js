@@ -185,23 +185,19 @@ function TK_veBangTonKho(data) {
     const imgSrc = hinhAnh.startsWith("http") || hinhAnh.startsWith("data:") ? hinhAnh : "../" + hinhAnh;
 
     // Trạng thái
-    let statusClass = "TK_status-normal";
-    let statusText = "Bình thường";
-    if (soLuongTon === 0) {
-      statusClass = "TK_status-out";
-      statusText = "Hết hàng";
-    } else if (soLuongTon < nguongSapHet) {
-      statusClass = "TK_status-low";
-      statusText = "Sắp hết hàng";
-    } else {
-      statusClass = "TK_status-normal";
-      statusText = "Bình thường";
-    }
+    const loai = TK_loaiTon(sp);
+    const statusClass = { hetHang: "TK_status-out", sapHetHang: "TK_status-low", binhThuong: "TK_status-normal" }[loai];
+    const statusText = { hetHang: "Hết hàng", sapHetHang: "Sắp hết hàng", binhThuong: "Bình thường" }[loai];
+    // Cảnh báo vì sao sản phẩm chưa lên cửa hàng dù còn tồn
+    const canhBao = [];
+    if (sp.trangThaiHienThi === "hidden") canhBao.push("Đang ẩn");
+    if (!(Number(sp.giaBan) > 0)) canhBao.push("Chưa có giá bán");
+    const canhBaoHtml = canhBao.map((t) => `<span class="TK_flag" title="Sản phẩm chưa hiển thị trên cửa hàng">${t}</span>`).join("");
 
     const tr = document.createElement("tr");
     tr.innerHTML = `
       <td>${stt}</td>
-      <td>${TK_esc(sp.maSanPham)}<br><span class="TK_status-tag ${statusClass}">${statusText}</span></td>
+      <td>${TK_esc(sp.maSanPham)}<br><span class="TK_status-tag ${statusClass}">${statusText}</span>${canhBaoHtml}</td>
       <td><img src="${TK_esc(imgSrc)}" 
                onerror="this.onerror=null; this.src='../assets/img/no-image.png';" 
                alt="${TK_esc(sp.tenSanPham)}" style="width:50px;height:50px;border-radius:6px;object-fit:cover;"></td>
@@ -342,12 +338,88 @@ function TK_layDanhSachDaLoc() {
         String(sp.tenSanPham || "").toLowerCase().includes(kw)
     );
   }
-  return ds;
+  return TK_sapXepDanhSach(ds);
+}
+
+// --- Sắp xếp (không đổi mảng gốc) ---
+let TK_sapXepKieu = "";
+function TK_sapXepDanhSach(ds) {
+  const ton = (sp) => Number(sp.soLuongTon) || 0;
+  const so = {
+    tonTang: (a, b) => ton(a) - ton(b),
+    tonGiam: (a, b) => ton(b) - ton(a),
+    giaTriGiam: (a, b) => TK_giaTriTon(b) - TK_giaTriTon(a),
+    banGiam: (a, b) => (Number(b.tongDaBan) || 0) - (Number(a.tongDaBan) || 0),
+    ten: (a, b) => String(a.tenSanPham || "").localeCompare(String(b.tenSanPham || ""), "vi"),
+  }[TK_sapXepKieu];
+  return so ? ds.slice().sort(so) : ds;
+}
+
+// --- Phân loại tồn kho theo tổng số lượng và ngưỡng ---
+function TK_loaiTon(sp) {
+  const n = Number(sp.soLuongTon) || 0;
+  if (n === 0) return "hetHang";
+  return n < nguongSapHet ? "sapHetHang" : "binhThuong";
+}
+
+// --- Thẻ tổng quan + số lượng trên từng tab (tính trên TOÀN BỘ sản phẩm, không phụ thuộc bộ lọc) ---
+function TK_veTongQuan() {
+  const box = document.getElementById("TK_summary");
+  const all = TK_productsLocal || [];
+  const dem = { all: all.length, binhThuong: 0, sapHetHang: 0, hetHang: 0 };
+  let tongTon = 0;
+  let giaTri = 0;
+  all.forEach((sp) => {
+    dem[TK_loaiTon(sp)] += 1;
+    tongTon += Number(sp.soLuongTon) || 0;
+    giaTri += TK_giaTriTon(sp);
+  });
+  const giu = TK_dangGiu();
+  const tongGiu = Object.keys(giu).reduce((sum, ma) => sum + giu[ma], 0);
+  if (box) {
+    const card = (value, label, cls, title) => `<div class="TK_card ${cls || ""}" title="${TK_esc(title || "")}"><strong>${value}</strong><span>${label}</span></div>`;
+    box.innerHTML =
+      card(dem.all, "Sản phẩm", "", "Tổng số sản phẩm đang quản lý") +
+      card(tongTon.toLocaleString("vi-VN"), "Tổng tồn (đôi)", "", "Tổng số đôi còn trong kho") +
+      card(giaTri.toLocaleString("vi-VN") + "₫", "Giá trị tồn (giá vốn)", "", "Giá nhập × số lượng tồn") +
+      card(dem.sapHetHang, "Sắp hết hàng", dem.sapHetHang ? "TK_card-warn" : "", "Tổng tồn dưới " + nguongSapHet + " đôi") +
+      card(dem.hetHang, "Hết hàng", dem.hetHang ? "TK_card-danger" : "", "Tổng tồn bằng 0") +
+      card(tongGiu, "Đang chờ giao", "", "Đã trừ kho, đơn chưa giao");
+  }
+  const nhan = { all: "Tất cả", binhThuong: "Bình thường", sapHetHang: "Sắp hết hàng", hetHang: "Hết hàng" };
+  document.querySelectorAll(".TK_tab-status button[data-type]").forEach((btn) => {
+    const key = btn.getAttribute("data-type");
+    if (nhan[key]) btn.innerHTML = `${nhan[key]} <span class="TK_count">${dem[key]}</span>`;
+  });
+}
+
+// --- Xuất danh sách đang hiển thị ra CSV (có BOM để Excel đọc đúng tiếng Việt) ---
+function TK_xuatCSV() {
+  const rows = TK_mangDaLoc || [];
+  if (!rows.length) { alert("Không có dữ liệu để xuất."); return; }
+  const giu = TK_dangGiu();
+  const cell = (v) => `"${String(v ?? "").replace(/"/g, '""')}"`;
+  const head = ["Mã SP", "Tên sản phẩm", "Loại", "Tồn kho", "Tồn theo size", "Tổng nhập", "Đã bán", "Chờ giao", "Giá nhập", "Giá bán", "Giá trị tồn", "Tình trạng"];
+  const nhan = { binhThuong: "Bình thường", sapHetHang: "Sắp hết hàng", hetHang: "Hết hàng" };
+  const lines = [head.map(cell).join(",")].concat(rows.map((sp) => {
+    const stock = sp.tonKhoTheoSize && typeof sp.tonKhoTheoSize === "object" ? sp.tonKhoTheoSize : {};
+    const sizes = Object.keys(stock).sort((a, b) => Number(a) - Number(b)).map((k) => `${k}:${Number(stock[k]) || 0}`).join("; ");
+    return [sp.maSanPham, sp.tenSanPham, sp.maLoai, Number(sp.soLuongTon) || 0, sizes, Number(sp.tongDaNhap) || 0, Number(sp.tongDaBan) || 0,
+      giu[sp.maSanPham] || 0, Number(sp.giaNhap) || 0, Number(sp.giaBan) || 0, TK_giaTriTon(sp), nhan[TK_loaiTon(sp)]].map(cell).join(",");
+  }));
+  const blob = new Blob(["\ufeff" + lines.join("\r\n")], { type: "text/csv;charset=utf-8" });
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = "ton-kho-" + new Date().toISOString().slice(0, 10) + ".csv";
+  document.body.appendChild(a);
+  a.click();
+  setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 0);
 }
 
 function TK_apDungBoLoc(veTrang1) {
   if (veTrang1) TK_currentPage = 1;
   TK_mangDaLoc = TK_layDanhSachDaLoc();
+  TK_veTongQuan();
   TK_veBangTonKho(TK_mangDaLoc);
 }
 
@@ -524,11 +596,16 @@ function TK_ganSuKien() {
   const statusButtons = document.querySelectorAll(".TK_tab-status button");
   statusButtons.forEach((btn) => {
     btn.addEventListener("click", function () {
-      statusButtons.forEach((b) => b.classList.remove("TK_active"));
-      this.classList.add("TK_active");
+      statusButtons.forEach((b) => b.classList.remove("TK_active", "active"));
+      this.classList.add("TK_active", "active");
       TK_locTheoTrangThai(this.getAttribute("data-type"));
     });
   });
+
+  const sapXep = document.getElementById("TK_sapXep");
+  if (sapXep) sapXep.addEventListener("change", () => { TK_sapXepKieu = sapXep.value; TK_apDungBoLoc(true); });
+  const btnExport = document.getElementById("TK_btnExport");
+  if (btnExport) btnExport.addEventListener("click", TK_xuatCSV);
 
   // Nút lọc theo ngày
   const btnFilter = document.getElementById("TK_btnFilter");

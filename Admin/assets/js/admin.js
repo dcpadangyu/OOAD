@@ -10,6 +10,51 @@ document.addEventListener("DOMContentLoaded", function() {
     initializeEvents();
 });
 
+// Khối "Cần xử lý" trên dashboard: các việc tồn đọng cần người xử lý, bấm vào để tới đúng màn hình.
+function renderDashboardTodo(allOrders, readList) {
+    const box = document.getElementById('dashboardTodo');
+    if (!box) return;
+    const threshold = Number(localStorage.getItem('nguongSapHet')) || 10;
+    const products = readList('productsLocal');
+    const selling = products.filter(p => p && p.trangThaiHienThi !== 'hidden');
+    const outOfStock = selling.filter(p => (Number(p.soLuongTon) || 0) <= 0).length;
+    const lowStock = selling.filter(p => { const n = Number(p.soLuongTon) || 0; return n > 0 && n < threshold; }).length;
+    const pendingOrders = allOrders.filter(o => o.trangThaiQuanTri === 'moiDat').length;
+    const refunds = allOrders.filter(o => o.trangThaiThanhToan === 'refund').length;
+    const draftReceipts = readList('phieuNhapLocal').filter(r => r && r.trangThai === 'chuaHoanThanh').length;
+    const waitingChats = readList('supportThreads').filter(t => t && t.trangThai !== 'closed' && !t.nhanVienXuLy && (t.tinNhan || []).some(m => m.loaiNguoiGui === 'customer')).length;
+
+    const items = [
+        { route: '/orders', label: 'Đơn chờ xác nhận', count: pendingOrders, level: 'warn' },
+        { route: '/orders', label: 'Đơn cần hoàn tiền', count: refunds, level: 'danger' },
+        { route: '/inventory', label: 'Sản phẩm hết hàng', count: outOfStock, level: 'danger' },
+        { route: '/inventory', label: 'Sản phẩm sắp hết (dưới ' + threshold + ')', count: lowStock, level: 'warn' },
+        { route: '/import', label: 'Phiếu nhập chưa hoàn thành', count: draftReceipts, level: 'info' },
+        { route: '/support', label: 'Khách chờ nhân viên tiếp nhận', count: waitingChats, level: 'warn' },
+    ];
+    const render = (extra) => {
+        const all = extra ? items.concat(extra) : items;
+        const open = all.filter(i => i.count > 0);
+        box.innerHTML = '<h2>Cần xử lý' + (open.length ? '' : ' <small>— không có việc tồn đọng</small>') + '</h2>' +
+            '<div class="todo-grid">' + all.map(i =>
+                '<a href="#" data-route="' + i.route + '" class="todo-item todo-' + (i.count > 0 ? i.level : 'ok') + '">' +
+                '<strong>' + i.count + '</strong><span>' + i.label + '</span></a>').join('') + '</div>';
+        // Ẩn mục mà vai trò hiện tại không được vào (nhân viên chỉ thấy việc của mình)
+        if (typeof adminSession !== 'undefined' && adminSession.isNhanVien && adminSession.isNhanVien()) {
+            const visible = new Set(Array.from(document.querySelectorAll('.sidebar-nav a[data-route]')).filter(a => a.style.display !== 'none').map(a => a.getAttribute('data-route')));
+            box.querySelectorAll('.todo-item').forEach(a => { if (!visible.has(a.getAttribute('data-route'))) a.style.display = 'none'; });
+        }
+    };
+    render();
+    // Đánh giá mới nằm trong IndexedDB nên nạp bất đồng bộ rồi vẽ lại
+    if (window.FeedbackStore && typeof window.FeedbackStore.getAll === 'function') {
+        window.FeedbackStore.getAll().then(list => {
+            const fresh = (list || []).filter(i => i && i.trangThai === 'moi').length;
+            render([{ route: '/reviews', label: 'Đánh giá mới chưa xử lý', count: fresh, level: 'info' }]);
+        }).catch(() => {});
+    }
+}
+
 // Khởi tạo dashboard
 function initializeDashboard() {
     console.log("Admin Dashboard initialized");
@@ -70,9 +115,17 @@ function updateDashboardMetrics() {
         const allOrders = Array.from(byId.values());
         const activeOrders = allOrders.filter(o => o.trangThaiQuanTri !== 'huy' && o.trangThai !== 'da-huy');
         const ordersCount = activeOrders.length;
+        // Đơn Admin cũ không lưu giamGia: lấy từ đơn của khách để doanh thu khớp báo cáo.
+        const discountById = new Map();
+        readList('DanhSachDatHang').forEach(o => { if (o && o.maDonHang) discountById.set(o.maDonHang, toNumber(o.giamGia)); });
         const revenue = allOrders
             .filter(o => o.trangThaiQuanTri === 'daGiao')
-            .reduce((s, o) => s + (Array.isArray(o.chiTiet) ? o.chiTiet : []).reduce((t, it) => t + toNumber(it && it.donGia) * toNumber(it && it.soLuong), 0), 0);
+            .reduce((s, o) => {
+                const gross = (Array.isArray(o.chiTiet) ? o.chiTiet : []).reduce((t, it) => t + toNumber(it && it.donGia) * toNumber(it && it.soLuong), 0);
+                const discount = o.giamGia !== undefined ? toNumber(o.giamGia) : (discountById.get(o.maDonHang) || 0);
+                return s + gross - Math.min(gross, Math.max(0, discount));
+            }, 0);
+        renderDashboardTodo(allOrders, readList);
 
         // Doanh thu & số khách hàng chỉ hiển thị cho admin thật (ẩn với nhân viên)
         const isStaffUser = typeof adminSession !== 'undefined' && typeof adminSession.isNhanVien === 'function' && adminSession.isNhanVien();

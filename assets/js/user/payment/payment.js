@@ -327,7 +327,7 @@ document.addEventListener('DOMContentLoaded',function(){
         cart.forEach(item=>{
             subtotal+=Number(item.giaBan)*Number(item.soLuong);
         });
-        const appliedVoucher = window.ShopVoucher?.getApplied?.() || null;
+        const appliedVoucher = window.ShopVoucher?.getApplied?.(userLogin) || null;
         const discount = window.ShopVoucher?.discount?.(appliedVoucher, subtotal) || 0;
         if (appliedVoucher && discount <= 0) window.ShopVoucher?.clear?.();
         const shippingFee=calcShipping(subtotal, paymentfs);
@@ -368,6 +368,8 @@ document.addEventListener('DOMContentLoaded',function(){
                 notify('Không thể tạo đơn', 'Không thể lưu đơn hàng chuyển khoản (bộ nhớ trình duyệt đã đầy). Giỏ hàng được giữ nguyên.', 'error');
                 return false;
             }
+            // GIU ma voucher da ap dung: khach huy / het han don cho van con ma de dat lai.
+            // Ma chi bi go khi don duoc xac nhan (confirmBankOrder) hoac khach bam "Bo ma".
             window.SumCartEnd(1);
             return true;
         }
@@ -378,6 +380,8 @@ document.addEventListener('DOMContentLoaded',function(){
             notify(storageError ? 'Không thể đặt hàng' : 'Sản phẩm không đủ', result.message, storageError ? 'error' : 'warning');
             return false;
         }
+        // Đã dùng mã voucher cho đơn này: gỡ đã áp dụng để đơn sau không tự dùng lại.
+        window.ShopVoucher?.clear?.();
         window.SumCartEnd(0);
         return true;
     }
@@ -390,14 +394,22 @@ document.addEventListener('DOMContentLoaded',function(){
         const danhsach = getDanhSachDatHang();
         if (danhsach.some((order) => order.maDonHang === pending.maDonHang)) {
             clearPending();
+            window.ShopVoucher?.clear?.();
             removeOrderLinesFromCart(pending);
             return { ok: true };
+        }
+        // Voucher có thể đã hết hạn / hết lượt trong lúc chờ chuyển khoản: kiểm tra lại trước khi chốt đơn.
+        const voucherCheck = window.ShopVoucher?.revalidateOrder?.(pending, getlogin());
+        if (voucherCheck && !voucherCheck.ok) {
+            return { ok: false, message: 'Voucher ' + pending.maVoucher + ' không còn hiệu lực: ' + voucherCheck.message + ' Vui lòng đặt lại đơn hàng.' };
         }
         const order = { ...pending, trangThaiThanhToan: 'paid' };
         delete order.hetHanLuc;
         const result = finalizeOrder(order);
         if (!result.ok) return result;
         clearPending();
+        // Don da chinh thuc: ma voucher da "dung" -> go khoi gio de don sau khong tu ap lai.
+        window.ShopVoucher?.clear?.();
         return { ok: true };
     }
     window.cancelBankOrder=function(){

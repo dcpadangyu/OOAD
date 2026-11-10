@@ -15,7 +15,7 @@
 | `chatLieu` | STRING | NOT NULL |
 | `phongCach` | STRING | NOT NULL |
 | `kichCo` | STRING | NOT NULL (chuỗi mô tả, vd `36 - 44`) |
-| `tonKhoTheoSize` | JSON | `{ "36": 2, "37": 5, ... }` — tồn kho từng size (không có trong SQL) |
+| `tonKhoTheoSize` | JSON | `{ "36": 2, "37": 5, ... }` — tồn kho từng size (bảng `SAN_PHAM_SIZE` trong SQL) |
 | `giaBan` | NUMBER | > 0 (giá bán) |
 | `giaHienThi` | STRING | NOT NULL (giá hiển thị đã format `₫`) |
 | `hinhAnh` | STRING | NOT NULL |
@@ -88,7 +88,7 @@
 | `soLuongToiDa`, `soLuongDaDung` | NUMBER | Giới hạn lượt dùng |
 | `trangThai` | STRING | CHECK (`active` / `inactive` / `expired`) |
 
-Mã mẫu: `GIAYMOI10`, `GIAY200K`, `KHACHMOI`. Voucher được kiểm tra theo đơn tối thiểu và chốt giảm giá khi tạo đơn.
+Mã mẫu: `GIAYMOI10`, `GIAY200K`, `KHACHMOI`, `SALE2026` (còn hạn), `SALE2025` (đã hết hạn). Voucher được kiểm tra theo đơn tối thiểu, trạng thái và hạn dùng, chốt giảm giá khi tạo đơn; mã `KHACHMOI` được kiểm tra lại theo tài khoản đang đăng nhập mỗi lần đọc mã đã lưu.
 
 ## 5. Bảng `DON_HANG` — key `DanhSachDatHang` (user) + `ordersLocal` (admin)
 
@@ -201,9 +201,8 @@ SAN_PHAM (1) ──── (N) CHI_TIET_DON_HANG (N) ──── (1) DON_HANG (N
 
 - **Không dùng khóa tự tăng thật** — chỉ fake ID dạng chuỗi (`SH`, `NV`, `KH`, `PN`, `DH`) do giới hạn localStorage.
 - **`chiTiet` bị lồng trong mảng** đơn hàng / phiếu nhập. Nếu muốn chuẩn 3NF nên tách thành bảng con `CHI_TIET_DON_HANG`, `CHI_TIET_PHIEU_NHAP` (đã có trong `CuaHangGiay.sql`).
-- **Tồn kho theo size** (`tonKhoTheoSize`) là mở rộng so với bảng SQL: khi chuyển sang CSDL thật nên tách thành bảng `TON_KHO_SIZE(maSanPham, kichCo, soLuong)`.
+- **Tồn kho theo size** (`tonKhoTheoSize`) tương ứng bảng `SAN_PHAM_SIZE(maSanPham, kichCo, soLuongTon)` trong `CuaHangGiay.sql`; `SAN_PHAM.soLuongTon` luôn bằng tổng các size. Giỏ hàng, chi tiết đơn và đánh giá đều gắn thêm `kichCoDaChon`.
 - **Trạng thái phiếu nhập** mặc định nên để `chuaHoanThanh`; khi chuyển sang `hoanThanh` mới cộng tồn kho.
 - Đơn hàng lưu `maVoucher` và `giamGia` để lịch sử không thay đổi khi shop cập nhật voucher.
 - Mỗi entity tương ứng với **một localStorage key** (riêng đánh giá nằm trong IndexedDB). Dữ liệu cũ tên tiếng Anh được `database/migrate-schema.js` tự chuyển sang tên mới.
 - Hỗ trợ khách hàng dùng key `supportThreads`, gồm phiên chat và tin nhắn `text` / `image` / `product`. Ảnh demo lưu Data URL tối đa 2MB.
-- Cuộc gọi hỗ trợ được nhúng bằng Jitsi External API ở chế độ `audio-only`; phòng có dạng `OOAD-Support-<threadId>`. Đây là dịch vụ bên ngoài, chưa thay thế backend/WebSocket cho hệ thống thật.

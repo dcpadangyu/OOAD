@@ -541,39 +541,92 @@
     background: #f8fafc;
 }
 .voucher-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
     margin-bottom: 10px;
     font-weight: 700;
 }
+.voucher-clear {
+    border: 0;
+    background: transparent;
+    color: #dc2626;
+    font: 600 12px/1.2 inherit;
+    text-decoration: underline;
+    cursor: pointer;
+    padding: 2px 0;
+}
+.voucher-clear[hidden] {
+    display: none;
+}
 .voucher-list {
     display: grid;
-    gap: 8px;
+    gap: 10px;
+    max-height: 340px;
+    overflow-y: auto;
+    padding: 2px;
+}
+.voucher-empty {
+    padding: 14px;
+    border: 1px dashed #cbd5e1;
+    border-radius: 8px;
+    color: #64748b;
+    font-size: 13px;
+    text-align: center;
 }
 .voucher-card {
+    position: relative;
     display: flex;
-    gap: 8px;
-    align-items: flex-start;
-    padding: 9px;
-    border: 1px solid #dbeafe;
-    border-radius: 8px;
+    align-items: stretch;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
     background: #fff;
     cursor: pointer;
+    overflow: hidden;
+    transition: border-color .15s, box-shadow .15s;
 }
+.voucher-card:hover:not(.is-disabled) { border-color: #93c5fd; }
 .voucher-card.is-selected {
     border-color: #2563eb;
     box-shadow: 0 0 0 1px #2563eb;
+    background: #f5f9ff;
 }
-.voucher-card span {
+.voucher-card.is-disabled { cursor: not-allowed; background: #f8fafc; }
+.voucher-card.is-disabled .voucher-stub { background: #94a3b8; }
+.voucher-card.is-disabled .voucher-main { opacity: .8; }
+.voucher-stub {
     display: grid;
+    place-content: center;
     gap: 2px;
+    width: 84px;
+    flex: none;
+    padding: 10px 6px;
+    background: linear-gradient(135deg, #2563eb, #1d4ed8);
+    color: #fff;
+    text-align: center;
+    border-right: 2px dashed rgba(255, 255, 255, .6);
 }
-.voucher-card small {
-    color: #64748b;
-    font-size: 12px;
+.voucher-stub strong { font-size: 20px; line-height: 1.1; }
+.voucher-stub small { font-size: 11px; opacity: .9; }
+.voucher-main { flex: 1; min-width: 0; display: grid; gap: 3px; padding: 10px 40px 10px 12px; }
+.voucher-title { font-weight: 700; font-size: 14px; color: #0f172a; }
+.voucher-tag {
+    display: inline-block;
+    margin-left: 4px;
+    padding: 1px 7px;
+    border-radius: 999px;
+    background: #eff6ff;
+    color: #1d4ed8;
+    font-size: 11px;
+    font-style: normal;
+    font-weight: 600;
 }
-.voucher-card b {
-    color: #2563eb;
-    font-size: 12px;
-}
+.voucher-cond, .voucher-exp { color: #64748b; font-size: 12px; }
+.voucher-exp b { color: #2563eb; }
+.voucher-note { color: #059669; font-size: 12px; font-weight: 600; }
+.voucher-note.is-warn { color: #d97706; }
+.voucher-card > input[type="radio"] { position: absolute; top: 50%; right: 14px; transform: translateY(-50%); width: 18px; height: 18px; }
 .voucher-input-row {
     display: flex;
     gap: 8px;
@@ -611,25 +664,4 @@
     gap: 12px;
     margin: 8px 0;
     color: #059669;
-}
-
-/* Gio hang chi-doc tren trang chuyen khoan / cua hang: dong chi co 3 phan tu (san pham | gia | so luong),
-   ghi de cac luoi 4 cot cua giao dien cu (cot dau 72px danh cho o chon) */
-#ThanhToan_ChuyenKhoan .list_danhsach .modal_cart.readonly-cart .item-info,
-#ThanhToan_CuaHang .list_danhsach .modal_cart.readonly-cart .item-info,
-#ThanhToan_ChuyenKhoan .list_danhsach .modal_cart.readonly-cart .all-cart,
-#ThanhToan_CuaHang .list_danhsach .modal_cart.readonly-cart .all-cart {
-    grid-template-columns: minmax(0, 1fr) 112px 76px !important;
-}
-#ThanhToan_ChuyenKhoan .list_danhsach .modal_cart.readonly-cart .item-info div:nth-child(4),
-#ThanhToan_CuaHang .list_danhsach .modal_cart.readonly-cart .item-info div:nth-child(4) {
-    display: block;
-}
-@media (max-width: 860px) {
-    #ThanhToan_ChuyenKhoan .list_danhsach .modal_cart.readonly-cart .item-info,
-    #ThanhToan_CuaHang .list_danhsach .modal_cart.readonly-cart .item-info,
-    #ThanhToan_ChuyenKhoan .list_danhsach .modal_cart.readonly-cart .all-cart,
-    #ThanhToan_CuaHang .list_danhsach .modal_cart.readonly-cart .all-cart {
-        grid-template-columns: minmax(0, 1fr) 92px 56px !important;
-    }
 }

@@ -64,7 +64,7 @@
     if (!document.querySelector('link[data-ooda-redesign]')) {
       const style = document.createElement('link');
       style.rel = 'stylesheet';
-      style.href = 'assets/css/user/redesign.css?v=20260923-2317';
+      style.href = 'assets/css/user/redesign.css?v=20261110-1';
       style.dataset.oodaRedesign = 'true';
       document.head.appendChild(style);
     }
@@ -76,13 +76,13 @@
       const style = document.createElement("link");
       style.id = "support-chat-style";
       style.rel = "stylesheet";
-      style.href = "assets/css/user/support-chat.css?v=1";
+      style.href = "assets/css/user/support-chat.css?v=12";
       document.head.appendChild(style);
     }
     if (!document.getElementById("support-chat-script")) {
       const script = document.createElement("script");
       script.id = "support-chat-script";
-      script.src = "assets/js/user/support-chat.js?v=1";
+      script.src = "assets/js/user/support-chat.js?v=24";
       document.body.appendChild(script);
     }
   }

@@ -74,7 +74,8 @@ document.addEventListener("DOMContentLoaded", () => {
       popup("error", "Lỗi", "Mật khẩu mới phải có ít nhất 8 ký tự!");
       return;
     }
-    if (newPassword === currentPassword || newPassword === storedPassword) {
+    const verifyStored = (plain) => window.PasswordUtil ? window.PasswordUtil.verify(plain, storedPassword) : plain === storedPassword;
+    if (newPassword === currentPassword || verifyStored(newPassword)) {
       popup("error", "Lỗi", "Mật khẩu mới phải khác mật khẩu cũ!");
       return;
     }
@@ -83,7 +84,7 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
-    const hasValidOldPassword = !!currentPassword && currentPassword === storedPassword;
+    const hasValidOldPassword = !!currentPassword && verifyStored(currentPassword);
     let hasValidOtp = false;
     if (otpValue) {
       try {
@@ -99,8 +100,14 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
-    const updated = { ...storedUser, matKhau: newPassword };
+    const updated = { ...storedUser, matKhau: window.PasswordUtil ? window.PasswordUtil.hash(newPassword) : newPassword };
     window.UserSession.saveUser(updated, storedUser, { passwordChange: true });
+    // Đã đổi khỏi mật khẩu tạm do cửa hàng cấp.
+    try {
+        const all = JSON.parse(localStorage.getItem("userList") || "[]");
+        const t = all.find((x) => x && x.maKhachHang === storedUser.maKhachHang);
+        if (t) { t.daDatLaiMatKhau = false; localStorage.setItem("userList", JSON.stringify(all)); }
+      } catch (_) { /* noop */ }
     window.UserSession.clearSession();
     form.reset();
 

@@ -539,21 +539,7 @@ body { background:var(--ooda-paper)!important; color:var(--ooda-ink)!important; 
   }
 }
 
-/* OOAD account, cart and payment surfaces */
-#GioHang,
-#LichSuMuaHang,
-#ThanhToan_ChuyenKhoan,
-#ThanhToan_ThanhCong {
-  width: min(1180px, calc(100% - 32px)) !important;
-  margin: 0 auto !important;
-  padding: 34px 0 64px !important;
-  min-height: 0 !important;
-  background: transparent !important;
-  box-sizing: border-box;
-}
-
-#GioHang #element_center_shop,
-#ThanhToan_ChuyenKhoan #Conten1 {
+#GioHang #element_center_shop {
   display: grid !important;
   grid-template-columns: minmax(0, 1.5fr) minmax(300px, .8fr) !important;
   gap: 20px !important;
@@ -561,9 +547,7 @@ body { background:var(--ooda-paper)!important; color:var(--ooda-ink)!important; 
 }
 
 #GioHang #element_center_left,
-#GioHang .element_center_right,
-#ThanhToan_ChuyenKhoan .all-left-center,
-#ThanhToan_ChuyenKhoan .all-righ-center {
+#GioHang .element_center_right {
   width: auto !important;
   min-width: 0 !important;
   margin: 0 !important;
@@ -591,8 +575,7 @@ body { background:var(--ooda-paper)!important; color:var(--ooda-ink)!important; 
   top: 124px;
 }
 
-#GioHang .danhsach,
-#ThanhToan_ChuyenKhoan .list_danhsach {
+#GioHang .danhsach {
   width: 100% !important;
   min-height: 0 !important;
   margin: 0 !important;
@@ -1149,177 +1132,6 @@ body { background:var(--ooda-paper)!important; color:var(--ooda-ink)!important; 
   color: var(--ooda-ink);
 }
 
-#ThanhToan_ChuyenKhoan .all-left-center {
-  display: grid;
-  grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr);
-  gap: 20px;
-}
-
-#ThanhToan_ChuyenKhoan .all-left-center .all-left,
-#ThanhToan_ChuyenKhoan .all-left-center .all-right {
-  width: auto !important;
-  min-width: 0 !important;
-  padding: 0 !important;
-}
-
-#ThanhToan_ChuyenKhoan #QR {
-  display: block;
-  width: min(260px, 100%) !important;
-  height: auto !important;
-  margin: 18px auto;
-  border: 1px solid var(--ooda-line);
-  border-radius: 8px;
-}
-
-#ThanhToan_ChuyenKhoan .thongtin {
-  margin-bottom: 14px;
-  color: var(--ooda-ink);
-  font-size: 15px !important;
-}
-
-#ThanhToan_ChuyenKhoan .display-flex {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px 10px;
-  padding: 10px 0 !important;
-  border-bottom: 1px solid #eeeae1 !important;
-}
-
-#ThanhToan_ChuyenKhoan .in4 {
-  width: auto !important;
-  margin-top: 14px;
-  padding: 14px;
-  border-radius: 6px;
-  background: #f8f7f2;
-  color: #6d6a62;
-  font-size: 12px;
-  line-height: 1.6;
-}
-
-#ThanhToan_ChuyenKhoan #allck {
-  grid-column: 1;
-  display: grid;
-  gap: 8px;
-  margin-top: 16px;
-}
-
-#ThanhToan_ChuyenKhoan .ck-success,
-#ThanhToan_ChuyenKhoan .ck-faile {
-  width: 100% !important;
-  margin: 0 !important;
-  border-radius: 5px !important;
-}
-
-#ThanhToan_ChuyenKhoan .ck-success button,
-#ThanhToan_ChuyenKhoan .ck-faile button {
-  height: auto !important;
-  min-height: 44px;
-  margin: 0 !important;
-  border-radius: 5px !important;
-}
-
-#ThanhToan_ChuyenKhoan .ck-success {
-  background: var(--ooda-ink) !important;
-}
-
-#ThanhToan_ChuyenKhoan .ck-success button {
-  color: #fff !important;
-}
-
-#ThanhToan_ChuyenKhoan .ck-faile {
-  background: #f2eee7 !important;
-}
-
-#ThanhToan_ChuyenKhoan .all-righ-center h2 {
-  margin: 20px 0 10px;
-  font-size: 16px;
-}
-
-@media (min-width: 901px) {
-  body:has(#ThanhToan_ChuyenKhoan) #ThanhToan_ChuyenKhoan #Conten1 {
-    display: grid !important;
-    grid-template-columns: minmax(190px, .72fr) minmax(320px, 1.18fr) minmax(300px, .9fr) !important;
-    gap: 20px !important;
-    width: 100% !important;
-  }
-
-  body:has(#ThanhToan_ChuyenKhoan) #ThanhToan_ChuyenKhoan .all-left-center {
-    display: contents;
-  }
-
-  body:has(#ThanhToan_ChuyenKhoan) #ThanhToan_ChuyenKhoan .all-left-center .all-left,
-  body:has(#ThanhToan_ChuyenKhoan) #ThanhToan_ChuyenKhoan .all-left-center .all-right,
-  body:has(#ThanhToan_ChuyenKhoan) #ThanhToan_ChuyenKhoan .all-righ-center {
-    min-width: 0;
-    min-height: 100%;
-    padding: 22px !important;
-    border: 1px solid var(--ooda-line);
-    border-radius: 10px;
-    background: #fff;
-    box-shadow: 0 12px 30px rgba(21, 21, 21, .06);
-    box-sizing: border-box;
-  }
-
-  body:has(#ThanhToan_ChuyenKhoan) #ThanhToan_ChuyenKhoan .all-left-center .all-left {
-    grid-column: 1;
-    grid-row: 1;
-  }
-
-  body:has(#ThanhToan_ChuyenKhoan) #ThanhToan_ChuyenKhoan .all-left-center .all-right {
-    grid-column: 2;
-    grid-row: 1;
-  }
-
-  body:has(#ThanhToan_ChuyenKhoan) #ThanhToan_ChuyenKhoan .all-righ-center {
-    grid-column: 3;
-    grid-row: 1;
-  }
-
-  body:has(#ThanhToan_ChuyenKhoan) #ThanhToan_ChuyenKhoan #allck {
-    grid-column: 2;
-    grid-row: 2;
-    margin-top: 0;
-  }
-
-  #ThanhToan_ChuyenKhoan .all-left-center .all-left > .display-flex {
-    display: block;
-    padding: 0 !important;
-    border: 0 !important;
-  }
-
-  #ThanhToan_ChuyenKhoan .all-left-center .all-right {
-    width: auto !important;
-  }
-}
-
-body:has(#ThanhToan_ThanhCong) #ThanhToan_ThanhCong {
-  max-width: 920px !important;
-}
-
-/* Final cleanup for invoice, cart navigation and payment summaries. */
-#ThanhToan_ThanhCong input[type="checkbox"],
-#ThanhToan_ThanhCong .cart-select,
-#ThanhToan_ThanhCong .item-select {
-  display: none !important;
-}
-
-#ThanhToan_ThanhCong .allship,
-#ThanhToan_ThanhCong .Tongtien_thanhtoan,
-#ThanhToan_ChuyenKhoan .allship,
-#ThanhToan_ChuyenKhoan .Tongtien_thanhtoan {
-  display: grid !important;
-  grid-template-columns: minmax(0, 1fr) auto;
-  align-items: center;
-  gap: 16px;
-}
-
-#ThanhToan_ThanhCong .Ship_money,
-#ThanhToan_ThanhCong .SumCartEnd,
-#ThanhToan_ChuyenKhoan .Ship_money,
-#ThanhToan_ChuyenKhoan .SumCart-thanhtoan_tong {
-  min-width: 130px;
-  text-align: right;
-}
 
 #GioHang .continute {
   display: flex !important;
@@ -1369,150 +1181,9 @@ body:has(#ThanhToan_ThanhCong) #ThanhToan_ThanhCong {
   background: #fff;
 }
 
-/* Invoice alignment: center the order code and keep product rows stable. */
-#ThanhToan_ThanhCong h2 {
-  text-align: center !important;
-}
-
-#ThanhToan_ThanhCong .madhck {
-  display: block !important;
-  width: fit-content;
-  max-width: calc(100% - 56px);
-  margin: 0 auto 18px !important;
-  text-align: center;
-}
-
-#ThanhToan_ThanhCong .invoice_cart .all-cart {
-  display: grid !important;
-  grid-template-columns: 76px minmax(0, 1fr) !important;
-  align-items: center;
-  gap: 16px;
-  min-height: 92px;
-  padding: 14px 18px !important;
-}
-
-#ThanhToan_ThanhCong .invoice_cart .item-img {
-  grid-column: 1;
-  width: 76px !important;
-  height: 76px !important;
-  margin: 0 !important;
-  object-fit: contain !important;
-  padding: 6px;
-  background: #f8f7f2;
-}
-
-#ThanhToan_ThanhCong .invoice_cart .name-price-quantity {
-  grid-column: 2;
-  min-width: 0;
-}
-
-#ThanhToan_ThanhCong .invoice_cart .display-flex {
-  display: grid !important;
-  grid-template-columns: minmax(0, 1fr) auto;
-  align-items: start;
-  gap: 14px;
-}
-
-#ThanhToan_ThanhCong .invoice_cart .item-name {
-  min-width: 0;
-  overflow-wrap: anywhere;
-}
-
-#ThanhToan_ThanhCong .invoice_cart .item-price {
-  min-width: 112px;
-  text-align: right;
-}
-
-#ThanhToan_ThanhCong .invoice_cart .item-quantity-all {
-  display: flex !important;
-  align-items: center;
-  width: fit-content;
-  min-height: 28px;
-  margin-top: 10px;
-  padding: 0 10px;
-  border: 1px solid var(--success-line);
-  border-radius: 6px;
-  background: #f8fafc;
-}
-
-#ThanhToan_ThanhCong .invoice_cart .item-quantity-all .quantity {
-  display: block;
-  min-width: 0;
-  margin: 0 !important;
-  padding: 5px 0 !important;
-  color: var(--success-muted);
-  font-size: 12px;
-  font-weight: 700;
-  line-height: 1;
-  white-space: nowrap;
-}
-
-#ThanhToan_ThanhCong .invoice_cart .item-quantity-all {
-  position: static !important;
-  grid-column: auto !important;
-  justify-self: start !important;
-  align-self: start !important;
-  margin: 8px 0 0 !important;
-  padding: 0 10px !important;
-  transform: none !important;
-}
-
-#ThanhToan_ThanhCong .invoice_cart .name-price-quantity {
-  display: grid !important;
-  grid-template-rows: auto auto !important;
-  align-content: start !important;
-  align-items: start !important;
-  width: 100% !important;
-  min-width: 0 !important;
-  margin: 0 !important;
-  padding: 0 !important;
-}
-
-#ThanhToan_ThanhCong .invoice_cart .name-price-quantity > .display-flex {
-  display: grid !important;
-  grid-template-columns: minmax(0, 1fr) 120px !important;
-  align-items: start !important;
-  width: 100% !important;
-  min-height: 0 !important;
-  margin: 0 !important;
-  padding: 0 !important;
-}
-
-#ThanhToan_ThanhCong .invoice_cart .name-price-quantity > .item-quantity-all {
-  grid-row: 2 !important;
-  grid-column: 1 !important;
-  justify-self: start !important;
-  align-self: start !important;
-  margin: 8px 0 0 !important;
-}
-
-#ThanhToan_ThanhCong .invoice_cart .name-price-quantity > .display-flex > .item-name {
-  grid-column: 1 !important;
-  min-width: 0 !important;
-  margin: 0 !important;
-  padding: 0 !important;
-}
-
-#ThanhToan_ThanhCong .invoice_cart .name-price-quantity > .display-flex > .item-price {
-  grid-column: 2 !important;
-  min-width: 120px !important;
-  margin: 0 !important;
-  padding: 0 !important;
-  text-align: right !important;
-}
-
 @media (max-width: 760px) {
-  #GioHang,
-  #LichSuMuaHang,
-  #ThanhToan_ChuyenKhoan,
-  #ThanhToan_ThanhCong {
-    width: min(100% - 20px, 620px) !important;
-    padding: 24px 0 44px !important;
-  }
 
-  #GioHang #element_center_shop,
-  #ThanhToan_ChuyenKhoan #Conten1,
-  #ThanhToan_ChuyenKhoan .all-left-center {
+  #GioHang #element_center_shop {
     display: flex !important;
     flex-direction: column !important;
     gap: 14px !important;
@@ -1523,21 +1194,9 @@ body:has(#ThanhToan_ThanhCong) #ThanhToan_ThanhCong {
   }
 
   #GioHang #element_center_left,
-  #GioHang .element_center_right,
-  #ThanhToan_ChuyenKhoan .all-left-center,
-  #ThanhToan_ChuyenKhoan .all-righ-center {
+  #GioHang .element_center_right {
     padding: 16px !important;
     border-radius: 8px !important;
-  }
-
-  #ThanhToan_ChuyenKhoan .all-left-center .all-left,
-  #ThanhToan_ChuyenKhoan .all-left-center .all-right {
-    width: 100% !important;
-  }
-
-  #ThanhToan_ChuyenKhoan #allck {
-    order: 3;
-    width: 100%;
   }
 
   #LichSuMuaHang .maLichSu,
@@ -1560,56 +1219,6 @@ body:has(#ThanhToan_ThanhCong) #ThanhToan_ThanhCong {
     gap: 3px;
   }
 
-  #ThanhToan_ThanhCong .allship,
-  #ThanhToan_ThanhCong .Tongtien_thanhtoan,
-  #ThanhToan_ChuyenKhoan .allship,
-  #ThanhToan_ChuyenKhoan .Tongtien_thanhtoan {
-    grid-template-columns: minmax(0, 1fr) minmax(112px, auto);
-    gap: 10px;
-    margin-left: 0 !important;
-    margin-right: 0 !important;
-  }
-
-  #ThanhToan_ThanhCong .Ship_money,
-  #ThanhToan_ThanhCong .SumCartEnd,
-  #ThanhToan_ChuyenKhoan .Ship_money,
-  #ThanhToan_ChuyenKhoan .SumCart-thanhtoan_tong {
-    min-width: 112px;
-    text-align: right;
-  }
-
-  #ThanhToan_ChuyenKhoan #content_center_menu_shop {
-    width: 100%;
-    padding-top: 0;
-    margin-bottom: 14px;
-  }
-
-  #ThanhToan_ChuyenKhoan #content_center_menu_shop h2 {
-    justify-content: flex-start;
-    overflow-x: auto;
-    flex-wrap: nowrap;
-    padding-bottom: 4px;
-  }
-
-  #ThanhToan_ChuyenKhoan .all-left-center,
-  #ThanhToan_ChuyenKhoan .all-righ-center {
-    width: 100% !important;
-    max-width: 100% !important;
-    overflow: hidden;
-  }
-
-  #ThanhToan_ChuyenKhoan .all-left-center .all-left,
-  #ThanhToan_ChuyenKhoan .all-left-center .all-right,
-  #ThanhToan_ChuyenKhoan .in4 {
-    max-width: 100% !important;
-    overflow-wrap: anywhere;
-  }
-
-  #ThanhToan_ChuyenKhoan #QR {
-    width: min(220px, 80vw) !important;
-    margin: 14px auto;
-  }
-
   #LichSuMuaHang .trangThaiDonHang {
     grid-template-columns: 1fr;
     text-align: left;
@@ -1617,37 +1226,6 @@ body:has(#ThanhToan_ThanhCong) #ThanhToan_ThanhCong {
 
   #LichSuMuaHang .trangThaiDonHang .track-step {
     text-align: left;
-  }
-
-  #ThanhToan_ThanhCong .madhck {
-    max-width: calc(100% - 32px);
-  }
-
-  #ThanhToan_ThanhCong .invoice_cart .all-cart {
-    grid-template-columns: 58px minmax(0, 1fr) !important;
-    gap: 10px;
-    min-height: 72px;
-    padding-left: 12px !important;
-    padding-right: 12px !important;
-  }
-
-  #ThanhToan_ThanhCong .invoice_cart .item-img {
-    width: 58px !important;
-    height: 58px !important;
-  }
-
-  #ThanhToan_ThanhCong .invoice_cart .display-flex {
-    grid-template-columns: minmax(0, 1fr);
-    gap: 4px;
-  }
-
-  #ThanhToan_ThanhCong .invoice_cart .item-price {
-    min-width: 0;
-    text-align: left;
-  }
-
-  #ThanhToan_ThanhCong .invoice_cart .item-quantity-all {
-    margin-top: 8px;
   }
 }
 
@@ -1687,44 +1265,6 @@ body:has(#ThanhToan_ThanhCong) #ThanhToan_ThanhCong {
   margin: 0;
 }
 
-#ThanhToan_ThanhCong .invoice_cart .all-cart {
-  grid-template-columns: minmax(0, 1fr) auto !important;
-  align-items: center;
-  gap: 18px;
-}
-
-#ThanhToan_ThanhCong .invoice_cart .cart-product {
-  display: flex;
-  min-width: 0;
-  align-items: center;
-  gap: 14px;
-}
-
-#ThanhToan_ThanhCong .invoice_cart .cart-product .item-img {
-  flex: 0 0 76px;
-}
-
-#ThanhToan_ThanhCong .invoice_cart .cart-product .item-name {
-  min-width: 0;
-  overflow-wrap: anywhere;
-}
-
-#ThanhToan_ThanhCong .invoice-price-quantity {
-  display: grid;
-  min-width: 150px;
-  justify-items: end;
-  gap: 8px;
-}
-
-#ThanhToan_ThanhCong .invoice-price-quantity .item-price {
-  min-width: 120px;
-  text-align: right;
-}
-
-#ThanhToan_ThanhCong .invoice-price-quantity .item-quantity-all {
-  margin: 0 !important;
-}
-
 @media (max-width: 760px) {
   #GioHang .modal_cart .item-info {
     display: none;
@@ -1743,65 +1283,6 @@ body:has(#ThanhToan_ThanhCong) #ThanhToan_ThanhCong {
     grid-column: 2;
     justify-self: start;
     margin-left: 84px;
-  }
-
-  #ThanhToan_ThanhCong .invoice_cart .all-cart {
-    grid-template-columns: minmax(0, 1fr) !important;
-  }
-
-  #ThanhToan_ThanhCong .invoice-price-quantity {
-    grid-column: 1;
-    justify-items: start;
-    margin-left: 90px;
-  }
-}
-
-/* Keep invoice price and quantity aligned to the same right edge. */
-#ThanhToan_ThanhCong .invoice-price-quantity {
-  width: 150px !important;
-  min-width: 150px !important;
-  justify-items: stretch !important;
-  align-items: end !important;
-}
-
-#ThanhToan_ThanhCong .invoice-price-quantity .item-price {
-  width: 100% !important;
-  min-width: 0 !important;
-  text-align: right !important;
-}
-
-#ThanhToan_ThanhCong .invoice-price-quantity .item-quantity-all {
-  justify-self: end !important;
-  margin: 0 !important;
-}
-
-#ThanhToan_ThanhCong .invoice-price-quantity .quantity {
-  min-width: 0 !important;
-  text-align: right !important;
-  white-space: nowrap;
-}
-
-@media (max-width: 760px) {
-  #ThanhToan_ThanhCong .invoice-price-quantity {
-    width: 100% !important;
-    min-width: 0 !important;
-    margin-left: 90px !important;
-    justify-items: start !important;
-    align-items: start !important;
-  }
-
-  #ThanhToan_ThanhCong .invoice-price-quantity .item-price,
-  #ThanhToan_ThanhCong .invoice-price-quantity .item-quantity-all {
-    width: auto !important;
-    justify-self: start !important;
-  }
-
-  #ThanhToan_ThanhCong .invoice-price-quantity .item-price {
-    text-align: left !important;
-  }
-
-  #ThanhToan_ThanhCong .invoice-price-quantity .quantity {
-    text-align: left !important;
   }
 }
 

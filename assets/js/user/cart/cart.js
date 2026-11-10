@@ -247,17 +247,22 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
         const esc = ShopCore.esc;
-        const html = `<div class="modal_cart invoice_cart">
+        // Cùng cấu trúc bảng với trang thanh toán tiền mặt (readonly-cart) để hai trang hiển thị giống hệt nhau.
+        const html = `<div class="modal_cart readonly-cart invoice_cart">
+            <div class="item-info">
+                <div class="cart-col-select" aria-hidden="true"></div>
+                <div> Sản phẩm</div>
+                <div> Giá</div>
+                <div> Số lượng</div>
+            </div>
             ${products.map((item) => `<div class="all-cart">
                 <div class="cart-product">
                     <img src="${esc(item.hinhAnh)}" alt="${esc(item.tenSanPham)}" class="item-img">
                     <div class="item-name">${esc(item.tenSanPham)} - Size ${esc(item.kichCoDaChon || "Chưa chọn")}</div>
                 </div>
-                <div class="invoice-price-quantity">
-                    <div class="item-price">${esc(item.giaHienThi)}</div>
-                    <div class="item-quantity-all">
-                        <div class="quantity">Số lượng: ${esc(item.soLuong)}</div>
-                    </div>
+                <div class="item-price">${esc(item.giaHienThi)}</div>
+                <div class="item-quantity-all">
+                    <div class="quantity">${esc(item.soLuong)}</div>
                 </div>
             </div>`).join("")}
         </div>`;

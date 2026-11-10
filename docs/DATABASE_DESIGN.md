@@ -55,7 +55,6 @@ employees N ─── 1 roles
 users 1 ─── N support_threads
 support_threads 1 ─── N support_messages
 support_messages 1 ─── N message_attachments
-support_threads 1 ─── N support_calls
 ```
 
 ## 4. Các bảng và thuộc tính
@@ -243,7 +242,9 @@ Ràng buộc:
 - `discount_amount` được chốt tại thời điểm tạo đơn; không tính lại theo cấu hình voucher hiện tại.
 - Không cho tạo đơn không có sản phẩm.
 
-### 4.9. Hỗ trợ khách hàng và cuộc gọi
+### 4.9. Hỗ trợ khách hàng
+
+Nút hỗ trợ ở widget phía User xổ ra 2 icon tròn: gọi hotline **0354 109 892** (link `tel:`) và chat trong website. Gọi điện không lưu dữ liệu.
 
 Trong bản demo, dữ liệu được gom trong `localStorage['supportThreads']`. Khi chuyển sang backend, nên tách thành các bảng sau:
 
@@ -280,21 +281,6 @@ Trong bản demo, dữ liệu được gom trong `localStorage['supportThreads']
 | `file_url` | VARCHAR(500) | NOT NULL |
 | `mime_type` | VARCHAR(100) | NOT NULL |
 | `file_size` | BIGINT | `<= 2MB` theo giới hạn demo |
-
-#### `support_calls` — phiên gọi hỗ trợ
-
-| Cột | Kiểu | Ràng buộc |
-|---|---|---|
-| `id` | BIGINT/UUID | PK |
-| `thread_id` | BIGINT/UUID | FK `support_threads.id`, NOT NULL |
-| `provider` | VARCHAR(30) | `jitsi` |
-| `room_name` | VARCHAR(150) | NOT NULL, UNIQUE |
-| `mode` | VARCHAR(20) | `audio-only` |
-| `status` | VARCHAR(20) | `started`, `ended`, `failed` |
-| `started_at` | TIMESTAMP | NULL |
-| `ended_at` | TIMESTAMP | NULL |
-
-Ứng dụng hiện nhúng `https://meet.jit.si/external_api.js` và tạo phòng Jitsi theo `thread.id`. Đây là dịch vụ gọi bên ngoài, chưa phải WebRTC signaling và máy chủ media riêng của hệ thống.
 - Đơn đã `da-giao` không được xóa cứng.
 
 ### 4.8. `order_items` — chi tiết đơn hàng

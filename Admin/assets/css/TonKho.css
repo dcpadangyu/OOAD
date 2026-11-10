@@ -429,3 +429,50 @@
 .TK_size-meta { margin-top: 5px; font-size: 11px; color: #64748b; }
 .TK_size-none { font-size: 12px; color: #94a3b8; font-style: italic; }
 #TK_locSize { margin-left: 8px; }
+
+/* =========================================================
+   TỒN KHO — bản chỉnh giao diện (thẻ tổng quan, bộ lọc, tab, bảng)
+   ========================================================= */
+.TK_summary { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; margin-bottom: 16px; max-width: 1050px; }
+.TK_card { padding: 12px 14px; border: 1px solid #e5e7eb; border-radius: 10px; background: #fff; }
+.TK_card strong { display: block; font-size: 20px; line-height: 1.25; color: #111827; }
+.TK_card span { color: #6b7280; font-size: 12px; }
+.TK_card-warn { border-color: #fde68a; background: #fffbeb; }
+.TK_card-warn strong { color: #b45309; }
+.TK_card-danger { border-color: #fecaca; background: #fef2f2; }
+.TK_card-danger strong { color: #b91c1c; }
+
+/* Thanh bộ lọc: tự xuống dòng, mọi ô cao bằng nhau */
+#page-inventory .TK_boLoc { flex-wrap: wrap; max-width: 1050px; box-sizing: border-box; }
+#page-inventory .TK_boLoc > div { width: auto !important; flex: 1 1 200px; min-width: 180px; }
+#page-inventory .TK_boLoc select { width: auto; min-width: 150px; }
+#page-inventory .TK_boLoc label { display: inline-flex; align-items: center; gap: 6px; margin: 0; font-size: 13px; color: #475569; white-space: nowrap; }
+#page-inventory .TK_boLoc input[type="date"] { width: 140px; }
+#page-inventory #TK_btnFilter,
+#page-inventory #TK_btnExport { height: 34px; padding: 0 16px; white-space: nowrap; border-radius: 6px; font-size: 14px; cursor: pointer; }
+#page-inventory #TK_btnExport { border: 1px solid #5062b5; background: #fff; color: #5062b5; }
+#page-inventory #TK_btnExport:hover { background: #eef1fb; }
+
+/* Tab trạng thái dạng viên thuốc, có số lượng */
+#page-inventory .TK_tab-status { align-items: center; gap: 8px; }
+#page-inventory .TK_tab-status button[data-type] { padding: 7px 14px; border: 1px solid #e2e8f0; border-radius: 999px; background: #fff; color: #475569; }
+#page-inventory .TK_tab-status button[data-type]::after { display: none !important; }
+#page-inventory .TK_tab-status button[data-type].active { border-color: #5062b5; background: #5062b5; color: #fff; }
+#page-inventory .TK_tab-status button[data-type="sapHetHang"].active { border-color: #d97706; background: #d97706; }
+#page-inventory .TK_tab-status button[data-type="hetHang"].active { border-color: #dc2626; background: #dc2626; }
+#page-inventory .TK_tab-status button[data-type="binhThuong"].active { border-color: #16a34a; background: #16a34a; }
+.TK_count { display: inline-block; min-width: 20px; margin-left: 4px; padding: 0 6px; border-radius: 999px; background: rgba(15, 23, 42, .08); font-size: 12px; text-align: center; }
+#page-inventory .TK_tab-status button.active .TK_count { background: rgba(255, 255, 255, .25); }
+
+/* Chú giải */
+.TK_legend { display: flex; flex-wrap: wrap; align-items: center; gap: 14px; max-width: 1050px; margin: -6px 0 12px; font-size: 12px; color: #64748b; }
+.TK_dot { display: inline-block; width: 10px; height: 10px; margin-right: 4px; border-radius: 3px; vertical-align: -1px; }
+.TK_dot-ok { background: #86efac; }
+.TK_dot-low { background: #fcd34d; }
+.TK_dot-out { background: #fca5a5; }
+.TK_legend-note { margin-left: auto; }
+
+/* Bảng */
+#page-inventory .TK_admin-table th { white-space: nowrap; }
+#page-inventory .TK_admin-table tr.row-total td { background: #f1f5f9; border-top: 2px solid #cbd5e1; border-bottom: 2px solid #cbd5e1; }
+.TK_flag { display: inline-block; margin: 4px 2px 0; padding: 1px 7px; border-radius: 999px; background: #fee2e2; color: #991b1b; font-size: 10px; font-weight: 700; white-space: nowrap; }

@@ -181,3 +181,41 @@ Do Admin ghi khi đổi trạng thái đơn (không có tên cũ): `ngayGiao` (k
 | hidden | daAn |
 
 Chỉ mục IndexedDB: `maSanPham`, `maKhachHang`, `ngayTao` (DB version 2, tự nâng cấp bản ghi cũ).
+
+## Phiên chat hỗ trợ (`supportThreads`) — HO_TRO_CHAT + TIN_NHAN
+Dữ liệu cũ được `database/migrate-schema.js` tự chuyển (cờ riêng `schemaSupport = "vi-2"`). Giá trị (`open`/`closed`, `customer`/`staff`/`system`, `text`/`image`/`product`/`rating`) giữ nguyên.
+
+Phiên chat (HO_TRO_CHAT):
+| Cũ | Mới |
+|---|---|
+| id | maPhienChat |
+| customerId | maKhachHang |
+| customerName | tenKhachHang |
+| assignedTo | nhanVienXuLy |
+| assignedToId | maNhanVienXuLy |
+| assignedAt | ngayTiepNhan |
+| status | trangThai |
+| lastReadId | maTinNhanKhachDaDoc |
+| lastStaffReadId | maTinNhanNhanVienDaDoc |
+| messages[] | tinNhan[] |
+| createdAt | ngayTao |
+| updatedAt | ngayCapNhat |
+| closedAt | ngayDong |
+| closedBy | nguoiDong |
+
+Tin nhắn (TIN_NHAN):
+| Cũ | Mới |
+|---|---|
+| id | maTinNhan |
+| senderType | loaiNguoiGui |
+| senderId | maNguoiGui |
+| senderName | tenNguoiGui |
+| type | loaiTinNhan |
+| text | noiDung |
+| data | duLieuAnh |
+| productId | maSanPham |
+| name | tenSanPham |
+| url | duongDan |
+| createdAt | thoiGianGui |
+
+`soSao` và `chiTiet[{tenSanPham, soSao, binhLuan}]` (tin loại `rating`) đã là tiếng Việt từ trước.

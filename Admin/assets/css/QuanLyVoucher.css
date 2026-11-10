@@ -1,0 +1,303 @@
+/* =========================================================
+   QUẢN LÝ VOUCHER (Admin)
+   ========================================================= */
+.QLV_page-header h3 {
+  margin: 0 0 4px;
+  font-size: 20px;
+  font-weight: 700;
+  color: #1f2937;
+}
+
+.QLV_page-header p {
+  margin: 0;
+  color: #6b7280;
+  font-size: 13px;
+}
+
+.QLV_toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  margin: 16px 0;
+}
+
+.QLV_toolbar input[type="text"],
+.QLV_toolbar select {
+  min-height: 38px;
+  padding: 8px 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  background: #fff;
+  font-size: 13px;
+}
+
+.QLV_toolbar input[type="text"] {
+  flex: 1 1 240px;
+  min-width: 180px;
+}
+
+.QLV_toolbar .QLV_spacer {
+  flex: 1;
+}
+
+.QLV_stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.QLV_stat {
+  padding: 14px 16px;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  background: #fff;
+}
+
+.QLV_stat strong {
+  display: block;
+  font-size: 22px;
+  line-height: 1.2;
+  color: #111827;
+}
+
+.QLV_stat span {
+  color: #6b7280;
+  font-size: 12px;
+}
+
+.QLV_table-wrap {
+  overflow-x: auto;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  background: #fff;
+}
+
+.QLV_table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+.QLV_table th,
+.QLV_table td {
+  padding: 11px 12px;
+  border-bottom: 1px solid #eef2f7;
+  text-align: left;
+  vertical-align: top;
+}
+
+.QLV_table th {
+  background: #f8fafc;
+  color: #475569;
+  font-size: 11px;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.QLV_table tr:last-child td {
+  border-bottom: 0;
+}
+
+.QLV_table tr:hover td {
+  background: #fbfdff;
+}
+
+.QLV_code {
+  font-weight: 800;
+  color: #1d4ed8;
+  white-space: nowrap;
+}
+
+.QLV_sub {
+  display: block;
+  margin-top: 3px;
+  color: #6b7280;
+  font-size: 12px;
+  line-height: 1.45;
+}
+
+.QLV_nowrap {
+  white-space: nowrap;
+}
+
+.QLV_badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 9px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.QLV_badge-active {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.QLV_badge-inactive {
+  background: #f1f5f9;
+  color: #475569;
+}
+
+.QLV_badge-expired {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+.QLV_badge-new {
+  background: #dbeafe;
+  color: #1d4ed8;
+}
+
+.QLV_actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.QLV_actions button {
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  background: #fff;
+  color: #334155;
+  padding: 5px 9px;
+  font: 600 12px/1.2 inherit;
+  cursor: pointer;
+}
+
+.QLV_actions button:hover {
+  border-color: #93c5fd;
+  background: #eff6ff;
+  color: #1d4ed8;
+}
+
+.QLV_actions button.QLV_danger:hover {
+  border-color: #fca5a5;
+  background: #fef2f2;
+  color: #b91c1c;
+}
+
+.QLV_empty {
+  padding: 34px 16px;
+  color: #6b7280;
+  text-align: center;
+}
+
+/* ---------- modal ---------- */
+.QLV_modal .modal-content {
+  max-width: 660px;
+  width: 94%;
+}
+
+.QLV_form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.QLV_form-grid .QLV_full {
+  grid-column: 1 / -1;
+}
+
+.QLV_form-grid .form-group {
+  margin: 0;
+}
+
+.QLV_form-grid label {
+  display: block;
+  margin-bottom: 5px;
+  color: #374151;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.QLV_form-grid input,
+.QLV_form-grid select,
+.QLV_form-grid textarea {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 8px 10px;
+  border: 1px solid #d1d5db;
+  border-radius: 7px;
+  font-size: 13px;
+}
+
+.QLV_form-grid input:disabled {
+  background: #f3f4f6;
+  color: #6b7280;
+}
+
+.QLV_hint {
+  display: block;
+  margin-top: 4px;
+  color: #6b7280;
+  font-size: 11px;
+}
+
+.QLV_checkbox {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 38px;
+  padding: 8px 10px;
+  border: 1px solid #d1d5db;
+  border-radius: 7px;
+  background: #fff;
+  font-size: 13px;
+}
+
+.QLV_checkbox input {
+  width: auto;
+  margin: 0;
+}
+
+/* ---------- toast ---------- */
+.QLV_toast {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  z-index: 20000;
+  max-width: 320px;
+  padding: 12px 16px;
+  border-radius: 10px;
+  background: #111827;
+  color: #fff;
+  font-size: 13px;
+  box-shadow: 0 12px 30px rgba(15, 23, 42, .25);
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity .2s ease, transform .2s ease;
+  pointer-events: none;
+}
+
+.QLV_toast.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.QLV_toast.error {
+  background: #b91c1c;
+}
+
+@media (max-width: 760px) {
+  .QLV_stats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .QLV_form-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.QLV_badge-upcoming { background: #fef3c7; color: #92400e; }
+.QLV_badge-exhausted { background: #ede9fe; color: #5b21b6; }
+.QLV_usage { min-width: 90px; }
+.QLV_usage span { display: block; margin-bottom: 4px; font-size: 12px; }
+.QLV_bar { height: 5px; border-radius: 999px; background: #e5e7eb; overflow: hidden; }
+.QLV_bar i { display: block; height: 100%; background: #2563eb; }
+.QLV_actions button:disabled { opacity: .45; cursor: not-allowed; }

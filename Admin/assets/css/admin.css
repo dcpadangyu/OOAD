@@ -919,3 +919,35 @@ body {
     overflow: hidden !important;
     height: 100vh !important;
 }
+/* ---------- Dashboard: việc cần xử lý ---------- */
+.dashboard-todo { margin-bottom: 32px; }
+.dashboard-todo h2 { margin: 0 0 14px; font-size: 20px; color: #1e293b; }
+.dashboard-todo h2 small { font-size: 13px; font-weight: 400; color: #16a34a; }
+.todo-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 12px; }
+.todo-item { display: flex; align-items: center; gap: 12px; padding: 12px 14px; border: 1px solid #e2e8f0; border-radius: 10px; background: #fff; color: #334155; text-decoration: none; transition: box-shadow .15s, transform .15s; }
+.todo-item:hover { box-shadow: 0 6px 16px rgba(15, 23, 42, .08); transform: translateY(-1px); }
+.todo-item strong { min-width: 34px; font-size: 22px; text-align: center; }
+.todo-item span { font-size: 13px; line-height: 1.3; }
+.todo-ok { opacity: .65; }
+.todo-ok strong { color: #16a34a; }
+.todo-warn { border-color: #fde68a; background: #fffbeb; }
+.todo-warn strong { color: #b45309; }
+.todo-danger { border-color: #fecaca; background: #fef2f2; }
+.todo-danger strong { color: #b91c1c; }
+.todo-info { border-color: #bfdbfe; background: #eff6ff; }
+.todo-info strong { color: #1d4ed8; }
+
+/* ---------- Ẩn thao tác theo quyền của nhân viên ---------- */
+body.perm-no-product-edit #QLSP_btnThemMoiSP,
+body.perm-no-product-delete .QLSP_btn-xoa { display: none !important; }
+/* Sửa: chỉ ẩn khi vừa không được sửa vừa không được thêm size (Nhân viên kho vẫn thấy nút để thêm size) */
+body.perm-no-product-edit.perm-no-product-size .QLSP_btn-sua { display: none !important; }
+body.perm-no-product-edit .QLSP_tick-visible,
+body.perm-no-product-edit .QLSP_tick-hidden { pointer-events: none; cursor: default; opacity: .7; }
+body.perm-no-import-manage #QLNH_btnThemMoiPhieuNhap,
+body.perm-no-import-manage .QLNH_btn-sua,
+body.perm-no-import-manage .QLNH_btn-xoa,
+body.perm-no-import-manage .QLNH_chkHoanThanh { display: none !important; }
+body.perm-no-import-cancel .QLNH_btn-huy-phieu { display: none !important; }
+.QLSP_sizeonly-note { display: none; padding: 8px 12px; border-radius: 8px; background: #eff6ff; color: #1d4ed8; font-size: 13px; }
+.QLSP_sizeonly .QLSP_sizeonly-note { display: block; }

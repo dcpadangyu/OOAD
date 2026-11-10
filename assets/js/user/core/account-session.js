@@ -76,7 +76,10 @@
       localStorage.removeItem("currentUser");
       return null;
     }
-    localStorage.setItem("currentUser", JSON.stringify(normalized));
+    // Bản lưu cho phiên đăng nhập không chứa mật khẩu; mật khẩu chỉ nằm ở userList.
+    const sessionCopy = { ...normalized };
+    delete sessionCopy.matKhau;
+    localStorage.setItem("currentUser", JSON.stringify(sessionCopy));
     return normalized;
   }
 

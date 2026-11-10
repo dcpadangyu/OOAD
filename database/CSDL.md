@@ -15,7 +15,7 @@
 | `chatLieu` | STRING | NOT NULL |
 | `phongCach` | STRING | NOT NULL |
 | `kichCo` | STRING | NOT NULL (chuỗi mô tả, vd `36 - 44`) |
-| `tonKhoTheoSize` | JSON | `{ "36": 2, "37": 5, ... }` — tồn kho từng size (không có trong SQL) |
+| `tonKhoTheoSize` | JSON | `{ "36": 2, "37": 5, ... }` — tồn kho từng size (bảng `SAN_PHAM_SIZE` trong SQL) |
 | `giaBan` | NUMBER | > 0 (giá bán) |
 | `giaHienThi` | STRING | NOT NULL (giá hiển thị đã format `₫`) |
 | `hinhAnh` | STRING | NOT NULL |
@@ -88,7 +88,7 @@
 | `soLuongToiDa`, `soLuongDaDung` | NUMBER | Giới hạn lượt dùng |
 | `trangThai` | STRING | CHECK (`active` / `inactive` / `expired`) |
 
-Mã mẫu: `GIAYMOI10`, `GIAY200K`, `KHACHMOI`. Voucher được kiểm tra theo đơn tối thiểu và chốt giảm giá khi tạo đơn.
+Mã mẫu: `GIAYMOI10`, `GIAY200K`, `KHACHMOI`, `SALE2026` (còn hạn), `SALE2025` (đã hết hạn). Voucher được kiểm tra theo đơn tối thiểu, trạng thái và hạn dùng, chốt giảm giá khi tạo đơn; mã `KHACHMOI` được kiểm tra lại theo tài khoản đang đăng nhập mỗi lần đọc mã đã lưu.
 
 ## 5. Bảng `DON_HANG` — key `DanhSachDatHang` (user) + `ordersLocal` (admin)
 
@@ -189,35 +189,42 @@ Mã mẫu: `GIAYMOI10`, `GIAY200K`, `KHACHMOI`. Voucher được kiểm tra theo
 
 ## 11. Bảng `HO_TRO_CHAT` — key `supportThreads`
 
-Trong bản demo, mỗi phần tử của `supportThreads` là một phiên chat và chứa cả danh sách `tinNhan`.
+Trong bản demo, mỗi phần tử của `supportThreads` là một phiên chat và chứa cả danh sách `tinNhan`. Dữ liệu cũ (tên tiếng Anh) được `database/migrate-schema.js` tự chuyển sang tên dưới đây (cờ `schemaSupport = "vi-2"`).
 
 | Thuộc tính | Kiểu dữ liệu | Ràng buộc |
 |---|---|---|
-| `id` | STRING | **PK** giả, ví dụ `CHAT_...` |
-| `customerId` | STRING | **FK → KHACH_HANG.maKhachHang** |
-| `customerName` | STRING | Snapshot tên khách |
-| `assignedTo` | STRING | Nhân viên đang xử lý, có thể NULL |
-| `status` | STRING | `open` / `closed` |
-| `messages[]` | ARRAY | Danh sách tin nhắn hỗ trợ |
-| `createdAt`, `updatedAt` | STRING | ISO timestamp |
+| `maPhienChat` | STRING | **PK** giả, ví dụ `CHAT_...` |
+| `maKhachHang` | STRING | **FK → KHACH_HANG.maKhachHang** |
+| `tenKhachHang` | STRING | Snapshot tên khách |
+| `nhanVienXuLy` | STRING | Tên nhân viên đang phụ trách, NULL = chờ tiếp nhận |
+| `maNhanVienXuLy` | STRING | Tên đăng nhập của nhân viên đang phụ trách |
+| `ngayTiepNhan` | STRING | ISO timestamp lúc nhân viên tiếp nhận / tiếp quản |
+| `trangThai` | STRING | `open` / `closed` (Chờ tiếp nhận / Đang xử lý là trạng thái tính ra từ `nhanVienXuLy`) |
+| `maTinNhanKhachDaDoc` | STRING | Mã tin nhắn khách đã đọc cuối cùng (NULL = chưa đọc tin nào); dùng để hiện chấm đỏ báo tin mới trên nút Hỗ trợ |
+| `maTinNhanNhanVienDaDoc` | STRING | Mã tin nhắn nhân viên đã đọc cuối cùng; dùng để đếm tin chưa đọc phía Admin |
+| `tinNhan[]` | ARRAY | Danh sách tin nhắn hỗ trợ (bảng `TIN_NHAN`) |
+| `ngayTao`, `ngayCapNhat` | STRING | ISO timestamp |
+| `ngayDong`, `nguoiDong` | STRING | Thời điểm và người kết thúc hội thoại (NULL khi còn mở) |
 
-### 11.1. Tin nhắn hỗ trợ
+### 11.1. Tin nhắn hỗ trợ (`TIN_NHAN`)
 
 | Thuộc tính | Kiểu dữ liệu | Ràng buộc |
 |---|---|---|
-| `id` | STRING | PK giả, ví dụ `MSG_...` |
-| `senderType` | STRING | `customer` / `staff` |
-| `senderId`, `senderName` | STRING | Người gửi |
-| `type` | STRING | `text` / `image` / `product` |
-| `text` | STRING | Nội dung chữ hoặc tên file |
-| `data` | STRING | Data URL ảnh, tối đa 2MB trong demo |
-| `productId` | STRING | FK → `SAN_PHAM.maSanPham`, NULL nếu không phải link SP |
-| `name`, `url` | STRING | Tên/link sản phẩm |
-| `createdAt` | STRING | ISO timestamp |
+| `maTinNhan` | STRING | **PK** giả, ví dụ `MSG_...` |
+| `loaiNguoiGui` | STRING | `customer` / `staff` / `system` |
+| `maNguoiGui`, `tenNguoiGui` | STRING | Người gửi |
+| `loaiTinNhan` | STRING | `text` / `image` / `product` / `rating` (đánh giá sao) |
+| `noiDung` | STRING | Nội dung chữ hoặc tên file |
+| `soSao` | NUMBER | Số sao 1–5 cho tin `rating` (mỗi sản phẩm) |
+| `chiTiet` | ARRAY | Danh sách sản phẩm kèm số sao và nhận xét cho tin `rating` |
+| `duLieuAnh` | STRING | Data URL ảnh, tối đa 2MB trong demo |
+| `maSanPham` | STRING | FK → `SAN_PHAM.maSanPham`, NULL nếu không phải link SP |
+| `tenSanPham`, `duongDan` | STRING | Tên/link sản phẩm |
+| `thoiGianGui` | STRING | ISO timestamp |
 
-### 11.2. Cuộc gọi hỗ trợ
+### 11.2. Gọi điện qua số hotline
 
-Cuộc gọi không lưu âm thanh; hệ thống tạo `roomName = OOAD-Support-<threadId>` và nhúng Jitsi External API trong modal. Chế độ hiện tại là **audio-only**, tự tắt camera và chỉ giữ microphone, chat, cài đặt, kết thúc cuộc gọi. Jitsi là dịch vụ bên ngoài; nếu triển khai thật cần backend quản lý phòng, quyền truy cập và signaling.
+Nút hỗ trợ ở phía khách hàng xổ ra 2 icon tròn: **gọi hotline 0354 109 892** (link `tel:`) và **chat với nhân viên** (chat trong website). Gọi điện **không lưu dữ liệu** trong hệ thống.
 
 ## 12. Sơ đồ quan hệ (ER)
 
@@ -231,15 +238,14 @@ SAN_PHAM (1) ──── (N) CHI_TIET_DON_HANG (N) ──── (1) DON_HANG (N
      └── (1) DANH_GIA (N) ──── (1) KHACH_HANG
 
 KHACH_HANG (1) ──── (N) HO_TRO_CHAT (1) ──── (N) TIN_NHAN
-                                      └──── (N) CUOC_GOI Jitsi audio-only
 ```
 
 ## 13. Ghi chú thiết kế
 
 - **Không dùng khóa tự tăng thật** — chỉ fake ID dạng chuỗi (`SH`, `NV`, `KH`, `PN`, `DH`) do giới hạn localStorage.
 - **`chiTiet` bị lồng trong mảng** đơn hàng / phiếu nhập. Nếu muốn chuẩn 3NF nên tách thành bảng con `CHI_TIET_DON_HANG`, `CHI_TIET_PHIEU_NHAP` (đã có trong `CuaHangGiay.sql`).
-- **Tồn kho theo size** (`tonKhoTheoSize`) là mở rộng so với bảng SQL: khi chuyển sang CSDL thật nên tách thành bảng `TON_KHO_SIZE(maSanPham, kichCo, soLuong)`.
+- **Tồn kho theo size** (`tonKhoTheoSize`) tương ứng bảng `SAN_PHAM_SIZE(maSanPham, kichCo, soLuongTon)` trong `CuaHangGiay.sql`; `SAN_PHAM.soLuongTon` luôn bằng tổng các size. Giỏ hàng, chi tiết đơn và đánh giá đều gắn thêm `kichCoDaChon`.
 - **Trạng thái phiếu nhập** mặc định nên để `chuaHoanThanh`; khi chuyển sang `hoanThanh` mới cộng tồn kho.
 - Đơn hàng lưu `maVoucher` và `giamGia` để lịch sử không thay đổi khi shop cập nhật voucher.
 - Mỗi entity tương ứng với **một localStorage key** (riêng đánh giá nằm trong IndexedDB). Dữ liệu cũ tên tiếng Anh được `database/migrate-schema.js` tự chuyển sang tên mới.
-- `supportThreads` chỉ phù hợp bản demo cùng origin; ảnh đang lưu Data URL trong localStorage nên giới hạn 2MB. Bản thật nên tách `HO_TRO_CHAT`, `TIN_NHAN`, `TEP_DINH_KEM`, `CUOC_GOI`, dùng object storage và WebSocket.
+- `supportThreads` chỉ phù hợp bản demo cùng origin; ảnh đang lưu Data URL trong localStorage nên giới hạn 2MB. Bản thật nên tách `HO_TRO_CHAT`, `TIN_NHAN`, `TEP_DINH_KEM`, dùng object storage và WebSocket.

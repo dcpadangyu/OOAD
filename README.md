@@ -2,7 +2,7 @@
 
 Hệ thống quản lý bán giày trực tuyến xây dựng hoàn toàn bằng **HTML / CSS / JavaScript thuần** (không framework, không backend bắt buộc). Dữ liệu lưu trên **localStorage** (sản phẩm, đơn hàng, tài khoản...) và **IndexedDB** (đánh giá kèm ảnh/video) của trình duyệt. Hai ứng dụng **User** và **Admin** dùng chung một nguồn dữ liệu và chung một bộ quy tắc xử lý tồn kho / đơn hàng (`ShopCore`) nên dữ liệu luôn khớp nhau.
 
-> **Lưu ý khi chạy:** User và Admin chia sẻ dữ liệu qua cùng một *origin* trình duyệt. Hãy mở cả hai bằng **cùng một địa chỉ và cổng** (ví dụ `http://localhost:5500/`), thư mục gốc phục vụ là thư mục chứa `index.html`.
+> **Lưu ý khi chạy:** User và Admin chia sẻ dữ liệu qua cùng một _origin_ trình duyệt. Hãy mở cả hai bằng **cùng một địa chỉ và cổng** (ví dụ `http://localhost:5500/`), thư mục gốc phục vụ là thư mục chứa `index.html`.
 
 ---
 
@@ -42,7 +42,7 @@ OOAD/
 │   ├── css/user/                       # CSS đang dùng của user (variables, base, common, redesign, feedback.css...)
 │   ├── js/user/
 │   │   ├── core/                       # site-shell.js (sinh tự động), site-header.js, account-session.js, storage.js, otp-api.js
-│   │   ├── support-chat.js             # Chat User, gửi ảnh/link sản phẩm và gọi âm thanh Jitsi
+│   │   ├── support-chat.js             # Widget hỗ trợ User: cột icon chọn gọi hotline 0354 109 892 hoặc chat
 │   │   ├── product/                    # products.js (giao diện cửa hàng), reviews.js (đánh giá trên trang chủ)
 │   │   ├── cart/                       # cart.js, cart-page.js
 │   │   ├── payment/                    # payment.js, checkout.js, voucher.js, payment-bank.js, payment-result.js, payment-success.js
@@ -83,18 +83,17 @@ OOAD/
 
 ## 2. Công Nghệ & Thư Viện
 
-| Thành phần | Công nghệ |
-|---|---|
-| Ngôn ngữ | HTML5, CSS3, JavaScript (ES6+) |
-| Framework | Không — vanilla JS thuần |
-| Backend | Node.js 18+ (chỉ phục vụ gửi + xác thực OTP qua email) |
-| Gửi email OTP | Resend API |
-| Lưu dữ liệu | localStorage / sessionStorage / **IndexedDB** (đánh giá + ảnh/video) |
-| Biểu đồ | Tự dựng bằng HTML/CSS (không dùng thư viện biểu đồ) |
-| Thông báo | SweetAlert2 (CDN) — dialog xác nhận |
-| QR thanh toán | SVG ngân hàng MBBank inline |
-| Gọi hỗ trợ | Jitsi Meet External API (nhúng trực tiếp, chế độ chỉ âm thanh) |
-| Responsive | Media queries, flexbox, grid |
+| Thành phần    | Công nghệ                                                            |
+| ------------- | -------------------------------------------------------------------- |
+| Ngôn ngữ      | HTML5, CSS3, JavaScript (ES6+)                                       |
+| Framework     | Không — vanilla JS thuần                                             |
+| Backend       | Node.js 18+ (chỉ phục vụ gửi + xác thực OTP qua email)               |
+| Gửi email OTP | Resend API                                                           |
+| Lưu dữ liệu   | localStorage / sessionStorage / **IndexedDB** (đánh giá + ảnh/video) |
+| Biểu đồ       | Tự dựng bằng HTML/CSS (không dùng thư viện biểu đồ)                  |
+| Thông báo     | SweetAlert2 (CDN) — dialog xác nhận                                  |
+| QR thanh toán | SVG ngân hàng MBBank inline                                          |
+| Responsive    | Media queries, flexbox, grid                                         |
 
 ---
 
@@ -102,27 +101,28 @@ OOAD/
 
 ### 3.1 Bảng các key (localStorage)
 
-| Key | Loại | Mô tả |
-|---|---|---|
-| `productsLocal` | `Array<Product>` | Toàn bộ sản phẩm (101 mẫu seed + sản phẩm admin tạo) |
-| `productsSeedVersion` | `string` | Phiên bản dữ liệu mẫu đã nạp; khi tăng, các mẫu mới được bổ sung **một lần** (không "hồi sinh" mẫu đã xóa) |
-| `cart` | `Array<CartItem>` | Giỏ hàng (chỉ lưu `maSanPham`, tên, ảnh, giá, `kichCoDaChon`, `soLuong` — luôn được đối chiếu lại với `productsLocal`) |
-| `selectedCartItems` | `Array<string>` | Các dòng giỏ được tick để thanh toán (`"<id>::<size>"`) |
-| `appliedVoucher` | `Object` | Voucher đang chọn ở checkout, chỉ lưu mã voucher; số tiền giảm được chốt khi tạo đơn |
-| `DanhSachDatHang` | `Array<Order>` | Đơn hàng khách đã đặt (nguồn dữ liệu chính của đơn) |
-| `CurrDanhSachDatHang` | `Array<Order>` | Đơn **chuyển khoản đang chờ thanh toán** (chưa vào danh sách chính, chưa trừ kho; gắn với người đặt, có `hetHanLuc` = hết hạn sau 30 phút) |
-| `ordersLocal` | `Array<AdminOrder>` | Bản đơn hàng cho Admin (đồng bộ từ `DanhSachDatHang`) |
-| `phieuNhapLocal` | `Array<Receipt>` | Phiếu nhập hàng |
-| `categories` | `Array<Category>` | Danh mục sản phẩm (`tenLoai`, `trangThai: active/hidden`) — User đọc key này để dựng menu/footer/dải thương hiệu |
-| `currentUser` | `Object` | User đang đăng nhập |
-| `userList` | `Array<User>` | User đã đăng ký (`maKH` dạng `KH001`...) |
-| `selectedAddress` | `Object` | Địa chỉ giao hàng đang chọn |
-| `shoeSearchHistory` | `Array<string>` | Lịch sử tìm kiếm (tối đa 6) |
-| `nguongSapHet` | `number` | Ngưỡng sắp hết hàng (mặc định 10) |
-| `employeeList` | `Array<Employee>` | Danh sách nhân viên |
-| `feedbackVersion` | `string` | Dấu thời gian báo cho các tab biết đánh giá vừa thay đổi |
-| `supportThreads` | `Array<SupportThread>` | Cuộc chat User ↔ Admin/Nhân viên, tin nhắn chữ/ảnh/link sản phẩm và trạng thái cuộc gọi |
-| `rememberedUsername` / `rememberLogin` | `string` / `boolean` | Ghi nhớ đăng nhập admin |
+| Key                                    | Loại                   | Mô tả                                                                                                                                      |
+| -------------------------------------- | ---------------------- | ------------------------------------------------------------------------------------------------------------------------------------------ |
+| `productsLocal`                        | `Array<Product>`       | Toàn bộ sản phẩm (101 mẫu seed + sản phẩm admin tạo)                                                                                       |
+| `productsSeedVersion`                  | `string`               | Phiên bản dữ liệu mẫu đã nạp; khi tăng, các mẫu mới được bổ sung **một lần** (không "hồi sinh" mẫu đã xóa)                                 |
+| `cart`                                 | `Array<CartItem>`      | Giỏ hàng (chỉ lưu `maSanPham`, tên, ảnh, giá, `kichCoDaChon`, `soLuong` — luôn được đối chiếu lại với `productsLocal`)                     |
+| `selectedCartItems`                    | `Array<string>`        | Các dòng giỏ được tick để thanh toán (`"<id>::<size>"`)                                                                                    |
+| `shopVouchers`                         | `Array<Voucher>`       | Kho voucher dùng chung (`code`, `type` percent/fixed, `value`, `maxDiscount`, `minOrder`, `ngayBatDau`, `hanDung`, `gioiHanMoiKhach`, `tongLuotDung`, `chiKhachMoi`, `trangThai`) |
+| `appliedVoucher`                       | `Object`               | Voucher đang chọn ở checkout, chỉ lưu mã voucher; số tiền giảm được chốt khi tạo đơn                                                       |
+| `DanhSachDatHang`                      | `Array<Order>`         | Đơn hàng khách đã đặt (nguồn dữ liệu chính của đơn)                                                                                        |
+| `CurrDanhSachDatHang`                  | `Array<Order>`         | Đơn **chuyển khoản đang chờ thanh toán** (chưa vào danh sách chính, chưa trừ kho; gắn với người đặt, có `hetHanLuc` = hết hạn sau 30 phút) |
+| `ordersLocal`                          | `Array<AdminOrder>`    | Bản đơn hàng cho Admin (đồng bộ từ `DanhSachDatHang`)                                                                                      |
+| `phieuNhapLocal`                       | `Array<Receipt>`       | Phiếu nhập hàng                                                                                                                            |
+| `categories`                           | `Array<Category>`      | Danh mục sản phẩm (`tenLoai`, `trangThai: active/hidden`) — User đọc key này để dựng menu/footer/dải thương hiệu                           |
+| `currentUser`                          | `Object`               | User đang đăng nhập                                                                                                                        |
+| `userList`                             | `Array<User>`          | User đã đăng ký (`maKH` dạng `KH001`...)                                                                                                   |
+| `selectedAddress`                      | `Object`               | Địa chỉ giao hàng đang chọn                                                                                                                |
+| `shoeSearchHistory`                    | `Array<string>`        | Lịch sử tìm kiếm (tối đa 6)                                                                                                                |
+| `nguongSapHet`                         | `number`               | Ngưỡng sắp hết hàng (mặc định 10)                                                                                                          |
+| `employeeList`                         | `Array<Employee>`      | Danh sách nhân viên                                                                                                                        |
+| `feedbackVersion`                      | `string`               | Dấu thời gian báo cho các tab biết đánh giá vừa thay đổi                                                                                   |
+| `supportThreads`                       | `Array<SupportThread>` | Cuộc chat User ↔ Admin/Nhân viên, tin nhắn chữ/ảnh/link sản phẩm và người đang hỗ trợ                                                      |
+| `rememberedUsername` / `rememberLogin` | `string` / `boolean`   | Ghi nhớ đăng nhập admin                                                                                                                    |
 
 **IndexedDB `ooad_feedback`** (object store `feedback`, khóa `id`): toàn bộ đánh giá của khách, gồm ảnh/video dạng `Blob`.
 
@@ -131,6 +131,7 @@ OOAD/
 > Mọi thuộc tính dùng **tên tiếng Việt, đồng bộ với `database/CuaHangGiay.sql`** (bảng đối chiếu tên cũ → mới: [`docs/DOI_TEN_THUOC_TINH.md`](docs/DOI_TEN_THUOC_TINH.md)). Dữ liệu cũ trong trình duyệt được tự chuyển sang tên mới một lần bởi `database/migrate-schema.js` (cờ `schemaVersion = "vi-1"`). Giá trị (`"visible"`, `"hidden"`, `"COD"`, `"cho-xac-nhan"`, `"moiDat"`...) không đổi.
 
 #### Product — `productsLocal` (bảng SAN_PHAM)
+
 ```js
 {
   maSanPham: "SH-001",                   // Mã SP, duy nhất (SH-001…SH-101 là mẫu có sẵn)
@@ -157,18 +158,31 @@ OOAD/
 ```
 
 #### Category — `categories` (bảng LOAI_SAN_PHAM)
+
 ```js
 { maLoai: "Nike", tenLoai: "Nike", moTa: "...", soSanPham: 20, trangThai: "active" | "hidden", ngayTao: "2024-01-15" }
 // maLoai = tên loại (khóa tự nhiên) và trùng với maLoai của sản phẩm thuộc loại đó
 ```
 
 #### Cart Item — `cart` (bảng GIO_HANG)
+
 ```js
-{ maSanPham, tenSanPham, maLoai, hinhAnh, giaHienThi, giaBan, kichCoDaChon, soLuong }
+{
+  (maSanPham,
+    tenSanPham,
+    maLoai,
+    hinhAnh,
+    giaHienThi,
+    giaBan,
+    kichCoDaChon,
+    soLuong);
+}
 ```
+
 Giá/tên/ảnh được lấy lại từ `productsLocal` mỗi lần đọc giỏ; sản phẩm bị ẩn hoặc đã xóa tự bị loại khỏi giỏ.
 
 #### Customer — `userList` / `currentUser` (bảng KHACH_HANG + DIA_CHI_PHU)
+
 ```js
 {
   maKhachHang: "user_...", tenDangNhap: "nguyenan", hoTen: "Nguyễn An",
@@ -180,9 +194,11 @@ Giá/tên/ảnh được lấy lại từ `productsLocal` mỗi lần đọc gi�
   daDatLaiMatKhau: false, ngayDatLaiMatKhau: "ISO"   // Admin reset mật khẩu
 }
 ```
+
 `selectedAddress` có cùng dạng với một phần tử của `diaChiPhu`.
 
 #### Order (User) — `DanhSachDatHang` (bảng DON_HANG + CHI_TIET_DON_HANG)
+
 ```js
 {
   maDonHang: "DH1726500000000",
@@ -204,6 +220,7 @@ Giá/tên/ảnh được lấy lại từ `productsLocal` mỗi lần đọc gi�
 ```
 
 #### AdminOrder — `ordersLocal`
+
 ```js
 {
   maDonHang, ngayDat, tenNguoiNhan, soDienThoaiNhan, diaChiGiaoHang, thuDienTuNguoiNhan,
@@ -215,6 +232,7 @@ Giá/tên/ảnh được lấy lại từ `productsLocal` mỗi lần đọc gi�
 ```
 
 #### Feedback — IndexedDB `ooad_feedback` (store `feedback`, khóa `maDanhGia`)
+
 ```js
 {
   maDanhGia: "fb_<maDonHang>_<maSanPham>_<size>",   // Mỗi sản phẩm trong một đơn chỉ đánh giá một lần
@@ -231,37 +249,46 @@ Giá/tên/ảnh được lấy lại từ `productsLocal` mỗi lần đọc gi�
 }
 ```
 
-#### SupportThread — `supportThreads` (chat hỗ trợ)
+#### SupportThread — `supportThreads` (chat hỗ trợ; bảng `HO_TRO_CHAT` + `TIN_NHAN`)
+
 ```js
 {
-  id: "CHAT_...",
-  customerId: "user_...",
-  customerName: "Nguyễn An",
-  assignedTo: "Nguyễn CSKH",
-  status: "open" | "closed",
-  messages: [
+  maPhienChat: "CHAT_...",
+  maKhachHang: "user_...",
+  tenKhachHang: "Nguyễn An",
+  nhanVienXuLy: "Nguyễn CSKH",        // null = chờ tiếp nhận
+  maNhanVienXuLy: "nhanvien01",       // tên đăng nhập nhân viên phụ trách
+  ngayTiepNhan: "ISO",
+  trangThai: "open" | "closed",       // đã đóng -> khách nhắn lại sẽ tạo phiên chat mới
+  ngayDong: "ISO", nguoiDong: "Nguyễn CSKH",
+  maTinNhanKhachDaDoc: "MSG_...",     // tin cuối khách đã đọc (chấm đỏ trên nút Hỗ trợ)
+  maTinNhanNhanVienDaDoc: "MSG_...",  // tin cuối nhân viên đã đọc (tính số tin chưa đọc)
+  tinNhan: [
     {
-      id: "MSG_...",
-      senderType: "customer" | "staff",
-      senderId: "...",
-      senderName: "...",
-      type: "text" | "image" | "product",
-      text: "...",
-      data: "data:image/...",
-      productId: "SH-001",
-      name: "...",
-      url: "pages/home.html?search=...#sanpham",
-      createdAt: "ISO"
+      maTinNhan: "MSG_...",
+      loaiNguoiGui: "customer" | "staff" | "system",
+      maNguoiGui: "...",
+      tenNguoiGui: "...",
+      loaiTinNhan: "text" | "image" | "product" | "rating",
+      noiDung: "...",
+      duLieuAnh: "data:image/...",
+      maSanPham: "SH-001",
+      tenSanPham: "...",
+      duongDan: "pages/home.html?search=...#sanpham",
+      thoiGianGui: "ISO"
     }
   ],
-  createdAt: "ISO",
-  updatedAt: "ISO"
+  ngayTao: "ISO",
+  ngayCapNhat: "ISO"
 }
 ```
+
+Dữ liệu cũ (tên tiếng Anh) được `database/migrate-schema.js` tự chuyển sang tên trên (cờ `schemaSupport`); bảng đối chiếu ở `docs/DOI_TEN_THUOC_TINH.md`.
 
 Ảnh chat được lưu tạm dưới dạng Data URL và giới hạn 2MB. Đây là cơ chế demo trên cùng origin, chưa thay thế upload server hoặc WebSocket khi triển khai thật.
 
 #### Import Receipt (Phiếu nhập hàng)
+
 ```js
 {
   maPhieuNhap: "PN1726500000000",
@@ -278,6 +305,7 @@ Giá/tên/ảnh được lấy lại từ `productsLocal` mỗi lần đọc gi�
 ```
 
 #### Employee (Nhân viên)
+
 ```js
 {
   maNhanVien: "NV001",                // Mã NV, tự động "NV" + 3 số
@@ -297,15 +325,15 @@ Giá/tên/ảnh được lấy lại từ `productsLocal` mỗi lần đọc gi�
 
 Định nghĩa trong `database/products-shoes.js`, được nạp cả ở User (giỏ, thanh toán, lịch sử đơn) và Admin.
 
-| Hàm | Vai trò |
-|---|---|
-| `adjustStock(sanPham, size, delta)` | Cộng/trừ tồn kho. Có `size` → đổi `tonKhoTheoSize[size]`; không có → chia đều (cộng) / lấy từ size nhiều nhất (trừ). Luôn đặt lại `soLuongTon = Σ tonKhoTheoSize` |
-| `checkStock(lines)` | Kiểm tra đủ hàng; **gộp các dòng cùng sản phẩm/size** trước khi so sánh |
-| `deductOrderStock(order)` | Kiểm tra đủ hàng rồi trừ kho; gắn `order.daTruKho = true`; trả lỗi nếu không lưu được (bộ nhớ đầy) |
-| `shippingFee(tamTinh, phuongThuc)` | Phí ship: COD/chuyển khoản 30.000đ, **miễn phí từ 10.000.000đ**; nhận tại cửa hàng 0đ |
-| `nextStatuses(trangThai)` | Các trạng thái đơn được phép chuyển tiếp (`moiDat → daXuLy/huy`, `daXuLy → daGiao/huy`, `daGiao`/`huy` là cuối) |
+| Hàm                                             | Vai trò                                                                                                                                                                                                                                                                                                  |
+| ----------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `adjustStock(sanPham, size, delta)`             | Cộng/trừ tồn kho. Có `size` → đổi `tonKhoTheoSize[size]`; không có → chia đều (cộng) / lấy từ size nhiều nhất (trừ). Luôn đặt lại `soLuongTon = Σ tonKhoTheoSize`                                                                                                                                        |
+| `checkStock(lines)`                             | Kiểm tra đủ hàng; **gộp các dòng cùng sản phẩm/size** trước khi so sánh                                                                                                                                                                                                                                  |
+| `deductOrderStock(order)`                       | Kiểm tra đủ hàng rồi trừ kho; gắn `order.daTruKho = true`; trả lỗi nếu không lưu được (bộ nhớ đầy)                                                                                                                                                                                                       |
+| `shippingFee(tamTinh, phuongThuc)`              | Phí ship: COD/chuyển khoản 30.000đ, **miễn phí từ 10.000.000đ**; nhận tại cửa hàng 0đ                                                                                                                                                                                                                    |
+| `nextStatuses(trangThai)`                       | Các trạng thái đơn được phép chuyển tiếp (`moiDat → daXuLy/huy`, `daXuLy → daGiao/huy`, `daGiao`/`huy` là cuối)                                                                                                                                                                                          |
 | `setOrderStatus(orderId, adminStatus, {force})` | **Chỉ cho chuyển trạng thái hợp lệ** (`force` chỉ dùng khi đồng bộ đơn cũ); Đổi trạng thái đơn ở **cả** `DanhSachDatHang` và `ordersLocal`; tự trừ/hoàn kho theo cờ `daTruKho`; cộng/trừ `tongDaBan` khi vào/ra "Đã giao"; phát `orderStatusChanged`. Dùng cho cả Admin đổi trạng thái lẫn khách hủy đơn |
-| `esc(value)` | Escape HTML khi chèn dữ liệu vào `innerHTML` |
+| `esc(value)`                                    | Escape HTML khi chèn dữ liệu vào `innerHTML`                                                                                                                                                                                                                                                             |
 
 ---
 
@@ -313,26 +341,26 @@ Giá/tên/ảnh được lấy lại từ `productsLocal` mỗi lần đọc gi�
 
 ### 4.1 Sự kiện trong cùng tab
 
-| Event | Khi nào | Ai lắng nghe |
-|---|---|---|
-| `productsUpdated` | Thêm/sửa/xóa SP, nhập hàng, đặt hàng, đổi trạng thái/hủy đơn | Trang chủ user, bảng sản phẩm, phiếu nhập, tồn kho admin |
-| `categoriesUpdated` | Thêm/sửa/xóa/toggle danh mục | Quản lý sản phẩm, dropdown danh mục |
-| `orderStatusChanged` | Admin đổi trạng thái hoặc khách hủy đơn | Lịch sử mua hàng user, danh sách đơn admin |
-| `userOrdersUpdated` | User đặt hàng thành công | Đồng bộ đơn sang admin |
-| `feedbackUpdated` | Có đánh giá mới / nhân viên xử lý phản hồi | Lịch sử đơn, thẻ & popup sản phẩm, trang Phản hồi đánh giá |
-| `user-shell-ready` | Header/footer render xong | Cập nhật UI tài khoản |
+| Event                | Khi nào                                                      | Ai lắng nghe                                               |
+| -------------------- | ------------------------------------------------------------ | ---------------------------------------------------------- |
+| `productsUpdated`    | Thêm/sửa/xóa SP, nhập hàng, đặt hàng, đổi trạng thái/hủy đơn | Trang chủ user, bảng sản phẩm, phiếu nhập, tồn kho admin   |
+| `categoriesUpdated`  | Thêm/sửa/xóa/toggle danh mục                                 | Quản lý sản phẩm, dropdown danh mục                        |
+| `orderStatusChanged` | Admin đổi trạng thái hoặc khách hủy đơn                      | Lịch sử mua hàng user, danh sách đơn admin                 |
+| `userOrdersUpdated`  | User đặt hàng thành công                                     | Đồng bộ đơn sang admin                                     |
+| `feedbackUpdated`    | Có đánh giá mới / nhân viên xử lý phản hồi                   | Lịch sử đơn, thẻ & popup sản phẩm, trang Phản hồi đánh giá |
+| `user-shell-ready`   | Header/footer render xong                                    | Cập nhật UI tài khoản                                      |
 
 ### 4.2 Đồng bộ giữa các tab (sự kiện `storage`)
 
-| Key thay đổi | Hệ quả |
-|---|---|
-| `productsLocal` | Trang chủ user, bảng sản phẩm, phiếu nhập, tồn kho admin tự refresh (giữ nguyên bộ lọc đang chọn) |
-| `categories` | Dropdown danh mục admin refresh |
-| `nguongSapHet` | Tồn kho cập nhật ngưỡng |
-| `DanhSachDatHang` | Danh sách đơn admin và lịch sử đơn của khách refresh |
-| `ordersLocal` | Danh sách đơn admin refresh |
-| `feedbackVersion` | Mọi trang đang mở nạp lại đánh giá |
-| `currentUser` | Header user cập nhật UI |
+| Key thay đổi      | Hệ quả                                                                                            |
+| ----------------- | ------------------------------------------------------------------------------------------------- |
+| `productsLocal`   | Trang chủ user, bảng sản phẩm, phiếu nhập, tồn kho admin tự refresh (giữ nguyên bộ lọc đang chọn) |
+| `categories`      | Dropdown danh mục admin refresh                                                                   |
+| `nguongSapHet`    | Tồn kho cập nhật ngưỡng                                                                           |
+| `DanhSachDatHang` | Danh sách đơn admin và lịch sử đơn của khách refresh                                              |
+| `ordersLocal`     | Danh sách đơn admin refresh                                                                       |
+| `feedbackVersion` | Mọi trang đang mở nạp lại đánh giá                                                                |
+| `currentUser`     | Header user cập nhật UI                                                                           |
 
 ---
 
@@ -348,7 +376,7 @@ Giá/tên/ảnh được lấy lại từ `productsLocal` mỗi lần đọc gi�
 ┌─────────────────────────────────────────────────────────────────────┐
 │ 2. ADMIN TẠO PHIẾU NHẬP HÀNG (gõ mã SP, nhập số lượng, hoàn thành) │
 │    Khi phiếu chuyển sang "Hoàn thành" (chỉ lần đầu):                │
-│       ShopCore.adjustStock(sp, size, +SL) → cộng đúng size dòng   
+│       ShopCore.adjustStock(sp, size, +SL) → cộng đúng size dòng
 │       tongDaNhap += SL                                          │
 └────────────────────────────┬────────────────────────────────────────┘
                              ▼
@@ -396,6 +424,7 @@ Giá/tên/ảnh được lấy lại từ `productsLocal` mỗi lần đọc gi�
 **Trang:** `pages/home.html` · **File JS:** `database/products-shoes.js` (dữ liệu), `assets/js/user/product/products.js` (giao diện), `reviews.js` (đánh giá)
 
 #### Chức năng chính
+
 - **Banner video** tự động phát (autoplay, loop).
 - **Thanh thương hiệu**, **menu** và **footer** lấy từ danh mục Admin (`categories`): ẩn/thêm danh mục ở Admin thì User thấy ngay sau khi tải lại; nếu chưa có `categories` thì dùng 5 hãng mặc định.
 - **Grid sản phẩm** 15 sản phẩm/trang (hiện có **101 mẫu**), mỗi thẻ hiện ảnh, tên, giá và **điểm đánh giá trung bình** (nếu có).
@@ -403,32 +432,38 @@ Giá/tên/ảnh được lấy lại từ `productsLocal` mỗi lần đọc gi�
 - **Tự cập nhật:** khi Admin đổi giá/tồn kho/ẩn sản phẩm, trang chủ cập nhật ngay (cả khi mở ở tab khác), giữ nguyên bộ lọc đang chọn.
 
 #### Phân trang
+
 Thanh phân trang chỉ hiện **4 số trang mỗi nhóm**:
 
 ```
 Nhóm 1–4:      1 2 3 4  >  Trang cuối
 Nhóm 5 trở đi: Trang đầu  <  5 6 7  >  Trang cuối
 ```
+
 - `>` / `<` chuyển từng trang; "Trang đầu" / "Trang cuối" nhảy thẳng tới trang đầu / cuối.
 - Ở nhóm trang 1–4 không hiện "Trang đầu" và `<`; ở trang cuối, `>` và "Trang cuối" bị khóa.
 - Chuyển trang thì tự cuộn về đầu danh sách; chỉ có 1 trang thì ẩn thanh phân trang.
 
 #### Bộ lọc (sidebar)
-| Bộ lọc | Loại | Chi tiết |
-|---|---|---|
-| Giá | Select | Dưới 1tr, 1-2tr, 2-3tr, 3-4tr, Trên 4tr |
-| Màu sắc | Select | Đen, Trắng, Vàng, Bạc, Hồng, Xanh lá, Xanh dương, Đỏ, Xám, Be |
-| Chất liệu | Select | Da, Da tổng hợp, Vải |
-| Phong cách | Select | Thể thao, Casual, Thời trang |
-| Giới tính | Select | Nam, Nữ, Unisex |
-| Size giày | Select | Danh sách size lấy động từ dữ liệu |
+
+| Bộ lọc     | Loại   | Chi tiết                                                      |
+| ---------- | ------ | ------------------------------------------------------------- |
+| Giá        | Select | Dưới 1tr, 1-2tr, 2-3tr, 3-4tr, Trên 4tr                       |
+| Màu sắc    | Select | Đen, Trắng, Vàng, Bạc, Hồng, Xanh lá, Xanh dương, Đỏ, Xám, Be |
+| Chất liệu  | Select | Da, Da tổng hợp, Vải                                          |
+| Phong cách | Select | Thể thao, Casual, Thời trang                                  |
+| Giới tính  | Select | Nam, Nữ, Unisex                                               |
+| Size giày  | Select | Danh sách size lấy động từ dữ liệu                            |
 
 #### Tìm kiếm
+
 - Nhập tên hoặc brand vào ô tìm kiếm; **gợi ý realtime** (tối đa 6) và **lịch sử tìm kiếm** (6 gần nhất, có thể xóa).
 - Hỗ trợ URL param `?search=...` và `?category=...`.
 
 #### Điều kiện hiển thị sản phẩm
+
 Sản phẩm hiện trên trang chủ khi:
+
 1. `trangThaiHienThi !== "hidden"` — đang hiển thị.
 2. `giaBan > 0` — đã được đặt giá bán ở Admin.
 3. `soLuongTon > 0` — còn hàng. **Hết sạch số lượng (mọi size = 0) thì sản phẩm tự biến mất khỏi trang chủ**, có hàng lại (nhập kho, hủy đơn) thì tự hiện lại. Sản phẩm còn ít nhất một size thì vẫn hiện, các size hết hàng bị khóa trong popup.
@@ -457,15 +492,17 @@ Sản phẩm hiện trên trang chủ khi:
 - Người dùng bị Admin khóa không đặt hàng được (phiên bị đăng xuất khi kiểm tra lại).
 
 #### Phương thức thanh toán
-| Phương thức | Mã | Phí ship | Luồng xử lý |
-|---|---|---|---|
-| Chuyển khoản ngân hàng | `PayBank` | 30.000đ (miễn phí từ 10.000.000đ) | Lưu tạm (hết hạn sau 30 phút, gắn với người đặt) → QR → xác nhận mới tạo đơn |
-| Thanh toán khi nhận hàng | `COD` | 30.000đ (miễn phí từ 10.000.000đ) | Trừ kho → tạo đơn → trang thành công |
-| Nhận tại cửa hàng | `Shop` | 0đ | Trừ kho → tạo đơn → trang thành công (trang `payment-store.html` hiện đang được vô hiệu hóa — đã comment — nên chưa có nút này trên giao diện) |
+
+| Phương thức              | Mã        | Phí ship                          | Luồng xử lý                                                                                                                                    |
+| ------------------------ | --------- | --------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
+| Chuyển khoản ngân hàng   | `PayBank` | 30.000đ (miễn phí từ 10.000.000đ) | Lưu tạm (hết hạn sau 30 phút, gắn với người đặt) → QR → xác nhận mới tạo đơn                                                                   |
+| Thanh toán khi nhận hàng | `COD`     | 30.000đ (miễn phí từ 10.000.000đ) | Trừ kho → tạo đơn → trang thành công                                                                                                           |
+| Nhận tại cửa hàng        | `Shop`    | 0đ                                | Trừ kho → tạo đơn → trang thành công (trang `payment-store.html` hiện đang được vô hiệu hóa — đã comment — nên chưa có nút này trên giao diện) |
 
 **Flow COD / Shop:** `ktsoluong()` → `thanhtoan("COD")` (trừ kho bằng `ShopCore.deductOrderStock`, lưu `DanhSachDatHang`, xóa sản phẩm đã đặt khỏi giỏ) → `payment-cash.html` / `payment-store.html`.
 
 **Flow PayBank:**
+
 1. `thanhtoan("PayBank")` chỉ lưu đơn **tạm** vào `CurrDanhSachDatHang` (chưa trừ kho, chưa hiện bên Admin).
 2. Hiển thị QR MBBank.
 3. Bấm **"Đã hoàn tất chuyển khoản"** → `confirmBankOrder()` kiểm tra lại tồn kho, trừ kho, thêm đơn (`trangThaiThanhToan: "paid"`) vào `DanhSachDatHang` **mà không ghi đè các đơn khác**, xóa giỏ → `payment-success.html`. Nếu hết hàng giữa chừng → trang thất bại.
@@ -478,14 +515,17 @@ Trang thành công / hóa đơn luôn hiển thị **đơn mới nhất của ch
 ### 6.4 Quản Lý Tài Khoản
 
 #### Đăng ký — `pages/register.html` (`register.js`)
+
 - Username: chỉ chữ, tối thiểu 3 ký tự, không trùng. Email đúng định dạng, không trùng. SĐT `0xxxxxxxxx`, không trùng.
 - Mật khẩu ≥ 8 ký tự (hiển thị rule realtime), xác nhận phải khớp; địa chỉ ≥ 10 ký tự.
 - Lưu `ngayTao` để Admin thấy đúng ngày tạo tài khoản. Đăng ký/quên mật khẩu dùng OTP qua email (xem 13.2).
 
 #### Đăng nhập — `pages/login.html` (`login.js`)
+
 - Bằng **email hoặc username** + mật khẩu; chặn tài khoản bị khóa (`biKhoa === true` hoặc `trangThai === "blocked"`).
 
 #### Hồ sơ — `profile.html`, `personal-info.html`, `change-password.html`
+
 - Xem/sửa thông tin, đổi mật khẩu (MK cũ → MK mới ≥ 8 → đăng nhập lại).
 - **Lưu hồ sơ không ghi đè trạng thái do Admin quản lý** (`trangThai`, `biKhoa`, `maKH`, `ngayTao`...).
 - Quên mật khẩu: tài khoản bị khóa không dùng được; đổi mật khẩu xong **không tự đăng nhập**.
@@ -513,12 +553,13 @@ Trang thành công / hóa đơn luôn hiển thị **đơn mới nhất của ch
 - **Đánh giá sản phẩm:** đơn `thanh-cong` có nút đánh giá dưới từng sản phẩm; đơn đang chờ/đang giao hiện lời nhắc "đánh giá sau khi nhận hàng" (xem 6.8).
 
 #### Ánh xạ trạng thái
+
 | Trạng thái User | Trạng thái Admin |
-|---|---|
-| `cho-xac-nhan` | `moiDat` |
-| `dang-giao` | `daXuLy` |
-| `thanh-cong` | `daGiao` |
-| `da-huy` | `huy` |
+| --------------- | ---------------- |
+| `cho-xac-nhan`  | `moiDat`         |
+| `dang-giao`     | `daXuLy`         |
+| `thanh-cong`    | `daGiao`         |
+| `da-huy`        | `huy`            |
 
 ---
 
@@ -538,25 +579,30 @@ Trang thành công / hóa đơn luôn hiển thị **đơn mới nhất của ch
 **File JS:** `assets/js/user/account/feedback.js` (form + lịch sử), `assets/js/user/product/reviews.js` (trang chủ) · **Dữ liệu:** `database/feedback-store.js` · **CSS:** `assets/css/user/feedback.css`
 
 **Cách khách đánh giá:**
+
 1. Đặt hàng → Admin chuyển đơn sang **Đã giao**.
 2. Khách vào **Đơn hàng** (`order-history.html`) → dưới từng sản phẩm của đơn "Thành công" bấm **☆ Đánh giá sản phẩm này**.
 3. Chấm **1–5 sao** (bắt buộc, có nhãn Rất tệ → Tuyệt vời), viết **nhận xét** (tối đa 1000 ký tự, không bắt buộc), đính kèm **ảnh/video** (tối đa 6 tệp, video ≤ 25MB, ảnh tự nén) → **Gửi đánh giá**.
 
 **Sau khi gửi:**
-- Mỗi sản phẩm trong một đơn chỉ đánh giá một lần; đánh giá hiện ngay dưới sản phẩm kèm trạng thái *Mới / Đang xử lý / Đã phản hồi*.
+
+- Mỗi sản phẩm trong một đơn chỉ đánh giá một lần; đánh giá hiện ngay dưới sản phẩm kèm trạng thái _Mới / Đang xử lý / Đã phản hồi_.
 - Khi nhân viên CSKH phản hồi, nội dung phản hồi hiện ngay dưới đánh giá.
 - Trang chủ: thẻ sản phẩm có điểm trung bình; popup chi tiết có điểm trung bình, phân bố sao, bộ lọc (tất cả / có ảnh-video / theo sao), danh sách đánh giá (tên khách che một phần, ảnh phóng to, video phát được, phản hồi của cửa hàng). Đánh giá bị Admin/CSKH **ẩn** thì không hiện công khai.
 
-### 6.9 Hỗ Trợ Khách Hàng & Gọi Âm Thanh
+### 6.9 Hỗ Trợ Khách Hàng
 
 **File JS:** `assets/js/user/support-chat.js` · **CSS:** `assets/css/user/support-chat.css` · **Dữ liệu:** `localStorage['supportThreads']`
 
-- User đã đăng nhập thấy nút **Hỗ trợ** trên các trang User.
-- Có thể gửi tin nhắn chữ, ảnh tối đa 2MB và link sản phẩm bằng mã sản phẩm.
-- Nút **Gọi miễn phí** nhúng Jitsi Meet trực tiếp trong modal của website bằng `https://meet.jit.si/external_api.js`.
-- Cuộc gọi cấu hình **chỉ âm thanh**: tự bật `startAudioOnly`, tắt camera và chỉ giữ microphone, chat, cài đặt, kết thúc cuộc gọi.
-- Mỗi cuộc chat dùng phòng riêng có tên tạo từ `thread.id`; User và nhân viên phải mở cùng origin để đồng bộ `localStorage`.
-- Khi đóng modal, Jitsi API được `dispose()` để giải phóng kết nối.
+- User đã đăng nhập thấy nút **Hỗ trợ** ở góc dưới phải các trang User. Bấm vào sẽ xổ ra 2 icon tròn để người dùng chọn cách liên hệ:
+  - **Gọi hotline** (đỏ, 📞): link `tel:0354109892`, bấm vào để gọi trực tiếp số **0354 109 892**. Mục này không lưu dữ liệu.
+  - **Chat với nhân viên** (xanh dương, 💬): mở panel chat trong website — gửi chữ, ảnh tối đa 2MB và link sản phẩm bằng mã sản phẩm. Mỗi cuộc chat gắn với một khách hàng; User và nhân viên phải mở cùng origin để đồng bộ `localStorage`. Trong panel chat có nút **Đánh giá** (giao diện kiểu TikTok Shop): nút này **chỉ hiện khi khách còn sản phẩm đã giao chưa chấm sao**; chấm xong hết, nút tự ẩn và không gửi được nữa. Khi bấm, panel liệt kê từng sản phẩm của đơn đã giao gần nhất kèm ảnh, sao lớn, nhãn "Chắc chắn sẽ không / Chắc chắn sẽ", chip gợi ý chọn nhiều (đổi theo điểm sao) và ô nhận xét. Điểm sao, chip và nhận xét được lưu thành review thật qua `FeedbackStore` (hiện tại trang chủ và Phản hồi đánh giá của CSKH) và đồng thời gửi một tin nhắn hiển thị sao + nhận xét vào cuộc chat.
+- Di chuột lên từng icon sẽ hiện nhãn tên kênh và số hotline.
+- **Vòng đời hội thoại:** _Chờ tiếp nhận_ (chưa có nhân viên) → _Đang xử lý_ (hiện "Đang hỗ trợ: tên nhân viên") → _Đã kết thúc_. Khi nhân viên đóng hội thoại, panel hiện banner "Hội thoại đã kết thúc"; khách nhắn tiếp sẽ **mở cuộc hội thoại mới** (cuộc cũ vẫn lưu lịch sử).
+- Panel chưa có tin nhắn hiển thị **gợi ý chủ đề** (tình trạng đơn hàng, tư vấn size, mã giảm giá, đổi/trả) — bấm một chủ đề là gửi luôn. Các thông báo hệ thống (nhân viên tiếp nhận/kết thúc, tin cảm ơn) hiển thị dạng dòng giữa khung chat.
+- Khi có tin nhắn mới từ shop/nhân viên (kể cả tin cảm ơn sau khi đặt hàng), nút **Hỗ trợ** hiện **chấm đỏ kèm số tin chưa đọc** ở góc trên bên phải. Khách mở panel chat để đọc là chấm đỏ biến mất và hệ thống ghi lại mã tin đã đọc cuối cùng (`lastReadId`) trong cuộc chat.
+- Dòng trạng thái trong panel chat hiển thị "Đang chờ nhân viên tiếp nhận" hoặc tên nhân viên đang hỗ trợ. Mỗi tin nhắn hiện kèm thời gian nhắn (hôm nay chỉ hiện giờ, hôm qua ghi "Hôm qua", cũ hơn hiện ngày/tháng), cả ở phía khách lẫn phía Admin.
+- **Sau khi đơn hàng được Admin xác nhận ĐÃ GIAO**, hệ thống tự gửi một tin nhắn cảm ơn (kèm mã đơn hàng) vào cuộc chat của khách, với người gửi là "OOAD Shop". Tin nhắn này xuất hiện cả ở phía Admin khi nhân viên mở cuộc chat của khách đó. Tin cảm ơn chỉ được gửi một lần khi đơn chuyển sang trạng thái giao thành công.
 
 ---
 
@@ -581,19 +627,20 @@ Trang thành công / hóa đơn luôn hiển thị **đơn mới nhất của ch
 
 - Bảng 10 sản phẩm/trang: ảnh, mã, tên, danh mục, mô tả, hiển thị; lọc theo danh mục (động từ `categories`); tìm theo mã/tên (gợi ý).
 
-| Thao tác | Chi tiết |
-|---|---|
-| **Thêm mới** | Modal: ảnh (nén ≤ 400px, lưu base64), mã SP (check trùng), tên, danh mục, giới tính, màu, chất liệu, phong cách, giá nhập (> 0), mô tả và **danh sách size sẽ bán** (phải chọn ít nhất 1 size). **Không nhập tồn kho ở đây**: sản phẩm mới có `soLuongTon = 0`, `tongDaNhap = 0`, `giaBan = 0`; hàng chỉ vào kho qua **Phiếu nhập hàng** |
-| **Chỉnh sửa** | Modal sửa thông tin + ảnh; mở ra hiển thị đúng các size đang có; nếu giá trị có trong dữ liệu mà chưa có trong ô chọn (màu Đỏ/Xám/Be, "Thời trang", "Unisex"...) vẫn được giữ, không bị lưu thành rỗng |
-| **Xóa** | Confirm → xóa khỏi danh sách |
-| **Ẩn/Hiện** | Click ô ✔/trống để đổi `trangThaiHienThi` |
+| Thao tác      | Chi tiết                                                                                                                                                                                                                                                                                                                                 |
+| ------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Thêm mới**  | Modal: ảnh (nén ≤ 400px, lưu base64), mã SP (check trùng), tên, danh mục, giới tính, màu, chất liệu, phong cách, giá nhập (> 0), mô tả và **danh sách size sẽ bán** (phải chọn ít nhất 1 size). **Không nhập tồn kho ở đây**: sản phẩm mới có `soLuongTon = 0`, `tongDaNhap = 0`, `giaBan = 0`; hàng chỉ vào kho qua **Phiếu nhập hàng** |
+| **Chỉnh sửa** | Modal sửa thông tin + ảnh; mở ra hiển thị đúng các size đang có; nếu giá trị có trong dữ liệu mà chưa có trong ô chọn (màu Đỏ/Xám/Be, "Thời trang", "Unisex"...) vẫn được giữ, không bị lưu thành rỗng                                                                                                                                   |
+| **Xóa**       | Confirm → xóa khỏi danh sách                                                                                                                                                                                                                                                                                                             |
+| **Ẩn/Hiện**   | Click ô ✔/trống để đổi `trangThaiHienThi`                                                                                                                                                                                                                                                                                                |
 
 #### Trình nhập Size & tồn kho (`size-editor.js`)
-- **Tạo nhanh:** nút *Nữ 35–40*, *Nam 38–44*, *Phổ thông 36–44*, *Rộng 35–45*.
-- **Khoảng size:** nhập *Từ size / Đến size / SL mỗi size* rồi bấm **Tạo size** (SL mỗi size là số lượng ban đầu cho các size mới tạo; size đã có giữ nguyên số lượng).
+
+- **Tạo nhanh:** nút _Nữ 35–40_, _Nam 38–44_, _Phổ thông 36–44_, _Rộng 35–45_.
+- **Khoảng size:** nhập _Từ size / Đến size / SL mỗi size_ rồi bấm **Tạo size** (SL mỗi size là số lượng ban đầu cho các size mới tạo; size đã có giữ nguyên số lượng).
 - **Từng size:** ô số lượng có nút **−/+**, nhập trực tiếp, nút **×** xóa size; Enter nhảy sang size kế tiếp; size 0 đôi tô đỏ nhạt.
 - **Đặt tất cả = N → Áp dụng:** gán cùng một số lượng cho mọi size; **Xóa hết size**. Trình này **không cho sửa số lượng tồn** ở cả form **Thêm** (chỉ chọn size) lẫn form **Sửa** (hiện "Tồn: N" chỉ đọc; chỉ được thêm size mới = 0, hoặc bỏ size đã hết hàng — bỏ size còn hàng bị chặn). Tồn kho chỉ tăng qua **Phiếu nhập hàng** và giảm khi bán/hủy đơn.
-- Dòng tổng kết: *Tổng N đôi · M size*. `kichCo` (vd "38 - 44") và `soLuongTon` được tự tính.
+- Dòng tổng kết: _Tổng N đôi · M size_. `kichCo` (vd "38 - 44") và `soLuongTon` được tự tính.
 - Xóa hết size của sản phẩm đang có size sẽ hỏi xác nhận rồi đưa tồn kho về 0.
 
 **Đồng bộ:** nghe `productsUpdated`, `categoriesUpdated` và `storage` để tự reload bảng.
@@ -607,6 +654,7 @@ Trang thành công / hóa đơn luôn hiển thị **đơn mới nhất của ch
 **Tạo phiếu:** chọn ngày nhập (không được ở tương lai) → nhập **nhà cung cấp** (bắt buộc) → mỗi dòng: mã SP (autocomplete) → **chọn size** (bắt buộc nếu sản phẩm có size) → **giá nhập của lô** (gợi ý từ giá vốn hiện tại, sửa được) → số lượng (số nguyên > 0) → thành tiền tự tính → "+ Thêm dòng" → chọn trạng thái → Lưu. Phiếu ghi `nguoiLap`.
 
 **Khi phiếu chuyển sang "Hoàn thành" (chỉ tính lần đầu, lưu lại nhiều lần không cộng trùng):**
+
 - Số lượng cộng **đúng size của dòng** (`ShopCore.adjustStock`); `soLuongTon` luôn bằng tổng `tonKhoTheoSize`. Dòng của phiếu mẫu cũ không có size thì chia đều vào các size đang có hàng.
 - `tongDaNhap += soLuongNhap`; ghi `nguoiDuyet`, `ngayHoanThanh`.
 - **Giá vốn bình quân gia quyền:** `giaNhap mới = (tồn cũ × giá vốn cũ + SL nhập × giá lô) / (tồn cũ + SL nhập)` (tồn cũ = 0 thì lấy giá lô).
@@ -623,7 +671,7 @@ Trang thành công / hóa đơn luôn hiển thị **đơn mới nhất của ch
 
 - **Ngưỡng sắp hết hàng** (1–1000, mặc định 10) lưu ở `nguongSapHet`.
 - **Bảng tồn kho** 10/trang: Mã SP + trạng thái, ảnh, tên, **Tồn kho**, **Tồn theo size**, Nhập, Đã bán (đơn đã giao), **Chờ giao** (đơn đã đặt nhưng chưa giao, đã bị trừ khỏi tồn kho; có `Nhập − Đã bán − Chờ giao = Tồn`), Giá bán, Giá trị tồn (**theo giá nhập**: `giaNhap × soLuongTon`). Lọc theo ngày: "Đã bán" = đơn **đã giao** trong khoảng ngày giao.
-- **Cột "Tồn theo size":** mỗi size là một ô nhỏ *size + số đôi*: xanh = bình thường, vàng = còn ≤ 2 đôi, đỏ (gạch size) = hết; dòng tóm tắt "N size · còn hàng X/N".
+- **Cột "Tồn theo size":** mỗi size là một ô nhỏ _size + số đôi_: xanh = bình thường, vàng = còn ≤ 2 đôi, đỏ (gạch size) = hết; dòng tóm tắt "N size · còn hàng X/N".
 - **Bộ lọc kết hợp được với nhau:** danh mục, trạng thái (Bình thường / Sắp hết / Hết hàng), **"Còn hàng size …"**, tìm theo mã/tên (lọc ngay khi gõ), lọc theo ngày nhập/bán; khi dữ liệu thay đổi, bộ lọc đang chọn được giữ nguyên.
 - Cập nhật realtime khi có thay đổi (đặt hàng, nhập hàng, hủy đơn, tab khác).
 
@@ -662,7 +710,7 @@ Trang thành công / hóa đơn luôn hiển thị **đơn mới nhất của ch
 **Section:** `page-categories` · **File JS:** `quanlyloaisanpham.js`
 
 - Bảng danh mục: tên, mô tả, **số sản phẩm** (tổng sản phẩm thuộc loại, kể cả đang ẩn/hết hàng/chưa có giá) và **đang bán** (số sản phẩm thật sự hiện trên trang chủ: chưa ẩn, có giá, còn hàng, loại đang hiện); **thêm / sửa / ẩn-hiện**. Ẩn/hiện chỉ đổi `trangThai` của loại; trang chủ User ẩn mọi sản phẩm thuộc loại đang ẩn (trạng thái ẩn/hiện riêng của từng sản phẩm giữ nguyên).
-- **Không thể xóa** danh mục còn sản phẩm (hãy chuyển/xóa sản phẩm hoặc dùng *Ẩn*).
+- **Không thể xóa** danh mục còn sản phẩm (hãy chuyển/xóa sản phẩm hoặc dùng _Ẩn_).
 - Danh mục thay đổi sẽ cập nhật menu, footer, dải thương hiệu ở User và dropdown trong Admin (`categoriesUpdated`).
 
 ### 7.10 Báo Cáo Doanh Thu
@@ -683,12 +731,12 @@ Trang thành công / hóa đơn luôn hiển thị **đơn mới nhất của ch
 
 **Phân quyền nhân viên (theo chức vụ):**
 
-| Chức vụ | Trang sau khi login | Các module được phép |
-|---|---|---|
-| Nhân viên bán hàng | Dashboard | Dashboard, Sản phẩm, Đơn hàng |
-| Nhân viên kho | Dashboard | Dashboard, Sản phẩm, Phiếu nhập, Tồn kho |
-| Nhân viên CSKH | Dashboard | Dashboard, Đơn hàng, **Phản hồi đánh giá** |
-| Nhân viên kiểm kho | Dashboard | Dashboard, Sản phẩm, Tồn kho |
+| Chức vụ            | Trang sau khi login | Các module được phép                       |
+| ------------------ | ------------------- | ------------------------------------------ |
+| Nhân viên bán hàng | Dashboard           | Dashboard, Sản phẩm, Đơn hàng              |
+| Nhân viên kho      | Dashboard           | Dashboard, Sản phẩm, Phiếu nhập, Tồn kho   |
+| Nhân viên CSKH     | Dashboard           | Dashboard, Đơn hàng, **Phản hồi đánh giá** |
+| Nhân viên kiểm kho | Dashboard           | Dashboard, Sản phẩm, Tồn kho               |
 
 Menu/route được lọc theo `ROLE_ROUTES` / `ROLE_HOME` trong `admin-spa-nav.js`; truy cập thẳng route không có quyền sẽ tự về trang chính. Các mục **chỉ admin**: Quản lý khách hàng, loại sản phẩm, giá bán, báo cáo doanh thu, nhân viên.
 
@@ -699,14 +747,16 @@ Menu/route được lọc theo `ROLE_ROUTES` / `ROLE_HOME` trong `admin-spa-nav.
 Dành cho **nhân viên CSKH** (và Admin). Menu có huy hiệu đỏ báo số đánh giá mới chưa ai nhận.
 
 **Tab "Xử lý phản hồi"**
-- Thẻ trạng thái *Tất cả / Mới / Đang xử lý / Đã phản hồi* kèm số lượng; bộ lọc: tìm kiếm (sản phẩm, khách, mã đơn, nội dung), số sao (kể cả "chưa hài lòng 1-2 sao"), có ảnh/video, người xử lý (*Của tôi / Chưa ai nhận*), sắp xếp; phân trang 8 phản hồi/trang.
-- **Tiếp nhận** → người nhận trở thành người xử lý, trạng thái *Mới → Đang xử lý*.
+
+- Thẻ trạng thái _Tất cả / Mới / Đang xử lý / Đã phản hồi_ kèm số lượng; bộ lọc: tìm kiếm (sản phẩm, khách, mã đơn, nội dung), số sao (kể cả "chưa hài lòng 1-2 sao"), có ảnh/video, người xử lý (_Của tôi / Chưa ai nhận_), sắp xếp; phân trang 8 phản hồi/trang.
+- **Tiếp nhận** → người nhận trở thành người xử lý, trạng thái _Mới → Đang xử lý_.
 - Ảnh sản phẩm trong danh sách và cửa sổ chi tiết lấy theo thứ tự: ảnh sản phẩm hiện tại → ảnh lưu kèm đánh giá → ảnh trong đơn hàng đã mua → ảnh mặc định (nên sản phẩm đã xóa vẫn có ảnh).
 - Cửa sổ chi tiết: thông tin sản phẩm/khách/đơn, nhận xét đầy đủ, **ảnh phóng to** và **video phát trực tiếp**, **4 mẫu trả lời nhanh**, ô soạn phản hồi.
-- **Gửi phản hồi & hoàn tất** → *Đã phản hồi* (khách thấy ngay ở lịch sử đơn và trên trang sản phẩm); **Mở lại** để xử lý tiếp; **Ẩn / Hiện** đánh giá trên trang sản phẩm công khai.
+- **Gửi phản hồi & hoàn tất** → _Đã phản hồi_ (khách thấy ngay ở lịch sử đơn và trên trang sản phẩm); **Mở lại** để xử lý tiếp; **Ẩn / Hiện** đánh giá trên trang sản phẩm công khai.
 - Nhân viên khác đang xử lý thì bạn chỉ xem được, kể cả nút ẩn/hiện (Admin luôn xử lý được). Thời gian phản hồi lần đầu (`phanHoi.thoiGian`) được giữ nguyên khi cập nhật phản hồi (thời điểm sửa lưu ở `capNhatLuc`).
 
 **Tab "Thống kê feedback"** (lọc theo khoảng ngày — 7 ngày / 30 ngày / tất cả — và theo hãng)
+
 - 6 thẻ số liệu: tổng feedback, điểm trung bình, tỷ lệ hài lòng (4-5★), chưa hài lòng (1-2★), chờ xử lý, thời gian phản hồi trung bình.
 - Biểu đồ: **phân bố số sao**; **trạng thái xử lý** (thanh xếp chồng + chú thích); **hình thức đánh giá** (chữ / ảnh / video); **số feedback theo ngày hoặc tháng** (màu cột theo điểm trung bình: xanh ≥ 4, vàng ≥ 3, đỏ < 3).
 - Bảng: sản phẩm **được đánh giá cao nhất**, **cần cải thiện**, **được đánh giá nhiều nhất**; điểm theo **hãng**; **hiệu suất từng nhân viên CSKH** (đã nhận, hoàn tất, thời gian phản hồi TB).
@@ -715,9 +765,11 @@ Dành cho **nhân viên CSKH** (và Admin). Menu có huy hiệu đỏ báo số 
 
 **Section:** `page-support` (route `/support`) · **File JS:** `Admin/assets/js/support-chat.js` · **CSS:** `Admin/assets/css/SupportChat.css`
 
-- Admin và nhân viên CSKH xem danh sách các cuộc chat, chọn từng khách và trả lời ngay trong SPA.
-- Có thể gửi chữ, ảnh tối đa 2MB và link sản phẩm.
-- Nút **Gọi miễn phí** mở cùng phòng Jitsi với User nhưng được nhúng trực tiếp trong Admin; cuộc gọi chỉ truyền âm thanh.
+- **Hàng đợi hội thoại:** cột trái có ô tìm theo tên/mã khách, bộ lọc _Tất cả / Chờ tiếp nhận / Đang xử lý / Đã đóng_ (kèm số lượng), mỗi cuộc hiện tin cuối, giờ, nhân viên phụ trách và **số tin chưa đọc**. Cuộc chưa đóng xếp trước; cuộc chỉ có tin hệ thống (chưa khách nào nhắn) không đưa vào hàng đợi.
+- **Phân công:** nút _Tiếp nhận_ (hoặc cứ trả lời trước thì tự tiếp nhận); cuộc đang do nhân viên khác phụ trách thì phải bấm _Tiếp quản_ mới trả lời được — tránh hai người trả lời chồng nhau. Mọi thay đổi ghi một dòng hệ thống vào khung chat.
+- **Đóng / mở lại:** _Kết thúc hội thoại_ gửi thông báo cho khách và khóa ô trả lời; _Mở lại_ chỉ được khi khách chưa có cuộc khác đang mở.
+- **Thông tin khách** ngay dưới tiêu đề: mã KH, SĐT, email và 3 đơn gần nhất (mã, trạng thái, tổng tiền) để tra cứu khi tư vấn; có **mẫu trả lời nhanh**.
+- Gửi chữ, ảnh tối đa 2MB và link sản phẩm.
 - Route hỗ trợ được khai báo trong `Admin/assets/js/admin-spa-nav.js`; nhân viên CSKH được phép truy cập, các chức vụ khác bị giới hạn theo phân quyền.
 
 ---
@@ -725,29 +777,53 @@ Dành cho **nhân viên CSKH** (và Admin). Menu có huy hiệu đỏ báo số 
 ## 8. Hệ Thống Session & Xác Thực
 
 ### User (`assets/js/user/core/account-session.js`)
+
 - `UserSession.setCurrentUser(user)` — đăng nhập; `getCurrentUser()` — đọc user hiện tại; `saveUser(user, previousIdentity, { silent })` — lưu hồ sơ; `clearSession()` — đăng xuất.
 - `getCurrentUser()` **đối chiếu lại với `userList`**: tài khoản bị khóa bị xóa phiên ngay; bản ghi trong `userList` luôn thắng bản sao phiên (nên mật khẩu/thông tin Admin vừa sửa không bị ghi đè lại). `saveUser` giữ `matKhau` đã lưu trừ khi gọi với `{ passwordChange: true }`.
 - `saveUser()` **giữ nguyên các trường do Admin quản lý** (`trangThai`, `biKhoa`, `ngayKhoa`, `maKH`, `daDatLaiMatKhau`, `ngayTao`); `silent: true` chỉ cập nhật `userList`, không tạo phiên đăng nhập (dùng cho quên mật khẩu).
 - Tab khác đăng nhập/đăng xuất → header tab hiện tại tự cập nhật qua `storage`.
 
 ### Admin (`Admin/assets/js/admin-session.js`)
+
 - `isLoggedIn()` đúng khi có admin **hoặc** nhân viên đăng nhập; `getCurrentAdmin()` trả `{ username, fullName, role, isNhanVien, loginTime }`; `getCurrentRole()`, `isAdmin()`, `isNhanVien()`; `logout()` xóa cả 2 loại session; `redirectToLogin()` / `handleLogout()` đưa về đúng trang đăng nhập theo vai trò.
 - Tự động đăng xuất sau 24h; mọi module kiểm tra đăng nhập trước khi render.
 
 ### Nhân viên (`Admin/assets/js/nhanvien-session.js`)
+
 - `EmployeeSession.login/isLoggedIn/getCurrentEmployee/logout` (lưu `nvLoggedIn`, `nvUsername`, `nvFullName`, `nvChucVu`, `nvLoginTime` trong sessionStorage; hết hạn 24h).
 - Phân quyền menu/route do `admin-spa-nav.js` xử lý (`getStaffRoutes()`, `getStaffHome()`).
 
 ---
 
+### Nhân viên & phân quyền (cập nhật)
+
+- **Quyền theo thao tác** (`adminSession.can(...)`, ngoài việc được vào màn hình nào; khớp đặc tả UC15–17, UC30, UC34–36, UC51): Admin có mọi quyền; _Nhân viên bán hàng_ thêm/sửa/ẩn-hiện/xóa sản phẩm và xác nhận/giao/hủy đơn; _Nhân viên kho_ lập/sửa/xóa/hoàn thành phiếu nhập và **chỉ được thêm/bớt size** của sản phẩm (các thông tin khác bị khóa); _CSKH_ chỉ hủy đơn (cùng chat hỗ trợ, đánh giá); _Nhân viên kiểm kho_ (vai trò thêm, không có trong đặc tả) chỉ xem sản phẩm và tồn kho. **Chỉ Admin** được hủy phiếu nhập đã hoàn thành (vì trừ lại tồn kho). Việc xóa sản phẩm vẫn bị hệ thống chặn khi còn đơn hoặc phiếu nhập liên quan. Nút không có quyền bị ẩn, và mỗi hàm xử lý vẫn kiểm tra lại quyền.
+- **Quản lý nhân viên:** tên đăng nhập là định danh cố định (không đổi khi sửa); mật khẩu mới/đổi phải ≥ 8 ký tự gồm cả chữ và số; mỗi thao tác ghi đều đọc lại danh sách mới nhất (không ghi đè dữ liệu đổi ở tab khác); **không xóa được** nhân viên đã có phiếu nhập hoặc hội thoại gắn với mình (khóa thay vì xóa).
+- **Khóa / đổi chức vụ / đổi tên nhân viên:** các hội thoại hỗ trợ đang do người đó phụ trách tự quay về hàng đợi (có thông báo hệ thống), khách không bị bỏ rơi; nhân viên bị khóa bị đăng xuất ngay.
+- **Đăng nhập nhân viên:** sai 5 lần liên tiếp thì khóa đăng nhập tài khoản đó 60 giây; ghi nhớ đăng nhập tách riêng khỏi trang Admin.
+
+### Size & tồn kho (cập nhật)
+
+- **Trình chọn size (Admin):** ngoài "Tạo nhanh" và khoảng size còn có ô **Thêm size lẻ** (hỗ trợ nửa số như 38.5 hoặc size ngoài khoảng đã tạo). Khi sửa sản phẩm, size còn hàng hiện biểu tượng khóa và không thể gỡ (đúng với quy tắc chỉ bỏ size đã hết hàng).
+- **Biểu mẫu thêm/sửa sản phẩm** chia hai cột, gom các ô cùng loại thành từng cặp.
+- **Popup chọn size (khách):** size hết hàng gạch ngang, không chọn được; dưới lưới size có ghi chú số đôi còn lại (cảnh báo màu cam khi ≤ 5 đôi).
+- **Tồn kho (Admin):** thẻ tổng quan (số sản phẩm, tổng đôi, giá trị tồn theo giá vốn, sắp hết, hết hàng, đang chờ giao); các tab trạng thái hiện số lượng và đã hiển thị đúng tab đang chọn; có **sắp xếp** và **xuất CSV** danh sách đang lọc; chú giải màu size; cảnh báo "Đang ẩn" / "Chưa có giá bán" cho sản phẩm còn tồn nhưng chưa lên cửa hàng. "Sắp hết hàng" nghĩa là tổng tồn **dưới** ngưỡng (cùng quy tắc với khối "Cần xử lý" trên dashboard).
+
+### Bảo mật mật khẩu & báo cáo (cập nhật)
+
+- **Mật khẩu không lưu chữ thường:** `database/password-util.js` (`PasswordUtil.hash/verify`) lưu mật khẩu khách, nhân viên và quản trị dạng `sha256$<muối>$<băm>` (muối riêng, 5000 vòng). Dữ liệu cũ còn chữ thường vẫn đăng nhập được và tự được nâng cấp lên dạng băm ở lần đăng nhập đúng đầu tiên. Bản lưu phiên (`currentUser`) không chứa mật khẩu. Đây là biện pháp giảm rủi ro cho bản demo chạy trên trình duyệt — hệ thống thật phải băm ở máy chủ.
+- **Admin reset mật khẩu khách:** hệ thống cấp **mật khẩu tạm ngẫu nhiên**, chỉ hiện **một lần** trong hộp thoại có nút sao chép (không nằm trong thông báo), lưu dạng băm và đặt cờ `daDatLaiMatKhau`. Lần đăng nhập tới khách bị chuyển thẳng sang trang đổi mật khẩu; đổi xong cờ được xóa.
+- **Doanh thu** (báo cáo + dashboard) = tiền hàng − giảm giá voucher của các đơn **đã giao**, không gồm phí ship; giảm giá được phân bổ theo tỷ trọng từng dòng hàng nên doanh thu/lợi nhuận theo sản phẩm khớp tổng. Báo cáo có thêm thẻ "Voucher đã giảm cho khách".
+- **Dashboard** có khối **Cần xử lý**: đơn chờ xác nhận, đơn cần hoàn tiền, sản phẩm hết/sắp hết hàng (dưới ngưỡng ở trang Tồn kho), phiếu nhập chưa hoàn thành, khách chờ tiếp nhận chat, đánh giá mới. Bấm vào mục nào sẽ tới đúng màn hình; nhân viên chỉ thấy mục thuộc quyền của mình.
+
 ## 9. Tài Khoản Demo
 
-| Loại | Username | Mật khẩu |
-|---|---|---|
-| **Admin** | `admin01` | `admin123` |
-| **Nhân viên bán hàng** | `nhanvien01` | `123456` |
-| **Nhân viên kho** | `nhanvien02` | `123456` |
-| **Nhân viên CSKH** | `nhanvien03` | `123456` |
+| Loại                   | Username     | Mật khẩu   |
+| ---------------------- | ------------ | ---------- |
+| **Admin**              | `admin01`    | `admin123` |
+| **Nhân viên bán hàng** | `nhanvien01` | `123456`   |
+| **Nhân viên kho**      | `nhanvien02` | `123456`   |
+| **Nhân viên CSKH**     | `nhanvien03` | `123456`   |
 
 - Admin đăng nhập bằng `admin01` / `admin123` (validate bằng `AdminSession.isValidAuthUser`) rồi giữ trong `sessionStorage`.
 - Nhân viên mặc định được seed từ `database/employees.js` vào `employeeList`; Admin có thể thêm/sửa/khóa trong **Quản lý nhân viên**.
@@ -768,6 +844,7 @@ Dành cho **nhân viên CSKH** (và Admin). Menu có huy hiệu đỏ báo số 
 6. **Luồng đánh giá:** khách đặt hàng → Admin đổi đơn sang **Đã giao** → khách bấm **Đánh giá sản phẩm này** ở Lịch sử đơn → nhân viên CSKH (`nhanvien03/123456`) vào **Phản hồi đánh giá** → Tiếp nhận → Gửi phản hồi → xem tab **Thống kê feedback**.
 
 ### Lưu ý
+
 - Dữ liệu nằm ở **trình duyệt của từng máy** (localStorage + IndexedDB). Xóa dữ liệu trình duyệt sẽ đưa hệ thống về dữ liệu mẫu ban đầu và **mất toàn bộ đánh giá**.
 - Muốn dọn dữ liệu cũ: DevTools (F12) → Application → xóa các key `productsLocal`, `productsSeedVersion`, `ordersLocal`, `DanhSachDatHang`, `phieuNhapLocal`, `cart` (và IndexedDB `ooad_feedback` nếu muốn xóa đánh giá).
 - User và Admin phải cùng origin (cùng địa chỉ + cổng) mới thấy chung dữ liệu; hai cửa sổ mở cùng lúc tự đồng bộ qua `storage`.
@@ -781,63 +858,63 @@ Dùng để vẽ **Use Case Diagram** đầy đủ cho 2 hệ thống con: **Use
 
 ### 11.1 Tác nhân (Actors)
 
-| Tác nhân | Mô tả |
-|---|---|
-| Khách (Guest) | Chưa đăng nhập — xem/lọc/tìm sản phẩm, xem đánh giá, đăng ký, đăng nhập |
-| Khách hàng (User) | Đã đăng nhập — kế thừa quyền của Khách + mua hàng, đánh giá, quản lý tài khoản |
-| Quản trị viên (Admin) | Đăng nhập `DangNhap_Admin.html` — toàn quyền back-office |
-| Nhân viên (Employee) | Đăng nhập `DangNhap_NhanVien.html` — chỉ dùng module được phân quyền theo chức vụ; **nhân viên CSKH** xử lý phản hồi đánh giá |
+| Tác nhân              | Mô tả                                                                                                                         |
+| --------------------- | ----------------------------------------------------------------------------------------------------------------------------- |
+| Khách (Guest)         | Chưa đăng nhập — xem/lọc/tìm sản phẩm, xem đánh giá, đăng ký, đăng nhập                                                       |
+| Khách hàng (User)     | Đã đăng nhập — kế thừa quyền của Khách + mua hàng, đánh giá, quản lý tài khoản                                                |
+| Quản trị viên (Admin) | Đăng nhập `DangNhap_Admin.html` — toàn quyền back-office                                                                      |
+| Nhân viên (Employee)  | Đăng nhập `DangNhap_NhanVien.html` — chỉ dùng module được phân quyền theo chức vụ; **nhân viên CSKH** xử lý phản hồi đánh giá |
 
 ### 11.2 Use case hệ thống con **User**
 
 #### Dành cho **Khách (Guest)**
 
-| Mã | Use case | Mô tả |
-|---|---|---|
-| UC-01 | Xem danh sách sản phẩm | Grid 15 SP/trang, phân trang theo nhóm 4 trang |
-| UC-02 | Lọc sản phẩm | Theo giá, màu, chất liệu, phong cách, giới tính, size, thương hiệu |
-| UC-03 | Tìm kiếm sản phẩm | Theo tên/brand, gợi ý realtime, lịch sử tìm kiếm |
-| UC-04 | Xem chi tiết sản phẩm | Popup: ảnh, màu, size, chất liệu, giá |
-| UC-05 | Đăng ký tài khoản | Check trùng username/email/SĐT, OTP email |
-| UC-06 | Đăng nhập | Email/username + mật khẩu; chặn tài khoản bị khóa |
-| UC-31 | Xem đánh giá sản phẩm | Điểm trung bình, phân bố sao, đánh giá kèm ảnh/video và phản hồi cửa hàng |
+| Mã    | Use case               | Mô tả                                                                     |
+| ----- | ---------------------- | ------------------------------------------------------------------------- |
+| UC-01 | Xem danh sách sản phẩm | Grid 15 SP/trang, phân trang theo nhóm 4 trang                            |
+| UC-02 | Lọc sản phẩm           | Theo giá, màu, chất liệu, phong cách, giới tính, size, thương hiệu        |
+| UC-03 | Tìm kiếm sản phẩm      | Theo tên/brand, gợi ý realtime, lịch sử tìm kiếm                          |
+| UC-04 | Xem chi tiết sản phẩm  | Popup: ảnh, màu, size, chất liệu, giá                                     |
+| UC-05 | Đăng ký tài khoản      | Check trùng username/email/SĐT, OTP email                                 |
+| UC-06 | Đăng nhập              | Email/username + mật khẩu; chặn tài khoản bị khóa                         |
+| UC-31 | Xem đánh giá sản phẩm  | Điểm trung bình, phân bố sao, đánh giá kèm ảnh/video và phản hồi cửa hàng |
 
 #### Dành cho **Khách hàng (User)** (kế thừa UC-01 → UC-06, UC-31)
 
-| Mã | Use case | Mô tả |
-|---|---|---|
-| UC-07 | Thêm sản phẩm vào giỏ hàng | Chọn size từ popup hoặc Mua ngay |
-| UC-08 | Quản lý giỏ hàng | Sửa số lượng, xóa dòng, tick chọn, xem tổng tiền |
-| UC-09 | Đặt hàng | Checkout: chọn địa chỉ + phương thức thanh toán |
-| UC-10 | Thanh toán COD | Thanh toán khi nhận hàng (ship 30.000đ, miễn phí từ 10.000.000đ) |
-| UC-11 | Thanh toán chuyển khoản | QR MBBank → xác nhận mới tạo đơn |
-| UC-12 | Nhận tại cửa hàng | Ship 0đ |
-| UC-13 | Xem lịch sử đơn hàng | Danh sách đơn + tracker trạng thái |
-| UC-14 | Hủy đơn hàng | Chỉ khi `cho-xac-nhan`; hoàn kho, Admin thấy ngay |
-| UC-15 | Quản lý thông tin cá nhân | Xem/sửa hồ sơ, đổi mật khẩu |
-| UC-16 | Quản lý địa chỉ giao hàng | Thêm/sửa/xóa, đặt mặc định |
-| UC-17 | Đăng xuất | Xóa session |
-| UC-32 | Đánh giá sản phẩm | Chấm 1-5 sao + nhận xét + ảnh/video cho sản phẩm trong đơn đã giao; xem phản hồi của cửa hàng |
+| Mã    | Use case                   | Mô tả                                                                                         |
+| ----- | -------------------------- | --------------------------------------------------------------------------------------------- |
+| UC-07 | Thêm sản phẩm vào giỏ hàng | Chọn size từ popup hoặc Mua ngay                                                              |
+| UC-08 | Quản lý giỏ hàng           | Sửa số lượng, xóa dòng, tick chọn, xem tổng tiền                                              |
+| UC-09 | Đặt hàng                   | Checkout: chọn địa chỉ + phương thức thanh toán                                               |
+| UC-10 | Thanh toán COD             | Thanh toán khi nhận hàng (ship 30.000đ, miễn phí từ 10.000.000đ)                              |
+| UC-11 | Thanh toán chuyển khoản    | QR MBBank → xác nhận mới tạo đơn                                                              |
+| UC-12 | Nhận tại cửa hàng          | Ship 0đ                                                                                       |
+| UC-13 | Xem lịch sử đơn hàng       | Danh sách đơn + tracker trạng thái                                                            |
+| UC-14 | Hủy đơn hàng               | Chỉ khi `cho-xac-nhan`; hoàn kho, Admin thấy ngay                                             |
+| UC-15 | Quản lý thông tin cá nhân  | Xem/sửa hồ sơ, đổi mật khẩu                                                                   |
+| UC-16 | Quản lý địa chỉ giao hàng  | Thêm/sửa/xóa, đặt mặc định                                                                    |
+| UC-17 | Đăng xuất                  | Xóa session                                                                                   |
+| UC-32 | Đánh giá sản phẩm          | Chấm 1-5 sao + nhận xét + ảnh/video cho sản phẩm trong đơn đã giao; xem phản hồi của cửa hàng |
 
 ### 11.3 Use case hệ thống con **Admin**
 
-| Mã | Use case | Mô tả |
-|---|---|---|
-| UC-18 | Đăng nhập Admin | Ghi nhớ đăng nhập, timeout 24h |
-| UC-19 | Xem Dashboard | Khách, sản phẩm, đơn hàng, doanh thu |
-| UC-20 | Quản lý sản phẩm | Thêm/sửa/xóa/Ẩn-Hiện; nhập size & tồn kho theo size |
-| UC-21 | Quản lý phiếu nhập hàng | Tạo/sửa/xóa/xem theo size, giá lô, nhà cung cấp; hủy phiếu đã hoàn thành |
-| UC-22 | Hoàn thành phiếu nhập | Cộng tồn kho đúng size + `tongDaNhap`, cập nhật giá vốn bình quân gia quyền |
-| UC-23 | Quản lý tồn kho | Tồn theo size, ngưỡng sắp hết, lọc theo size/ngày |
-| UC-24 | Quản lý giá bán | % lợi nhuận, cập nhật đồng loạt |
-| UC-25 | Quản lý đơn hàng | Xem/lọc, đổi trạng thái, hủy đơn (hoàn kho theo size) |
-| UC-26 | Quản lý khách hàng | Tìm kiếm, khóa/mở khóa, xóa |
-| UC-27 | Quản lý loại sản phẩm | Thêm/sửa/Ẩn-Hiện (không xóa khi còn sản phẩm) |
-| UC-28 | Xem báo cáo doanh thu | Biểu đồ, lọc theo thời gian |
-| UC-29 | Đăng nhập nhân viên | Trang riêng, chặn tài khoản khóa |
-| UC-30 | Quản lý nhân viên | Chỉ admin |
-| UC-33 | Xử lý phản hồi đánh giá | Tiếp nhận, soạn & gửi phản hồi, mở lại, ẩn/hiện đánh giá (CSKH / Admin) |
-| UC-34 | Thống kê feedback | Điểm TB, phân bố sao, xu hướng, sản phẩm tốt/cần cải thiện, hãng, hiệu suất nhân viên |
+| Mã    | Use case                | Mô tả                                                                                 |
+| ----- | ----------------------- | ------------------------------------------------------------------------------------- |
+| UC-18 | Đăng nhập Admin         | Ghi nhớ đăng nhập, timeout 24h                                                        |
+| UC-19 | Xem Dashboard           | Khách, sản phẩm, đơn hàng, doanh thu                                                  |
+| UC-20 | Quản lý sản phẩm        | Thêm/sửa/xóa/Ẩn-Hiện; nhập size & tồn kho theo size                                   |
+| UC-21 | Quản lý phiếu nhập hàng | Tạo/sửa/xóa/xem theo size, giá lô, nhà cung cấp; hủy phiếu đã hoàn thành              |
+| UC-22 | Hoàn thành phiếu nhập   | Cộng tồn kho đúng size + `tongDaNhap`, cập nhật giá vốn bình quân gia quyền           |
+| UC-23 | Quản lý tồn kho         | Tồn theo size, ngưỡng sắp hết, lọc theo size/ngày                                     |
+| UC-24 | Quản lý giá bán         | % lợi nhuận, cập nhật đồng loạt                                                       |
+| UC-25 | Quản lý đơn hàng        | Xem/lọc, đổi trạng thái, hủy đơn (hoàn kho theo size)                                 |
+| UC-26 | Quản lý khách hàng      | Tìm kiếm, khóa/mở khóa, xóa                                                           |
+| UC-27 | Quản lý loại sản phẩm   | Thêm/sửa/Ẩn-Hiện (không xóa khi còn sản phẩm)                                         |
+| UC-28 | Xem báo cáo doanh thu   | Biểu đồ, lọc theo thời gian                                                           |
+| UC-29 | Đăng nhập nhân viên     | Trang riêng, chặn tài khoản khóa                                                      |
+| UC-30 | Quản lý nhân viên       | Chỉ admin                                                                             |
+| UC-33 | Xử lý phản hồi đánh giá | Tiếp nhận, soạn & gửi phản hồi, mở lại, ẩn/hiện đánh giá (CSKH / Admin)               |
+| UC-34 | Thống kê feedback       | Điểm TB, phân bố sao, xu hướng, sản phẩm tốt/cần cải thiện, hãng, hiệu suất nhân viên |
 
 > **Nhân viên** tái sử dụng UC-19, UC-20, UC-21, UC-23, UC-25 trong phạm vi chức vụ; **nhân viên CSKH** còn dùng UC-33, UC-34. Các use case UC-22, UC-24, UC-26, UC-27, UC-28, UC-30 chỉ dành cho Admin.
 
@@ -846,6 +923,7 @@ Dùng để vẽ **Use Case Diagram** đầy đủ cho 2 hệ thống con: **Use
 **Kế thừa:** `Khách hàng` là một loại `Khách` → UC-07…UC-17, UC-32 kế thừa UC-01…UC-06, UC-31.
 
 **`≪include≫`:**
+
 - UC-09 Đặt hàng `≪include≫` UC-06 Đăng nhập, Kiểm tra tồn kho, Trừ tồn kho.
 - UC-32 Đánh giá sản phẩm `≪include≫` UC-06 Đăng nhập và UC-13 Xem lịch sử đơn hàng (chỉ đơn đã giao).
 - UC-20…UC-28, UC-33, UC-34 (Admin) `≪include≫` UC-18 Đăng nhập Admin.
@@ -853,6 +931,7 @@ Dùng để vẽ **Use Case Diagram** đầy đủ cho 2 hệ thống con: **Use
 - UC-30 `≪include≫` UC-18.
 
 **`≪extend≫`:**
+
 - UC-11 Thanh toán chuyển khoản `≪extend≫` UC-09 (thêm QR + chờ xác nhận).
 - UC-14 Hủy đơn `≪extend≫` UC-13 (khi `cho-xac-nhan`).
 - UC-22 Hoàn thành phiếu nhập `≪extend≫` UC-21.
@@ -878,6 +957,7 @@ Mô tả từng bước chạy của từng chức năng, chia theo phía **User
 ### 12.1 Phía người dùng (User)
 
 #### U-01. Xem, lọc, tìm kiếm và phân trang sản phẩm
+
 1. Mở `pages/home.html` → `database/migrate-schema.js` chuyển dữ liệu cũ (nếu có) → `getLocalProducts()` đọc `productsLocal` (lần đầu nạp 101 sản phẩm mẫu).
 2. `products.js` lọc ra sản phẩm **được bán**: chưa ẩn, `giaBan > 0`, `soLuongTon > 0`, loại (`categories`) đang hiện.
 3. Khách chọn bộ lọc (giá, màu, chất liệu, phong cách, giới tính, size), chọn hãng ở menu / dải thương hiệu, hoặc gõ ô tìm kiếm (có gợi ý và lịch sử) → `applyAllFilters()` tính lại danh sách.
@@ -886,31 +966,37 @@ Mô tả từng bước chạy của từng chức năng, chia theo phía **User
 6. Khi Admin đổi sản phẩm/giá/tồn kho/loại (cùng tab hoặc tab khác) → sự kiện `productsUpdated` / `storage` → trang tự vẽ lại, giữ nguyên bộ lọc.
 
 #### U-02. Xem chi tiết sản phẩm và đánh giá
+
 1. Bấm thẻ sản phẩm → `openProductPopup()` mở popup: ảnh, thông tin, các nút size (size hết hàng bị khóa), giá.
 2. Dưới popup, `reviews.js` tải đánh giá từ IndexedDB: điểm trung bình, phân bố sao, bộ lọc (tất cả / có ảnh-video / theo sao), danh sách đánh giá và phản hồi của cửa hàng (đánh giá bị ẩn thì không hiện).
 
 #### U-03. Thêm vào giỏ hàng
+
 1. Chọn size → bấm **Thêm vào giỏ hàng** → đọc lại sản phẩm mới nhất, kiểm tra còn được bán và còn đủ hàng của size đó (tính cả số đã có trong giỏ).
 2. Đủ hàng → thêm dòng (hoặc cộng số lượng nếu cùng sản phẩm, cùng size) vào `cart`. Thiếu hàng → báo "chỉ còn N (bạn đã có M trong giỏ)".
 
 #### U-04. Quản lý giỏ hàng
+
 1. `pages/cart.html` → `getcart()` đối chiếu từng dòng với `productsLocal`: lấy lại giá/tên/ảnh mới nhất, loại sản phẩm đã ẩn hoặc đã xóa.
 2. Khách tick các dòng muốn thanh toán (`selectedCartItems`), bấm +/− (không vượt tồn kho của size) hoặc × (chỉ xóa đúng dòng đó).
 3. Tổng tiền tính từ các dòng đã tick → bấm thanh toán sang `checkout.html`.
 
 #### U-05. Mua ngay
+
 1. Trong popup bấm **Mua ngay** → thêm sản phẩm vào giỏ (nếu giỏ đã có dòng đó thì giữ nguyên số lượng, không cộng thêm).
 2. Chỉ tick đúng dòng vừa chọn → chuyển thẳng sang `checkout.html`.
 
 #### U-06. Thanh toán khi nhận hàng (COD)
+
 1. `checkout.html`: chưa đăng nhập → chuyển sang đăng nhập; giỏ trống → quay lại giỏ; chưa có địa chỉ → chuyển sang trang địa chỉ.
 2. Trang hiển thị địa chỉ nhận, danh sách sản phẩm đã tick, voucher mặc định/ô nhập mã, **Tạm tính / Giảm giá / Phí vận chuyển / Tổng** (ship 30.000đ, miễn phí từ 10.000.000đ).
-3. Voucher được kiểm tra mã và đơn tối thiểu; mỗi đơn chỉ dùng một voucher.
+3. Voucher (kho `database/vouchers.js` + logic `voucher.js`, Admin quản lý ở mục **Quản lý voucher**): mỗi lần áp dụng/chốt đơn đều kiểm tra đủ điều kiện theo thứ tự _ngừng áp dụng → chưa tới ngày bắt đầu → hết hạn → hết tổng lượt phát hành → chỉ dành khách mới → hết lượt/tài khoản → chưa đạt đơn tối thiểu_. Danh sách ở checkout hiển thị dạng thẻ (giá trị giảm, điều kiện, HSD, số tiền tiết kiệm được), xếp mã giảm nhiều nhất lên đầu; mã chỉ thiếu đơn tối thiểu hiện mờ kèm "Mua thêm X để dùng", mã hết hạn/hết lượt/không đúng đối tượng bị ẩn. Mỗi đơn chỉ dùng một voucher; giảm giá chỉ trừ vào tiền hàng, không trừ phí ship. `KHACHMOI` chỉ dành cho khách chưa từng đặt hàng (đơn đã hủy không tính). Đơn chuyển khoản chờ thanh toán được **kiểm tra lại voucher** khi bấm "Đã hoàn tất chuyển khoản" (`ShopVoucher.revalidateOrder`) — nếu mã đã hết hạn/hết lượt thì từ chối và yêu cầu đặt lại.
 4. Bấm **Đặt hàng** → `ktsoluong()` kiểm tra đủ hàng từng size.
 5. `thanhtoan("COD")`: xóa đơn chuyển khoản tạm cũ → dựng đơn với công thức `tamTinh - giamGia + tienVanChuyen` → `ShopCore.deductOrderStock` trừ kho đúng size → ghi vào `DanhSachDatHang` (lỗi bộ nhớ thì hoàn lại kho, giữ giỏ) → xóa các dòng đã đặt khỏi giỏ → phát `userOrdersUpdated`.
 6. Chuyển sang `payment-cash.html` (biên lai, địa chỉ lấy từ chính đơn) → "xem đơn hóa đơn" mở `payment-success.html` (hóa đơn của đơn mới nhất của khách).
 
 #### U-07. Thanh toán chuyển khoản
+
 1. Bấm nút chuyển khoản → `thanhtoan("PayBank")` chỉ lưu **đơn tạm** vào `CurrDanhSachDatHang` (gắn với khách, hết hạn sau 30 phút), **chưa trừ kho**, chưa hiện bên Admin.
 2. `payment-bank.html` hiện QR, số tiền, nội dung chuyển khoản và danh sách sản phẩm.
 3. Bấm **Đã hoàn tất chuyển khoản** → `confirmBankOrder()`: kiểm tra đơn tạm còn hạn và đúng chủ → kiểm tra lại tồn kho → trừ kho → thêm đơn (`trangThaiThanhToan = paid`) vào `DanhSachDatHang` (không ghi đè đơn khác) → xóa đúng các dòng của đơn khỏi giỏ → `payment-success.html`.
@@ -918,55 +1004,66 @@ Mô tả từng bước chạy của từng chức năng, chia theo phía **User
 5. Trang **Đơn hàng** nhắc "Tiếp tục thanh toán" nếu còn đơn tạm chưa xác nhận.
 
 #### U-08. Đăng ký tài khoản
+
 1. `register.html`: nhập tên đăng nhập, email, số điện thoại, mật khẩu, xác nhận, địa chỉ → kiểm tra định dạng và trùng lặp (tên đăng nhập, email, số điện thoại).
 2. Bấm gửi OTP → `UserOtp.request` gọi server OTP → khách nhập mã → `UserOtp.verify`.
 3. Hợp lệ → lưu vào `userList` (`maKhachHang`, `ngayTao`, trạng thái hoạt động) → chuyển sang đăng nhập.
 
 #### U-09. Đăng nhập / đăng xuất
+
 1. `login.html`: nhập email hoặc tên đăng nhập + mật khẩu → so khớp `userList`.
 2. Tài khoản bị khóa (`biKhoa` hoặc `trangThai = blocked`) → chặn. Thành công → `setCurrentUser`, xóa địa chỉ đã chọn và đơn chuyển khoản tạm của người trước → về trang chủ.
 3. Mỗi lần gọi `getCurrentUser()`: lấy bản ghi mới nhất trong `userList` (bản ghi Admin sửa luôn thắng). **Khi Admin khóa/xóa tài khoản đang đăng nhập** (phát hiện tức thì ở tab khác nhờ sự kiện `storage`, ngoài ra kiểm tra mỗi 3 giây): khách bị đăng xuất ngay và hiện popup **"Tài khoản đã bị ngừng hoạt động"**, bấm "Đã hiểu" hoặc sau 6 giây tự chuyển về `login.html` (giỏ hàng tạm cũng được xóa).
 4. Đăng xuất (header, có xác nhận): xóa phiên, địa chỉ đã chọn, đơn chuyển khoản tạm.
 
 #### U-10. Quên mật khẩu / đổi mật khẩu
+
 1. **Quên mật khẩu:** nhập email → tài khoản bị khóa thì chặn → gửi OTP → nhập OTP + mật khẩu mới (≥ 8 ký tự, khớp xác nhận) → lưu mật khẩu mới (không tự đăng nhập) → về trang đăng nhập.
 2. **Đổi mật khẩu** (đã đăng nhập): kiểm tra mật khẩu cũ với bản ghi trong `userList`, kiểm tra mật khẩu mới hợp lệ và khác mật khẩu cũ **trước**, rồi mới gửi/xác minh OTP → lưu → đăng nhập lại.
 
 #### U-11. Hồ sơ cá nhân và địa chỉ
+
 1. **Hồ sơ** (`personal-info.html`): bấm sửa → kiểm tra họ tên, email (định dạng + không trùng tài khoản khác), số điện thoại (`0xxxxxxxxx` + không trùng), địa chỉ ≥ 10 ký tự → `saveUser` (giữ nguyên các trường Admin quản lý và mật khẩu).
 2. **Địa chỉ** (`address.html`): thêm / sửa / xóa / đặt mặc định (mỗi địa chỉ có `maDiaChi`); địa chỉ mặc định hoặc đang chọn được đồng bộ vào `selectedAddress`, dùng ở bước thanh toán.
 3. Chưa đăng nhập → các trang này tự chuyển về `login.html`.
 
 #### U-12. Lịch sử đơn hàng và hủy đơn
+
 1. `order-history.html`: lấy đơn của khách (theo `maKhachHang`, hoặc email lưu cùng đơn), mới nhất trước, 3 đơn/trang; bấm "Xem thêm" để xem địa chỉ, thanh toán và thanh trạng thái.
 2. Trạng thái: `cho-xac-nhan` → `dang-giao` → `thanh-cong` hoặc `da-huy` (do Admin đổi; trang tự cập nhật khi Admin đổi).
 3. **Hủy đơn:** chỉ khi `cho-xac-nhan` → `ShopCore.setOrderStatus(maDonHang, "huy")` → hoàn kho đúng size, cập nhật cả `DanhSachDatHang` và `ordersLocal`, Admin thấy ngay.
 
 #### U-13. Đánh giá sản phẩm
+
 1. Chỉ đơn `thanh-cong` có nút **Đánh giá sản phẩm này** dưới từng sản phẩm; đơn chưa giao hiện lời nhắc.
 2. Form: chấm 1–5 sao (bắt buộc), nhận xét (tối đa 1000 ký tự), đính kèm ≤ 6 ảnh/video (ảnh tự nén; video ≤ 25MB).
 3. Gửi → `FeedbackStore.add` lưu vào IndexedDB (`status = moi`, kèm ảnh sản phẩm lúc đánh giá). Mỗi sản phẩm + size trong một đơn chỉ đánh giá một lần.
 4. Khi nhân viên CSKH tiếp nhận / phản hồi → trạng thái và nội dung phản hồi hiện ngay dưới đánh giá của khách.
 
-#### U-14. Chat và gọi âm thanh hỗ trợ
-1. User đăng nhập → `site-shell.js` nạp `support-chat.css` và `support-chat.js`; widget tự tạo hoặc đọc cuộc chat đang mở trong `supportThreads`.
-2. User gửi chữ, ảnh hoặc mã sản phẩm; tin nhắn được lưu vào `supportThreads` và tab Admin cùng origin nhận qua sự kiện `storage`.
-3. Bấm **Gọi miễn phí** → tạo phòng Jitsi theo mã cuộc chat, nạp External API và nhúng modal audio-only; trình duyệt hỏi quyền microphone nếu cần.
-4. Đóng modal → hủy đối tượng Jitsi bằng `dispose()`.
+#### U-14. Chat hỗ trợ
+
+1. User đăng nhập → `site-shell.js` nạp `support-chat.css` và `support-chat.js`; widget tạo dock hỗ trợ ở góc dưới phải và chỉ đọc cuộc chat có sẵn trong `supportThreads` (tạo mới **lười** khi khách gửi tin đầu tiên, để danh sách hỗ trợ không bị ngập cuộc trống do khách chỉ lướt trang).
+2. Bấm nút **Hỗ trợ** → xổ ra 2 icon tròn: **Gọi hotline 0354 109 892** (`tel:`) và **Chat với nhân viên** (mở panel chat).
+3. Chọn Chat: User gửi chữ, ảnh hoặc mã sản phẩm; tin nhắn được lưu vào `supportThreads` và tab Admin cùng origin nhận qua sự kiện `storage`. Mỗi tin nhắn hiển thị thời gian nhắn (hôm nay: giờ, hôm qua: "Hôm qua giờ", cũ hơn: ngày/tháng/năm giờ).
+4. Nút **Đánh giá** trong panel chat (giao diện kiểu TikTok Shop): **chỉ hiện khi khách còn sản phẩm của đơn đã giao gần nhất chưa chấm sao**; mỗi lần gửi tin chat hoặc nhận sự kiện storage, widget kiểm tra lại và ẩn nút đi khi đã chấm xong hết (chống gửi trùng). Khi mở panel: liệt kê từng sản phẩm kèm ảnh, sao lớn, nhãn "Chắc chắn sẽ không / Chắc chắn sẽ", chip gợi ý chọn nhiều (đổi theo điểm sao) và ô nhận xét. Khi gửi, hệ thống lưu review vào `FeedbackStore` (mỗi sản phẩm + size 1 đánh giá, như form ở Lich sử đơn hàng; chip gợi ý + nhận xét gộp vào trường bình luận) và gửi một tin nhắn `rating` hiển thị sao + nhận xét vào cuộc chat. Sản phẩm đã đánh giá trước đó được đánh dấu và không cho đánh giá lại.
+5. Khi đơn hàng được Admin xác nhận ĐÃ GIAO (`updateStatus` sang `daGiao`), `quanlydonhang.js` gọi `SupportChatAdmin.sendSystemMessage` để gửi tin cảm ơn (kèm mã đơn hàng) vào cuộc chat của khách.
 
 ### 12.2 Phía quản trị (Admin) và nhân viên
 
 #### A-01. Đăng nhập, phân quyền và phiên làm việc
+
 1. Admin vào `DangNhap_Admin.html`; nhân viên vào `DangNhap_NhanVien.html` (kiểm tra `employeeList`, chặn tài khoản khóa). Mỗi bên đăng nhập sẽ xóa phiên của bên kia.
 2. Vào `TrangChu_Admin.html` (SPA): `admin-spa-nav.js` ẩn menu và chặn route không thuộc chức vụ (bán hàng, kho, CSKH, kiểm kho); truy cập thẳng route cấm tự về trang chính.
 3. Phiên có hạn 24 giờ. Hệ thống kiểm tra lại nhân viên khi Admin lưu danh sách nhân viên (sự kiện `storage`, tức thì ở tab khác), mỗi 3 giây, khi quay lại tab và mỗi lần đọc phiên: **tài khoản bị khóa/xóa → đăng xuất ngay và hiện popup "Tài khoản đã bị ngừng hoạt động"** (bấm "Đã hiểu" hoặc tự chuyển sau 6 giây về `DangNhap_NhanVien.html`); đổi chức vụ → quyền đổi theo.
 4. Đăng xuất → về đúng trang đăng nhập của vai trò.
 
 #### A-02. Dashboard
+
 1. `admin.js` đọc dữ liệu: số khách (`userList`), số sản phẩm, số đơn chưa hủy, doanh thu (chỉ đơn **đã giao**, không tính phí ship).
 2. Thẻ doanh thu và số khách chỉ hiện với Admin, ẩn với nhân viên.
 
 #### A-03. Quản lý sản phẩm
+
 1. **Thêm:** bấm thêm → nhập mã (không trùng), tên, loại, giới tính, màu, chất liệu, phong cách, giá nhập (> 0), mô tả, ảnh (nén ≤ 400px), **danh sách size sẽ bán** (phải chọn ≥ 1 size; **không nhập tồn kho**, kho = 0) → lưu (`giaBan = 0` nên chưa hiện ở User; hàng vào kho qua Phiếu nhập hàng).
 2. **Sửa:** mở form với dữ liệu hiện có (giữ cả giá trị không có trong ô chọn) → lưu.
 3. **Xóa:** bị chặn nếu sản phẩm nằm trong đơn chưa hoàn tất hoặc phiếu nhập chưa hoàn thành; chỉ nằm trong lịch sử thì xác nhận rồi xóa.
@@ -974,31 +1071,37 @@ Mô tả từng bước chạy của từng chức năng, chia theo phía **User
 5. Mọi lưu thành công → `saveLocalProducts` → `productsUpdated` → User và các màn hình Admin khác tự cập nhật; lưu thất bại (bộ nhớ đầy) → báo lỗi.
 
 #### A-04. Trình nhập size và tồn kho
+
 1. Chọn mẫu nhanh (Nữ 35–40, Nam 38–44, …) hoặc nhập Từ size / Đến size / SL mỗi size → **Tạo size**.
 2. Chỉnh số lượng từng size (+/−, nhập trực tiếp), xóa size, hoặc **Đặt tất cả** một số lượng.
 3. Lưu → `tonKhoTheoSize`, `soLuongTon` (= tổng) và `kichCo` được tự tính.
 
 #### A-05. Phiếu nhập hàng
+
 1. **Tạo phiếu:** chọn ngày (không tương lai) → nhập nhà cung cấp → gõ mã/tên sản phẩm (gợi ý) → chọn size → nhập giá nhập của lô → nhập số lượng → thành tiền tự tính → thêm dòng → chọn trạng thái → lưu.
 2. **Hoàn thành** (chọn trạng thái "Hoàn thành" khi lưu, hoặc bấm ô "Hoàn thành" của phiếu đang chờ): chỉ tính **một lần** → cộng đúng size, `tongDaNhap` tăng, giá vốn tính bình quân gia quyền; sản phẩm chưa có giá thì tự đặt giá theo % lợi nhuận, đã có giá nhưng thấp hơn giá vốn mới thì cảnh báo.
 3. Phiếu chưa hoàn thành sửa / xóa được; phiếu đã hoàn thành chỉ xem hoặc **Hủy phiếu** (trừ lại kho nếu còn đủ hàng). Sửa phiếu rồi thêm phiếu mới không còn ghi đè phiếu cũ.
 
 #### A-06. Tồn kho
+
 1. Bảng tồn kho hiển thị tồn tổng, tồn theo từng size (xanh / vàng ≤ 2 đôi / đỏ hết), đã nhập, đã bán (đơn đã giao), **chờ giao** (đơn đã đặt chưa giao, đã trừ khỏi tồn), giá bán và giá trị tồn (theo giá nhập).
 2. Bộ lọc **kết hợp**: loại, trạng thái (bình thường / sắp hết theo ngưỡng / hết hàng), "còn hàng size …", từ khóa mã hoặc tên, khoảng ngày nhập/bán.
 3. Dữ liệu đổi (đặt hàng, nhập hàng, hủy đơn, tab khác) → bảng vẽ lại nhưng giữ bộ lọc.
 
 #### A-07. Giá bán
+
 1. Bảng sản phẩm có giá nhập; nhập % lợi nhuận hoặc giá bán trực tiếp (phải > 0 và ≥ giá nhập).
 2. "Áp dụng" theo danh sách: sản phẩm giá nhập = 0 bị bỏ qua và báo số lượng bị bỏ qua.
 3. Lưu → `giaBan` và `giaHienThi` cùng ghi; sản phẩm có giá và còn hàng sẽ lên trang chủ User.
 
 #### A-08. Loại sản phẩm
+
 1. Thêm / sửa tên, mô tả, trạng thái; đổi tên loại → cập nhật cả `maLoai`, `tenLoai` và các sản phẩm thuộc loại đó.
 2. Ẩn/Hiện chỉ đổi `trangThai` của loại → User ẩn/hiện mọi sản phẩm của loại (trạng thái riêng từng sản phẩm giữ nguyên); menu, footer, dải thương hiệu User cập nhật theo.
 3. Xóa: bị chặn nếu loại còn sản phẩm. Bảng có hai cột: **Số sản phẩm** (tổng) và **Đang bán** (số đang hiện ở trang chủ).
 
 #### A-09. Đơn hàng
+
 1. Mở trang → `syncUserOrders()` thêm đơn mới từ `DanhSachDatHang` vào `ordersLocal` và đồng bộ đơn khách đã hủy; luôn đồng bộ lại khi có `userOrdersUpdated` / `storage`.
 2. Danh sách mới nhất trước; lọc theo ngày, trạng thái, mã đơn; "Xem" mở chi tiết (khách, địa chỉ, sản phẩm kèm size, thanh toán, phí ship).
 3. **Đổi trạng thái** chỉ theo chiều hợp lệ: `moiDat → daXuLy | huy`, `daXuLy → daGiao | huy`; `daGiao` và `huy` là cuối. Thực hiện qua `ShopCore.setOrderStatus`:
@@ -1008,22 +1111,26 @@ Mô tả từng bước chạy của từng chức năng, chia theo phía **User
 4. Cập nhật cả `trangThai` (User) lẫn `trangThaiQuanTri` → phát `orderStatusChanged` → lịch sử đơn của khách tự cập nhật.
 
 #### A-10. Khách hàng
+
 1. Bảng khách (đọc `userList`): mã KH, họ tên, email, số điện thoại, trạng thái, ngày tạo; tìm kiếm.
 2. **Khóa / mở khóa:** ghi `trangThai` và `biKhoa` → khách bị chặn đăng nhập và bị đăng xuất ở lần kiểm tra phiên kế tiếp.
 3. **Reset mật khẩu:** ghi mật khẩu mới, `daDatLaiMatKhau`, `ngayDatLaiMatKhau` (không bị khách ghi đè lại). **Xóa** khách có xác nhận.
 4. `userList` rỗng → bảng trống ("Chưa có khách hàng nào").
 
 #### A-11. Nhân viên
+
 1. Thêm: mã `NV###` tự sinh; kiểm tra số điện thoại 10 số (không trùng), tên đăng nhập (không trùng, không trùng tài khoản admin), mật khẩu ≥ 6 ký tự.
 2. Sửa (bỏ trống mật khẩu = giữ cũ), khóa/mở khóa, xóa, tìm kiếm, phân trang.
 3. Khóa hoặc đổi chức vụ có hiệu lực ngay với phiên nhân viên đang mở (xem A-01).
 
 #### A-12. Báo cáo doanh thu
+
 1. Chọn kỳ (ngày / tuần / tháng / năm) và khoảng thời gian → lọc đơn **đã giao** theo **ngày giao** (`ngayGiao`; đơn cũ chưa có thì dùng ngày đặt), giờ địa phương.
 2. Doanh thu = tổng `donGia × soLuong` các dòng (không tính ship). Hiển thị: tổng doanh thu, số đơn, giá trị TB/đơn, số lượng bán, **giá vốn hàng bán**, **lợi nhuận gộp** (= doanh thu − giá vốn, kèm biên %), biểu đồ cột, top sản phẩm bán chạy và doanh thu + lợi nhuận từng sản phẩm (giữ cả sản phẩm đã xóa).
 3. Giá vốn từng dòng lấy từ `chiTiet[].giaVon` (chốt lúc Admin bấm "Đã giao"). Dòng chưa có thì ước tính theo giá nhập hiện tại, dòng không xác định được thì tính 0; cả hai trường hợp đều có ghi chú dưới các thẻ.
 
 #### A-13. Phản hồi và đánh giá (CSKH / Admin)
+
 1. Vào **Phản hồi đánh giá** (huy hiệu đỏ báo số đánh giá mới): lọc theo trạng thái, số sao, ảnh/video, người xử lý, từ khóa; sắp xếp; 8 phản hồi/trang.
 2. **Tiếp nhận** → người nhận thành người xử lý, `moi → dangXuLy`. Nhân viên khác chỉ xem được (Admin luôn xử lý được).
 3. Mở chi tiết: xem sản phẩm (ảnh), khách, nhận xét, ảnh phóng to, video; soạn phản hồi (có 4 mẫu) → **Gửi phản hồi & hoàn tất** → `daXuLy`; gửi lại thì giữ thời gian trả lời lần đầu và ghi `capNhatLuc`.
@@ -1031,30 +1138,32 @@ Mô tả từng bước chạy của từng chức năng, chia theo phía **User
 5. Mọi thay đổi → `feedbackUpdated` / `feedbackVersion` → trang của khách và các tab khác cập nhật.
 
 #### A-14. Thống kê feedback
+
 1. Tab **Thống kê feedback**: lọc khoảng ngày (7 ngày / 30 ngày / tất cả) và hãng.
 2. Tính từ toàn bộ đánh giá (`FeedbackStore.summarize`): tổng, điểm trung bình, tỷ lệ hài lòng / chưa hài lòng, chờ xử lý, thời gian phản hồi trung bình.
 3. Biểu đồ: phân bố sao, trạng thái xử lý, hình thức (chữ / ảnh / video), số feedback theo ngày hoặc tháng; bảng sản phẩm tốt nhất / cần cải thiện / nhiều đánh giá nhất, theo hãng, hiệu suất từng nhân viên.
 
 #### A-15. Hỗ trợ khách hàng
-1. Vào route `/support` → `support-chat.js` đọc `supportThreads`, sắp xếp cuộc chat theo `updatedAt` và cho nhân viên chọn cuộc chat.
+
+1. Vào route `/support` → `support-chat.js` đọc `supportThreads`, sắp xếp cuộc chat theo `ngayCapNhat` và cho nhân viên chọn cuộc chat.
 2. Nhân viên trả lời chữ, gửi ảnh/link sản phẩm; tin nhắn được gắn `senderType = "staff"` và người xử lý hiện tại.
-3. Bấm **Gọi miễn phí** → nhúng cùng phòng Jitsi audio-only vào modal Admin; chỉ hiển thị microphone, chat, cài đặt và kết thúc.
-4. User/Admin phải dùng cùng origin vì dữ liệu demo lưu trong `localStorage`; hệ thống thật cần backend, phân quyền và WebSocket.
+3. User/Admin phải dùng cùng origin vì dữ liệu demo lưu trong `localStorage`; hệ thống thật cần backend, phân quyền và WebSocket.
 
 ### 12.3 Luồng liên thông User ↔ Admin
 
-| Hành động | Phía thực hiện | Phía còn lại thấy |
-|---|---|---|
-| Thêm/sửa sản phẩm, đặt giá, nhập hàng, ẩn/hiện | Admin | Trang chủ User tự cập nhật (cùng/khác tab) |
-| Ẩn/hiện loại sản phẩm, đổi tên loại | Admin | Menu, footer, dải thương hiệu và sản phẩm của loại cập nhật |
-| Đặt hàng COD / xác nhận chuyển khoản | User | Admin thấy đơn mới ở Quản lý đơn hàng; kho bị trừ |
-| Đổi trạng thái đơn (xử lý, giao) | Admin | Lịch sử đơn của khách đổi trạng thái; đơn đã giao mới đánh giá được |
-| Hủy đơn | User hoặc Admin | Bên kia thấy trạng thái hủy; kho hoàn lại đúng size |
-| Gửi đánh giá | User | Huy hiệu và danh sách ở Phản hồi đánh giá của CSKH |
-| Phản hồi / ẩn đánh giá | CSKH / Admin | Khách thấy phản hồi; trang sản phẩm ẩn/hiện đánh giá |
-| Chat, gửi ảnh/link sản phẩm | User ↔ CSKH/Admin | Hai phía thấy tin nhắn qua `supportThreads` |
-| Gọi hỗ trợ | User ↔ CSKH/Admin | Cùng tham gia phòng Jitsi audio-only được nhúng trong website |
-| Khóa tài khoản / reset mật khẩu | Admin | Khách bị đăng xuất; mật khẩu mới có hiệu lực |
+| Hành động                                      | Phía thực hiện    | Phía còn lại thấy                                                    |
+| ---------------------------------------------- | ----------------- | -------------------------------------------------------------------- |
+| Thêm/sửa sản phẩm, đặt giá, nhập hàng, ẩn/hiện | Admin             | Trang chủ User tự cập nhật (cùng/khác tab)                           |
+| Ẩn/hiện loại sản phẩm, đổi tên loại            | Admin             | Menu, footer, dải thương hiệu và sản phẩm của loại cập nhật          |
+| Đặt hàng COD / xác nhận chuyển khoản           | User              | Admin thấy đơn mới ở Quản lý đơn hàng; kho bị trừ                    |
+| Xác nhận đơn ĐÃ GIAO                           | Admin             | Khách nhận tin cảm ơn trong khung chat (kèm chấm đỏ trên nút Hỗ trợ) |
+| Đổi trạng thái đơn (xử lý, giao)               | Admin             | Lịch sử đơn của khách đổi trạng thái; đơn đã giao mới đánh giá được  |
+| Hủy đơn                                        | User hoặc Admin   | Bên kia thấy trạng thái hủy; kho hoàn lại đúng size                  |
+| Gửi đánh giá                                   | User              | Huy hiệu và danh sách ở Phản hồi đánh giá của CSKH                   |
+| Phản hồi / ẩn đánh giá                         | CSKH / Admin      | Khách thấy phản hồi; trang sản phẩm ẩn/hiện đánh giá                 |
+| Chat, gửi ảnh/link sản phẩm                    | User ↔ CSKH/Admin | Hai phía thấy tin nhắn qua `supportThreads`                          |
+| Gọi qua số điện thoại                          | User              | Gọi trực tiếp hotline 0354 109 892 (link `tel:`), không qua hệ thống |
+| Khóa tài khoản / reset mật khẩu                | Admin             | Khách bị đăng xuất; mật khẩu mới có hiệu lực                         |
 
 ---
 

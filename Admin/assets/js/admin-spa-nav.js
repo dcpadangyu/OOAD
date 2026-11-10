@@ -10,6 +10,7 @@
         '/prices': 'page-prices',
         '/orders': 'page-orders',
         '/reviews': 'page-reviews',
+        '/vouchers': 'page-vouchers',
         '/support': 'page-support',
         '/reports': 'page-reports',
         '/employees': 'page-employees',
