@@ -1,4 +1,4 @@
-document.addEventListener('DOMContentLoaded',function(){
+﻿document.addEventListener('DOMContentLoaded',function(){
     const PENDING_KEY = 'CurrDanhSachDatHang';
     // Don chuyen khoan cho xac nhan chi giu 30 phut (thuoc tinh hetHanLuc = moc thoi gian ms).
     const PENDING_TTL_MS = 30 * 60 * 1000;
@@ -346,9 +346,9 @@ document.addEventListener('DOMContentLoaded',function(){
             tongTien:tongtien,
             tamTinh:subtotal,
             giamGia:discount,
-            maVoucher: discount > 0 ? appliedVoucher.code : "",
+            maVoucher: discount > 0 ? appliedVoucher.maVoucher : "",
             voucher: discount > 0 ? {
-                ma: appliedVoucher.code,
+                ma: appliedVoucher.maVoucher,
                 ten: appliedVoucher.title,
                 soTienGiam: discount
             } : null,

@@ -1,8 +1,29 @@
-(function () {
+﻿(function () {
   "use strict";
   const KEY = "supportThreads";
   let selectedId = null;
-  const read = () => { try { const value = JSON.parse(localStorage.getItem(KEY) || "[]"); return Array.isArray(value) ? value : []; } catch (_) { return []; } };
+  const read = () => {
+    try {
+      const value = JSON.parse(localStorage.getItem(KEY) || "[]");
+      return Array.isArray(value) ? value.map((thread) => ({
+        ...thread,
+        messages: (Array.isArray(thread.messages) ? thread.messages : []).map((message) => {
+          // Đọc tương thích tin nhắn cũ; lưu lại bằng tên thuộc tính của lớp HoTro.
+          const { senderId, senderType, text, type, data, productId, createdAt, ...rest } = message;
+          return {
+            ...rest,
+            maNguoiGui: message.maNguoiGui ?? senderId,
+            loaiNguoiGui: message.loaiNguoiGui ?? senderType,
+            noiDung: message.noiDung ?? text,
+            loaiTinNhan: message.loaiTinNhan ?? type,
+            tepDinhKem: message.tepDinhKem ?? data,
+            maSanPham: message.maSanPham ?? productId,
+            thoiGianGui: message.thoiGianGui ?? createdAt
+          };
+        })
+      })) : [];
+    } catch (_) { return []; }
+  };
   const write = (value) => localStorage.setItem(KEY, JSON.stringify(value));
   const esc = (value) => String(value ?? "").replace(/[&<>"']/g, (ch) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[ch]));
   const id = () => `MSG_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
@@ -95,28 +116,28 @@
       input.disabled = !thread; call.disabled = !thread;
       document.getElementById("supportAdminTitle").textContent = thread ? `Chat với ${thread.customerName}` : "Chọn cuộc trò chuyện";
       messages.innerHTML = thread ? ((thread.messages || []).map((item) => {
-        const content = item.type === "image" ? `<img src="${esc(item.data)}" alt="Ảnh khách gửi">` : item.type === "product" ? `<a href="${esc(item.url)}" target="_blank" rel="noopener">🛍️ ${esc(item.name)}</a>` : esc(item.text);
-        return `<div class="support-admin-message ${item.senderType === "staff" ? "mine" : ""}"><small>${esc(item.senderName || "Khách hàng")}</small>${content}</div>`;
+        const content = item.loaiTinNhan === "image" ? `<img src="${esc(item.tepDinhKem)}" alt="Ảnh khách gửi">` : item.loaiTinNhan === "product" ? `<a href="${esc(item.url)}" target="_blank" rel="noopener">🛍️ ${esc(item.name)}</a>` : esc(item.noiDung);
+        return `<div class="support-admin-message ${item.loaiNguoiGui === "staff" ? "mine" : ""}"><small>${esc(item.senderName || "Khách hàng")}</small>${content}</div>`;
       }).join("") || "Chưa có tin nhắn.") : "Chưa có cuộc trò chuyện.";
       messages.scrollTop = messages.scrollHeight;
     };
     const add = (message) => {
       const threads = read(); const thread = threads.find((item) => item.id === selectedId); if (!thread) return;
       const staff = admin(); thread.assignedTo = staff.fullName || staff.username; thread.messages = Array.isArray(thread.messages) ? thread.messages : [];
-      thread.messages.push({ id: id(), createdAt: new Date().toISOString(), senderType: "staff", senderId: staff.username, senderName: staff.fullName || staff.username, ...message });
+      thread.messages.push({ id: id(), thoiGianGui: new Date().toISOString(), loaiNguoiGui: "staff", maNguoiGui: staff.username, senderName: staff.fullName || staff.username, ...message });
       thread.updatedAt = new Date().toISOString(); write(threads); render();
     };
     list.onclick = (event) => { const button = event.target.closest("[data-thread]"); if (button) { selectedId = button.dataset.thread; render(); } };
-    document.getElementById("supportAdminForm").onsubmit = (event) => { event.preventDefault(); if (!input.value.trim()) return; add({ type: "text", text: input.value.trim() }); input.value = ""; };
+    document.getElementById("supportAdminForm").onsubmit = (event) => { event.preventDefault(); if (!input.value.trim()) return; add({ loaiTinNhan: "text", noiDung: input.value.trim() }); input.value = ""; };
     document.getElementById("supportAdminImage").onclick = () => document.getElementById("supportAdminFile").click();
     document.getElementById("supportAdminFile").onchange = () => {
       const file = document.getElementById("supportAdminFile").files[0]; if (!file || file.size > 2 * 1024 * 1024) { alert("Ảnh phải nhỏ hơn 2MB."); return; }
-      const reader = new FileReader(); reader.onload = () => add({ type: "image", data: reader.result, text: file.name }); reader.readAsDataURL(file);
+      const reader = new FileReader(); reader.onload = () => add({ loaiTinNhan: "image", tepDinhKem: reader.result, noiDung: file.name }); reader.readAsDataURL(file);
     };
     document.getElementById("supportAdminProduct").onclick = () => {
       const code = prompt("Nhập mã sản phẩm cần gửi (ví dụ SH-001):"); if (!code) return;
       const product = getProducts().find((item) => item.maSanPham === code.trim()); if (!product) { alert("Không tìm thấy sản phẩm."); return; }
-      add({ type: "product", productId: product.maSanPham, name: product.tenSanPham, url: `../pages/home.html?search=${encodeURIComponent(product.tenSanPham)}#sanpham` });
+      add({ loaiTinNhan: "product", maSanPham: product.maSanPham, name: product.tenSanPham, url: `../pages/home.html?search=${encodeURIComponent(product.tenSanPham)}#sanpham` });
     };
     document.getElementById("supportAdminCall").onclick = () => { const thread = active(); if (thread) { const staff = admin(); openCall(thread, staff.fullName || staff.username); } };
     window.addEventListener("storage", (event) => { if (event.key === KEY) render(); });

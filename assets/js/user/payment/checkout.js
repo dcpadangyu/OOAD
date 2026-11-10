@@ -1,4 +1,4 @@
-document.addEventListener("DOMContentLoaded", () => {
+﻿document.addEventListener("DOMContentLoaded", () => {
   // Kiem tra dang nhap TRUOC khi ve dia chi / gio hang.
   const currentUser = window.UserSession?.getCurrentUser?.() || null;
   if (!currentUser) { window.location.href = "pages/login.html"; return; }
@@ -26,9 +26,9 @@ document.addEventListener("DOMContentLoaded", () => {
     const list = document.getElementById("VoucherList");
     if (!list || !window.ShopVoucher) return;
     list.innerHTML = window.ShopVoucher.list().map((voucher) => `
-      <label class="voucher-card ${appliedVoucher?.code === voucher.code ? "is-selected" : ""}">
-        <input type="radio" name="shop-voucher" value="${voucher.code}" ${appliedVoucher?.code === voucher.code ? "checked" : ""}>
-        <span><strong>${voucher.title}</strong><small>${voucher.description}</small><b>${voucher.code}</b></span>
+      <label class="voucher-card ${appliedVoucher?.maVoucher === voucher.maVoucher ? "is-selected" : ""}">
+        <input type="radio" name="shop-voucher" value="${voucher.maVoucher}" ${appliedVoucher?.maVoucher === voucher.maVoucher ? "checked" : ""}>
+        <span><strong>${voucher.title}</strong><small>${voucher.description}</small><b>${voucher.maVoucher}</b></span>
       </label>
     `).join("");
     list.querySelectorAll("input").forEach((input) => input.addEventListener("change", () => {
@@ -45,7 +45,7 @@ document.addEventListener("DOMContentLoaded", () => {
       showVoucherMessage(result.message, true);
     } else {
       appliedVoucher = result.voucher;
-      showVoucherMessage(`Đã áp dụng ${result.voucher.code}. Bạn được giảm ${money(result.discount)}.`, false);
+      showVoucherMessage(`Đã áp dụng ${result.voucher.maVoucher}. Bạn được giảm ${money(result.discount)}.`, false);
     }
     renderVouchers();
     renderSummary();
@@ -66,7 +66,7 @@ document.addEventListener("DOMContentLoaded", () => {
     window.ShopVoucher?.clear?.();
   }
   renderVouchers();
-  if (appliedVoucher) showVoucherMessage(`Đã áp dụng ${appliedVoucher.code}.`, false);
+  if (appliedVoucher) showVoucherMessage(`Đã áp dụng ${appliedVoucher.maVoucher}.`, false);
   document.getElementById("ApplyVoucher")?.addEventListener("click", () => {
     applyVoucher(document.getElementById("VoucherCode")?.value);
   });
