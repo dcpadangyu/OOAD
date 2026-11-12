@@ -287,6 +287,9 @@
     }
     // Tru kho + luu don; neu khong luu duoc don thi hoan kho. Tra ve { ok, message }.
     function finalizeOrder(order) {
+        if (order.maVoucher && !window.ShopVoucher) return { ok: false, message: 'Không thể tải voucher. Vui lòng tải lại trang.' };
+        const voucherCheck = window.ShopVoucher?.kiemTraVoucherDonHang(order) || { ok: true };
+        if (!voucherCheck.ok) return voucherCheck;
         const snapshot = localStorage.getItem('productsLocal');
         const stock = ShopCore.deductOrderStock(order);
         if (!stock.ok) return stock;
@@ -295,6 +298,7 @@
             return { ok: false, message: 'Không thể lưu đơn hàng (bộ nhớ trình duyệt đã đầy). Đơn hàng chưa được tạo và giỏ hàng được giữ nguyên.', storage: true };
         }
         removeOrderLinesFromCart(order);
+        try { window.ShopVoucher?.clear(); } catch (_) { /* Đơn đã lưu; lượt dùng được tính từ đơn. */ }
         window.dispatchEvent(new Event('userOrdersUpdated'));
         return { ok: true };
     }
@@ -328,13 +332,18 @@
             subtotal+=Number(item.giaBan)*Number(item.soLuong);
         });
         const appliedVoucher = window.ShopVoucher?.getApplied?.() || null;
-        const discount = window.ShopVoucher?.discount?.(appliedVoucher, subtotal) || 0;
-        if (appliedVoucher && discount <= 0) window.ShopVoucher?.clear?.();
         const shippingFee=calcShipping(subtotal, paymentfs);
+        let discount = 0;
+        if (appliedVoucher) {
+            const result = window.ShopVoucher.apply(appliedVoucher.maVoucher, subtotal, shippingFee);
+            if (!result.ok) { notify('Voucher không khả dụng', result.message, 'warning'); return false; }
+            discount = result.discount;
+        }
         const tongtien=Math.max(0, subtotal-discount+shippingFee);
         const neworder={
             maDonHang:"DH"+Date.now(),
             maKhachHang: userLogin.maKhachHang || null,
+            voucherTaiKhoan: userLogin.maKhachHang || userLogin.tenDangNhap || null,
             tenNguoiNhan: address.tenNguoiNhan,
             soDienThoaiNhan: address.soDienThoai,
             thuDienTuNguoiNhan: address.thuDienTu,
@@ -375,7 +384,7 @@
         const result = finalizeOrder(neworder);
         if (!result.ok) {
             const storageError = result.storage || /Không thể lưu/.test(result.message || '');
-            notify(storageError ? 'Không thể đặt hàng' : 'Sản phẩm không đủ', result.message, storageError ? 'error' : 'warning');
+            notify('Không thể đặt hàng', result.message, storageError ? 'error' : 'warning');
             return false;
         }
         window.SumCartEnd(0);
