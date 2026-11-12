@@ -13,6 +13,7 @@
           const { senderId, senderType, text, type, data, productId, createdAt, ...rest } = message;
           return {
             ...rest,
+            maHotro: message.maHotro ?? message.id,
             maNguoiGui: message.maNguoiGui ?? senderId,
             loaiNguoiGui: message.loaiNguoiGui ?? senderType,
             noiDung: message.noiDung ?? text,
@@ -44,7 +45,7 @@
     return window.__ooadJitsiApiPromise;
   }
 
-  function getThread(user) {
+  function layCuocTroChuyen(user) {
     const threads = readThreads();
     let thread = threads.find((item) => item.customerId === user.maKhachHang && item.status !== "closed");
     if (!thread) {
@@ -55,14 +56,22 @@
     return thread;
   }
 
-  function addMessage(threadId, message) {
+  function guiTinNhan(threadId, message) {
     const threads = readThreads();
     const thread = threads.find((item) => item.id === threadId);
     if (!thread) return;
     thread.messages = Array.isArray(thread.messages) ? thread.messages : [];
-    thread.messages.push({ id: id("MSG"), thoiGianGui: new Date().toISOString(), ...message });
+    thread.messages.push({ id: id("MSG"), maHotro: id("HT"), thoiGianGui: new Date().toISOString(), ...message });
     thread.updatedAt = new Date().toISOString();
     writeThreads(threads);
+  }
+
+  function xemTinNhan() {
+    return readThreads().flatMap((thread) => thread.messages || []);
+  }
+
+  function lienKetSanPham(maSanPham) {
+    return { loaiTinNhan: "product", maSanPham };
   }
 
   function closeCall() {
@@ -73,7 +82,7 @@
     document.getElementById("supportCallModal")?.remove();
   }
 
-  async function openCall(thread, displayName) {
+  async function GoiDien(thread, displayName) {
     const room = `OOAD-Support-${thread.id.replace(/[^a-zA-Z0-9]/g, "")}`;
     closeCall();
     document.body.insertAdjacentHTML("beforeend", `
@@ -113,7 +122,7 @@
     if (document.getElementById("supportChatPanel")) return;
     const user = currentUser();
     if (!user) return;
-    const thread = getThread(user);
+    const thread = layCuocTroChuyen(user);
     document.body.insertAdjacentHTML("beforeend", `
       <button class="support-chat-launcher" id="supportChatLauncher">💬 Hỗ trợ</button>
       <section class="support-chat-panel" id="supportChatPanel" aria-label="Chat hỗ trợ">
@@ -155,7 +164,7 @@
       event.preventDefault();
       const input = document.getElementById("supportChatInput");
       if (!input.value.trim()) return;
-      addMessage(thread.id, { loaiNguoiGui: "customer", maNguoiGui: user.maKhachHang, senderName: user.hoTen, loaiTinNhan: "text", noiDung: input.value.trim() });
+      guiTinNhan(thread.id, { loaiNguoiGui: "customer", maNguoiGui: user.maKhachHang, senderName: user.hoTen, loaiTinNhan: "text", noiDung: input.value.trim() });
       input.value = ""; render();
     };
     document.getElementById("supportChatImage").onclick = () => document.getElementById("supportChatFile").click();
@@ -163,7 +172,7 @@
       const file = document.getElementById("supportChatFile").files[0];
       if (!file || file.size > 2 * 1024 * 1024) { alert("Ảnh phải nhỏ hơn 2MB."); return; }
       const reader = new FileReader();
-      reader.onload = () => { addMessage(thread.id, { loaiNguoiGui: "customer", maNguoiGui: user.maKhachHang, senderName: user.hoTen, loaiTinNhan: "image", tepDinhKem: reader.result, noiDung: file.name }); render(); };
+      reader.onload = () => { guiTinNhan(thread.id, { loaiNguoiGui: "customer", maNguoiGui: user.maKhachHang, senderName: user.hoTen, loaiTinNhan: "image", tepDinhKem: reader.result, noiDung: file.name }); render(); };
       reader.readAsDataURL(file);
     };
     document.getElementById("supportChatProduct").onclick = () => {
@@ -172,14 +181,20 @@
       let products = []; try { products = JSON.parse(localStorage.getItem("productsLocal") || "[]"); } catch (_) {}
       const product = products.find((item) => item.maSanPham === code.trim());
       if (!product) { alert("Không tìm thấy sản phẩm."); return; }
-      addMessage(thread.id, { loaiNguoiGui: "customer", maNguoiGui: user.maKhachHang, senderName: user.hoTen, loaiTinNhan: "product", maSanPham: product.maSanPham, name: product.tenSanPham, url: `pages/home.html?search=${encodeURIComponent(product.tenSanPham)}#sanpham` });
+      guiTinNhan(thread.id, { loaiNguoiGui: "customer", maNguoiGui: user.maKhachHang, senderName: user.hoTen, loaiTinNhan: "product", maSanPham: product.maSanPham, name: product.tenSanPham, url: `pages/home.html?search=${encodeURIComponent(product.tenSanPham)}#sanpham` });
       render();
     };
-    document.getElementById("supportChatCall").onclick = () => openCall(thread, user.hoTen);
+    document.getElementById("supportChatCall").onclick = () => GoiDien(thread, user.hoTen);
     window.addEventListener("storage", (event) => { if (event.key === THREADS_KEY) render(); });
     render();
   }
 
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init, { once: true });
   else init();
+  window.SupportChat = {
+    guiTinNhan,
+    xemTinNhan,
+    lienKetSanPham,
+    GoiDien
+  };
 })();

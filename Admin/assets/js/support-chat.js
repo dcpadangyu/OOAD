@@ -12,6 +12,7 @@
           const { senderId, senderType, text, type, data, productId, createdAt, ...rest } = message;
           return {
             ...rest,
+            maHotro: message.maHotro ?? message.id,
             maNguoiGui: message.maNguoiGui ?? senderId,
             loaiNguoiGui: message.loaiNguoiGui ?? senderType,
             noiDung: message.noiDung ?? text,
@@ -124,7 +125,7 @@
     const add = (message) => {
       const threads = read(); const thread = threads.find((item) => item.id === selectedId); if (!thread) return;
       const staff = admin(); thread.assignedTo = staff.fullName || staff.username; thread.messages = Array.isArray(thread.messages) ? thread.messages : [];
-      thread.messages.push({ id: id(), thoiGianGui: new Date().toISOString(), loaiNguoiGui: "staff", maNguoiGui: staff.username, senderName: staff.fullName || staff.username, ...message });
+      thread.messages.push({ id: id(), maHotro: id(), thoiGianGui: new Date().toISOString(), loaiNguoiGui: "staff", maNguoiGui: staff.username, senderName: staff.fullName || staff.username, ...message });
       thread.updatedAt = new Date().toISOString(); write(threads); render();
     };
     list.onclick = (event) => { const button = event.target.closest("[data-thread]"); if (button) { selectedId = button.dataset.thread; render(); } };
@@ -144,5 +145,17 @@
     render();
   }
   document.addEventListener("DOMContentLoaded", init);
-  window.SupportChatAdmin = { init };
+  window.SupportChatAdmin = {
+    init,
+    guiTinNhan: (message) => {
+      const threads = read(); const thread = threads.find((item) => item.id === selectedId);
+      if (!thread) return;
+      const staff = admin(); thread.messages = Array.isArray(thread.messages) ? thread.messages : [];
+      thread.messages.push({ id: id(), maHotro: id(), thoiGianGui: new Date().toISOString(), loaiNguoiGui: "staff", maNguoiGui: staff.username, ...message });
+      thread.updatedAt = new Date().toISOString(); write(threads);
+    },
+    xemTinNhan: () => read().flatMap((thread) => thread.messages || []),
+    lienKetSanPham: (maSanPham) => ({ loaiTinNhan: "product", maSanPham }),
+    GoiDien: (maSanPham) => maSanPham
+  };
 })();
