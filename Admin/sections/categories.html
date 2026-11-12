@@ -1,0 +1,92 @@
+<section id="page-categories" class="spa-page">
+            <!-- Content from QuanLyLoaiSanPham.html (main) -->
+            <div class="page-header">
+              <h1>Quản lý loại sản phẩm</h1>
+              <p>
+                Quản lý danh mục loại sản phẩm, thêm/sửa/xóa/ẩn loại sản phẩm
+              </p>
+            </div>
+            <div class="action-bar">
+              <div class="action-left">
+                <button
+                  class="btn btn-primary"
+                  onclick="showAddCategoryModal()"
+                >
+                  Thêm loại sản phẩm
+                </button>
+              </div>
+              <div class="action-right">
+                <div class="search-box">
+                  <input
+                    type="text"
+                    placeholder="Tìm kiếm loại sản phẩm..."
+                    id="searchInput-categories"
+                  />
+                  <button><i class="fa-solid fa-search"></i></button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Modal thêm/sửa loại sản phẩm -->
+            <div id="categoryModal" class="modal">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h2 id="modalTitle">Thêm loại sản phẩm</h2>
+                  <button class="close-btn" onclick="closeCategoryModal()">
+                    &times;
+                  </button>
+                </div>
+                <div class="modal-body">
+                  <form id="categoryForm">
+                    <div class="form-group">
+                      <label for="categoryName">Tên loại sản phẩm</label>
+                      <input type="text" id="categoryName" required />
+                    </div>
+                    <div class="form-group">
+                      <label for="categoryDescription">Mô tả</label>
+                      <textarea id="categoryDescription" rows="3"></textarea>
+                    </div>
+                    <div class="form-group">
+                      <label for="categoryStatus">Trạng thái</label>
+                      <select id="categoryStatus">
+                        <option value="active">Hiển thị</option>
+                        <option value="hidden">Ẩn</option>
+                      </select>
+                    </div>
+                  </form>
+                </div>
+                <div class="modal-footer">
+                  <button
+                    class="btn btn-secondary"
+                    onclick="closeCategoryModal()"
+                  >
+                    Hủy
+                  </button>
+                  <button class="btn btn-primary" onclick="saveCategory()">
+                    Lưu
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Bảng danh sách loại sản phẩm -->
+            <div class="table-responsive">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>Tên loại</th>
+                    <th>Mô tả</th>
+                    <th title="Tổng số sản phẩm thuộc loại này (kể cả đang ẩn / hết hàng)">Số sản phẩm</th>
+                    <th title="Số sản phẩm đang được bán trên trang chủ: chưa ẩn, đã có giá, còn hàng và loại đang hiện">Đang bán</th>
+                    <th>Trạng thái</th>
+                    <th>Ngày tạo</th>
+                    <th>Thao tác</th>
+                  </tr>
+                </thead>
+                <tbody id="categoriesTableBody">
+                  <!-- Dữ liệu sẽ được thêm qua JavaScript -->
+                </tbody>
+              </table>
+            </div>
+          </section>

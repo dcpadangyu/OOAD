@@ -1,0 +1,47 @@
+<!-- Bẫy autofill: trình duyệt điền username/password đã lưu vào đây thay vì ô tìm kiếm -->
+    <input type="text" autocomplete="username" style="position:absolute; left:-9999px; width:1px; height:1px; opacity:0;" tabindex="-1" aria-hidden="true" />
+    <input type="password" autocomplete="current-password" style="position:absolute; left:-9999px; width:1px; height:1px; opacity:0;" tabindex="-1" aria-hidden="true" />
+
+    <!-- Header Admin -->
+    <header class="admin-header">
+      <div class="header-content">
+        <div class="header-left">
+          <div class="logo">
+            <h1>Admin Dashboard</h1>
+          </div>
+        </div>
+        <div class="header-right">
+          <div class="admin-info">
+            <span class="admin-name" id="adminName">Admin</span>
+            <div class="admin-avatar">
+              <i class="fa-solid fa-user"></i>
+            </div>
+          </div>
+          <button
+            class="logout-btn nsv-profile-btn"
+            id="btnNhanVienInfo"
+            style="display: none"
+            onclick="NhanVienInfo.openProfile()"
+          >
+            <i class="fa-solid fa-user-circle"></i>
+            Thông tin
+          </button>
+          <button
+            class="logout-btn nsv-profile-btn"
+            id="btnAdminInfo"
+            style="display: none"
+            onclick="AdminInfo.openProfile()"
+          >
+            <i class="fa-solid fa-user-shield"></i>
+            Thông tin
+          </button>
+          <button
+            class="logout-btn"
+            onclick="adminSession.handleLogout()"
+          >
+            <i class="fa-solid fa-right-from-bracket"></i>
+            Đăng xuất
+          </button>
+        </div>
+      </div>
+    </header>

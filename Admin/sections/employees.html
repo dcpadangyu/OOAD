@@ -1,0 +1,89 @@
+<section id="page-employees" class="spa-page">
+            <div class="QLNV_page-header">
+              <h3>Quản lý nhân viên</h3>
+            </div>
+            <div class="QLNV_boLoc">
+              <input type="text" id="QLNV_search" placeholder="Tìm mã NV, tên, SĐT, chức vụ..." />
+              <input type="button" id="QLNV_btnThemMoi" value="Thêm nhân viên" />
+            </div>
+            <div class="QLNV_bang-wrap">
+              <table class="QLNV_bang">
+                <thead>
+                  <tr>
+                    <th>Mã NV</th>
+                    <th>Họ tên</th>
+                    <th>Giới tính</th>
+                    <th>SĐT</th>
+                    <th>Địa chỉ</th>
+                    <th>Chức vụ</th>
+                    <th>Username</th>
+                    <th>Trạng thái</th>
+                    <th>Thao tác</th>
+                  </tr>
+                </thead>
+                <tbody id="QLNV_tableBody">
+                </tbody>
+              </table>
+            </div>
+            <div class="QLNV_phan-trang">
+              <button id="QLNV_btnPrev">Trước</button>
+              <span id="QLNV_pageInfo"></span>
+              <button id="QLNV_btnNext">Sau</button>
+            </div>
+
+            <div class="QLNV_modal" id="QLNV_modal">
+              <div class="QLNV_modal-content">
+                <div class="QLNV_modal-header">
+                  <h2 id="QLNV_modalTitle">Thêm nhân viên mới</h2>
+                  <button class="QLNV_close" id="QLNV_closeModal">&times;</button>
+                </div>
+                <div class="QLNV_modal-body">
+                  <div class="QLNV_form-group">
+                    <label>Mã nhân viên</label>
+                    <input type="text" id="QLNV_maNhanVien" readonly />
+                  </div>
+                  <div class="QLNV_form-row">
+                    <div class="QLNV_form-group">
+                      <label>Họ và tên *</label>
+                      <input type="text" id="QLNV_tenNhanVien" />
+                    </div>
+                    <div class="QLNV_form-group">
+                      <label>Giới tính</label>
+                      <select id="QLNV_gioiTinh">
+                        <option value="Nam">Nam</option>
+                        <option value="Nữ">Nữ</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="QLNV_form-row">
+                    <div class="QLNV_form-group">
+                      <label>Số điện thoại *</label>
+                      <input type="text" id="QLNV_sdt" maxlength="10" />
+                    </div>
+                    <div class="QLNV_form-group">
+                      <label>Chức vụ</label>
+                      <select id="QLNV_chucVu"></select>
+                    </div>
+                  </div>
+                  <div class="QLNV_form-group">
+                    <label>Địa chỉ *</label>
+                    <input type="text" id="QLNV_diaChi" />
+                  </div>
+                  <div class="QLNV_form-row">
+                    <div class="QLNV_form-group">
+                      <label>Tên đăng nhập *</label>
+                      <input type="text" id="QLNV_username" />
+                    </div>
+                    <div class="QLNV_form-group" id="QLNV_passwordRow">
+                      <label>Mật khẩu *</label>
+                      <input type="password" id="QLNV_password" placeholder="Tối thiểu 6 ký tự" />
+                    </div>
+                  </div>
+                </div>
+                <div class="QLNV_modal-buttons">
+                  <button id="QLNV_saveBtn" class="QLNV_save-btn">Lưu</button>
+                  <button id="QLNV_cancelBtn" class="QLNV_cancel-btn">Hủy</button>
+                </div>
+              </div>
+            </div>
+          </section>

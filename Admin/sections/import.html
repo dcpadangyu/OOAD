@@ -1,0 +1,192 @@
+<section id="page-import" class="spa-page">
+            <!-- Content from QuanLyNhapHang.html (main) -->
+            <div class="QLNH_page-header">
+              <h3>Quản lý nhập sản phẩm</h3>
+              <p>
+                Quản lý nhập sản phẩm: Hiển thị / Tìm kiếm / Thêm / Sửa / Hoàn
+                thành phiếu nhập hàng
+              </p>
+            </div>
+
+            <div class="QLNH_boLoc">
+              <select name="locTrangThai" id="QLNH_locTrangThai">
+                <option value="all">Tất cả</option>
+                <option value="hoanThanh">Hoàn thành</option>
+                <option value="chuaHoanThanh">Chưa hoàn thành</option>
+                <option value="daHuy">Đã hủy</option>
+              </select>
+
+              <input
+                type="text"
+                name="searchImported"
+                id="QLNH_timKiemPhieu"
+                placeholder="Tìm kiếm theo id..."
+                autocomplete="off"
+              />
+              <input
+                type="button"
+                value="Thêm phiếu mới"
+                id="QLNH_btnThemMoiPhieuNhap"
+              />
+            </div>
+
+            <div class="QLNH_boLoc-duoi">
+              <div class="QLNH_loc-ngay-group">
+                <label for="QLNH_LocTuNgay">Từ ngày:</label>
+                <input type="date" id="QLNH_LocTuNgay" />
+              </div>
+
+              <div class="QLNH_loc-ngay-group">
+                <label for="QLNH_LocDenNgay">Đến ngày:</label>
+                <input type="date" id="QLNH_LocDenNgay" />
+              </div>
+
+              <button id="QLNH_btnXoaLocNgay" class="QLNH_btn-xoa-loc">
+                Xóa
+              </button>
+            </div>
+
+            <!-- Tiêu đề bảng -->
+            <div class="QLNH_table-header">
+              <table class="QLNH_table-header">
+                <tr>
+                  <th style="width: 5%">Stt</th>
+                  <th style="width: 10%">Mã</th>
+                  <th style="width: 20%">Ngày nhập</th>
+                  <th style="width: 20%">Thành tiền</th>
+                  <th style="width: 15%">Chi tiết</th>
+                  <th style="width: 15%">Hoàn thành</th>
+                  <th style="width: 15%">Tác vụ</th>
+                </tr>
+              </table>
+            </div>
+
+            <!-- Thân bảng -->
+            <div class="QLNH_table-content" id="QLNH_table-content">
+              <!-- Dữ liệu phiếu nhập sẽ được JS render ở đây -->
+            </div>
+
+            <!-- Modal xem chi tiết phiếu nhập -->
+            <div id="QLNH_modalChiTietPhieuNhap" class="QLNH_modal">
+              <div class="QLNH_modal-content QLNH_modal-chitiet">
+                <div class="QLNH_modal-header">
+                  <h2>PHIẾU NHẬP KHO</h2>
+                  <span class="QLNH_close-btn" id="QLNH_closeModalChiTiet"
+                    >&times;</span
+                  >
+                </div>
+
+                <div class="QLNH_modal-body">
+                  <p class="QLNH_ngay-nhap">
+                    Ngày nhập:
+                    <span id="QLNH_chiTietNgayNhap">--/--/----</span>
+                  </p>
+                  <p class="QLNH_ngay-nhap" id="QLNH_chiTietThongTin"></p>
+
+                  <table class="QLNH_chitiet-table">
+                    <thead>
+                      <tr>
+                        <th>STT</th>
+                        <th>Mã sản phẩm</th>
+                        <th>Tên sản phẩm</th>
+                        <th>Số lượng</th>
+                        <th>Đơn giá</th>
+                        <th>Thành tiền</th>
+                      </tr>
+                    </thead>
+                    <tbody id="QLNH_chiTietPhieuBody">
+                      <!-- Dữ liệu sẽ được thêm bằng JS -->
+                    </tbody>
+                  </table>
+
+                  <div class="QLNH_tong-tien">
+                    <strong>Tổng tiền:</strong>
+                    <span id="QLNH_chiTietTongTien">0 ₫</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Modal thêm phiếu nhập -->
+            <div id="QLNH_modalThemPhieuNhap" class="QLNH_modal">
+              <div class="QLNH_modal-content QLNH_modal-themphieu">
+                <div class="QLNH_modal-header">
+                  <h2>THÊM PHIẾU NHẬP MỚI</h2>
+                  <span class="QLNH_close-btn" id="QLNH_closeModalThemPhieu"
+                    >&times;</span
+                  >
+                </div>
+
+                <div class="QLNH_modal-body">
+                  <div class="QLNH_form-group">
+                    <label for="QLNH_ngayNhapMoi">Ngày nhập:</label>
+                    <input type="date" id="QLNH_ngayNhapMoi" required />
+                  </div>
+
+                  <div class="QLNH_form-group">
+                    <label for="QLNH_nhaCungCap">Nhà cung cấp:</label>
+                    <input type="text" id="QLNH_nhaCungCap" maxlength="150" placeholder="Tên nhà cung cấp / nhà phân phối" autocomplete="off" />
+                  </div>
+
+                  <div class="QLNH_form-group">
+                    <label for="QLNH_trangThaiPhieu">Trạng thái:</label>
+                    <select id="QLNH_trangThaiPhieu">
+                      <option value="hoanThanh">Hoàn thành</option>
+                      <option value="chuaHoanThanh">Chưa hoàn thành</option>
+                    </select>
+                  </div>
+
+                  <hr />
+
+                  <div id="QLNH_dsSanPhamNhap" class="QLNH_bang-san-pham-nhap">
+                    <h3>Danh sách sản phẩm nhập</h3>
+                    <table class="QLNH_bangNhap">
+                      <thead>
+                        <tr>
+                          <th>Nhập mã</th>
+                          <th>Tên sản phẩm</th>
+                          <th>Size</th>
+                          <th>Giá nhập</th>
+                          <th>Nhập số lượng</th>
+                          <th>Thành tiền</th>
+                          <th>Xóa</th>
+                        </tr>
+                      </thead>
+                      <tbody id="QLNH_tableBodyNhap"></tbody>
+                    </table>
+
+                    <div class="QLNH_them-dong-container">
+                      <button id="QLNH_btnThemDong" class="QLNH_btn-them-dong">
+                        + Thêm dòng
+                      </button>
+                    </div>
+
+                    <div class="QLNH_tong-tien">
+                      <strong>Tổng tiền:</strong>
+                      <span id="QLNH_tongTien">0₫</span>
+                    </div>
+                  </div>
+
+                  <div class="QLNH_form-footer">
+                    <button id="QLNH_btnLuuPhieuMoi" class="QLNH_btn-luu">
+                      Lưu phiếu
+                    </button>
+                    <button id="QLNH_btnHuyPhieuMoi" class="QLNH_btn-huy">
+                      Hủy
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Phân trang -->
+            <div class="QLNH_pagi">
+              <button id="QLNH_prevPage" class="QLNH_pagination-btn">
+                Trước
+              </button>
+              <span id="QLNH_pageInfo">Trang 1 / 1</span>
+              <button id="QLNH_nextPage" class="QLNH_pagination-btn">
+                Sau
+              </button>
+            </div>
+          </section>

@@ -126,3 +126,41 @@ Admin/
 - **Security**: Chỉ là demo, cần implement backend thực tế cho production
 - **Data persistence**: Dữ liệu hiện tại chỉ lưu trong session storage
 
+
+## Cấu trúc file giao diện trang quản trị
+
+`TrangChu_Admin.html` chỉ là khung ngắn (head, các thẻ script và 4 chỗ giữ chỗ `<div data-admin-component="...">`). Giao diện thật nằm trong các file HTML riêng, do `assets/js/admin-shell.js` (file **sinh ra**) dựng vào trang trước khi các script khác chạy:
+
+```
+Admin/
+├── TrangChu_Admin.html            # khung ngắn (~75 dòng)
+├── components/                    # các khối khung
+│   ├── header.html                # thanh trên cùng
+│   ├── sidebar.html               # menu bên trái
+│   └── modals.html                # hộp thoại hồ sơ Admin / nhân viên
+├── sections/                      # mỗi mục một file (thẻ <section id="page-...">)
+│   ├── dashboard.html             # Tổng quan
+│   ├── customers.html             # Quản lý khách hàng
+│   ├── categories.html            # Loại sản phẩm
+│   ├── products.html              # Sản phẩm
+│   ├── import.html                # Nhập hàng
+│   ├── inventory.html             # Tồn kho
+│   ├── prices.html                # Giá bán
+│   ├── orders.html                # Đơn hàng
+│   ├── reviews.html               # Đánh giá
+│   ├── support.html               # Hỗ trợ khách hàng
+│   ├── reports.html               # Báo cáo
+│   ├── employees.html             # Nhân viên
+│   └── order-detail.html, orders-list.html, customers-list.html   # trang mẫu
+└── assets/js/admin-shell.js       # FILE SINH RA từ components + sections
+```
+
+Sau khi sửa bất kỳ file nào trong `components/` hoặc `sections/`, chạy ở thư mục gốc dự án:
+
+```
+node tools/build-admin.js
+```
+
+Thêm mục mới: tạo `sections/<tên>.html` (thẻ `<section id="page-<tên>" class="spa-page">`), thêm `<tên>` vào mảng `SECTIONS` trong `tools/build-admin.js`, rồi chạy lại lệnh build. Không sửa tay `assets/js/admin-shell.js`.
+
+Lưu ý: vì giao diện được dựng bằng JavaScript nên `TrangChu_Admin.html` không hiển thị gì nếu tắt JavaScript (các trang quản trị vốn đã cần JavaScript để chạy).

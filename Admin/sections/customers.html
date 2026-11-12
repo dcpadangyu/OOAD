@@ -1,0 +1,44 @@
+<section id="page-customers" class="spa-page">
+            <!-- Content from QuanLyKhachHang.html (main) -->
+            <div class="page-header">
+              <h1>Quản lý khách hàng</h1>
+              <p>
+                Quản lý tài khoản khách hàng, reset mật khẩu và khóa/mở khóa tài
+                khoản
+              </p>
+            </div>
+            <div class="action-bar">
+              <div class="action-right">
+                <div class="search-box">
+                  <input
+                    type="text"
+                    placeholder="Tìm kiếm khách hàng..."
+                    id="searchInput-customers"
+                  />
+                  <button onclick="searchCustomers()">
+                    <i class="fa-solid fa-search"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Bảng danh sách khách hàng -->
+            <div class="table-responsive">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>Mã khách hàng</th>
+                    <th>Họ tên</th>
+                    <th>Email</th>
+                    <th>Điện thoại</th>
+                    <th>Trạng thái</th>
+                    <th>Ngày tạo</th>
+                    <th>Thao tác</th>
+                  </tr>
+                </thead>
+                <tbody id="customersTableBody">
+                  <!-- Dữ liệu sẽ được thêm qua JavaScript -->
+                </tbody>
+              </table>
+            </div>
+          </section>

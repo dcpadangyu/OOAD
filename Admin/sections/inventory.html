@@ -1,0 +1,94 @@
+<section id="page-inventory" class="spa-page">
+            <div class="TK_page-header">
+              <h3>Quản lý tồn kho</h3>
+              <p>
+                Theo dõi tình trạng hàng hóa, số lượng tồn và giá trị tồn kho
+              </p>
+            </div>
+
+            <div class="TK_boLoc">
+              <select name="locDanhMuc" id="TK_locDanhMuc">
+                <option value="all">Tất cả sản phẩm</option>
+                <option value="Nike">Nike</option>
+                <option value="Adidas">Adidas</option>
+                <option value="Converse">Converse</option>
+                <option value="MLB">MLB</option>
+                <option value="Vans">Vans</option>
+              </select>
+              <div
+                style="position: relative; display: inline-block; width: 20%"
+              >
+                <input
+                  type="text"
+                  name="searchInventory"
+                  id="TK_timId"
+                  placeholder="Tìm theo mã hoặc tên..."
+                  autocomplete="off"
+                  style="width: 100%"
+                />
+                <div id="TK_goiY" class="TK_goiY"></div>
+              </div>
+              <label
+                >Từ ngày: <input type="date" id="TK_filterDateFrom"
+              /></label>
+              <label
+                >Đến ngày: <input type="date" id="TK_filterDateTo"
+              /></label>
+              <button id="TK_btnFilter">Lọc dữ liệu</button>
+            </div>
+
+            <!-- Bộ chọn loại hàng -->
+            <div class="TK_tab-status">
+              <button class="TK_active" data-type="all">Tất cả</button>
+              <button data-type="binhThuong">Bình thường</button>
+              <button data-type="sapHetHang">Sắp hết hàng</button>
+              <button data-type="hetHang">Hết hàng</button>
+
+              <div class="nguong-container">
+                <label for="nguong-input" class="nguong-label"
+                  >Ngưỡng sắp hết:</label
+                >
+                <input
+                  type="number"
+                  id="nguong-input"
+                  min="1"
+                  max="1000"
+                  value="10"
+                  class="nguong-input"
+                  placeholder="VD: 10"
+                />
+                <span class="nguong-donvi">sản phẩm</span>
+              </div>
+            </div>
+
+            <!-- Tiêu đề bảng -->
+            <div class="TK_table-header">
+              <table class="TK_admin-table">
+                <thead>
+                  <tr>
+                    <th style="width: 5%">STT</th>
+                    <th style="width: 10%">Mã</th>
+                    <th style="width: 8%">Ảnh</th>
+                    <th style="width: 13%">Tên sản phẩm</th>
+                    <th style="width: 7%">Tồn kho</th>
+                    <th style="width: 21%" title="Mỗi ô: số size và số đôi còn lại. Đỏ = hết, vàng = còn 2 đôi trở xuống">Tồn theo size</th>
+                    <th style="width: 6%" title="Tổng đã nhập qua phiếu nhập hoàn thành">Nhập</th>
+                    <th style="width: 6%" title="Đã giao thành công">Đã bán</th>
+                    <th style="width: 6%" title="Đơn đã đặt nhưng chưa giao (đã trừ khỏi tồn kho). Nhập − Đã bán − Chờ giao = Tồn">Chờ giao</th>
+                    <th style="width: 9%">Giá bán</th>
+                    <th style="width: 12%">Giá trị tồn kho</th>
+                  </tr>
+                </thead>
+                <tbody id="TK_table-content"></tbody>
+              </table>
+            </div>
+
+            <div id="TK_product-container" class="TK_product-container"></div>
+
+            <!-- Phân trang -->
+            <div class="TK_pagi">
+              <button id="TK_prevPage" class="TK_pagination-btn">Trước</button>
+              <span id="TK_pageInfo">Trang 1 / 1</span>
+              <button id="TK_nextPage" class="TK_pagination-btn">Sau</button>
+            </div>
+          </section>
