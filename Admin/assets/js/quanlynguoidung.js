@@ -215,75 +215,56 @@ function findRawUserIndex(rawUserList, id) {
     return userIndex;
 }
 
-// Hộp thoại hiện mật khẩu tạm ĐÚNG MỘT LẦN (không để trong thông báo toast). Đóng hộp thoại là không xem lại được.
-function showTemporaryPassword(customerName, password) {
-    const old = document.getElementById('tempPasswordOverlay');
-    if (old) old.remove();
-    const overlay = document.createElement('div');
-    overlay.id = 'tempPasswordOverlay';
-    overlay.style.cssText = 'position:fixed;inset:0;z-index:99999;background:rgba(15,23,42,.6);display:flex;align-items:center;justify-content:center;padding:16px';
-    overlay.innerHTML = `
-      <div style="background:#fff;border-radius:12px;max-width:420px;width:100%;padding:24px;box-shadow:0 20px 50px rgba(0,0,0,.3);font-family:inherit">
-        <h3 style="margin:0 0 6px;font-size:18px;color:#0f172a">Đã cấp mật khẩu tạm</h3>
-        <p style="margin:0 0 14px;color:#475569;font-size:14px">Tài khoản: <b>${escKhach(customerName)}</b></p>
-        <div style="display:flex;gap:8px;align-items:center;padding:12px;border:1px dashed #94a3b8;border-radius:8px;background:#f8fafc">
-          <code id="tempPasswordValue" style="flex:1;font-size:20px;letter-spacing:1px;color:#0f172a;user-select:all">${escKhach(password)}</code>
-          <button type="button" id="tempPasswordCopy" style="padding:6px 12px;border:1px solid #2563eb;border-radius:6px;background:#fff;color:#2563eb;cursor:pointer">Sao chép</button>
-        </div>
-        <ul style="margin:14px 0 0;padding-left:18px;color:#b45309;font-size:13px;line-height:1.5">
-          <li>Mật khẩu này <b>chỉ hiện một lần</b>; hệ thống chỉ lưu bản đã mã hóa.</li>
-          <li>Hãy gửi cho khách qua kênh riêng tư. Khách sẽ bị yêu cầu đổi mật khẩu ngay lần đăng nhập tới.</li>
-        </ul>
-        <div style="margin-top:18px;text-align:right"><button type="button" id="tempPasswordClose" style="padding:8px 18px;border:0;border-radius:8px;background:#2563eb;color:#fff;cursor:pointer">Đã ghi nhận, đóng</button></div>
-      </div>`;
-    document.body.appendChild(overlay);
-    const close = () => overlay.remove();
-    overlay.querySelector('#tempPasswordClose').addEventListener('click', close);
-    overlay.querySelector('#tempPasswordCopy').addEventListener('click', (event) => {
-        const btn = event.currentTarget;
-        const done = () => { btn.textContent = 'Đã sao chép'; };
-        if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(password).then(done, () => {});
-        else { const range = document.createRange(); range.selectNodeContents(overlay.querySelector('#tempPasswordValue')); const sel = window.getSelection(); sel.removeAllRanges(); sel.addRange(range); }
-    });
-}
-
-// Reset mật khẩu khách hàng: cấp mật khẩu tạm, lưu dạng băm, bắt khách đổi mật khẩu khi đăng nhập lại.
+// Reset mật khẩu khách hàng
 function resetPassword(id) {
-    if (!confirm('Cấp lại mật khẩu cho khách hàng này? Mật khẩu hiện tại sẽ không còn dùng được.')) return;
-    try {
-        const rawUserList = readRawUserList();
-        const userIndex = findRawUserIndex(rawUserList, id);
-        if (userIndex === -1) throw new Error('Không tìm thấy tài khoản!');
-        if (!window.PasswordUtil) throw new Error('Thiếu module mã hóa mật khẩu (database/password-util.js).');
+    if (confirm('Bạn có chắc chắn muốn reset mật khẩu cho khách hàng này?')) {
+        try {
+            // Lấy danh sách người dùng thô từ userList
+            const rawUserList = readRawUserList();
+            const userIndex = findRawUserIndex(rawUserList, id);
 
-        const temp = window.PasswordUtil.generateTemporary(10);
-        const target = rawUserList[userIndex];
-        target.matKhau = window.PasswordUtil.hash(temp);
-        target.daDatLaiMatKhau = true;
-        target.ngayDatLaiMatKhau = new Date().toISOString();
-        delete target.resetDate;
-        localStorage.setItem('userList', JSON.stringify(rawUserList));
+            if (userIndex === -1) {
+                throw new Error('Không tìm thấy tài khoản!');
+            }
 
-        showTemporaryPassword(target.hoTen || target.tenDangNhap || id, temp);
-        loadCustomers();
-    } catch (error) {
-        console.error('Lỗi khi reset mật khẩu:', error);
-        const msg = 'Không thể reset mật khẩu. ' + (error && error.message ? error.message : 'Vui lòng thử lại!');
-        if (typeof AdminDashboard !== 'undefined') AdminDashboard.showNotification(msg, 'error');
-        else alert(msg);
+            // Tạo mật khẩu mới ngẫu nhiên
+            const newPassword = generateRandomPassword();
+
+            // Cập nhật mật khẩu mới trong raw userList
+            rawUserList[userIndex].matKhau = newPassword;
+            rawUserList[userIndex].daDatLaiMatKhau = true;
+            rawUserList[userIndex].ngayDatLaiMatKhau = new Date().toISOString();
+            delete rawUserList[userIndex].resetDate;
+
+            // Lưu lại vào localStorage
+            localStorage.setItem('userList', JSON.stringify(rawUserList));
+
+            // Hiển thị thông báo cho quản trị viên
+            if (typeof AdminDashboard !== 'undefined') {
+                AdminDashboard.showNotification(
+                    `Đã reset mật khẩu thành công! Mật khẩu mới: ${newPassword}`,
+                    'success'
+                );
+            } else {
+                alert(`Đã reset mật khẩu thành công! Mật khẩu mới: ${newPassword}`);
+            }
+
+            // Cập nhật lại giao diện
+            loadCustomers();
+        } catch (error) {
+            console.error('Lỗi khi reset mật khẩu:', error);
+            if (typeof AdminDashboard !== 'undefined') {
+                AdminDashboard.showNotification('Không thể reset mật khẩu. Vui lòng thử lại!', 'error');
+            } else {
+                alert('Không thể reset mật khẩu. Vui lòng thử lại!');
+            }
+        }
     }
 }
 
 // Thay đổi trạng thái khóa/mở khóa của khách hàng
 function toggleCustomerStatus(id) {
     try {
-        const preview = readRawUserList()[findRawUserIndex(readRawUserList(), id)];
-        const willBlock = preview && !(preview.trangThai === 'blocked' || preview.biKhoa === true);
-        const who = preview ? (preview.hoTen || preview.tenDangNhap || id) : id;
-        const question = willBlock
-            ? `Khóa tài khoản "${who}"? Khách sẽ bị đăng xuất và không thể đăng nhập hoặc đặt hàng.`
-            : `Mở khóa tài khoản "${who}"?`;
-        if (!confirm(question)) return;
         // Lấy danh sách người dùng thô từ userList
         const rawUserList = readRawUserList();
         const userIndex = findRawUserIndex(rawUserList, id);

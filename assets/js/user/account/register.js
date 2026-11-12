@@ -138,7 +138,7 @@ document.addEventListener("DOMContentLoaded", () => {
       hoTen: input.username.value.trim(),
       thuDienTu: input.email.value.trim(),
       soDienThoai: input.phone.value.trim(),
-      matKhau: window.PasswordUtil ? window.PasswordUtil.hash(input.password.value) : input.password.value,
+      matKhau: input.password.value,
       diaChi: input.address.value.trim(),
       diaChiPhu: [],
       anhDaiDien: "assets/img/Avatar/avtuser.jpg",

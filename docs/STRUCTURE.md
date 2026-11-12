@@ -22,7 +22,7 @@ DoAnWeb1/
 │       │   ├── site-header.js
 │       │   └── storage.js
 │       ├── account/
-│       ├── support-chat.js            # Widget hỗ trợ User: cột icon chọn gọi hotline 0354 109 892 hoặc chat
+│       ├── support-chat.js            # Widget chat User + gọi Jitsi audio-only
 │       ├── cart/
 │       ├── payment/
 │       │   ├── voucher.js               # Danh sách voucher, điều kiện và tính giảm giá
@@ -38,8 +38,8 @@ DoAnWeb1/
 Admin/
 ├── TrangChu_Admin.html                # Route /support và khu vực hỗ trợ
 └── assets/
-    ├── css/SupportChat.css             # Giao diện chat hỗ trợ
-    └── js/support-chat.js              # Chat Admin/CSKH
+    ├── css/SupportChat.css             # Giao diện chat và modal gọi âm thanh
+    └── js/support-chat.js              # Chat Admin/CSKH + Jitsi External API
 ```
 
 `supportThreads` dùng `localStorage` cho bản demo. User và Admin phải chạy cùng origin để nhận tin nhắn qua sự kiện `storage`. Khi chạy lại `tools/build-user-shell.js`, cần bảo đảm phần nạp module hỗ trợ trong shell User vẫn được giữ lại.

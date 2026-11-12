@@ -7,11 +7,10 @@ const loginBtn = document.querySelector('.login-btn');
 const notification = document.getElementById('notification');
 
 // Dữ liệu đăng nhập mẫu
-// Mật khẩu quản trị lưu dạng băm (xem database/password-util.js), không để chữ thường trong mã nguồn.
 const adminCredentials = {
-    'admin01': 'sha256$f8c652c2606589b2$46ccf139b16c25b3f948371003d2482eb7a92ec13270c20cf4238d4867f993ad',
-    'admin02': 'sha256$080e9f55a6f461b4$cf9a10676d92394ea92a355f9f53973020685ee515b8a4a73ea23e670489a5f3',
-    'admin03': 'sha256$b8bad3ef629b21e4$1e8a27f2c4ae5ed618ce33ec1ef622db88df3269007f938294703c4debce3202'
+    'admin01': 'admin123',
+    'admin02': 'admin456',
+    'admin03': 'admin789'
 };
 
 // Hàm hiển thị thông báo
@@ -53,7 +52,7 @@ function handleLogin(username, password) {
     return new Promise((resolve) => {
         setTimeout(() => {
             // Kiểm tra thông tin đăng nhập
-            if (adminCredentials[username] && window.PasswordUtil && window.PasswordUtil.verify(password, adminCredentials[username])) {
+            if (adminCredentials[username] && adminCredentials[username] === password) {
                 resolve({
                     success: true,
                     message: 'Đăng nhập thành công!'
@@ -232,3 +231,32 @@ document.addEventListener('DOMContentLoaded', function() {
         passwordInput.focus();
     }
 });
+
+// Hàm demo thông tin đăng nhập
+function showDemoCredentials() {
+    const credentials = Object.keys(adminCredentials).map(username =>
+        `Tên đăng nhập: ${username} | Mật khẩu: ${adminCredentials[username]}`
+    ).join('\n');
+
+    showNotification(`Thông tin demo:\n${credentials}`, 'warning');
+}
+
+// Thêm nút demo (chỉ để test)
+if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+    const demoBtn = document.createElement('button');
+    demoBtn.textContent = 'Xem thông tin demo';
+    demoBtn.style.cssText = `
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        padding: 10px;
+        background: #666;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 12px;
+    `;
+    demoBtn.addEventListener('click', showDemoCredentials);
+    document.body.appendChild(demoBtn);
+}

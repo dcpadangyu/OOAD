@@ -14,7 +14,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const setText = (id, text) => { const el = document.getElementById(id); if (el) el.textContent = text; };
   const voucherMessage = document.getElementById("VoucherMessage");
   const discountRow = document.getElementById("CheckoutDiscountRow");
-  let appliedVoucher = window.ShopVoucher?.getApplied?.(currentUser) || null;
+  let appliedVoucher = window.ShopVoucher?.getApplied?.() || null;
 
   function showVoucherMessage(message, isError) {
     if (!voucherMessage) return;
@@ -22,69 +22,23 @@ document.addEventListener("DOMContentLoaded", () => {
     voucherMessage.classList.toggle("is-error", !!isError);
   }
 
-  const esc = (v) => String(v ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
-  function fmtExpiry(voucher) {
-    if (!voucher.hanDung) return "Không thời hạn";
-    const d = new Date(voucher.hanDung);
-    if (isNaN(d.getTime())) return "";
-    const pad = (n) => String(n).padStart(2, "0");
-    const days = Math.ceil((d.getTime() - Date.now()) / 86400000);
-    const label = `HSD: ${pad(d.getDate())}/${pad(d.getMonth() + 1)}/${d.getFullYear()}`;
-    return days <= 3 ? `${label} · sắp hết hạn` : label;
-  }
-  function valueBadge(voucher) {
-    if (voucher.type === "percent") return `-${voucher.value}%`;
-    const v = Number(voucher.value) || 0;
-    return v >= 1000 ? `-${Math.round(v / 1000)}K` : `-${v}đ`;
-  }
-
   function renderVouchers() {
     const list = document.getElementById("VoucherList");
     if (!list || !window.ShopVoucher) return;
-    const entries = window.ShopVoucher.listForCheckout(currentUser, subtotal);
-    if (!entries.length) {
-      list.innerHTML = '<div class="voucher-empty">Hiện chưa có mã giảm giá nào phù hợp với tài khoản của bạn.</div>';
-      updateClearButton();
-      return;
-    }
-    list.innerHTML = entries.map(({ voucher, check, discount }) => {
-      const selected = appliedVoucher?.code === voucher.code;
-      const disabled = !check.ok;
-      const cond = voucher.minOrder > 0 ? `Đơn tối thiểu ${money(voucher.minOrder)}` : "Không yêu cầu đơn tối thiểu";
-      const tags = [
-        voucher.chiKhachMoi ? '<em class="voucher-tag">Khách mới</em>' : "",
-        voucher.type === "percent" && voucher.maxDiscount ? `<em class="voucher-tag">Tối đa ${money(voucher.maxDiscount)}</em>` : ""
-      ].join("");
-      const note = disabled
-        ? `<div class="voucher-note is-warn">${esc(check.reason === "min-order" ? `Mua thêm ${money(check.shortBy)} để dùng mã này` : check.message)}</div>`
-        : `<div class="voucher-note">Tiết kiệm ${money(discount)} cho đơn này</div>`;
-      return `
-      <label class="voucher-card ${selected ? "is-selected" : ""} ${disabled ? "is-disabled" : ""}">
-        <div class="voucher-stub"><strong>${esc(valueBadge(voucher))}</strong><small>${voucher.type === "percent" ? "Giảm giá" : "Giảm tiền"}</small></div>
-        <div class="voucher-main">
-          <div class="voucher-title">${esc(voucher.title)} ${tags}</div>
-          <div class="voucher-cond">${esc(cond)}</div>
-          <div class="voucher-exp">${esc(fmtExpiry(voucher))} · Mã <b>${esc(voucher.code)}</b></div>
-          ${note}
-        </div>
-        <input type="radio" name="shop-voucher" value="${esc(voucher.code)}" ${selected ? "checked" : ""} ${disabled ? "disabled" : ""}>
-      </label>`;
-    }).join("");
+    list.innerHTML = window.ShopVoucher.list().map((voucher) => `
+      <label class="voucher-card ${appliedVoucher?.code === voucher.code ? "is-selected" : ""}">
+        <input type="radio" name="shop-voucher" value="${voucher.code}" ${appliedVoucher?.code === voucher.code ? "checked" : ""}>
+        <span><strong>${voucher.title}</strong><small>${voucher.description}</small><b>${voucher.code}</b></span>
+      </label>
+    `).join("");
     list.querySelectorAll("input").forEach((input) => input.addEventListener("change", () => {
       applyVoucher(input.value);
     }));
-    updateClearButton();
-  }
-
-  function updateClearButton() {
-    const button = document.getElementById("ClearVoucher");
-    if (button) button.hidden = !appliedVoucher;
   }
 
   function applyVoucher(code) {
     if (!window.ShopVoucher) return;
-    if (!String(code || "").trim()) { showVoucherMessage("Vui lòng nhập mã voucher.", true); return; }
-    const result = window.ShopVoucher.apply(code, subtotal, currentUser);
+    const result = window.ShopVoucher.apply(code, subtotal);
     if (!result.ok) {
       appliedVoucher = null;
       window.ShopVoucher.clear();
@@ -92,8 +46,6 @@ document.addEventListener("DOMContentLoaded", () => {
     } else {
       appliedVoucher = result.voucher;
       showVoucherMessage(`Đã áp dụng ${result.voucher.code}. Bạn được giảm ${money(result.discount)}.`, false);
-      const codeInput = document.getElementById("VoucherCode");
-      if (codeInput) codeInput.value = "";
     }
     renderVouchers();
     renderSummary();
@@ -117,13 +69,6 @@ document.addEventListener("DOMContentLoaded", () => {
   if (appliedVoucher) showVoucherMessage(`Đã áp dụng ${appliedVoucher.code}.`, false);
   document.getElementById("ApplyVoucher")?.addEventListener("click", () => {
     applyVoucher(document.getElementById("VoucherCode")?.value);
-  });
-  document.getElementById("ClearVoucher")?.addEventListener("click", () => {
-    appliedVoucher = null;
-    window.ShopVoucher?.clear?.();
-    showVoucherMessage("Đã bỏ mã giảm giá.", false);
-    renderVouchers();
-    renderSummary();
   });
   renderSummary();
 

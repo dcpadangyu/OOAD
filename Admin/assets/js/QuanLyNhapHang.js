@@ -688,7 +688,6 @@ function QLNH_baoCanhBao(canhBao) {
 }
 
 function QLNH_luuPhieuMoi() {
-  if (typeof adminSession !== "undefined" && !adminSession.can("import.manage")) return alert("Bạn không có quyền lập phiếu nhập.");
   const tt = QLNH_docThongTinPhieu();
   if (tt.loi) return alert(tt.loi);
 
@@ -733,7 +732,6 @@ function QLNH_luuPhieuMoi() {
 
 /* ======= SỬA PHIẾU NHẬP ======= */
 function QLNH_suaPhieuNhap(maPhieu) {
-  if (typeof adminSession !== "undefined" && !adminSession.can("import.manage")) return alert("Bạn không có quyền sửa phiếu nhập.");
   const phieu = QLNH_phieuNhapLocal.find((p) => p.maPhieuNhap === maPhieu);
   if (!phieu) return alert("Không tìm thấy phiếu nhập!");
   if (phieu.trangThai !== "chuaHoanThanh") return alert("Chỉ sửa được phiếu chưa hoàn thành!");
@@ -769,7 +767,6 @@ function QLNH_suaPhieuNhap(maPhieu) {
 }
 
 function QLNH_luuPhieuSua(maPhieu) {
-  if (typeof adminSession !== "undefined" && !adminSession.can("import.manage")) return alert("Bạn không có quyền sửa phiếu nhập.");
   const tt = QLNH_docThongTinPhieu();
   if (tt.loi) return alert(tt.loi);
 
@@ -885,7 +882,6 @@ function QLNH_capNhatTonKhoKhiHoanThanh(chiTiet) {
 
 /* ====== HOÀN THÀNH, HỦY & XÓA ====== */
 function QLNH_hoanThanhPhieuNhap(maPhieu) {
-  if (typeof adminSession !== "undefined" && !adminSession.can("import.manage")) return alert("Bạn không có quyền hoàn thành phiếu nhập.");
   const phieuIndex = QLNH_phieuNhapLocal.findIndex((p) => p.maPhieuNhap === maPhieu);
   if (phieuIndex === -1) return alert("Không tìm thấy phiếu!");
   const phieu = QLNH_phieuNhapLocal[phieuIndex];
@@ -917,7 +913,6 @@ function QLNH_hoanThanhPhieuNhap(maPhieu) {
 // Hủy phiếu đã hoàn thành: trừ lại đúng số lượng đã nhập (chỉ khi kho còn đủ, tức hàng chưa bán/xuất).
 // Giá vốn không được tính lại (giữ nguyên giá vốn hiện tại).
 function QLNH_huyPhieuNhap(maPhieu) {
-  if (typeof adminSession !== "undefined" && !adminSession.can("import.cancel")) return alert("Chỉ quản trị viên mới được hủy phiếu đã hoàn thành.");
   const index = QLNH_phieuNhapLocal.findIndex((p) => p.maPhieuNhap === maPhieu);
   if (index === -1) return alert("Không tìm thấy phiếu!");
   const phieu = QLNH_phieuNhapLocal[index];
@@ -965,7 +960,6 @@ function QLNH_huyPhieuNhap(maPhieu) {
 }
 
 function QLNH_xoaPhieuNhap(maPhieu) {
-  if (typeof adminSession !== "undefined" && !adminSession.can("import.manage")) return alert("Bạn không có quyền xóa phiếu nhập.");
   const index = QLNH_phieuNhapLocal.findIndex((p) => p.maPhieuNhap === maPhieu);
   if (index === -1) return alert("Không tìm thấy phiếu!");
   const phieu = QLNH_phieuNhapLocal[index];

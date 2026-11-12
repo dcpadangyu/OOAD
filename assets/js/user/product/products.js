@@ -131,7 +131,7 @@ function openProductPopup(product) {
       const available = stock === null || stock > 0;
       const selected = available && size === firstAvailableSize;
       return `<button type="button" class="size-option${selected ? " active" : ""}${available ? "" : " sold-out"}" data-size="${size}" aria-pressed="${selected}"${available ? "" : " disabled"}>${size}${available ? "" : " (Hết hàng)"}</button>`;
-    }).join("")}</div><div class="size-stock-note" id="sizeStockNote" aria-live="polite"></div></div>`
+    }).join("")}</div></div>`
     : "";
   const sizeDescription = sizeOptions.length ? `<p><strong>Kích thước:</strong> ${sizeOptions.join(", ")}</p>` : "";
   detail.innerHTML = `<div class="product-info"><div class="left"><img src="${esc(product.hinhAnh)}" alt="${esc(product.tenSanPham)}" ${imgFallbackAttr()}></div><div class="right"><p class="desc">${esc(product.moTaNgan)}</p><h2>${esc(product.tenSanPham)}</h2><p><strong>Màu sắc:</strong> ${esc(product.mauSac)}</p><p><strong>Chất liệu:</strong> ${esc(product.chatLieu)}</p><p><strong>Phong cách:</strong> ${esc(product.phongCach)}</p><p><strong>Giới tính:</strong> ${esc(product.gioiTinh)}</p>${sizePicker}<p class="price">${esc(product.giaHienThi)}</p><div class="actions"><button id="add-to-cart">Thêm vào giỏ hàng</button><button id="buy-now">Mua ngay</button></div></div></div><div class="description"><h3>Mô tả sản phẩm</h3><p>${esc(product.moTa)}</p><h3>Thông số giày</h3><p><strong>Chất liệu:</strong> ${esc(product.chatLieu)}</p><p><strong>Phong cách:</strong> ${esc(product.phongCach)}</p>${sizeDescription}<p><strong>Xuất xứ:</strong> ${esc(product.xuatXu)}</p></div><div class="product-reviews" data-product="${esc(product.maSanPham)}"></div>`;
@@ -139,21 +139,9 @@ function openProductPopup(product) {
   popup.style.display = "flex";
   document.body.style.overflow = "hidden";
   let selectedSize = firstAvailableSize == null ? "" : String(firstAvailableSize);
-  // Ghi chú số đôi còn lại của size đang chọn (cảnh báo khi sắp hết)
-  const stockNote = detail.querySelector("#sizeStockNote");
-  const updateStockNote = () => {
-    if (!stockNote) return;
-    const left = selectedSize ? stockForSize(selectedSize) : null;
-    if (!selectedSize) { stockNote.textContent = "Sản phẩm đã hết hàng ở tất cả size."; stockNote.className = "size-stock-note is-out"; return; }
-    if (left === null) { stockNote.textContent = ""; stockNote.className = "size-stock-note"; return; }
-    stockNote.textContent = left <= 5 ? `Size ${selectedSize}: chỉ còn ${left} đôi` : `Size ${selectedSize}: còn hàng`;
-    stockNote.className = "size-stock-note" + (left <= 5 ? " is-low" : "");
-  };
-  updateStockNote();
   detail.querySelectorAll(".size-option").forEach((button) => {
     button.addEventListener("click", () => {
       selectedSize = button.dataset.size || selectedSize;
-      updateStockNote();
       detail.querySelectorAll(".size-option").forEach((option) => {
         const isSelected = option === button;
         option.classList.toggle("active", isSelected);

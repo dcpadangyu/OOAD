@@ -642,12 +642,3 @@ body #section-register #nutdky {
     border-color: var(--store-line);
     border-radius: 2px;
 }
-
-
-/* Popup sản phẩm: lưới size + ghi chú số đôi còn lại */
-#product-popup .size-picker { align-items: flex-start; flex-direction: column; gap: 8px; }
-#product-popup .size-option.sold-out { position: relative; border-style: dashed; background: #f3f4f6; color: #9ca3af; text-decoration: line-through; opacity: 1; cursor: not-allowed; }
-#product-popup .size-option.sold-out:hover { background: #f3f4f6; border-color: var(--store-line); color: #9ca3af; }
-#product-popup .size-stock-note { min-height: 18px; font-size: 13px; color: #059669; font-weight: 600; }
-#product-popup .size-stock-note.is-low { color: #d97706; }
-#product-popup .size-stock-note.is-out { color: #dc2626; }

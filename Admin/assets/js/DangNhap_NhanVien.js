@@ -29,57 +29,17 @@ function validateLogin(username, password) {
   return true;
 }
 
-// Chống dò mật khẩu: sai MAX_FAIL lần liên tiếp thì khóa đăng nhập tài khoản đó trong LOCK_MS.
-const MAX_FAIL = 5;
-const LOCK_MS = 60 * 1000;
-function failKey(username) { return "nvLoginFail:" + String(username).toLowerCase(); }
-function readFail(username) {
-  try { return JSON.parse(localStorage.getItem(failKey(username)) || "null") || { count: 0, until: 0 }; }
-  catch (e) { return { count: 0, until: 0 }; }
-}
-function lockRemaining(username) {
-  const f = readFail(username);
-  return f.until > Date.now() ? Math.ceil((f.until - Date.now()) / 1000) : 0;
-}
-function recordFail(username) {
-  const f = readFail(username);
-  if (f.until && f.until <= Date.now()) { f.count = 0; f.until = 0; } // hết thời gian khóa -> đếm lại
-  f.count += 1;
-  if (f.count >= MAX_FAIL) f.until = Date.now() + LOCK_MS;
-  try { localStorage.setItem(failKey(username), JSON.stringify(f)); } catch (e) { /* bỏ qua */ }
-  return f;
-}
-function clearFail(username) { try { localStorage.removeItem(failKey(username)); } catch (e) { /* bỏ qua */ } }
-
 function handleLogin(username, password) {
   return new Promise((resolve) => {
-    const wait = lockRemaining(username);
-    if (wait > 0) {
-      resolve({ success: false, message: "Đăng nhập sai quá nhiều lần. Vui lòng thử lại sau " + wait + " giây." });
-      return;
-    }
     setTimeout(() => {
       const emp = findNhanVienByUsername(username);
-      if (!emp || !(window.PasswordUtil ? window.PasswordUtil.verify(password, emp.matKhau) : emp.matKhau === password)) {
-        const f = recordFail(username);
-        const left = MAX_FAIL - f.count;
-        resolve({ success: false, message: left > 0
-          ? "Tên đăng nhập hoặc mật khẩu không đúng! (còn " + left + " lần thử)"
-          : "Đăng nhập sai quá nhiều lần. Tài khoản bị tạm khóa đăng nhập " + (LOCK_MS / 1000) + " giây." });
+      if (!emp || emp.matKhau !== password) {
+        resolve({ success: false, message: "Tên đăng nhập hoặc mật khẩu không đúng!" });
         return;
       }
-      clearFail(username);
       if (emp.trangThai === "khoa") {
         resolve({ success: false, message: "Tài khoản của bạn đã bị khóa, liên hệ quản trị viên!" });
         return;
-      }
-      // Nâng cấp mật khẩu chữ thường (dữ liệu mẫu cũ) sang dạng băm sau lần đăng nhập đúng.
-      if (window.PasswordUtil && !window.PasswordUtil.isHashed(emp.matKhau)) {
-        try {
-          const list = getLocalEmployees() || [];
-          const target = list.find((e) => e.maNhanVien === emp.maNhanVien);
-          if (target) { target.matKhau = window.PasswordUtil.hash(password); saveLocalEmployees(list); }
-        } catch (e) { /* giữ nguyên */ }
       }
       resolve({
         success: true,
@@ -92,17 +52,17 @@ function handleLogin(username, password) {
 
 function saveLoginInfo(username, remember) {
   if (remember) {
-    localStorage.setItem("nvRememberedUsername", username);
-    localStorage.setItem("nvRememberLogin", "true");
+    localStorage.setItem("rememberedUsername", username);
+    localStorage.setItem("rememberLogin", "true");
   } else {
-    localStorage.removeItem("nvRememberedUsername");
-    localStorage.removeItem("nvRememberLogin");
+    localStorage.removeItem("rememberedUsername");
+    localStorage.removeItem("rememberLogin");
   }
 }
 
 function loadSavedLoginInfo() {
-  const rememberedUsername = localStorage.getItem("nvRememberedUsername");
-  const rememberLogin = localStorage.getItem("nvRememberLogin");
+  const rememberedUsername = localStorage.getItem("rememberedUsername");
+  const rememberLogin = localStorage.getItem("rememberLogin");
   if (rememberedUsername && rememberLogin === "true") {
     usernameInput.value = rememberedUsername;
     rememberCheckbox.checked = true;

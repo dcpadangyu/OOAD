@@ -4,8 +4,7 @@ var NhanVienInfo = (function () {
       "/import": "Quản lý phiếu nhập",
       "/inventory": "Quản lý tồn kho",
       "/orders": "Quản lý đơn hàng",
-      "/reviews": "Phản hồi đánh giá",
-      "/support": "Hỗ trợ khách hàng"
+      "/reviews": "Phản hồi đánh giá"
     };
 
   function esc(value) {

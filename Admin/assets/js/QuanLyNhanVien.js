@@ -195,10 +195,7 @@ function QLNV_moModalThem() {
   document.getElementById("QLNV_sdt").value = "";
   document.getElementById("QLNV_diaChi").value = "";
   document.getElementById("QLNV_chucVu").value = CHUC_VU_NHAN_VIEN[0];
-  const userNew = document.getElementById("QLNV_username");
-  userNew.value = "";
-  userNew.readOnly = false;
-  userNew.title = "";
+  document.getElementById("QLNV_username").value = "";
   document.getElementById("QLNV_password").value = "";
   document.getElementById("QLNV_passwordRow").style.display = "";
   const modal = document.getElementById("QLNV_modal");
@@ -216,10 +213,7 @@ function QLNV_moModalSua(ma) {
   document.getElementById("QLNV_sdt").value = nv.soDienThoai || "";
   document.getElementById("QLNV_diaChi").value = nv.diaChi || "";
   document.getElementById("QLNV_chucVu").value = CHUC_VU_NHAN_VIEN.includes(nv.chucVu) ? nv.chucVu : CHUC_VU_NHAN_VIEN[0];
-  const userEl = document.getElementById("QLNV_username");
-  userEl.value = nv.tenDangNhap || "";
-  userEl.readOnly = true; // tên đăng nhập là định danh cố định: đổi sẽ làm mất liên kết với phiếu nhập, hội thoại...
-  userEl.title = "Tên đăng nhập không thể thay đổi";
+  document.getElementById("QLNV_username").value = nv.tenDangNhap || "";
   document.getElementById("QLNV_password").value = "";
   document.getElementById("QLNV_password").placeholder = "Để trống nếu giữ mật khẩu cũ";
   document.getElementById("QLNV_passwordRow").style.display = "";
@@ -232,62 +226,7 @@ function QLNV_dongModal() {
   if (modal) modal.style.display = "none";
 }
 
-// Đọc lại danh sách mới nhất trước khi sửa: bản lưu trong bộ nhớ có thể đã cũ
-// (vd. nhân viên vừa đăng nhập ở tab khác và mật khẩu được nâng cấp sang dạng băm).
-function QLNV_napLai() {
-  QLNV_danhSach = getLocalEmployees() || [];
-}
-
-// Trả hội thoại đang do nhân viên này phụ trách về hàng đợi chung, để khách không bị bỏ rơi.
-function QLNV_traLaiHoiThoai(nv, lyDo) {
-  try {
-    const threads = JSON.parse(localStorage.getItem("supportThreads") || "[]");
-    if (!Array.isArray(threads)) return 0;
-    let dem = 0;
-    threads.forEach((t) => {
-      if (!t || t.trangThai === "closed" || !t.nhanVienXuLy) return;
-      const cua = (t.maNhanVienXuLy && t.maNhanVienXuLy === nv.tenDangNhap) || t.nhanVienXuLy === nv.tenNhanVien;
-      if (!cua) return;
-      t.nhanVienXuLy = null;
-      t.maNhanVienXuLy = null;
-      t.tinNhan = Array.isArray(t.tinNhan) ? t.tinNhan : [];
-      t.tinNhan.push({ maTinNhan: "MSG_" + Date.now() + "_" + Math.random().toString(36).slice(2, 8), thoiGianGui: new Date().toISOString(), loaiNguoiGui: "system", maNguoiGui: "shop", tenNguoiGui: "OOAD Shop", loaiTinNhan: "text", noiDung: "Nhân viên " + nv.tenNhanVien + " " + lyDo + ". Hội thoại đã quay lại hàng đợi để nhân viên khác tiếp nhận." });
-      t.ngayCapNhat = new Date().toISOString();
-      dem += 1;
-    });
-    if (dem) localStorage.setItem("supportThreads", JSON.stringify(threads));
-    return dem;
-  } catch (e) {
-    return 0;
-  }
-}
-
-// Nhân viên đã có dữ liệu nghiệp vụ gắn với mình (phiếu nhập, hội thoại) thì không xóa được, chỉ khóa.
-function QLNV_dauVet(nv) {
-  const out = [];
-  try {
-    const phieu = JSON.parse(localStorage.getItem("phieuNhapLocal") || "[]") || [];
-    const soPhieu = phieu.filter((p) => p && [nv.tenNhanVien, nv.tenDangNhap].indexOf(p.nguoiLap) !== -1 || p && [nv.tenNhanVien, nv.tenDangNhap].indexOf(p.nguoiDuyet) !== -1).length;
-    if (soPhieu) out.push(soPhieu + " phiếu nhập hàng");
-    const threads = JSON.parse(localStorage.getItem("supportThreads") || "[]") || [];
-    const soChat = threads.filter((t) => t && ((t.maNhanVienXuLy && t.maNhanVienXuLy === nv.tenDangNhap) || t.nhanVienXuLy === nv.tenNhanVien)).length;
-    if (soChat) out.push(soChat + " hội thoại hỗ trợ");
-  } catch (e) { /* bỏ qua */ }
-  return out;
-}
-
-function QLNV_matKhauHopLe(pw) {
-  if (pw.length < 8) return "Mật khẩu phải có ít nhất 8 ký tự!";
-  if (!/[A-Za-z]/.test(pw) || !/\d/.test(pw)) return "Mật khẩu phải gồm cả chữ và số!";
-  return "";
-}
-
-function QLNV_bamMatKhau(plain) {
-  return window.PasswordUtil ? window.PasswordUtil.hash(plain) : plain;
-}
-
 function QLNV_luuNhanVien() {
-  QLNV_napLai();
   const ma = document.getElementById("QLNV_maNhanVien").value.trim();
   const ten = document.getElementById("QLNV_tenNhanVien").value.trim();
   const gioiTinh = document.getElementById("QLNV_gioiTinh").value;
@@ -315,30 +254,24 @@ function QLNV_luuNhanVien() {
   );
   if (trungSdt) return QLNV_notify("Số điện thoại đã được dùng cho nhân viên khác!", "error");
 
-  if (!isEdit || password) {
-    const loiMk = QLNV_matKhauHopLe(password);
-    if (loiMk) return QLNV_notify(loiMk, "error");
+  if (!isEdit) {
+    if (password.length < 6) return QLNV_notify("Mật khẩu phải có ít nhất 6 ký tự!", "error");
+  } else if (password && password.length < 6) {
+    return QLNV_notify("Mật khẩu mới phải có ít nhất 6 ký tự!", "error");
   }
 
   if (isEdit) {
     const index = QLNV_danhSach.findIndex((e) => e.maNhanVien === QLNV_dangSuaMa);
     if (index === -1) return;
-    const truoc = Object.assign({}, QLNV_danhSach[index]);
     QLNV_danhSach[index].tenNhanVien = ten;
     QLNV_danhSach[index].gioiTinh = gioiTinh;
     QLNV_danhSach[index].soDienThoai = sdt;
     QLNV_danhSach[index].diaChi = diaChi;
     QLNV_danhSach[index].chucVu = chucVu;
-    // tenDangNhap giữ nguyên (không đổi khi sửa)
-    if (password) QLNV_danhSach[index].matKhau = QLNV_bamMatKhau(password);
+    QLNV_danhSach[index].tenDangNhap = username;
+    if (password) QLNV_danhSach[index].matKhau = password;
     saveLocalEmployees(QLNV_danhSach);
-    // Đổi khỏi chức vụ CSKH hoặc đổi tên: hội thoại đang phụ trách quay lại hàng đợi (tránh gán nhầm người)
-    let thongBao = "Đã cập nhật nhân viên!";
-    if (truoc.chucVu !== chucVu || truoc.tenNhanVien !== ten) {
-      const n = QLNV_traLaiHoiThoai(truoc, truoc.chucVu !== chucVu ? "đã chuyển sang chức vụ khác" : "đã được đổi thông tin");
-      if (n) thongBao += " " + n + " hội thoại hỗ trợ đã được trả về hàng đợi.";
-    }
-    QLNV_notify(thongBao, "success");
+    QLNV_notify("Đã cập nhật nhân viên!", "success");
   } else {
     QLNV_danhSach.push({
       maNhanVien: ma,
@@ -348,7 +281,7 @@ function QLNV_luuNhanVien() {
       diaChi: diaChi,
       chucVu: chucVu,
       tenDangNhap: username,
-      matKhau: QLNV_bamMatKhau(password),
+      matKhau: password,
       ngayTao: new Date().toISOString().split("T")[0],
       trangThai: "hoatdong"
     });
@@ -362,33 +295,17 @@ function QLNV_luuNhanVien() {
 }
 
 function QLNV_khoaMoKhoa(ma) {
-  QLNV_napLai();
   const index = QLNV_danhSach.findIndex((e) => e.maNhanVien === ma);
   if (index === -1) return;
   const dangKhoa = QLNV_danhSach[index].trangThai === "khoa";
-  const nv = QLNV_danhSach[index];
-  if (!dangKhoa && !confirm("Khóa tài khoản " + nv.tenNhanVien + "? Nhân viên sẽ bị đăng xuất ngay và các hội thoại đang phụ trách được trả về hàng đợi.")) return;
   QLNV_danhSach[index].trangThai = dangKhoa ? "hoatdong" : "khoa";
   saveLocalEmployees(QLNV_danhSach);
-  let thongBao = dangKhoa ? "Đã mở khóa tài khoản nhân viên!" : "Đã khóa tài khoản nhân viên!";
-  if (!dangKhoa) {
-    const n = QLNV_traLaiHoiThoai(nv, "đã bị khóa tài khoản");
-    if (n) thongBao += " " + n + " hội thoại hỗ trợ đã được trả về hàng đợi.";
-  }
-  QLNV_notify(thongBao, "success");
+  QLNV_notify(dangKhoa ? "Đã mở khóa tài khoản nhân viên!" : "Đã khóa tài khoản nhân viên!", "success");
   QLNV_danhSach = getLocalEmployees() || [];
   QLNV_veBang();
 }
 
 function QLNV_xoa(ma) {
-  QLNV_napLai();
-  const nv = QLNV_danhSach.find((e) => e.maNhanVien === ma);
-  if (!nv) return;
-  const dauVet = QLNV_dauVet(nv);
-  if (dauVet.length) {
-    QLNV_notify("Không thể xóa " + nv.tenNhanVien + " vì đã có dữ liệu gắn với nhân viên này (" + dauVet.join(", ") + "). Hãy khóa tài khoản để giữ lịch sử.", "error");
-    return;
-  }
   if (!confirm(`Bạn có chắc chắn muốn xóa nhân viên ${ma}?`)) return;
   QLNV_danhSach = QLNV_danhSach.filter((e) => e.maNhanVien !== ma);
   saveLocalEmployees(QLNV_danhSach);

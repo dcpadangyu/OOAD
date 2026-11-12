@@ -268,8 +268,7 @@ function saveCategory() {
         }
 
         // Check for duplicates
-        const norm = (v) => String(v || '').trim().toLowerCase();
-        const duplicate = categories.some(c => norm(c.tenLoai) === norm(name) && (mode === 'add' || c.tenLoai !== originalName));
+        const duplicate = categories.some(c => c.tenLoai === name && (mode === 'add' || c.tenLoai !== originalName));
         if (duplicate) {
             console.error('Duplicate category name:', name);
             if (typeof AdminDashboard !== 'undefined') {

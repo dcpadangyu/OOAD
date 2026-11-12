@@ -67,27 +67,6 @@ class AdminSession {
         return admin ? admin.role : null;
     }
 
-    // Quyền theo THAO TÁC (ngoài việc được vào màn hình nào, xem ROLE_ROUTES ở admin-spa-nav.js).
-    // Admin có mọi quyền. Nhân viên chỉ có các quyền ghi trong bảng dưới đây (theo đặc tả use case):
-    //   product.edit     thêm / sửa / ẩn-hiện sản phẩm          (UC15, UC17)
-    //   product.delete   xóa sản phẩm                           (UC16)
-    //   product.size     thêm/bớt size của sản phẩm             (UC51) - không sửa các thông tin khác
-    //   import.manage    lập, sửa, xóa, hoàn thành phiếu nhập   (UC34-36)
-    //   import.cancel    hủy phiếu đã hoàn thành (trừ lại tồn kho, chỉ Admin)
-    //   order.process    xác nhận / giao đơn hàng               (UC30)
-    //   order.cancel     hủy đơn hàng
-    can(permission) {
-        if (!this.isNhanVien()) return this.isLoggedIn();
-        const role = String(this.getCurrentRole() || '');
-        const table = {
-            'Nhân viên bán hàng': ['product.edit', 'product.delete', 'order.process', 'order.cancel'],
-            'Nhân viên kho': ['product.size', 'import.manage'],
-            'Nhân viên CSKH': ['order.cancel'],
-            'Nhân viên kiểm kho': []
-        };
-        return (table[role] || []).indexOf(permission) !== -1;
-    }
-
     // Kiểm tra có phải admin không
     isAdmin() {
         const admin = this.getCurrentAdmin();
@@ -165,15 +144,6 @@ document.addEventListener('DOMContentLoaded', function() {
     if (!adminSession.isLoggedIn()) {
         adminSession.redirectToLogin(wasStaff);
     }
-});
-
-// Gắn class lên <body> để ẩn nút thao tác mà vai trò hiện tại không được dùng (xem admin.css: perm-no-*).
-// Việc kiểm tra thật vẫn nằm ở từng hàm xử lý (adminSession.can) để không lách được bằng DevTools/hash.
-document.addEventListener('DOMContentLoaded', function () {
-    if (!adminSession.isLoggedIn() || !adminSession.isNhanVien()) return;
-    ['product.edit', 'product.delete', 'product.size', 'import.manage', 'import.cancel'].forEach(function (perm) {
-        if (!adminSession.can(perm)) document.body.classList.add('perm-no-' + perm.replace('.', '-'));
-    });
 });
 
 // Export để sử dụng trong các file khác

@@ -47,11 +47,6 @@
         <label>SL mỗi size <input type="number" class="SZ-qty" min="0" max="${MAX_QTY}" value="0"></label>
         <button type="button" class="SZ-btn SZ-gen">Tạo size</button>
       </div>
-      <div class="SZ-one">
-        <label>Thêm size lẻ <input type="text" inputmode="decimal" class="SZ-oneval" placeholder="VD: 38.5" maxlength="4"></label>
-        <button type="button" class="SZ-btn SZ-btn-light SZ-addone">Thêm</button>
-        <span class="SZ-hint">Dùng cho size có nửa số (35.5, 38.5…) hoặc size nằm ngoài khoảng đã tạo.</span>
-      </div>
       <div class="SZ-grid" aria-live="polite"></div>
       <div class="SZ-add">
         <label class="SZ-fill-label">Đặt tất cả =
@@ -97,9 +92,7 @@
       }
       grid.innerHTML = sizes.map((size) => `
         <div class="SZ-cell${Number(stock[size]) === 0 ? " SZ-zero" : ""}" data-size="${size}">
-          ${opts.lockQty && Number(stock[size]) > 0
-            ? `<span class="SZ-lock" title="Size ${size} còn ${Number(stock[size])} đôi trong kho nên chưa thể bỏ">🔒</span>`
-            : `<button type="button" class="SZ-remove" title="Xóa size ${size}" aria-label="Xóa size ${size}">&times;</button>`}
+          <button type="button" class="SZ-remove" title="Xóa size ${size}" aria-label="Xóa size ${size}">&times;</button>
           <div class="SZ-size">Size ${size}</div>
           <div class="SZ-ro">Tồn: <b>${Number(stock[size]) || 0}</b></div>
           <div class="SZ-stepper">
@@ -138,22 +131,10 @@
       render();
     }
 
-    function addOne() {
-      const input = $(".SZ-oneval");
-      const key = validSize(input.value);
-      if (!key) return showError(`Size không hợp lệ. Nhập số từ ${MIN_SIZE} đến ${MAX_SIZE}, chỉ cho phép lẻ .5 (VD: 38 hoặc 38.5).`);
-      if (key in stock) return showError(`Size ${key} đã có trong danh sách.`);
-      showError("");
-      stock[key] = 0;
-      input.value = "";
-      render();
-    }
-
     // ---- sự kiện ----
     container.addEventListener("click", (event) => {
       const target = event.target;
       if (!(target instanceof Element)) return;
-      if (target.closest(".SZ-addone")) return addOne();
       const chip = target.closest(".SZ-chip");
       if (chip) {
         $(".SZ-from").value = chip.dataset.from;
@@ -206,8 +187,6 @@
         if (next) { next.focus(); next.select(); }
       } else if (input.classList.contains("SZ-from") || input.classList.contains("SZ-to") || input.classList.contains("SZ-qty")) {
         generate($(".SZ-from").value, $(".SZ-to").value, $(".SZ-qty").value);
-      } else if (input.classList.contains("SZ-oneval")) {
-        addOne();
       } else if (input.classList.contains("SZ-fillqty")) {
         $(".SZ-fill").click();
       }

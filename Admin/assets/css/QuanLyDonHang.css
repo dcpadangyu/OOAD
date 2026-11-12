@@ -281,23 +281,3 @@
 }
 
 
-
-/* ---------- Tóm tắt + nhãn trạng thái ---------- */
-.QLDH_summary { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; margin-bottom: 16px; }
-.QLDH_card { padding: 12px 14px; border: 1px solid #e5e7eb; border-radius: 10px; background: #fff; }
-.QLDH_card strong { display: block; font-size: 20px; line-height: 1.25; color: #111827; }
-.QLDH_card span { color: #6b7280; font-size: 12px; }
-.QLDH_card-warn { border-color: #fecaca; background: #fef2f2; }
-.QLDH_card-warn strong { color: #b91c1c; }
-.QLDH_chip { display: inline-block; padding: 3px 10px; border-radius: 999px; font-size: 12px; font-weight: 600; }
-.QLDH_chip-moiDat { background: #fef3c7; color: #92400e; }
-.QLDH_chip-daXuLy { background: #dbeafe; color: #1d4ed8; }
-.QLDH_chip-daGiao { background: #dcfce7; color: #166534; }
-.QLDH_chip-huy { background: #fee2e2; color: #991b1b; }
-.QLDH_pay { display: inline-block; margin-top: 4px; font-size: 11px; color: #64748b; }
-.QLDH_pay-paid { color: #15803d; }
-.QLDH_pay-refund { color: #dc2626; font-weight: 700; }
-.QLDH_pay-refunded { color: #7c3aed; }
-.QLDH_sub { color: #94a3b8; font-size: 11px; }
-.QLDH_md_breakdown { display: grid; gap: 4px; margin: 12px 0 6px; padding: 10px 12px; border-radius: 8px; background: #f8fafc; font-size: 13px; color: #475569; }
-.QLDH_md_breakdown div { display: flex; justify-content: space-between; }

@@ -46,12 +46,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
     try {
       await window.UserOtp.verify(user.thuDienTu, "forgot-password", otpInput.value.trim());
-      window.UserSession.saveUser({ ...user, matKhau: window.PasswordUtil ? window.PasswordUtil.hash(newPasswordInput.value) : newPasswordInput.value }, user, { silent: true, passwordChange: true });
-      try {
-        const all = JSON.parse(localStorage.getItem("userList") || "[]");
-        const t = all.find((x) => x && x.maKhachHang === user.maKhachHang);
-        if (t) { t.daDatLaiMatKhau = false; localStorage.setItem("userList", JSON.stringify(all)); }
-      } catch (_) { /* noop */ }
+      window.UserSession.saveUser({ ...user, matKhau: newPasswordInput.value }, user, { silent: true, passwordChange: true });
       await popup("success", "Đổi mật khẩu thành công", "Vui lòng đăng nhập lại.");
       window.location.href = "pages/login.html";
     } catch (error) {

@@ -111,7 +111,6 @@ function QLSP_ganSuKien() {
   document.addEventListener("click", function (e) {
     const tick = e.target.closest && e.target.closest(".QLSP_tick-visible, .QLSP_tick-hidden");
     if (!tick) return;
-    if (typeof adminSession !== "undefined" && !adminSession.can("product.edit")) return;
     const productId = tick.getAttribute("data-id");
     const products = getLocalProducts();
 
@@ -132,7 +131,6 @@ function QLSP_ganSuKien() {
   document.addEventListener("click", function (e) {
     const nutSua = e.target.closest && e.target.closest(".QLSP_btn-sua");
     if (nutSua) {
-      if (typeof adminSession !== "undefined" && !adminSession.can("product.edit") && !adminSession.can("product.size")) { alert("Bạn không có quyền sửa sản phẩm."); return; }
       const id = nutSua.getAttribute("data-id");
       const product = QLSP_productsLocal.find((p) => p.maSanPham === id);
       if (product) QLSP_openEditModal(product);
@@ -307,7 +305,6 @@ const QLSP_preview = document.getElementById("QLSP_previewImage");
 const QLSP_inputImage = document.getElementById("QLSP_spImage");
 
 QLSP_btnThemMoi.addEventListener("click", () => {
-  if (typeof adminSession !== "undefined" && !adminSession.can("product.edit")) { alert("Bạn không có quyền thực hiện thao tác này (thêm sản phẩm)."); return; }
   QLSP_modal.style.display = "flex";
 });
 QLSP_btnClose.addEventListener("click", QLSP_closeModal);
@@ -466,7 +463,6 @@ function QLSP_kiemTraSuDungSanPham(maSanPham) {
 }
 
 function QLSP_xoaSanPham(id) {
-  if (typeof adminSession !== "undefined" && !adminSession.can("product.delete")) { alert("Bạn không có quyền xóa sản phẩm."); return; }
   const sp = QLSP_productsLocal.find((p) => p.maSanPham === id);
   if (!sp) return;
   const dung = QLSP_kiemTraSuDungSanPham(id);
@@ -523,32 +519,9 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 // ================== MODAL SỬA ==================
-// Nhân viên kho: chỉ được thêm/bớt size (UC51), các thông tin khác của sản phẩm bị khóa.
-function QLSP_laChiSize() {
-  return typeof adminSession !== "undefined" && !adminSession.can("product.edit") && adminSession.can("product.size");
-}
-
-function QLSP_datCheDoSua(chiSize) {
-  const ids = ["QLSP_editCatalog", "QLSP_editName", "QLSP_editGender", "QLSP_editDesc", "QLSP_editColor", "QLSP_editImportPrice",
-    "QLSP_editVisibility", "QLSP_editMaterial", "QLSP_editStyle", "QLSP_editDescription", "QLSP_editImage"];
-  ids.forEach((id) => { const el = document.getElementById(id); if (el) el.disabled = chiSize; });
-  const modal = document.getElementById("QLSP_modalSuaSP");
-  modal.classList.toggle("QLSP_sizeonly", chiSize);
-  const title = modal.querySelector(".QLSP_modal-header h3");
-  if (title) title.textContent = chiSize ? "Cập nhật size sản phẩm" : "Sửa thông tin sản phẩm";
-  let note = modal.querySelector(".QLSP_sizeonly-note");
-  if (!note) {
-    note = document.createElement("div");
-    note.className = "QLSP_sizeonly-note";
-    note.textContent = "Bạn chỉ được thêm hoặc bớt size. Thông tin khác của sản phẩm do nhân viên bán hàng hoặc Admin quản lý; số lượng tồn chỉ đổi qua Phiếu nhập hàng.";
-    title.closest(".QLSP_modal-header").insertAdjacentElement("afterend", note);
-  }
-}
-
 function QLSP_openEditModal(product) {
   const modal = document.getElementById("QLSP_modalSuaSP");
   modal.style.display = "flex";
-  QLSP_datCheDoSua(QLSP_laChiSize());
 
   document.getElementById("QLSP_editId").value = product.maSanPham;
   QLSP_setSelectValue("QLSP_editCatalog", product.maLoai);
@@ -597,11 +570,6 @@ document
 document
   .getElementById("QLSP_btnUpdateSP")
   .addEventListener("click", function () {
-    if (typeof adminSession !== "undefined" && !adminSession.can("product.edit") && !adminSession.can("product.size")) {
-      alert("Bạn không có quyền sửa sản phẩm.");
-      return;
-    }
-    const sizeOnly = QLSP_laChiSize();
     const id = document.getElementById("QLSP_editId").value.trim();
     let dsSanPham = getLocalProducts();
     const index = dsSanPham.findIndex((sp) => sp.maSanPham === id);
@@ -622,7 +590,7 @@ document
     let imageData = editImageInput.dataset.imageData || dsSanPham[index].hinhAnh;
 
     const giaBanHienTai = Number(dsSanPham[index].giaBan) || 0;
-    if (!sizeOnly && giaBanHienTai > 0 && giaSuaValue > giaBanHienTai && !confirm(`Giá nhập mới (${giaSuaValue.toLocaleString("vi-VN")}₫) cao hơn giá bán hiện tại (${giaBanHienTai.toLocaleString("vi-VN")}₫) nên sẽ bị lỗ. Vẫn lưu? (Nhớ cập nhật giá bán ở Quản lý giá bán.)`)) {
+    if (giaBanHienTai > 0 && giaSuaValue > giaBanHienTai && !confirm(`Giá nhập mới (${giaSuaValue.toLocaleString("vi-VN")}₫) cao hơn giá bán hiện tại (${giaBanHienTai.toLocaleString("vi-VN")}₫) nên sẽ bị lỗ. Vẫn lưu? (Nhớ cập nhật giá bán ở Quản lý giá bán.)`)) {
       return;
     }
 
@@ -642,7 +610,7 @@ document
     if (!editedSizeStock && hadSizes && !confirm("Sản phẩm sẽ không còn size nào. Tiếp tục?")) {
       return;
     }
-    const capNhatDayDu = {
+    dsSanPham[index] = {
       ...dsSanPham[index],
       maLoai: document.getElementById("QLSP_editCatalog").value,
       tenSanPham: document.getElementById("QLSP_editName").value.trim(),
@@ -658,14 +626,6 @@ document
       moTa: document.getElementById("QLSP_editDescription").value.trim(),
       hinhAnh: imageData,
     };
-    // Nhân viên kho chỉ cập nhật phần size; mọi trường khác giữ nguyên như đang lưu.
-    dsSanPham[index] = sizeOnly
-      ? {
-          ...dsSanPham[index],
-          kichCo: capNhatDayDu.kichCo,
-          ...(editedSizeStock ? { tonKhoTheoSize: editedSizeStock, soLuongTon: QLSP_totalSizeStock(editedSizeStock) } : {}),
-        }
-      : capNhatDayDu;
 
     if (!editedSizeStock && hadSizes) {
       delete dsSanPham[index].tonKhoTheoSize;

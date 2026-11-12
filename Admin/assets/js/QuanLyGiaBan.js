@@ -154,9 +154,9 @@
         <td>${ma}</td>
         <td>${hinhAnh ? `<img src="${esc(imgSrc)}" alt="${esc(p.tenSanPham)}" class="QLGB_img" />` : ""}</td>
         <td>${esc(p.tenSanPham)}</td>
-        <td>${Number(p.giaNhap) > 0 ? currency(p.giaNhap) : '<span class="QLGB_warn" title="Cần nhập hàng để có giá vốn">Chưa có giá vốn</span>'}</td>
+        <td>${currency(p.giaNhap)}</td>
         <td>${percent}%</td>
-        <td>${Number(p.giaBan) > 0 ? currency(p.giaBan) : '<span class="QLGB_warn" title="Chưa có giá bán nên sản phẩm chưa được hiển thị trên cửa hàng">Chưa đặt giá</span>'}</td>
+        <td>${currency(p.giaBan)}</td>
         <td>
           <button class="QLGB_btn-edit-percent" data-id="${ma}">Sửa %LN</button>
           <button class="QLGB_btn-edit-price" data-id="${ma}">Sửa giá</button>
@@ -289,10 +289,7 @@
 
     document.getElementById("QLGB_btnApDung").addEventListener("click", () => {
       const val = Number(document.getElementById("QLGB_percentDefault").value);
-      if (isNaN(val) || val < 0 || val > 300) return alert("% lợi nhuận phải nằm trong khoảng 0 – 300.");
-      const soLuong = currentFiltered().length;
-      if (!soLuong) return alert("Danh sách hiện tại không có sản phẩm nào!");
-      if (!confirm(`Đặt giá bán = giá vốn + ${val}% cho ${soLuong} sản phẩm đang hiển thị? Giá bán hiện tại sẽ bị ghi đè.`)) return;
+      if (isNaN(val) || val < 0) return alert("% lợi nhuận không hợp lệ");
       const all = readProducts();
       const filtered = currentFiltered().map((p) => p.maSanPham);
       let daApDung = 0;
