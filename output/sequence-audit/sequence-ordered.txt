@@ -1,0 +1,755 @@
+
+1.1.1. UC01 – Đăng nhập hệ thống
+LIFELINES: Người dùng | CSDL đăng nhập | Giao diện đăng nhập | Xử lý đăng nhập
+270 Kiểm tra dữ liệu nhập vào có đầy đủ và đúng định dạng
+280 Hiển thị form đăng nhập gồm tên đăng nhập hoặc email và mật khẩu
+290 Chọn chức năng Đăng nhập
+390 Nhập thông tin và nhấn nút Đăng nhập
+429 Gửi dữ liệu đăng nhập
+530 Đối chiếu thông tin với dữ liệu tài khoản đã lưu
+580 Trả về kết quả xác thực tài khoản
+630 Xác định vai trò của người dùng và tạo phiên làm việc
+690 Phản hồi đăng nhập thành công
+730 Chuyển người dùng đến giao diện chính tương ứng với vai trò của người dùng
+
+1.1.2. UC02 – Đăng xuất hệ thống
+LIFELINES: Người dùng | Giao diện đăng xuất | Xử lý đăng xuất
+1050 Chọn chức năng Đăng xuất
+1090 Gửi yêu cầu kết thúc phiên làm việc
+1130 Kết thúc phiên làm việc và xóa thông tin phiên của người dùng
+1190 Phản hồi thành công
+1230 Chuyển người dùng về trang đăng nhập (hoặc trang chủ)
+
+1.1.3. UC03 – Quên mật khẩu
+LIFELINES: Người dùng | CSDL đăng nhập | Giao diện đăng nhập | Xử lý đăng nhập
+1550 Tại form đăng nhập, chọn Quên mật khẩu
+1610 Hiển thị form yêu cầu nhập email (hoặc tên đăng nhập) đã đăng ký
+1660 Nhập thông tin và gửi yêu cầu
+1700 Gửi thông tin tìm kiếm tài khoản
+1740 Kiểm tra tài khoản có tồn tại hay chưa
+1790 Trả về kết quả xác nhận tài khoản
+1850 Tạo liên kết (hoặc mã xác nhận) đặt lại mật khẩu đến email của người dùng
+1900 Gửi liên kết (hoặc mã xác nhận) đặt lại mật khẩu đến email của người dùng
+1950 Mở liên kết (hoặc nhập mã), nhập mật khẩu mới và xác nhận mật khẩu mới
+1990 Gửi mật khẩu mới và mã xác thực
+2040 Kiểm tra mật khẩu mới hợp lệ
+2100 Cập nhật mật khẩu mới vào tài khoản
+2160 Xác nhận cập nhật thành công
+2210 Thông báo đặt lại mật khẩu thành công
+2250 Quay về form Đăng nhập
+
+1.2.1. UC04 – Đăng ký tài khoản
+LIFELINES: Người dùng | Xử lý đăng kí | CSDL đăng kí | Giao diện đăng kí
+2610 Chọn chức năng Đăng kí
+2660 Hiển thị form đăng ký gồm họ tên, email, số điện thoại, mật khẩu và xác nhận mật khẩu
+2700 Nhập đầy đủ thông tin và nhấn Đăng kí
+2750 Gửi dữ liệu đăng kí
+2790 Kiểm tra dữ liệu hợp lệ
+2850 Kiểm tra chưa bị trùng với tài khoản khác
+2895 Xác nhận dữ liệu không trùng
+2940 Mã hóa mã khẩu trước khi lưu
+3000 Tạo tài khoản khách hàng mới
+3040 Xác nhận tạo thành công
+3080 Thông báo đăng kí thành công
+3120 Chuyển đến trang đăng nhập
+
+1.2.2. UC05 – Cập nhật thông tin cá nhân
+LIFELINES: Người dùng | CSDL cập nhật | Giao diện cập nhật | Xử lý cập nhật
+3390 Chọn chức năng Thông tin cá nhân
+3430 Yêu cầu lấy thông tin cá nhận hiện tại
+3469 Truy vấn thông tin khách hàng
+3510 Trả về thông tin cá nhân
+3549 Trả về thành công
+3580 Hiển thị thông tin hiện tại của khách hàng
+3630 Chỉnh sửa các thông tin cần thay đổi và nhấn Lưu
+3660 Gửi thông tin cập nhật
+3700 Kiểm tra tính hợp lệ của dữ liệu
+3760 Cập nhật thông tin
+3800 Xác nhận cấp nhật thành công
+3840 Phản hồi thành công
+3880 Thông báo cập nhật thành công
+
+1.2.3. UC06 – Đổi mật khẩu
+LIFELINES: Người dùng | CSDL | Giao diện đổi mật khẩu | Xử lý đổi mật khẩu
+4110 Chọn chức năng Đổi mật khẩu
+4160 Hiển thị form gồm mật khẩu hiện tại, mật khẩu mới và xác nhận mật khẩu mới
+4190 Nhập thông tin và nhấn Xác nhận
+4220 Gửi dữ liệu đổi mật khẩu
+4240 Kiểm tra tài khoản có tồn tại
+4300 Truy vấn tài khoản theo email, tên đăng nhập
+4340 Trả thông tin tài khoản
+4380 Kiểm tra và gửi mã xác nhận qua email
+4430 Thôn báo gửi mã xác nhận
+4470 Hiển thị form nhập mã và mật khẩu mới
+4510 Nhập mã, đặt mật khẩu và xác nhận
+4540 Gửi dữ liệu mật khẩu mới
+4570 Kiểm tra mã và tính hợp lệ
+4628 Cập nhật mật khẩu mới
+4670 Xác nhận cập nhật thành công
+4700 Phản hồi thành công
+4730 Thông báo đổi mật khẩu thành công
+
+1.3.1.UC07 – Xem danh sách khách hàng
+LIFELINES: Nhân viên | CSDL | Giao diện xem danh sách | Xử lý xem danh sách
+4980 Chọn chức năng Quản lý tài khoản khách hàng
+5020 Yêu cầu lấy danh sách
+5050 Truy xuất danh sách khách hàng
+5100 Trả về danh sách khách hàng gồm họ tên, email, số điện thoại và trạng thái tài khoản
+5140 Tra về danh sách thành công
+5180 Hiển thị danh sách khách hàng
+5220 Nhập từ khóa để tìm kiếm khách hàng
+5260 Gửi từ khóa lọc
+5290 Truy vấn từ khóa
+5330 Trả về kết quả
+5360 Tra về thành công
+5390 Hiển thị danh sách phù hợp
+5440 Chọn một khách hàng để xem thông tin tài khoản chi tiết
+5470 Yêu cầu chi tiết tài khoản khách hàng
+5500 Truy vấn thông tin chi tiết
+5540 Trả về dữ liệu chi tiết
+5570 Trả về thành công
+5600 Hiển thị thông tin chi tiết khách hàng
+
+1.3.2. UC08 – Xem thông tin lịch sử mua hàng
+LIFELINES: Nhân viên | CSDL | Giao diện lịch sử mua hàng | Xử lý thông tin mua hàng
+5810 Chọn một khách hàng trong danh sách
+5850 Chọn chức năng Lịch sử mua hàng
+5890 Yêu cầu lấy lịch sử mua hàng
+5930 Truy xuất các đơn hàng của khách hàng
+5980 Trả về danh sách đơn hàng gồm mã đơn, ngày đặt, tổng tiền và trạng thái
+6020 Trả về danh sách thành công
+6070 Hiển thị danh sách đơn hàng
+6110 Chọn một đơn hàng để xem chi tiết
+
+1.4.1. UC09 – Tạo tài khoản nhân viên mới
+LIFELINES: Admin | CSDL | Giao diện tài khoản nhân viên | Xử lý tài khoản
+6450 Chọn chức năng Quản lý tài khoản nhân viên và nhấn Tạo tài khoản mới
+6500 Hiển thị form gồm tên, email, số điện thoại tên đăng nhập, mật khẩu ban đầu và vai trò
+6540 Nhập thông tin, chọn vai trò và nhấn Lưu
+6580 Gửi dữ liệu tạo tài khoản
+6620 Kiểm tra dữ liệu hợp lệ
+6680 Kiểm tra dữ liệu hợp lệ và không trùng với tài khoản đã có
+6720 Xác nhận không trùng
+6760 Tạo tài khoản nhân viên và gán vai trò đã chọn
+6799 Xác nhận lưu thành công
+6840 Phản hồi thành công
+6880 Thông báo tạo thành công và hiển thị nhân viên mới trong danh sách
+
+1.4.2. UC10 – Sửa thông tin nhân viên
+LIFELINES: Admin | CSDL | Giao diện tài khoản nhân viên | Xử lý tài khoản
+7190 Chọn chức năng Quản lý tài khoản nhân viên
+7230 Yêu cầu lấy danh sách nhân viên
+7270 Truy vấn danh sách nhân viên
+7310 Trả về danh sách
+7340 Trả về thành công
+7370 Hiển thị dánh sách nhân viên
+7440 Yêu cầu thông tin nhân viên
+7480 Truy vấn thông tin chi tiết
+7520 Trả về dữ liệu
+7550 Trả về thành công
+7580 Hiển thị thông tin hiện tại của nhân viên
+7615 Chỉnh sửa thông tin và nhấn Lưu
+7640 Gửi thông tin cập nhật
+7680 Kiểm tra dữ liệu hợp lệ
+7740 Cập nhật thông tin nhân viên
+7780 Xác nhận cập nhật thành công
+7810 Phản hồi thành công
+7850 Thông báo cập nhật thành công
+
+1.4.3. UC11 – Phân quyền
+LIFELINES: Admin | CSDL | Giao diện tài khoản nhân viên | Xử lý tài khoản
+8150 Chọn nhân viên cần phân quyền trong danh sách và chọn chức năng Phân quyền
+8190 Yêu cầu lấy vai trò và quyền hiện tại
+8240 Truy xuất vai trò và danh sách chức năng, quyền
+8270 Trả về dữ liệu quyền
+8310 Trả về thành công
+8340 Hiển thị vai trò hiện tại và danh sách chức năng, quyền có thể gán
+8380 Chọn vai trò hoặc điều chỉnh các quyền cho nhân viên
+8410 Gửi cấu hình phân quyền mới
+8440 Cập nhật quyền của nhân viên
+8480 Xác nhận cập nhật thành công
+8520 Phản hồi thành công
+8560 Thông báo phân quyền thành công
+
+1.5.1. UC12 – Tìm kiếm sản phẩm
+LIFELINES: Người dùng | CSDL | Giao diện tìm kiếm | Xử lý tìm kiếm
+8950 Nhập từ khóa vào ô tìm kiếm sản phẩm và nhấn nút Tìm kiếm
+8990 Gửi từ khóa tìm kiếm
+9030 Tìm các sản phẩm phù hợp với từ khóa
+9070 Trả về danh sách sản phẩm khớp
+9120 Trả danh sách thành công
+9160 Hiển thị danh sách kết quả gồm hình ảnh, tên, giá và tình trạng hàng
+9200 Chọn một sản phẩm để xem chi tiết
+
+1.5.2. UC13 – Lọc sản phẩm
+LIFELINES: Người dùng | CSDL | Giao diện sản phẩm | Xử lý lọc sản phẩm
+9450 Mở danh sách sản phẩm
+9500 Hiển thị các tiêu chí lọc
+9550 Chọn một hoặc nhiều tiêu chí lọc và nhân Áp dụng
+9590 Gửi các tiêu chí lọc
+9680 Trả về danh sách sản phẩm thỏa điều kiện
+9720 Trả về danh sách thành công
+9760 Hiển thị danh sách sản phẩm sau khi lọc
+
+1.5.3. UC14 – Xem chi tiết sản phẩm
+LIFELINES: Người dùng | CSDL sản phẩm | Giao diện xem chi tiết | Xử lý xem chi tiết
+10070 Chọn một sản phẩm trong danh sách
+10110 Yêu cầu thông tin sản phẩm
+10150 Truy xuất thông tin sản phẩm
+10190 Trả về dữu liệu chi tiết
+10230 Trả về dữ liệu thành công
+10280 Hiển thị trang chi tiết gồm hình ảnh, tên, thương hiệu, mô tả, giá, các kích cỡ, màu sắc và tình trạng còn hàng
+
+1.5.4. UC15 – Thêm sản phẩm
+LIFELINES: Nhân viên | CSDL | Giao diện thêm sản phẩm | Xử lý thêm sản phẩm
+10530 Chọn chức năng Quản lý sản phẩm và nhấn Thêm sản phẩm
+10590 Hiển thị form nhập thông tin sản phẩm gồm mã, tên, thương hiệu, danh mục, mô tả, giá bán, kích cỡ, màu sắc, số lượng và hình ảnh
+10630 Nhập thông tin và nhấn Lưu
+10680 Gửi dữ liệu sản phẩm mới
+10720 Kiểm tra dữ liệu hợp lệ
+10780 Truy xuất mã không trùng
+10860 Lưu sản phẩm mới
+10950 Phản hồi thành công
+10990 Thông báo thêm thành công và hiển thị sản phẩm trong danh sách
+
+1.5.5. UC16 – Xóa sản phẩm
+LIFELINES: Nhân viên | CSDL | Giao diện thêm sản phẩm | Xử lý thêm sản phẩm
+11330 Chọn sản phẩm cần xóa trong danh sách (hoặc trang chi tiết) và nhấn Xóa
+11370 Hiển thị hộp thoại yêu cầu xác nhận xóa
+11409 Xác nhận xóa
+11449 Gửi yêu cầu xóa sản phẩm
+11510 Kiểm tra sản phẩm không bị ràng buôc
+11579 Xóa sản phẩm và cập nhật
+11630 Xác nhận xóa thành công
+11670 Phản hồi thành công
+11710 Thông báo xóa thành công và cập nhật danh sách sản phẩm
+
+1.5.6. UC17 – Sửa sản phẩm
+LIFELINES: Nhân viên | CSDL | Giao diện sửa sản phẩm | Xử lý sửa sản phẩm
+12100 Chọn sản phẩm cần sửa và nhấn Sửa
+12140 Yêu cầu lấy thông tin sản phẩm
+12190 Truy vấn thông tin sản phẩm
+12220 Trả về dữ liệu hiện tại
+12260 Trả dữ liệu thành công
+12300 Hiển thị form chứa thông tin hiện tại của sản phẩm
+12345 Chỉnh sửa thông tin cần thay đổi và nhấn Lưu
+12380 Gửi thông tin cập nhật
+12410 Kiểm tra dữ liệu hợp lệ
+12470 Cập nhật thông tin sản phẩm
+12510 Xác nhận cập nhật thành công
+12550 Phản hồi thành công
+12590 Thông báo cập nhật thành công
+
+1.6.1. UC18 – Thêm vào giỏ hàng
+LIFELINES: Khách hàng | Giao diện thêm giỏ hàng | CSDL | Xử lý giỏ hàng
+12900 Mở trang chi tiết sản phẩm chọn kích cỡ, màu sắc và số lượng, sau đó nhấn “Thêm vào giỏ hàng”
+12939 Gửi thông tin lựa chọn sản phẩm
+12980 Kiểm tra lựa chọn hợp lệ
+13040 Truy vấn số lượng tồn
+13075 Xác nhận đủ số lượng tồn kho
+13120 Thêm sản phẩm vào giỏ hàng
+13160 Xác nhận cập nhật giỏ hàng thành công
+13200 Phản hồi thành công
+13240 Thông báo thêm vào giỏ hàng thành công
+
+1.6.2. UC19 – Mua ngay
+LIFELINES: Khách hàng | CSDL | Giao diện mua hàng | Xử lý mua hàng
+13550 Mở trang chi tiết sản phẩm và chọn kích cỡ, màu sắc và số lượng sau đó nhấn '"Mua ngay"
+13590 Gửi thông tin mua ngay
+13620 Kiểm tra lựa chọn hợp lệ
+13680 Truy vấn số lượng tồn
+13715 Xác nhận đủ số lượng tồn kho
+13790 Chuyển khách hàng đến bước đặt hàng với sản phẩm vừa chọn
+
+1.6.3. UC20 – Xem giỏ hàng
+LIFELINES: Khách hàng | CSDL | Giao diện mua hàng | Xử lý mua hàng
+14110 Chọn biểu tượng giỏ hàng
+14150 Yêu cầu lấy thông tin giỏ hàng
+14185 Truy xuất giỏ hàng của khách hàng
+14230 Trả về danh sách sản phẩm trong giỏ
+14280 Tính toán thành tiền từng dòng và tổng tiền giỏ hàng
+14340 Trả kết quả thành công
+14390 Hiển thị danh sách sản phẩm gồm hình ảnh, tên, kích cỡ, màu sắc, đơn giá, số lượng, thành tiền và tổng tiền
+
+1.6.4. UC21 – Cập nhật giỏ hàng
+LIFELINES: Khách hàng | CSDL | Giao diện cập nhật | Xử lý cập nhật
+14710 Mở giỏ hàng, thay đổi số lượng, kích cỡ, màu sắc hoặc chọn Xóa đối với sản phẩm cần điều chỉnh
+14750 Gửi thông tin cập nhật giỏ hàng
+14790 Kiểm tra số lượng so với tồn kho
+14830 Xác nhận kết quả tồn kho
+14870 Cập nhật giỏ hàng trong hệ thống
+14910 Xác nhận thành công
+14960 Tính lại thành tiền và tổng tiền
+15020 Phản hồi dữ liệu mới
+15070 Hiển thị giỏ hàng sau khi cập nhật
+
+1.7.1. UC22 – Thanh toán khi nhận hàng
+LIFELINES: Khách hàng | CSDL | Giao diện thanh toán | Xử lý thanh toán
+15460 Tại bước đặt hàng, khách hàng chọn phương thức Thanh toán khi nhận hàng
+15490 Yêu cầu tính tổng chi phí
+15550 Trả về danh sách
+15590 Trả về thành công
+15620 Hiển thị tóm tắt đơn hàng gồm danh sách sản phẩm, phí (nếu có) và tổng số tiền phải trả
+15649 Xác nhận đặt hàng
+15680 Gửi thông tin xác nhận
+15730 Lưu đơn hàng, ghi nhận phương thức thanh toán khi nhận hàng và đặt trạng thái thanh toán là Chưa thanh toán
+15760 Lưu thành công
+15800 Phản hồi mã đơn hàng
+15840 Thông báo đặt hàng thành công kèm mã đơn hàng
+
+1.7.2. UC23 – Thanh toán chuyển khoản
+LIFELINES: Khách hàng | CSDL | Giao diện thanh toán | Xử lý thanh toán
+16110 Tại bước đặt hàng, khách hàng chọn phương thức Thanh toán chuyển khoản
+16140 Yêu cầu thông tin thanh toán chuyển khoản
+16170 Truy vấn thông tin
+16210 Trả về thông tin
+16240 Trả về thành công
+16275 Hiển thị thông tin tài khoản nhận tiền của cửa hàng, số tiền cần chuyển và nội dung chuyển khoản (kèm mã đơn hàng)
+16320 Xác nhận đặt hàng và thực hiện chuyển khoản theo hướng dẫn
+16350 Gửi thông tin đặt hàng
+16380 Ghi nhận phương thức chuyển khoản và đặt trạng thái thanh toán là Chờ xác nhận
+16410 Lưu thành công
+16450 Phản hồi mã đơn hàng
+16490 Thông báo đặt hàng thành công kèm mã đơn hàng
+
+1.7.3. UC24 – Xác nhận thông tin thanh toán
+LIFELINES: Nhân viên | CSDL | Giao diện xác nhận | Xử lý xác nhận
+16810 Chọn chức năng Quản lý thanh toán và mở danh sách đơn hàng chờ xác nhận thanh toán
+16840 Yêu cầu danh sách đơn hàng chờ xác nhận
+16870 Truy xuất đơn hàng chưa hoàn tất thanh toán
+16910 Trả về danh sách đơn hàng
+16940 Trả danh sách thành công
+16970 Hiển thị danh sách
+17000 Chọn một đơn hàng
+17040 Yêu cầu thông tin đơn hàng được chọn
+17070 Truy vấn thông tin chi tiết
+17110 Trả về dữ liệu
+17150 Trả dữ liệu thành công
+17190 Hiển thị phương thức thanh toán, số tiền và trạng thái thanh toán của đơn hàng
+17240 Đối chiếu với khoản tiền thực nhận (sao kê chuyển khoản hoặc tiền thu khi giao hàng)
+17280 Gửi yêu cầu xác nhận thanh toán
+17320 Cập nhật trạng thái thanh toán là Đã thanh toán và lưu lại thông tin xác nhận
+17360 Xác nhận thành công
+17400 Phản hồi thành công
+17440 Thông báo cập nhật trạng thái thanh toán thành công
+
+1.8.1. UC25 – Đặt hàng
+LIFELINES: Khách hàng | CSDL | Giao diện đặt hàng | Xử lý đặt hàng
+17820 Chọn Đặt hàng từ giỏ hàng (hoặc sau khi chọn Mua ngay)
+17850 Yêu cầu thông tin đặt hàng
+17890 Truy vấn dữ liệu sản phẩm và thông tin cá nhân khách hàng
+17960 Trả thông tin thành công
+17990 Hiển thị danh sách sản phẩm, tổng tiền và form thông tin nhận hàng (họ tên, số điện thoại, địa chỉ) được điền sẵn từ thông tin cá nhân
+18050 Kiểm tra, chỉnh sửa thông tin nhận hàng và chọn phương thức thanh toán và xác nhận đặt hàng
+18080 Gửi dữ liệu đặt hàng hoàn chỉnh
+18120 Kiểm tra số lượng tồn kho của các sản phẩm
+18160 Xác nhận đủ tồn kho
+18230 Tạo đơn hàng ở trạng thái Chờ xử lý, cập nhật số lượng tồn kho tương ứng và xóa các sản phẩm đã đặt khỏi giỏ hàng
+18280 Xác nhận lưu thành công
+18320 Phản hồi mã đơn hàng
+18360 Thông báo mã đơn hàng cho khách hàng
+
+1.8.2. UC26 – Lọc đơn hàng
+LIFELINES: Nhân viên | CSDL | Giao diện đơn hàng | Xử lý đơn hàng
+18690 Chọn chức năng Quản lý đơn hàng
+18720 Yêu cầu lấy danh sách đơn hàng
+18750 Truy xuất danh sách đơn hàng
+18790 Trả về danh sách
+18840 Trả danh sách thành công
+18870 Hiển thị danh sách đơn hàng
+18920 Chọn một hoặc nhiều tiêu chí lọc và nhấn Áp dụng
+18960 Gửi các tiêu chí lọc
+19000 Lọc các đơn hàng thỏa mãn tiêu chí
+19040 Trả về danh sách đã lọc
+19080 Hiển thị danh sách đơn hàng sau khi lọc
+
+1.8.3. UC27 – Tìm kiếm đơn hàng
+LIFELINES: Nhân viên | CSDL | Giao diện tìm kiếm | Xử lý tìm kiếm đơn hàng
+19410 Chọn chức năng Quản lý đơn hàng
+19470 Nhập từ khóa (mã đơn, tên khách hàng hoặc số điện thoại) vào ô tìm kiếm và nhấn Tìm kiếm
+19510 Gửi từ khóa tìm kiếm đơn hàng
+19550 Tìm các đơn hàng phù hợp
+19600 Trả về danh sách đơn hàng tìm được
+19640 Trả về danh sách thành công
+19680 Hiển thị danh sách đơn hàng tìm được
+19720 Chọn một đơn hàng để xem chi tiết
+
+1.8.4. UC28 – Xem chi tiết đơn hàng
+LIFELINES: Người dùng | CSDL | Xử lý xem chi tiết đơn hàng | Giao diện xem chi tiết
+20030 Chọn một đơn hàng trong danh sách
+20080 Yêu cầu lấy chi tiết đơn hàng
+20120 Truy xuất thông tin đơn hàng
+20155 Trả về thông tin chi tiết
+20200 Trả thông tin thành công
+20250 Hiển thị mã đơn, ngày đặt, trạng thái, danh sách sản phẩm (kích cỡ, màu sắc, số lượng, đơn giá), thông tin nhận hàng, phương thức và trạng thái thanh toán, tổng tiền
+
+1.8.5. UC29 – Theo dõi tình trạng đơn hàng
+LIFELINES: Người dùng | CSDL | Giao diện theo dõi tình trạng | Xử lý tình trạng đơn hàng
+20590 Chọn một đơn hàng cần theo dõi
+20630 Yêu cầu lấy trạng thái và lịch sử đơn hàng
+20680 Truy xuất trạng thái hiện tại và lịch sử thay đổi trạng thái của đơn hàng
+20720 Trả về dữ liệu lịch sử
+20760 Trả dữ liệu thành công
+20800 Hiển thị trạng thái hiện tại (ví dụ: Chờ xử lý, Đã xác nhận, Đang giao, Đã giao, Đã hủy) cùng thời điểm cập nhật của từng trạng thái
+
+1.8.6. UC30 – Cập nhật trạng thái đơn hàng
+LIFELINES: Nhân viên | CSDL | Giao diện tìm kiếm | Xử lý tìm kiếm đơn hàng
+21090 Chọn một đơn hàng cần cập nhật
+21130 Yêu cầu lấy thông tin trạng thái
+21160 Truy vấn đơn hàng
+21190 Trả về dữ liệu
+21230 Trả dữ liệu thành công
+21270 Hiển thị trạng thái hiện tại và các trạng thái hợp lệ có thể chuyển tiếp
+21320 Chọn trạng thái mới và nhập ghi chú (nếu có) và nhấn Xác nhận
+21360 Gửi thông tin cập nhật trạng thái
+21400 Cập nhật trạng thái đơn hàng và lưu lại lịch sử thay đổi
+21440 Xác nhận thành công
+21480 Phản hồi thành công
+21520 Thông báo cập nhật thành công, khách hàng xem được trạng thái mới
+
+1.8.7. UC31 – Hủy đơn hàng
+LIFELINES: Khách hàng | CSDL | Giao diện hủy đơn hàng | Xử lý hủy đơn hàng
+21870 Mở chi tiết đơn hàng và chọn Hủy đơn hàng
+21910 Kiểm tra đơn hàng có thỏa điều kiện cho phép hủy hay không
+21940 Truy vấn trạng thái đơn hàng
+21975 Trả về trạng thái
+22010 Trả trạng thái thành công
+22040 Hiển thị form xác nhận và yêu cầu nhập lý do hủy
+22080 Nhập lý do và xác nhận hủy
+22120 Gửi yêu cầu hủy đơn hàng
+22170 Chuyển trạng thái đơn hàng thành Đã hủy và cập nhật lại số lượng tồn kho
+22210 Xác nhận thành công
+22250 Phản hồi thành công
+22290 Thông báo hủy đơn hàng thành công
+
+1.9.1. UC32 – Theo dõi tồn kho
+LIFELINES: Nhân viên | CSDL | Giao diện tìm kiếm | Xử lý tìm kiếm đơn hàng
+22660 Chọn chức năng Quản lý tồn kho
+22700 Yêu cầu dữ liệu tồn kho
+22730 Truy xuất dữ liệu tồn kho
+22770 Trả về danh sách sản phẩm
+22810 Trả danh sách thành công
+22830 Hiển thị danh sách sản phẩm cùng số lượng tồn theo kích cỡ, màu
+22880 Tìm kiếm hoặc lọc sản phẩm theo tên, mã, tình trạng tồn kho
+22920 Gửi yêu cầu lọc
+22950 Truy vấn yêu cầu lọc
+22990 Trả về dữ liệu
+23020 Trả về thành công
+23060 Hiển thị kết quả phù hợp với yêu cầu của tác nhân
+
+1.9.2. UC33 – Kiểm tra tình trạng hàng
+LIFELINES: Nhân viên | CSDL | Giao diện tìm kiếm | Xử lý tìm kiếm đơn hàng
+23310 Chọn một sản phẩm từ danh sách tồn kho
+23350 Yêu cầu kiểm tra chi tiết sản phẩm
+23400 Truy xuất số lượng tồn và các lần nhập, bán gần đây của sản phẩm
+23440 Trả về dữ liệu lịch sử và tồn kho
+23490 Phân loại tình trạng hàng
+23550 Phản hồi thành công
+23600 Hiển thị tình trạng hàng theo từng kích cỡ, màu sắc (còn hàng, sắp hết hàng, hết hàng).
+23650 Xem các mặt hàng cần nhập thêm và có thể chuyển sang tạo phiếu nhập
+
+1.10.1. UC34 – Thêm phiếu nhập
+LIFELINES: Nhân viên | CSDL | Giao diện thêm phiếu | Xử lý thêm phiếu nhập
+23970 Chọn chức năng Quản lý phiếu nhập và nhấn Thêm phiếu nhập
+24030 Hiển thị form phiếu nhập gồm mã phiếu, ngày nhập, nhà cung cấp và danh sách mặt hàng nhập.
+24090 Chọn sản phẩm, nhập kích cỡ, màu sắc, số lượng, giá nhập cho từng mặt hàng và nhấn Lưu
+24140 Gửi dữ liệu phiếu nhập mới
+24180 Kiểm tra dữ liệu hợp lệ
+24250 Lưu phiếu nhập và cộng số lượng nhập vào tồn kho.
+24290 Xác nhận lưu thành công
+24330 Phản hồi thành công
+24370 Thông báo thêm phiếu nhập thành công
+
+1.10.2. UC35 – Xóa phiếu nhập
+LIFELINES: Nhân viên | CSDL | Giao diện xóa phiếu | Xử lý xóa phiếu nhập
+24690 Chọn phiếu nhập cần xóa trong danh sách và nhấn Xóa
+24730 Hiển thị hộp thoại yêu cầu xác nhận
+24770 Xác nhận xóa
+24810 Gửi yêu cầu xóa phiếu nhập
+24850 Kiểm tra việc xóa có làm sai lệch số lượng tồn kho hay không
+24900 Trả về dữ liệu liên quan
+24950 Xóa phiếu nhập và hoàn lại số lượng tồn kho tương ứng
+24990 Xác nhận thành công
+25030 Phản hồi thành công
+25070 Thông báo xóa thành công và cập nhật danh sách phiếu nhập
+
+1.10.3. UC36 – Sửa phiếu nhập
+LIFELINES: Nhân viên | CSDL | Giao diện sửa phiếu | Xử lý sửa phiếu nhập
+25420 Chọn phiếu nhập cần sửa và nhấn Sửa
+25450 Yêu cầu lấy thông tin phiếu nhập
+25480 Truy vấn dữ liệu phiếu nhập
+25520 Trả về thông tin hiện tại
+25550 Trả thông tin thành công
+25590 Hiển thị thông tin hiện tại của phiếu nhập
+25645 Chỉnh sửa thông tin (nhà cung cấp, ngày nhập mặt hàng, số lượng, giá nhập) và nhấn Lưu
+25680 Gửi dữ liệu cập nhật
+25710 Kiểm tra dữ liệu hợp lệ
+25780 Cập nhật phiếu nhập và điều chỉnh tồn kho theo phần chênh lệch
+25820 Xác nhận thành công
+25860 Phản hồi thành công
+25900 Thông báo cập nhật thành công
+
+1.10.4. UC37 – Chi tiết phiếu nhập
+LIFELINES: Nhân viên | CSDL | Giao diện chi tiết phiếu nhập | Xử lý chi tiết phiếu nhập
+26230 Chọn một phiếu nhập trong danh sách
+26270 Yêu cầu chi tiết phiếu nhập
+26310 Truy xuất thông tin phiếu nhập
+26350 Trả về dữ liệu chi tiết
+26390 Trả dữ liệu thành công
+26440 Hiển thị mã phiếu, ngày nhập, nhà cung cấp, người lập phiếu, danh sách mặt hàng (kích cỡ, màu sắc, số lượng, giá nhập) và tổng giá trị
+
+1.11.1. UC38 – Gửi yêu cầu
+LIFELINES: Khách hàng | CSDL | Giao diện gửi yêu cầu | Xử lý yêu cầu khiếu nại
+26770 Chọn chức năng Hỗ trợ / Khiếu nại và nhấn Gửi yêu cầu
+26820 Hiển thị form gồm loại yêu cầu, đơn hàng liên quan (nếu có), tiêu đề và nội dung
+26880 Nhập thông tin (có thể đính kèm hình ảnh) và nhấn Gửi
+26920 Gửi dữ liệu yêu cầu
+26960 Kiểm tra dữ liệu hợp lệ
+27040 Ghi nhận yêu cầu với trạng thái Chờ tiếp nhận và tạo mã yêu cầu
+27080 Xác nhận lưu thành công
+27120 Phản hồi mã yêu cầu
+27160 Thông báo gửi thành công kèm mã yêu cầu để khách hàng theo dõi
+
+1.11.2. UC39 – Theo dõi trạng thái yêu cầu
+LIFELINES: Người dùng | CSDL | Xử lý chi tiết phiếu nhập | Giao diện chi tiết phiếu nhập
+27490 Chọn chức năng Theo dõi yêu cầu
+27520 Yêu cầu lấy danh sách yêu cầu
+27570 Truy xuất danh sách yêu cầu phù hợp với phân quyền
+27600 Trả về danh sách
+27640 Trả về danh sách thành công
+27690 Hiển thị danh sách yêu cầu của khách hàng hoặc danh sách yêu cầu cần theo dõi (nhân viên, Admin).
+27720 Chọn một yêu cầu
+27760 Yêu cầu chi tiết yêu cầu
+27800 Truy vấn trạng thái và lịch sử phản hồi
+27840 Trả về dữ liệu chi tiết
+27880 Trả dữ liệu thành công
+27930 Hiển thị trạng thái hiện tại, lịch sử cập nhật và các phản hồi của nhân viên chăm sóc khách hàng
+
+1.11.3. UC40 – Lấy danh sách yêu cầu có trạng thái Chờ tiếp nhận
+LIFELINES: Nhân viên | CSDL | Giao diện tiếp nhận yêu cầu | Xử lý tiếp nhận yêu cầu
+28230 Chọn chức năng Quản lý khiếu nại và mở danh sách yêu cầu mới
+28260 Yêu cầu danh sách yêu cầu mới
+28300 Truy vấn các yêu cầu ở trạng thái Chờ xác nhận
+28340 Trả về danh sách
+28380 Trả danh sách thành công
+28410 Hiển thị danh sách
+28460 Chọn một yêu cầu và xem nội dung và chọn Tiếp nhận
+28490 Gửi yêu cầu tiếp nhận
+28540 Ghi nhận nhân viên tiếp nhận và chuyển trạng thái yêu cầu thành Đã tiếp nhận
+28580 Trả về danh sách
+28620 Phản hồi thành công
+28670 Thông báo tiếp nhận thành công, khách hàng thấy trạng thái mới
+
+1.11.4. UC41 – Xem danh sách yêu cầu
+LIFELINES: Nhân viên | CSDL | Giao diện xem danh sách yêu cầu | Xử lý xem danh sách yêu cầu
+28940 Chọn chức năng Quản lý khiếu nại
+28980 Yêu cầu truy xuất danh sách yêu cầu
+29020 Truy xuất danh sách yêu cầu
+29055 Trả về dữ liệu
+29140 Hiển thị danh sách gồm mã yêu cầu, khách hàng, loại yêu cầu, ngày gửi và trạng thái
+29195 Thực hiện lọc theo trạng thái, loại yêu cầu hoặc tìm theo mã yêu cầu, tên khách hàng
+29240 Gửi tiêu chí lọc/ tìm kiếm
+29280 Truy vấn dữ liệu theo tiêu chí
+29320 Trả về dữ liệu
+29360 Trả dữ liệu thành công
+29400 Hiển thị danh sách sau khi lọc/ tìm kiếm
+29449 Chọn một yêu cầu để xem nội dung chi tiết
+
+1.11.5. UC42 – Phân loại yêu cầu
+LIFELINES: Nhân viên | CSDL | Giao diện phân loại yêu cầu | Xử lý xem phân loại yêu cầu
+29730 Mở một yêu cầu trong danh sách
+29760 Yêu cầu thông tin
+29790 Truy vấn dữ liệu yêu cầu
+29830 Trả về nội dung và loại hiện tại
+29870 Trả nội dung và loại hiện tại thành công
+29910 Hiển thị nội dung yêu cầu và loại hiện tại
+29970 Chọn loại (và mức ưu tiên nếu có) phù hợp với nội dung
+30000 Gửi thông tin phân loại mới
+30040 Cập nhật phân loại trong hệ thống
+30080 Xác nhận thành công
+30119 Phản hồi cập nhật thành công
+30160 Thông báo cập nhật thành công
+
+1.11.6. UC43 – Xử lý yêu cầu
+LIFELINES: Nhân viên | CSDL | Giao diện phân loại yêu cầu | Xử lý xem phân loại yêu cầu
+30490 Mở yêu cầu cần xử lý
+30520 Yêu cầu thông tin
+30560 Truy vấn nội dung yêu cầu, thông tin khách hàng và đơn hàng liên quan
+30600 Trả về dữ liệu
+30640 Trả dữ liệu thành công
+30680 Hiển thị nội dung yêu cầu, thông tin khách hàng và đơn hàng liên quan (nếu có)
+30730 Nhập nội dung phản hồi và kết quả xử lý, nhấn Gửi
+30769 Gửi dữ liệu phản hồi
+30815 Lưu phản hồi, gửi đến khách hàng và ghi nhận vào lịch sử xử lý yêu cầu
+30860 Xác nhận thành công
+30900 Phản hồi thành công
+30940 Thông báo gửi phản hồi thành công; cập nhật trạng thái yêu cầu
+
+1.11.7. UC44 – Cập nhật trạng thái yêu cầu
+LIFELINES: Nhân viên | CSDL | Giao diện phân loại yêu cầu | Xử lý xem phân loại yêu cầu
+31250 Mở yêu cầu cần cập nhật
+31280 Yêu cầu thông tin trạng thái
+31310 Truy vấn trạng thái
+31350 Trả về dữ liệu
+31390 Trả về dữ liệu thành công
+31430 Hiển thị trạng thái hiện tại và các trạng thái hợp lệ có thể chuyển
+31480 Chọn trạng thái mới và nhập ghi chú và nhấn Xác nhận
+31519 Gửi dữ liệu cập nhật trạng thái
+31560 Cập nhật trạng thái và lưu lịch sử
+31600 Xác nhận thành công
+31640 Phản hồi thành công
+31680 Thông báo thành công; khách hàng xem được trạng thái mới
+
+1.12.1. UC45 – Thống kê mặt hàng bán chạy
+LIFELINES: Admin | CSDL | Giao diện xem thống kê | Xử lý quản lý thống kê
+32010 Chọn chức năng Báo cáo thống kê và chọn Thống kê mặt hàng bán chạy
+32070 Hiển thị form chọn khoảng thời gian (ngày, tháng, quý hoặc năm) và số lượng mặt hàng cần hiển thị
+32120 Chọn khoảng thời gian, số lượng và nhấn Xem thống kê
+32150 Gửi tham số thống kê
+32180 Tổng hợp số lượng bán của từng sản phẩm từ các đơn hàng hợp lệ trong khoảng thời gian đã chọn
+32240 Truy xuất danh sách tổng hợp
+32280 Trả về dữ liệu tổng hợp
+32330 Sắp xếp theo thứ giảm dần số lượng bán
+32390 Phản hồi kết quả thống kê
+32430 Hiển thị danh sách (hoặc biểu đồ) mặt hàng bán chạy theo thứ tự giảm dần số lượng bán
+
+1.12.2. UC46 – Thống kê doanh thu
+LIFELINES: Admin | CSDL | Giao diện xem thống kê | Xử lý quản lý thống kê
+32700 Chọn chức năng Báo cáo thống kê và chọn Thống kê doanh thu
+32750 Hiển thị form chọn khoảng thời gian và cách xem (ngày, tháng, quý hoặc năm)
+32800 Chọn khoảng thời gian, số lượng và nhấn Xem thống kê
+32830 Gửi tham số thống kê doanh thu
+32870 Tổng hợp số lượng bán của từng sản phẩm từ các đơn hàng hợp lệ trong khoảng thời gian đã chọn
+32930 Truy xuất danh sách tổng hợp
+32970 Trả về dữ liệu tổng hợp
+33020 Tính tổng doanh thu và nhóm theo mốc thời gian
+33070 Phản hồi kết quả dữ liệu
+33110 Hiển thị tổng doanh thu và doanh thu theo từng mốc thời gian dưới dạng bảng hoặc biểu đồ
+
+1.13.1. UC47 – Xem lịch sử mua hàng cá nhân
+LIFELINES: Khách hàng | :Xử lý lịch sử mua hàng | CSDL | Giao diện xem lịch sử
+33580 Mở lịch sử mua hàng
+33620 Yêu cầu lấy lịch sử mua hàng (mã KH)
+33660 Lọc danh sách đặt hàng (mã KH) và sắp xếp mới nhất
+33700 Trả về dữ liệu đơn hàng
+33740 Gửi dữ liệu (mã đơn, ngày, tổng tiền, trạng thái)
+33780 Hiển thị danh sách đơn
+33830 Chọn đơn để xem sản phẩm, size, voucher và thanh toán
+
+1.13.2. UC48 – Quản lý loại sản phẩm
+LIFELINES: Admin | :Xử lý quản lý loại sản phẩm | CSDL | Giao diện sản phẩm
+34220 Mở Quản lý loại
+34260 Tải danh sách loại sản phẩm
+34300 Truy xuất categories
+34340 Trả về dữ liệu
+34380 Gửi dữ liệu loại sản phẩm
+34430 Hiển tên, mô tả, số sản phẩm và trạng thái
+34470 Thêm hoặc sửa, lưu và ẩn/hiện
+34510 Gửi thông tin cập nhật
+34550 Cập nhật categoties và menu User
+34590 Xác nhận thành công
+34630 Thông báo hoàn tất
+34670 Hiển thị kết quả
+
+1.13.3. UC49 – Quản lý giá bán
+LIFELINES: Admin | CSDL | Giao diện giá bán | Xử lý quản lý giá bán
+35060 Mở Quản lý giá bán
+35100 Yêu cầu thông tin giá
+35140 Truy xuất giá nhập và giá bán
+35180 Trả về dữ liệu giá
+35230 Gửi thông tin giá
+35270 Hiển thị giá nhập và giá bán
+35320 Nhập giá hoặc tỷ lệ lợi nhuận
+35360 Gửi dữ liệu giá/ lợi nhuận mới
+35390 Tính, kiểm tra giá bán
+35470 Lưu giá bán cùng giá hiển thị
+35510 Xác nhận lưu thành công
+35540 Phản hồi thành công
+35580 Hiển thị kết quả
+
+1.13.4. UC50 – Quản lý trạng thái tài khoản khách hàng
+LIFELINES: Admin | CSDL | Giao diện tài khoản khách hàng | Xử lý quản lý tài khoản khách hàng
+35900 Mở Quản lý khách
+35940 Yêu cầu danh sách khách hàng
+35980 Truy xuất userList
+36020 Trả về danh sách
+36070 Gửi danh sách khách hàng
+36110 Hiển thị danh sách
+36160 Chọn tài khoản, chọn Khóa/Mở khóa hoặc Xóa
+36200 Gửi yêu cầu thay đổi trạng thái
+36240 Cập nhật userList, trangThai, biKhoa và phát sự kiện
+36280 Xác nhận cập nhật thành công
+36320 Phản hồi thành công
+36360 Hiển thị kết quả
+
+1.13.5. UC51 – Cập nhật và bổ sung tồn kho theo size
+LIFELINES: Nhân viên | CSDL | Giao diện cập nhật và bổ sung tồn kho | Xử lý cập nhật và bổ sung theo size
+36740 Mở Quản lý tồn kho
+36780 Yêu cầu dữ liệu tồn kho
+36820 Truy xuất tồn tổng và tồn theo size
+36860 Trả về dữ liệu tồn kho
+36910 Gửi danh sách tồn kho
+36950 Hiển thị tồn tổng và tồn theo size (cho phép lọc theo size/ trạng thái)
+37000 Thêm size mới hoặc lập phiếu nhập hoàn thành
+37030 Gửi dữ liệu cập nhật tồn kho/ size
+37050 Kiểm tra điều kiện size và số lượng tồn
+37140 Cộng đúng số lượng vào đúng size khi hoàn thành, cập nhật số lượng tồn, tổng đã nhập
+37170 Xác nhận lưu
+37200 Phản hồi lưu thành công
+37240 Hiển thị tồn kho đã cập nhật
+
+1.14.1. UC52 – Áp dụng voucher khi thanh toán
+LIFELINES: Khách hàng | CSDL | Giao diện khuyến mãi | Xử lý khuyến mãi
+37620 Chọn voucher mặc định hoặc nhập mã tại checkout
+37660 Gửi mã voucher và thông tin đơn hàng
+37690 Kiểm tra mã, thời gian, trạng thái và đơn tối thiểu
+37770 Tạm tính, giảm giá, ship và tổng sau giảm
+37810 Trả về kết quả
+37850 Gửi thông báo phản hồi
+37880 Hiển thị thông tin thanh toán sau khi áp dụng voucher
+
+1.14.2. UC53 – Quản lý voucher
+LIFELINES: Admin | CSDL | Giao diện quản lý | Xử lý quản lý voucher
+38220 Mở Quản lý voucher/ thêm voucher mới
+38260 Gửi thông tin ( mã, loại giảm, giá trị,giá tối thiểu, giảm tối đa, thời gian và trạng thái )
+38295 Kiểm tra hợp lệ
+38350 Lưu danh sách
+38390 Xác nhận lưu thành công
+38430 Phản hồi thành công
+38470 Hiển thị danh sách voucher
+
+1.14.3. UC54 – Khách hàng chat hỗ trợ
+LIFELINES: Khách hàng | CSDL | Giao diện Chat | Xử lý Chat hỗ trợ
+38820 Mở Khung chat
+38860 Yêu cầu khởi tạo/ đọc luồng
+38900 Truy vấn tạo/ đọc supportThreads
+38940 Trả về dữ liệu luồng chat
+38990 Gửi dữ liệu
+39030 Hiển thị khung chat và sẵn sàng chat
+39080 Gửi tin, ảnh tối đa 2MB hoặc mã sản phẩm
+39120 Xử lý và gửi nội dung tin nhắn
+39160 Lưu tin nhắn vào storage
+39200 Xác nhận lưu
+39240 Cập nhật giao diện chat qua storage event
+39280 Hiển thị tin nhắn ở hai phía
+
+1.14.5. UC55 – Nhân viên/Admin chat với khách hàng
+LIFELINES: Nhân viên | CSDL | Giao diện Chat | Xử lý Chat hỗ trợ
+39640 Đăng nhập hệ thống và truy cập trang /support
+39680 Yêu cầu lấy danh sách supportThreads
+39720 Truy vấn danh sách supportThreads
+39760 Trả về dữ liệu danh sách
+39810 Gửi dữ liệu
+39850 Hiển thị các danh sách supportThreads
+39900 Chọn một supportThreads của khách hàng
+39940 Yêu cầu lấy nội dung tin
+39980 Truy vấn nội dung tin nhắn
+40020 Trả về nội dung tin nhắn
+40060 Gửi nội dung
+40100 Hiển thị hiển thị nội dung tin nhắn
+40170 Nhập nội dung phản hồi hoặc đính kèm hình ảnh, đường dẫn sản phẩm và gửi tin
+40210 Gửi tin nhắn mới
+40250 Lưu tin nhắn vào cuộc hội thoại và cập nhật nội dung cho khách hàng
+40290 Xác nhận đã lưu
+40330 Cập nhật nội dung cho khách hàng
+40370 Khách hàng nhận được tin nhắn và có thể tiếp tục phản hồi

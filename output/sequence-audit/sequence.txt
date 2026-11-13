@@ -1,0 +1,885 @@
+WfQwTarJ0JiaEOhg-VSf-1 mso-ascii-font-family:"Times New Roman";mso-ascii-theme-font:major-latin; mso-hansi-font-family:"Times New Roman";mso-hansi-theme-font:major-latin; mso-bidi-font-family:"Times New Roman";mso-bidi-theme-font:major-latin; font-weight:normal">1.1. Quản lý đăng nhập
+WfQwTarJ0JiaEOhg-VSf-3 mso-ascii-font-family:"Times New Roman";mso-ascii-theme-font:major-latin; mso-hansi-font-family:"Times New Roman";mso-hansi-theme-font:major-latin; mso-bidi-font-family:"Times New Roman";mso-bidi-theme-font:major-latin; font-weight:normal">1.1.1. UC01 – Đăng nhập hệ thống
+WfQwTarJ0JiaEOhg-VSf-5 Giao diện đăng nhập
+WfQwTarJ0JiaEOhg-VSf-6 CSDL đăng nhập
+WfQwTarJ0JiaEOhg-VSf-7 Xử lý đăng nhập
+WfQwTarJ0JiaEOhg-VSf-20 Kiểm tra dữ liệu nhập vào có đầy đủ và đúng định dạng
+WfQwTarJ0JiaEOhg-VSf-8 Gửi dữ liệu đăng nhập
+WfQwTarJ0JiaEOhg-VSf-10 Chọn chức năng Đăng nhập
+WfQwTarJ0JiaEOhg-VSf-16 Hiển thị form đăng nhập gồm tên đăng nhập hoặc email và mật khẩu
+WfQwTarJ0JiaEOhg-VSf-17 Nhập thông tin và nhấn nút Đăng nhập
+WfQwTarJ0JiaEOhg-VSf-21 Đối chiếu thông tin với dữ liệu tài khoản đã lưu
+WfQwTarJ0JiaEOhg-VSf-22 Trả về kết quả xác thực tài khoản
+WfQwTarJ0JiaEOhg-VSf-23 Xác định vai trò của người dùng và tạo phiên làm việc
+WfQwTarJ0JiaEOhg-VSf-25 Phản hồi đăng nhập thành công
+WfQwTarJ0JiaEOhg-VSf-27 Chuyển người dùng đến giao diện chính tương ứng với vai trò của người dùng
+WfQwTarJ0JiaEOhg-VSf-28 mso-ascii-font-family:"Times New Roman";mso-ascii-theme-font:major-latin; mso-hansi-font-family:"Times New Roman";mso-hansi-theme-font:major-latin; mso-bidi-font-family:"Times New Roman";mso-bidi-theme-font:major-latin; font-weight:normal">1.1.2. UC02 – Đăng xuất hệ thống
+WfQwTarJ0JiaEOhg-VSf-32 Xử lý đăng xuất
+WfQwTarJ0JiaEOhg-VSf-33 Giao diện đăng xuất
+WfQwTarJ0JiaEOhg-VSf-34 Người dùng
+WfQwTarJ0JiaEOhg-VSf-35 Người dùng
+WfQwTarJ0JiaEOhg-VSf-40 Chọn chức năng Đăng xuất
+WfQwTarJ0JiaEOhg-VSf-41 Gửi yêu cầu kết thúc phiên làm việc
+WfQwTarJ0JiaEOhg-VSf-42 Kết thúc phiên làm việc và xóa thông tin phiên của người dùng
+WfQwTarJ0JiaEOhg-VSf-46 Phản hồi thành công
+WfQwTarJ0JiaEOhg-VSf-47 Chuyển người dùng về trang đăng nhập (hoặc trang chủ)
+WfQwTarJ0JiaEOhg-VSf-48 mso-ascii-font-family:"Times New Roman";mso-ascii-theme-font:major-latin; mso-hansi-font-family:"Times New Roman";mso-hansi-theme-font:major-latin; mso-bidi-font-family:"Times New Roman";mso-bidi-theme-font:major-latin; font-weight:normal">1.1.3. UC03 – Quên mật khẩu
+WfQwTarJ0JiaEOhg-VSf-50 Giao diện đăng nhập
+WfQwTarJ0JiaEOhg-VSf-51 Xử lý đăng nhập
+WfQwTarJ0JiaEOhg-VSf-52 CSDL đăng nhập
+WfQwTarJ0JiaEOhg-VSf-53 Người dùng
+WfQwTarJ0JiaEOhg-VSf-58 Tại form đăng nhập, chọn Quên mật khẩu
+WfQwTarJ0JiaEOhg-VSf-60 Gửi thông tin tìm kiếm tài khoản
+WfQwTarJ0JiaEOhg-VSf-61 Hiển thị form yêu cầu nhập email (hoặc tên đăng nhập) đã đăng ký
+WfQwTarJ0JiaEOhg-VSf-63 Nhập thông tin và gửi yêu cầu
+WfQwTarJ0JiaEOhg-VSf-64 Kiểm tra tài khoản có tồn tại hay chưa
+WfQwTarJ0JiaEOhg-VSf-66 Trả về kết quả xác nhận tài khoản
+WfQwTarJ0JiaEOhg-VSf-67 Tạo liên kết (hoặc mã xác nhận) đặt lại mật khẩu đến email của người dùng
+WfQwTarJ0JiaEOhg-VSf-70 Gửi liên kết (hoặc mã xác nhận) đặt lại mật khẩu đến email của người dùng
+WfQwTarJ0JiaEOhg-VSf-71 Mở liên kết (hoặc nhập mã), nhập mật khẩu mới và xác nhận mật khẩu mới
+WfQwTarJ0JiaEOhg-VSf-73 Gửi mật khẩu mới và mã xác thực
+WfQwTarJ0JiaEOhg-VSf-74 Kiểm tra mật khẩu mới hợp lệ
+WfQwTarJ0JiaEOhg-VSf-75 Cập nhật mật khẩu mới vào tài khoản
+WfQwTarJ0JiaEOhg-VSf-76 Xác nhận cập nhật thành công
+WfQwTarJ0JiaEOhg-VSf-80 Quay về form Đăng nhập
+WfQwTarJ0JiaEOhg-VSf-81 Thông báo đặt lại mật khẩu thành công
+WfQwTarJ0JiaEOhg-VSf-82 mso-ascii-font-family:"Times New Roman";mso-ascii-theme-font:major-latin; mso-hansi-font-family:"Times New Roman";mso-hansi-theme-font:major-latin; mso-bidi-font-family:"Times New Roman";mso-bidi-theme-font:major-latin; font-weight:normal">1.2. Quản lý tài khoản (Khách hàng)
+WfQwTarJ0JiaEOhg-VSf-83 mso-ascii-font-family:"Times New Roman";mso-ascii-theme-font:major-latin; mso-hansi-font-family:"Times New Roman";mso-hansi-theme-font:major-latin; mso-bidi-font-family:"Times New Roman";mso-bidi-theme-font:major-latin; font-weight:normal">1.2.1. UC04 – Đăng ký tài khoản
+WfQwTarJ0JiaEOhg-VSf-85 Giao diện đăng kí
+WfQwTarJ0JiaEOhg-VSf-86 Xử lý đăng kí
+WfQwTarJ0JiaEOhg-VSf-87 CSDL đăng kí
+WfQwTarJ0JiaEOhg-VSf-88 Người dùng
+WfQwTarJ0JiaEOhg-VSf-93 Chọn chức năng Đăng kí
+WfQwTarJ0JiaEOhg-VSf-94 Hiển thị form đăng ký gồm họ tên, email, số điện thoại, mật khẩu và xác nhận mật khẩu
+WfQwTarJ0JiaEOhg-VSf-95 Nhập đầy đủ thông tin và nhấn Đăng kí
+WfQwTarJ0JiaEOhg-VSf-96 Gửi dữ liệu đăng kí
+WfQwTarJ0JiaEOhg-VSf-98 Mã hóa mã khẩu trước khi lưu
+WfQwTarJ0JiaEOhg-VSf-99 Kiểm tra dữ liệu hợp lệ
+WfQwTarJ0JiaEOhg-VSf-100 Kiểm tra chưa bị trùng với tài khoản khác
+WfQwTarJ0JiaEOhg-VSf-101 Xác nhận dữ liệu không trùng
+WfQwTarJ0JiaEOhg-VSf-103 Tạo tài khoản khách hàng mới
+WfQwTarJ0JiaEOhg-VSf-104 Xác nhận tạo thành công
+WfQwTarJ0JiaEOhg-VSf-106 Thông báo đăng kí thành công
+WfQwTarJ0JiaEOhg-VSf-107 Chuyển đến trang đăng nhập
+WfQwTarJ0JiaEOhg-VSf-110 mso-ascii-font-family:"Times New Roman";mso-ascii-theme-font:major-latin; mso-hansi-font-family:"Times New Roman";mso-hansi-theme-font:major-latin; mso-bidi-font-family:"Times New Roman";mso-bidi-theme-font:major-latin; font-weight:normal">1.2.2. UC05 – Cập nhật thông tin cá nhân
+WfQwTarJ0JiaEOhg-VSf-113 CSDL cập nhật
+WfQwTarJ0JiaEOhg-VSf-114 Xử lý cập nhật
+WfQwTarJ0JiaEOhg-VSf-115 Giao diện cập nhật
+WfQwTarJ0JiaEOhg-VSf-120 Kiểm tra tính hợp lệ của dữ liệu
+WfQwTarJ0JiaEOhg-VSf-121 Chọn chức năng Thông tin cá nhân
+WfQwTarJ0JiaEOhg-VSf-122 Truy vấn thông tin khách hàng
+WfQwTarJ0JiaEOhg-VSf-123 Yêu cầu lấy thông tin cá nhận hiện tại
+WfQwTarJ0JiaEOhg-VSf-124 Trả về thông tin cá nhân
+WfQwTarJ0JiaEOhg-VSf-128 Trả về thành công
+WfQwTarJ0JiaEOhg-VSf-129 Chỉnh sửa các thông tin cần thay đổi và nhấn Lưu
+WfQwTarJ0JiaEOhg-VSf-130 Gửi thông tin cập nhật
+WfQwTarJ0JiaEOhg-VSf-134 Cập nhật thông tin
+WfQwTarJ0JiaEOhg-VSf-135 Xác nhận cấp nhật thành công
+WfQwTarJ0JiaEOhg-VSf-136 Thông báo cập nhật thành công
+WfQwTarJ0JiaEOhg-VSf-137 Phản hồi thành công
+WfQwTarJ0JiaEOhg-VSf-138 Trả thông tin tài khoản
+WfQwTarJ0JiaEOhg-VSf-139 mso-ascii-font-family:"Times New Roman";mso-ascii-theme-font:major-latin; mso-hansi-font-family:"Times New Roman";mso-hansi-theme-font:major-latin; mso-bidi-font-family:"Times New Roman";mso-bidi-theme-font:major-latin; font-weight:normal">1.2.3. UC06 – Đổi mật khẩu
+WfQwTarJ0JiaEOhg-VSf-141 Giao diện đổi mật khẩu
+WfQwTarJ0JiaEOhg-VSf-142 Xử lý đổi mật khẩu
+WfQwTarJ0JiaEOhg-VSf-144 Người dùng
+WfQwTarJ0JiaEOhg-VSf-148 Chọn chức năng Đổi mật khẩu
+WfQwTarJ0JiaEOhg-VSf-149 Hiển thị form gồm mật khẩu hiện tại, mật khẩu mới và xác nhận mật khẩu mới
+WfQwTarJ0JiaEOhg-VSf-150 Nhập thông tin và nhấn Xác nhận
+WfQwTarJ0JiaEOhg-VSf-151 Gửi dữ liệu đổi mật khẩu
+WfQwTarJ0JiaEOhg-VSf-152 CSDL
+WfQwTarJ0JiaEOhg-VSf-154 Kiểm tra và gửi mã xác nhận qua email
+WfQwTarJ0JiaEOhg-VSf-157 Cập nhật mật khẩu mới
+WfQwTarJ0JiaEOhg-VSf-158 Xác nhận cập nhật thành công
+WfQwTarJ0JiaEOhg-VSf-163 Phản hồi thành công
+WfQwTarJ0JiaEOhg-VSf-164 Thông báo đổi mật khẩu thành công
+WfQwTarJ0JiaEOhg-VSf-165 mso-ascii-font-family:"Times New Roman";mso-ascii-theme-font:major-latin; mso-hansi-font-family:"Times New Roman";mso-hansi-theme-font:major-latin; mso-bidi-font-family:"Times New Roman";mso-bidi-theme-font:major-latin; font-weight:normal">1.3. Quản lý tài khoản khách hàng
+WfQwTarJ0JiaEOhg-VSf-167 "Times New Roman",serif;mso-ascii-theme-font:major-latin;mso-fareast-font-family: "Times New Roman";mso-hansi-theme-font:major-latin;mso-bidi-theme-font:major-latin; mso-ansi-language:VI;mso-fareast-language:VI;mso-bidi-language:AR-SA"> 1.3.1.UC07 – Xem danh sách khách hàng
+WfQwTarJ0JiaEOhg-VSf-169 CSDL
+WfQwTarJ0JiaEOhg-VSf-170 Xử lý xem danh sách
+WfQwTarJ0JiaEOhg-VSf-171 Giao diện xem danh sách
+WfQwTarJ0JiaEOhg-VSf-172 Người dùng
+WfQwTarJ0JiaEOhg-VSf-173 Nhân viên
+WfQwTarJ0JiaEOhg-VSf-178 Chọn chức năng Quản lý tài khoản khách hàng
+WfQwTarJ0JiaEOhg-VSf-179 Yêu cầu lấy danh sách
+WfQwTarJ0JiaEOhg-VSf-180 Truy xuất danh sách khách hàng
+WfQwTarJ0JiaEOhg-VSf-181 Trả về danh sách khách hàng gồm họ tên, email, số điện thoại và trạng thái tài khoản
+WfQwTarJ0JiaEOhg-VSf-184 Tra về danh sách thành công
+WfQwTarJ0JiaEOhg-VSf-185 Hiển thị danh sách phù hợp
+WfQwTarJ0JiaEOhg-VSf-186 Nhập từ khóa để tìm kiếm khách hàng
+WfQwTarJ0JiaEOhg-VSf-188 Gửi từ khóa lọc
+WfQwTarJ0JiaEOhg-VSf-189 Chọn một khách hàng để xem thông tin tài khoản chi tiết
+WfQwTarJ0JiaEOhg-VSf-191 Yêu cầu chi tiết tài khoản khách hàng
+WfQwTarJ0JiaEOhg-VSf-193 Truy vấn thông tin chi tiết
+WfQwTarJ0JiaEOhg-VSf-194 Trả về dữ liệu chi tiết
+WfQwTarJ0JiaEOhg-VSf-196 Hiển thị thông tin chi tiết khách hàng
+WfQwTarJ0JiaEOhg-VSf-197 mso-ascii-font-family:"Times New Roman";mso-ascii-theme-font:major-latin; mso-hansi-font-family:"Times New Roman";mso-hansi-theme-font:major-latin; mso-bidi-font-family:"Times New Roman";mso-bidi-theme-font:major-latin; font-weight:normal">1.3.2. UC08 – Xem thông tin lịch sử mua hàng
+WfQwTarJ0JiaEOhg-VSf-199 CSDL
+WfQwTarJ0JiaEOhg-VSf-200 Xử lý thông tin mua hàng
+WfQwTarJ0JiaEOhg-VSf-201 Giao diện lịch sử mua hàng
+WfQwTarJ0JiaEOhg-VSf-202 Nhân viên
+WfQwTarJ0JiaEOhg-VSf-207 Chọn một khách hàng trong danh sách
+WfQwTarJ0JiaEOhg-VSf-208 Chọn chức năng Lịch sử mua hàng
+WfQwTarJ0JiaEOhg-VSf-209 Yêu cầu lấy lịch sử mua hàng
+WfQwTarJ0JiaEOhg-VSf-210 Truy xuất các đơn hàng của khách hàng
+WfQwTarJ0JiaEOhg-VSf-211 Trả về danh sách đơn hàng gồm mã đơn, ngày đặt, tổng tiền và trạng thái
+WfQwTarJ0JiaEOhg-VSf-213 Hiển thị danh sách đơn hàng
+WfQwTarJ0JiaEOhg-VSf-214 Chọn một đơn hàng để xem chi tiết
+WfQwTarJ0JiaEOhg-VSf-216 mso-ascii-font-family:"Times New Roman";mso-ascii-theme-font:major-latin; mso-hansi-font-family:"Times New Roman";mso-hansi-theme-font:major-latin; mso-bidi-font-family:"Times New Roman";mso-bidi-theme-font:major-latin; font-weight:normal">1.4. Quản lý tài khoản nhân viên
+WfQwTarJ0JiaEOhg-VSf-217 mso-ascii-font-family:"Times New Roman";mso-ascii-theme-font:major-latin; mso-hansi-font-family:"Times New Roman";mso-hansi-theme-font:major-latin; mso-bidi-font-family:"Times New Roman";mso-bidi-theme-font:major-latin; font-weight:normal">1.4.1. UC09 – Tạo tài khoản nhân viên mới
+WfQwTarJ0JiaEOhg-VSf-220 CSDL
+WfQwTarJ0JiaEOhg-VSf-221 Xử lý tài khoản
+WfQwTarJ0JiaEOhg-VSf-222 Giao diện tài khoản nhân viên
+WfQwTarJ0JiaEOhg-VSf-228 Chọn chức năng Quản lý tài khoản nhân viên và nhấn Tạo tài khoản mới
+WfQwTarJ0JiaEOhg-VSf-229 Admin
+WfQwTarJ0JiaEOhg-VSf-230 Hiển thị form gồm tên, email, số điện thoại tên đăng nhập, mật khẩu ban đầu và vai trò
+WfQwTarJ0JiaEOhg-VSf-231 Nhập thông tin, chọn vai trò và nhấn Lưu
+WfQwTarJ0JiaEOhg-VSf-232 Gửi dữ liệu tạo tài khoản
+WfQwTarJ0JiaEOhg-VSf-233 Kiểm tra dữ liệu hợp lệ
+WfQwTarJ0JiaEOhg-VSf-234 Kiểm tra dữ liệu hợp lệ và không trùng với tài khoản đã có
+WfQwTarJ0JiaEOhg-VSf-235 Xác nhận không trùng
+WfQwTarJ0JiaEOhg-VSf-236 Tạo tài khoản nhân viên và gán vai trò đã chọn
+WfQwTarJ0JiaEOhg-VSf-237 Xác nhận lưu thành công
+WfQwTarJ0JiaEOhg-VSf-239 Phản hồi thành công
+WfQwTarJ0JiaEOhg-VSf-241 Thông báo tạo thành công và hiển thị nhân viên mới trong danh sách
+WfQwTarJ0JiaEOhg-VSf-243 mso-ascii-font-family:"Times New Roman";mso-ascii-theme-font:major-latin; mso-hansi-font-family:"Times New Roman";mso-hansi-theme-font:major-latin; mso-bidi-font-family:"Times New Roman";mso-bidi-theme-font:major-latin; font-weight:normal">1.4.2. UC10 – Sửa thông tin nhân viên
+WfQwTarJ0JiaEOhg-VSf-246 CSDL
+WfQwTarJ0JiaEOhg-VSf-247 Xử lý tài khoản
+WfQwTarJ0JiaEOhg-VSf-248 Giao diện tài khoản nhân viên
+WfQwTarJ0JiaEOhg-VSf-249 Admin
+WfQwTarJ0JiaEOhg-VSf-254 Chọn chức năng Quản lý tài khoản nhân viên
+WfQwTarJ0JiaEOhg-VSf-255 Yêu cầu lấy danh sách nhân viên
+WfQwTarJ0JiaEOhg-VSf-256 Truy vấn danh sách nhân viên
+WfQwTarJ0JiaEOhg-VSf-257 Hiển thị thông tin hiện tại của nhân viên
+WfQwTarJ0JiaEOhg-VSf-258 Trả về danh sách
+WfQwTarJ0JiaEOhg-VSf-262 Hiển thị dánh sách nhân viên
+WfQwTarJ0JiaEOhg-VSf-263 Chọn nhân viên cần sửa
+WfQwTarJ0JiaEOhg-VSf-268 Yêu cầu thông tin nhân viên
+WfQwTarJ0JiaEOhg-VSf-269 Truy vấn thông tin chi tiết
+WfQwTarJ0JiaEOhg-VSf-270 Trả về dữ liệu
+WfQwTarJ0JiaEOhg-VSf-273 Chỉnh sửa thông tin và nhấn Lưu
+WfQwTarJ0JiaEOhg-VSf-276 Gửi thông tin cập nhật
+WfQwTarJ0JiaEOhg-VSf-279 Cập nhật thông tin nhân viên
+WfQwTarJ0JiaEOhg-VSf-280 Kiểm tra dữ liệu hợp lệ
+WfQwTarJ0JiaEOhg-VSf-282 Xác nhận cập nhật thành công
+WfQwTarJ0JiaEOhg-VSf-287 Phản hồi thành công
+WfQwTarJ0JiaEOhg-VSf-288 Thông báo cập nhật thành công
+WfQwTarJ0JiaEOhg-VSf-290 mso-ascii-font-family:"Times New Roman";mso-ascii-theme-font:major-latin; mso-hansi-font-family:"Times New Roman";mso-hansi-theme-font:major-latin; mso-bidi-font-family:"Times New Roman";mso-bidi-theme-font:major-latin; font-weight:normal">1.4.3. UC11 – Phân quyền
+WfQwTarJ0JiaEOhg-VSf-292 CSDL
+WfQwTarJ0JiaEOhg-VSf-293 Xử lý tài khoản
+WfQwTarJ0JiaEOhg-VSf-294 Giao diện tài khoản nhân viên
+WfQwTarJ0JiaEOhg-VSf-299 Chọn nhân viên cần phân quyền trong danh sách và chọn chức năng Phân quyền
+WfQwTarJ0JiaEOhg-VSf-300 Admin
+WfQwTarJ0JiaEOhg-VSf-302 Yêu cầu lấy vai trò và quyền hiện tại
+WfQwTarJ0JiaEOhg-VSf-303 Truy xuất vai trò và danh sách chức năng, quyền
+WfQwTarJ0JiaEOhg-VSf-304 Trả về dữ liệu quyền
+WfQwTarJ0JiaEOhg-VSf-307 Hiển thị vai trò hiện tại và danh sách chức năng, quyền có thể gán
+WfQwTarJ0JiaEOhg-VSf-308 Chọn vai trò hoặc điều chỉnh các quyền cho nhân viên
+WfQwTarJ0JiaEOhg-VSf-311 Gửi cấu hình phân quyền mới
+WfQwTarJ0JiaEOhg-VSf-312 Cập nhật quyền của nhân viên
+WfQwTarJ0JiaEOhg-VSf-313 Xác nhận cập nhật thành công
+WfQwTarJ0JiaEOhg-VSf-316 Thông báo phân quyền thành công
+WfQwTarJ0JiaEOhg-VSf-317 Phản hồi thành công
+WfQwTarJ0JiaEOhg-VSf-318 mso-ascii-font-family:"Times New Roman";mso-ascii-theme-font:major-latin; mso-hansi-font-family:"Times New Roman";mso-hansi-theme-font:major-latin; mso-bidi-font-family:"Times New Roman";mso-bidi-theme-font:major-latin; font-weight:normal">1.5. Quản lý sản phẩm / Tra cứu sản phẩm
+WfQwTarJ0JiaEOhg-VSf-322 "Times New Roman",serif;mso-ascii-theme-font:major-latin;mso-fareast-font-family: "Times New Roman";mso-hansi-theme-font:major-latin;mso-bidi-theme-font:major-latin; mso-ansi-language:VI;mso-fareast-language:VI;mso-bidi-language:AR-SA"> 1.5.1. UC12 – Tìm kiếm sản phẩm
+WfQwTarJ0JiaEOhg-VSf-323 CSDL
+WfQwTarJ0JiaEOhg-VSf-324 Xử lý tìm kiếm
+WfQwTarJ0JiaEOhg-VSf-325 Giao diện tìm kiếm
+WfQwTarJ0JiaEOhg-VSf-326 Người dùng
+WfQwTarJ0JiaEOhg-VSf-331 Tìm các sản phẩm phù hợp với từ khóa
+WfQwTarJ0JiaEOhg-VSf-332 Gửi từ khóa tìm kiếm
+WfQwTarJ0JiaEOhg-VSf-333 Nhập từ khóa vào ô tìm kiếm sản phẩm và nhấn nút Tìm kiếm
+WfQwTarJ0JiaEOhg-VSf-341 Hiển thị danh sách kết quả gồm hình ảnh, tên, giá và tình trạng hàng
+WfQwTarJ0JiaEOhg-VSf-342 Trả về danh sách sản phẩm khớp
+WfQwTarJ0JiaEOhg-VSf-344 Chọn một sản phẩm để xem chi tiết
+WfQwTarJ0JiaEOhg-VSf-345 mso-ascii-font-family:"Times New Roman";mso-ascii-theme-font:major-latin; mso-hansi-font-family:"Times New Roman";mso-hansi-theme-font:major-latin; mso-bidi-font-family:"Times New Roman";mso-bidi-theme-font:major-latin; font-weight:normal">1.5.2. UC13 – Lọc sản phẩm
+WfQwTarJ0JiaEOhg-VSf-348 CSDL
+WfQwTarJ0JiaEOhg-VSf-349 Xử lý lọc sản phẩm
+WfQwTarJ0JiaEOhg-VSf-350 Giao diện sản phẩm
+WfQwTarJ0JiaEOhg-VSf-355 Mở danh sách sản phẩm
+WfQwTarJ0JiaEOhg-VSf-356 Người dùng
+u1N9Q0PMFtPA-nWcpbLK-1 Hiển thị các tiêu chí lọc
+u1N9Q0PMFtPA-nWcpbLK-2 Chọn một hoặc nhiều tiêu chí lọc và nhân Áp dụng
+u1N9Q0PMFtPA-nWcpbLK-3 Lọc các sản phẩm thỏa mãn tất cả tiêu chí đã chọn
+u1N9Q0PMFtPA-nWcpbLK-4 Gửi các tiêu chí lọc
+u1N9Q0PMFtPA-nWcpbLK-6 Trả về danh sách sản phẩm thỏa điều kiện
+u1N9Q0PMFtPA-nWcpbLK-8 Hiển thị danh sách sản phẩm sau khi lọc
+u1N9Q0PMFtPA-nWcpbLK-9 mso-ascii-font-family:"Times New Roman";mso-ascii-theme-font:major-latin; mso-hansi-font-family:"Times New Roman";mso-hansi-theme-font:major-latin; mso-bidi-font-family:"Times New Roman";mso-bidi-theme-font:major-latin; font-weight:normal">1.5.3. UC14 – Xem chi tiết sản phẩm
+u1N9Q0PMFtPA-nWcpbLK-11 CSDL sản phẩm
+u1N9Q0PMFtPA-nWcpbLK-12 Xử lý xem chi tiết
+u1N9Q0PMFtPA-nWcpbLK-13 Giao diện xem chi tiết
+u1N9Q0PMFtPA-nWcpbLK-14 Người dùng
+u1N9Q0PMFtPA-nWcpbLK-19 Chọn một sản phẩm trong danh sách
+u1N9Q0PMFtPA-nWcpbLK-20 Yêu cầu thông tin sản phẩm
+u1N9Q0PMFtPA-nWcpbLK-21 Truy xuất thông tin sản phẩm
+u1N9Q0PMFtPA-nWcpbLK-22 Trả về dữu liệu chi tiết
+u1N9Q0PMFtPA-nWcpbLK-24 Hiển thị trang chi tiết gồm hình ảnh, tên, thương hiệu, mô tả, giá, các kích cỡ, màu sắc và tình trạng còn hàng
+u1N9Q0PMFtPA-nWcpbLK-25 mso-ascii-font-family:"Times New Roman";mso-ascii-theme-font:major-latin; mso-hansi-font-family:"Times New Roman";mso-hansi-theme-font:major-latin; mso-bidi-font-family:"Times New Roman";mso-bidi-theme-font:major-latin; font-weight:normal">1.5.4. UC15 – Thêm sản phẩm
+u1N9Q0PMFtPA-nWcpbLK-27 CSDL
+u1N9Q0PMFtPA-nWcpbLK-28 Xử lý thêm sản phẩm
+u1N9Q0PMFtPA-nWcpbLK-29 Giao diện thêm sản phẩm
+u1N9Q0PMFtPA-nWcpbLK-34 Chọn chức năng Quản lý sản phẩm và nhấn Thêm sản phẩm
+u1N9Q0PMFtPA-nWcpbLK-35 mso-ascii-font-family:"Times New Roman";mso-ascii-theme-font:major-latin; mso-hansi-font-family:"Times New Roman";mso-hansi-theme-font:major-latin; mso-bidi-font-family:"Times New Roman";mso-bidi-theme-font:major-latin; font-weight:normal">1.5.5. UC16 – Xóa sản phẩm
+u1N9Q0PMFtPA-nWcpbLK-38 CSDL
+u1N9Q0PMFtPA-nWcpbLK-40 Xử lý thêm sản phẩm
+u1N9Q0PMFtPA-nWcpbLK-42 Giao diện thêm sản phẩm
+u1N9Q0PMFtPA-nWcpbLK-44 Chọn sản phẩm cần xóa trong danh sách (hoặc trang chi tiết) và nhấn Xóa
+u1N9Q0PMFtPA-nWcpbLK-45 Hiển thị form nhập thông tin sản phẩm gồm mã, tên, thương hiệu, danh mục, mô tả, giá bán, kích cỡ, màu sắc, số lượng và hình ảnh
+u1N9Q0PMFtPA-nWcpbLK-46 Nhập thông tin và nhấn Lưu
+u1N9Q0PMFtPA-nWcpbLK-47 Gửi dữ liệu sản phẩm mới
+u1N9Q0PMFtPA-nWcpbLK-48 Kiểm tra dữ liệu hợp lệ
+u1N9Q0PMFtPA-nWcpbLK-49 Truy xuất mã không trùng
+u1N9Q0PMFtPA-nWcpbLK-50 Xác nhận mã không trùng
+u1N9Q0PMFtPA-nWcpbLK-51 Lưu sản phẩm mới
+u1N9Q0PMFtPA-nWcpbLK-52 Xác nhận lưu thành công
+u1N9Q0PMFtPA-nWcpbLK-55 Phản hồi thành công
+u1N9Q0PMFtPA-nWcpbLK-56 Thông báo thêm thành công và hiển thị sản phẩm trong danh sách
+u1N9Q0PMFtPA-nWcpbLK-57 Nhân viên
+u1N9Q0PMFtPA-nWcpbLK-58 Hiển thị hộp thoại yêu cầu xác nhận xóa
+u1N9Q0PMFtPA-nWcpbLK-59 Xác nhận xóa
+u1N9Q0PMFtPA-nWcpbLK-60 Gửi yêu cầu xóa sản phẩm
+u1N9Q0PMFtPA-nWcpbLK-61 Xóa sản phẩm và cập nhật
+u1N9Q0PMFtPA-nWcpbLK-64 Xác nhận xóa thành công
+u1N9Q0PMFtPA-nWcpbLK-67 Phản hồi thành công
+u1N9Q0PMFtPA-nWcpbLK-69 2.5pt;margin-left:.25in;text-indent:-.25in;line-height:120%;mso-list:l0 level1 lfo1"> Thông báo xóa thành công và 2.5pt;margin-left:.25in;text-indent:-.25in;line-height:120%;mso-list:l0 level1 lfo1"> cập nhật danh sách sản phẩm
+u1N9Q0PMFtPA-nWcpbLK-70 mso-ascii-font-family:"Times New Roman";mso-ascii-theme-font:major-latin; mso-hansi-font-family:"Times New Roman";mso-hansi-theme-font:major-latin; mso-bidi-font-family:"Times New Roman";mso-bidi-theme-font:major-latin; font-weight:normal">1.5.6. UC17 – Sửa sản phẩm
+u1N9Q0PMFtPA-nWcpbLK-74 CSDL
+u1N9Q0PMFtPA-nWcpbLK-76 Xử lý sửa sản phẩm
+u1N9Q0PMFtPA-nWcpbLK-78 Giao diện sửa sản phẩm
+u1N9Q0PMFtPA-nWcpbLK-81 Chọn sản phẩm cần sửa và nhấn Sửa
+u1N9Q0PMFtPA-nWcpbLK-84 Yêu cầu lấy thông tin sản phẩm
+u1N9Q0PMFtPA-nWcpbLK-85 Kiểm tra dữ liệu hợp lệ
+u1N9Q0PMFtPA-nWcpbLK-89 Hiển thị form chứa thông tin hiện tại của sản phẩm
+u1N9Q0PMFtPA-nWcpbLK-90 Phản hồi thành công
+u1N9Q0PMFtPA-nWcpbLK-91 Thông báo cập nhật thành công
+u1N9Q0PMFtPA-nWcpbLK-92 Nhân viên
+u1N9Q0PMFtPA-nWcpbLK-97 Truy vấn thông tin sản phẩm
+u1N9Q0PMFtPA-nWcpbLK-98 Trả về dữ liệu hiện tại
+u1N9Q0PMFtPA-nWcpbLK-101 Chỉnh sửa thông tin cần thay đổi và nhấn Lưu
+u1N9Q0PMFtPA-nWcpbLK-102 Gửi thông tin cập nhật
+u1N9Q0PMFtPA-nWcpbLK-104 Cập nhật thông tin sản phẩm
+u1N9Q0PMFtPA-nWcpbLK-105 Xác nhận cập nhật thành công
+u1N9Q0PMFtPA-nWcpbLK-106 mso-ascii-font-family:"Times New Roman";mso-ascii-theme-font:major-latin; mso-hansi-font-family:"Times New Roman";mso-hansi-theme-font:major-latin; mso-bidi-font-family:"Times New Roman";mso-bidi-theme-font:major-latin; font-weight:normal">1.6. Quản lý giỏ hàng
+u1N9Q0PMFtPA-nWcpbLK-107 mso-ascii-font-family:"Times New Roman";mso-ascii-theme-font:major-latin; mso-hansi-font-family:"Times New Roman";mso-hansi-theme-font:major-latin; mso-bidi-font-family:"Times New Roman";mso-bidi-theme-font:major-latin">1.6.1. UC18 – Thêm vào giỏ hàng mso-ascii-font-family:"Times New Roman";mso-ascii-theme-font:major-latin; mso-hansi-font-family:"Times New Roman";mso-hansi-theme-font:major-latin; mso-bidi-font-family:"Times New Roman";mso-bidi-theme-font:major-latin; font-weight:normal">
+u1N9Q0PMFtPA-nWcpbLK-133 CSDL
+u1N9Q0PMFtPA-nWcpbLK-134 Xử lý giỏ hàng
+u1N9Q0PMFtPA-nWcpbLK-135 Giao diện thêm giỏ hàng
+u1N9Q0PMFtPA-nWcpbLK-136 Khách hàng
+u1N9Q0PMFtPA-nWcpbLK-141 Mở trang chi tiết sản phẩm chọn kích cỡ, màu sắc và số lượng, sau đó nhấn “Thêm vào giỏ hàng”
+u1N9Q0PMFtPA-nWcpbLK-142 Gửi thông tin lựa chọn sản phẩm
+u1N9Q0PMFtPA-nWcpbLK-143 Truy vấn số lượng tồn
+u1N9Q0PMFtPA-nWcpbLK-144 Xác nhận đủ số lượng tồn kho
+u1N9Q0PMFtPA-nWcpbLK-145 Thêm sản phẩm vào giỏ hàng
+u1N9Q0PMFtPA-nWcpbLK-146 Xác nhận cập nhật giỏ hàng thành công
+u1N9Q0PMFtPA-nWcpbLK-149 Phản hồi thành công
+u1N9Q0PMFtPA-nWcpbLK-150 Thông báo thêm vào giỏ hàng thành công
+u1N9Q0PMFtPA-nWcpbLK-151 mso-ascii-theme-font:major-latin;mso-hansi-font-family:"Times New Roman"; mso-hansi-theme-font:major-latin;mso-bidi-font-family:"Times New Roman"; mso-bidi-theme-font:major-latin">1.6.2. UC19 – Mua ngay
+u1N9Q0PMFtPA-nWcpbLK-153 CSDL
+u1N9Q0PMFtPA-nWcpbLK-154 Xử lý mua hàng
+u1N9Q0PMFtPA-nWcpbLK-155 Giao diện mua hàng
+u1N9Q0PMFtPA-nWcpbLK-156 Khách hàng
+u1N9Q0PMFtPA-nWcpbLK-161 mso-ascii-font-family:"Times New Roman";mso-ascii-theme-font:major-latin; mso-hansi-font-family:"Times New Roman";mso-hansi-theme-font:major-latin; mso-bidi-font-family:"Times New Roman";mso-bidi-theme-font:major-latin">1.6.3. UC20 – Xem giỏ hàng "Times New Roman";mso-ascii-theme-font:major-latin;mso-hansi-font-family:"Times New Roman"; mso-hansi-theme-font:major-latin;mso-bidi-font-family:"Times New Roman"; mso-bidi-theme-font:major-latin;font-weight:normal">
+u1N9Q0PMFtPA-nWcpbLK-164 CSDL
+u1N9Q0PMFtPA-nWcpbLK-166 Xử lý mua hàng
+u1N9Q0PMFtPA-nWcpbLK-168 Giao diện mua hàng
+u1N9Q0PMFtPA-nWcpbLK-170 Khách hàng
+u1N9Q0PMFtPA-nWcpbLK-171 Mở trang chi tiết sản phẩm và chọn kích cỡ, màu sắc và số lượng sau đó nhấn '"Mua ngay"
+u1N9Q0PMFtPA-nWcpbLK-173 Gửi thông tin mua ngay
+u1N9Q0PMFtPA-nWcpbLK-177 Phản hồi hợp lệ
+u1N9Q0PMFtPA-nWcpbLK-178 Chuyển khách hàng đến bước đặt hàng với sản phẩm vừa chọn
+u1N9Q0PMFtPA-nWcpbLK-179 Chọn biểu tượng giỏ hàng
+u1N9Q0PMFtPA-nWcpbLK-180 Yêu cầu lấy thông tin giỏ hàng
+u1N9Q0PMFtPA-nWcpbLK-181 Truy xuất giỏ hàng của khách hàng
+u1N9Q0PMFtPA-nWcpbLK-182 Trả về danh sách sản phẩm trong giỏ
+u1N9Q0PMFtPA-nWcpbLK-183 Tính toán thành tiền từng dòng và tổng tiền giỏ hàng
+u1N9Q0PMFtPA-nWcpbLK-184 Hiển thị danh sách sản phẩm gồm hình ảnh, tên, kích cỡ, màu sắc, đơn giá, số lượng, thành tiền và tổng tiền
+u1N9Q0PMFtPA-nWcpbLK-188 mso-ascii-font-family:"Times New Roman";mso-ascii-theme-font:major-latin; mso-hansi-font-family:"Times New Roman";mso-hansi-theme-font:major-latin; mso-bidi-font-family:"Times New Roman";mso-bidi-theme-font:major-latin">1.6.4. UC21 – Cập nhật giỏ hàng mso-ascii-font-family:"Times New Roman";mso-ascii-theme-font:major-latin; mso-hansi-font-family:"Times New Roman";mso-hansi-theme-font:major-latin; mso-bidi-font-family:"Times New Roman";mso-bidi-theme-font:major-latin; font-weight:normal">
+u1N9Q0PMFtPA-nWcpbLK-190 CSDL
+u1N9Q0PMFtPA-nWcpbLK-191 Xử lý cập nhật
+u1N9Q0PMFtPA-nWcpbLK-192 Giao diện cập nhật
+u1N9Q0PMFtPA-nWcpbLK-197 Mở giỏ hàng, thay đổi số lượng, kích cỡ, màu sắc hoặc chọn Xóa đối với sản phẩm cần điều chỉnh
+u1N9Q0PMFtPA-nWcpbLK-198 Kiểm tra số lượng so với tồn kho
+u1N9Q0PMFtPA-nWcpbLK-199 Gửi thông tin cập nhật giỏ hàng
+u1N9Q0PMFtPA-nWcpbLK-200 Cập nhật giỏ hàng trong hệ thống
+u1N9Q0PMFtPA-nWcpbLK-201 Xác nhận kết quả tồn kho
+u1N9Q0PMFtPA-nWcpbLK-202 Xác nhận thành công
+u1N9Q0PMFtPA-nWcpbLK-203 Tính lại thành tiền và tổng tiền
+u1N9Q0PMFtPA-nWcpbLK-205 Phản hồi dữ liệu mới
+u1N9Q0PMFtPA-nWcpbLK-207 Hiển thị giỏ hàng sau khi cập nhật
+u1N9Q0PMFtPA-nWcpbLK-208 mso-ascii-font-family:"Times New Roman";mso-ascii-theme-font:major-latin; mso-hansi-font-family:"Times New Roman";mso-hansi-theme-font:major-latin; mso-bidi-font-family:"Times New Roman";mso-bidi-theme-font:major-latin; font-weight:normal">1.7. Quản lý thanh toán
+u1N9Q0PMFtPA-nWcpbLK-210 mso-ascii-font-family:"Times New Roman";mso-ascii-theme-font:major-latin; mso-hansi-font-family:"Times New Roman";mso-hansi-theme-font:major-latin; mso-bidi-font-family:"Times New Roman";mso-bidi-theme-font:major-latin; font-weight:normal">1.7.1. UC22 – Thanh toán khi nhận hàng
+u1N9Q0PMFtPA-nWcpbLK-212 Khách hàng
+u1N9Q0PMFtPA-nWcpbLK-213 Xử lý thanh toán
+u1N9Q0PMFtPA-nWcpbLK-214 Giao diện thanh toán
+u1N9Q0PMFtPA-nWcpbLK-216 CSDL
+u1N9Q0PMFtPA-nWcpbLK-221 Khách hàng
+u1N9Q0PMFtPA-nWcpbLK-222 Tại bước đặt hàng, khách hàng chọn phương thức Thanh toán khi nhận hàng
+u1N9Q0PMFtPA-nWcpbLK-223 Yêu cầu tính tổng chi phí
+u1N9Q0PMFtPA-nWcpbLK-224 Xác nhận đặt hàng
+u1N9Q0PMFtPA-nWcpbLK-225 Hiển thị tóm tắt đơn hàng gồm danh sách sản phẩm, phí (nếu có) và tổng số tiền phải trả
+u1N9Q0PMFtPA-nWcpbLK-228 Gửi thông tin xác nhận
+u1N9Q0PMFtPA-nWcpbLK-229 Lưu đơn hàng, ghi nhận phương thức thanh toán khi nhận hàng và đặt trạng thái thanh toán là Chưa thanh toán
+u1N9Q0PMFtPA-nWcpbLK-230 Lưu thành công
+u1N9Q0PMFtPA-nWcpbLK-231 Phản hồi mã đơn hàng
+u1N9Q0PMFtPA-nWcpbLK-234 Thông báo đặt hàng thành công kèm mã đơn hàng
+u1N9Q0PMFtPA-nWcpbLK-235 mso-ascii-font-family:"Times New Roman";mso-ascii-theme-font:major-latin; mso-hansi-font-family:"Times New Roman";mso-hansi-theme-font:major-latin; mso-bidi-font-family:"Times New Roman";mso-bidi-theme-font:major-latin; font-weight:normal">1.7.2. UC23 – Thanh toán chuyển khoản
+u1N9Q0PMFtPA-nWcpbLK-238 CSDL
+u1N9Q0PMFtPA-nWcpbLK-239 Xử lý thanh toán
+u1N9Q0PMFtPA-nWcpbLK-240 Giao diện thanh toán
+u1N9Q0PMFtPA-nWcpbLK-245 Khách hàng
+u1N9Q0PMFtPA-nWcpbLK-246 Tại bước đặt hàng, khách hàng chọn phương thức Thanh toán chuyển khoản
+u1N9Q0PMFtPA-nWcpbLK-247 Yêu cầu thông tin thanh toán chuyển khoản
+u1N9Q0PMFtPA-nWcpbLK-248 Hiển thị thông tin tài khoản nhận tiền của cửa hàng, số tiền cần chuyển và nội dung chuyển khoản (kèm mã đơn hàng)
+u1N9Q0PMFtPA-nWcpbLK-250 Xác nhận đặt hàng và thực hiện chuyển khoản theo hướng dẫn
+u1N9Q0PMFtPA-nWcpbLK-251 Gửi thông tin đặt hàng
+u1N9Q0PMFtPA-nWcpbLK-254 Ghi nhận phương thức chuyển khoản và đặt trạng thái thanh toán là Chờ xác nhận
+u1N9Q0PMFtPA-nWcpbLK-255 Lưu thành công
+u1N9Q0PMFtPA-nWcpbLK-257 Phản hồi mã đơn hàng
+u1N9Q0PMFtPA-nWcpbLK-259 Thông báo đặt hàng thành công kèm mã đơn hàng
+u1N9Q0PMFtPA-nWcpbLK-260 mso-ascii-font-family:"Times New Roman";mso-ascii-theme-font:major-latin; mso-hansi-font-family:"Times New Roman";mso-hansi-theme-font:major-latin; mso-bidi-font-family:"Times New Roman";mso-bidi-theme-font:major-latin; font-weight:normal">1.7.3. UC24 – Xác nhận thông tin thanh toán
+u1N9Q0PMFtPA-nWcpbLK-263 CSDL
+u1N9Q0PMFtPA-nWcpbLK-264 Xử lý xác nhận
+u1N9Q0PMFtPA-nWcpbLK-265 Giao diện xác nhận
+u1N9Q0PMFtPA-nWcpbLK-270 Chọn chức năng Quản lý thanh toán và mở danh sách đơn hàng chờ xác nhận thanh toán
+u1N9Q0PMFtPA-nWcpbLK-271 mso-ascii-font-family:"Times New Roman";mso-ascii-theme-font:major-latin; mso-hansi-font-family:"Times New Roman";mso-hansi-theme-font:major-latin; mso-bidi-font-family:"Times New Roman";mso-bidi-theme-font:major-latin; font-weight:normal">1.8. Quản lý đơn hàng
+u1N9Q0PMFtPA-nWcpbLK-274 CSDL
+u1N9Q0PMFtPA-nWcpbLK-276 Xử lý đặt hàng
+u1N9Q0PMFtPA-nWcpbLK-278 Giao diện đặt hàng
+u1N9Q0PMFtPA-nWcpbLK-281 Yêu cầu danh sách đơn hàng chờ xác nhận
+u1N9Q0PMFtPA-nWcpbLK-282 Truy xuất đơn hàng chưa hoàn tất thanh toán
+u1N9Q0PMFtPA-nWcpbLK-283 Trả về danh sách đơn hàng
+u1N9Q0PMFtPA-nWcpbLK-284 Nhân viên
+u1N9Q0PMFtPA-nWcpbLK-287 Hiển thị danh sách
+u1N9Q0PMFtPA-nWcpbLK-289 Chọn một đơn hàng
+u1N9Q0PMFtPA-nWcpbLK-290 Yêu cầu thông tin đơn hàng được chọn
+u1N9Q0PMFtPA-nWcpbLK-292 Truy vấn thông tin chi tiết
+u1N9Q0PMFtPA-nWcpbLK-293 Trả về dữ liệu
+u1N9Q0PMFtPA-nWcpbLK-294 Hiển thị phương thức thanh toán, số tiền và trạng thái thanh toán của đơn hàng
+u1N9Q0PMFtPA-nWcpbLK-295 Đối chiếu với khoản tiền thực nhận (sao kê chuyển khoản hoặc tiền thu khi giao hàng)
+u1N9Q0PMFtPA-nWcpbLK-296 Gửi yêu cầu xác nhận thanh toán
+u1N9Q0PMFtPA-nWcpbLK-298 Cập nhật trạng thái thanh toán là Đã thanh toán và lưu lại thông tin xác nhận
+u1N9Q0PMFtPA-nWcpbLK-299 Xác nhận thành công
+u1N9Q0PMFtPA-nWcpbLK-300 Phản hồi thành công
+u1N9Q0PMFtPA-nWcpbLK-301 Thông báo cập nhật trạng thái thanh toán thành công
+u1N9Q0PMFtPA-nWcpbLK-303 mso-ascii-font-family:"Times New Roman";mso-ascii-theme-font:major-latin; mso-hansi-font-family:"Times New Roman";mso-hansi-theme-font:major-latin; mso-bidi-font-family:"Times New Roman";mso-bidi-theme-font:major-latin; font-weight:normal">1.8.1. UC25 – Đặt hàng
+u1N9Q0PMFtPA-nWcpbLK-304 mso-ascii-font-family:"Times New Roman";mso-ascii-theme-font:major-latin; mso-hansi-font-family:"Times New Roman";mso-hansi-theme-font:major-latin; mso-bidi-font-family:"Times New Roman";mso-bidi-theme-font:major-latin; font-weight:normal">1.8.2. UC26 – Lọc đơn hàng
+u1N9Q0PMFtPA-nWcpbLK-307 CSDL
+u1N9Q0PMFtPA-nWcpbLK-309 Xử lý đơn hàng
+u1N9Q0PMFtPA-nWcpbLK-311 Giao diện đơn hàng
+DU_9noBwxVV13ah_5AG6-2 Chọn Đặt hàng từ giỏ hàng (hoặc sau khi chọn Mua ngay)
+DU_9noBwxVV13ah_5AG6-3 Yêu cầu thông tin đặt hàng
+DU_9noBwxVV13ah_5AG6-4 Truy vấn dữ liệu sản phẩm và thông tin cá nhân khách hàng
+DU_9noBwxVV13ah_5AG6-5 Trả về thông tin
+DU_9noBwxVV13ah_5AG6-7 Hiển thị danh sách sản phẩm, tổng tiền và form thông tin nhận hàng (họ tên, số điện thoại, địa chỉ) được điền sẵn từ thông tin cá nhân
+DU_9noBwxVV13ah_5AG6-10 Kiểm tra, chỉnh sửa thông tin nhận hàng và chọn phương thức thanh toán và xác nhận đặt hàng
+DU_9noBwxVV13ah_5AG6-13 Gửi dữ liệu đặt hàng hoàn chỉnh
+DU_9noBwxVV13ah_5AG6-14 Kiểm tra số lượng tồn kho của các sản phẩm
+DU_9noBwxVV13ah_5AG6-15 Xác nhận đủ tồn kho
+DU_9noBwxVV13ah_5AG6-16 Tạo đơn hàng ở trạng thái Chờ xử lý, cập nhật số lượng tồn kho tương ứng và xóa các sản phẩm đã đặt khỏi giỏ hàng
+DU_9noBwxVV13ah_5AG6-19 Xác nhận lưu thành công
+DU_9noBwxVV13ah_5AG6-20 Phản hồi mã đơn hàng
+DU_9noBwxVV13ah_5AG6-21 Thông báo mã đơn hàng cho khách hàng
+DU_9noBwxVV13ah_5AG6-22 Khách hàng
+DU_9noBwxVV13ah_5AG6-23 Nhân viên
+DU_9noBwxVV13ah_5AG6-24 mso-ascii-font-family:"Times New Roman";mso-ascii-theme-font:major-latin; mso-hansi-font-family:"Times New Roman";mso-hansi-theme-font:major-latin; mso-bidi-font-family:"Times New Roman";mso-bidi-theme-font:major-latin; font-weight:normal">1.8.3. UC27 – Tìm kiếm đơn hàng
+DU_9noBwxVV13ah_5AG6-27 CSDL
+DU_9noBwxVV13ah_5AG6-29 Xử lý tìm kiếm đơn hàng
+DU_9noBwxVV13ah_5AG6-31 Giao diện tìm kiếm
+DU_9noBwxVV13ah_5AG6-33 Chọn chức năng Quản lý đơn hàng
+DU_9noBwxVV13ah_5AG6-34 Yêu cầu lấy danh sách đơn hàng
+DU_9noBwxVV13ah_5AG6-35 Truy xuất danh sách đơn hàng
+DU_9noBwxVV13ah_5AG6-36 Trả về danh sách
+DU_9noBwxVV13ah_5AG6-39 Hiển thị danh sách đơn hàng
+DU_9noBwxVV13ah_5AG6-40 Chọn một hoặc nhiều tiêu chí lọc và nhấn Áp dụng
+DU_9noBwxVV13ah_5AG6-43 Gửi các tiêu chí lọc
+DU_9noBwxVV13ah_5AG6-44 Lọc các đơn hàng thỏa mãn tiêu chí
+DU_9noBwxVV13ah_5AG6-45 Trả về danh sách đã lọc
+DU_9noBwxVV13ah_5AG6-47 Hiển thị danh sách đơn hàng sau khi lọc
+DU_9noBwxVV13ah_5AG6-48 mso-ascii-font-family:"Times New Roman";mso-ascii-theme-font:major-latin; mso-hansi-font-family:"Times New Roman";mso-hansi-theme-font:major-latin; mso-bidi-font-family:"Times New Roman";mso-bidi-theme-font:major-latin; font-weight:normal">1.8.4. UC28 – Xem chi tiết đơn hàng
+DU_9noBwxVV13ah_5AG6-51 CSDL
+DU_9noBwxVV13ah_5AG6-53 Xử lý xem chi tiết đơn hàng
+DU_9noBwxVV13ah_5AG6-55 Giao diện xem chi tiết
+DU_9noBwxVV13ah_5AG6-57 Nhân viên
+DU_9noBwxVV13ah_5AG6-59 Chọn chức năng Quản lý đơn hàng
+DU_9noBwxVV13ah_5AG6-60 Nhập từ khóa (mã đơn, tên khách hàng hoặc số điện thoại) vào ô tìm kiếm và nhấn Tìm kiếm
+DU_9noBwxVV13ah_5AG6-61 Gửi từ khóa tìm kiếm đơn hàng
+DU_9noBwxVV13ah_5AG6-62 Tìm các đơn hàng phù hợp
+DU_9noBwxVV13ah_5AG6-63 Trả về danh sách đơn hàng tìm được
+DU_9noBwxVV13ah_5AG6-66 Trả về danh sách thành công
+DU_9noBwxVV13ah_5AG6-67 Hiển thị danh sách đơn hàng tìm được
+DU_9noBwxVV13ah_5AG6-68 mso-ascii-font-family:"Times New Roman";mso-ascii-theme-font:major-latin; mso-hansi-font-family:"Times New Roman";mso-hansi-theme-font:major-latin; mso-bidi-font-family:"Times New Roman";mso-bidi-theme-font:major-latin; font-weight:normal">1.8.5. UC29 – Theo dõi tình trạng đơn hàng
+DU_9noBwxVV13ah_5AG6-71 CSDL
+DU_9noBwxVV13ah_5AG6-73 Xử lý tình trạng đơn hàng
+DU_9noBwxVV13ah_5AG6-75 Giao diện theo dõi tình trạng
+DU_9noBwxVV13ah_5AG6-77 Người dùng
+DU_9noBwxVV13ah_5AG6-78 Chọn một đơn hàng trong danh sách
+DU_9noBwxVV13ah_5AG6-79 Yêu cầu lấy chi tiết đơn hàng
+DU_9noBwxVV13ah_5AG6-80 Truy xuất thông tin đơn hàng
+DU_9noBwxVV13ah_5AG6-81 Trả về thông tin chi tiết
+DU_9noBwxVV13ah_5AG6-83 Hiển thị mã đơn, ngày đặt, trạng thái, danh sách sản phẩm (kích cỡ, màu sắc, số lượng, đơn giá), thông tin nhận hàng, phương thức và trạng thái thanh toán, tổng tiền
+DU_9noBwxVV13ah_5AG6-84 mso-ascii-font-family:"Times New Roman";mso-ascii-theme-font:major-latin; mso-hansi-font-family:"Times New Roman";mso-hansi-theme-font:major-latin; mso-bidi-font-family:"Times New Roman";mso-bidi-theme-font:major-latin; font-weight:normal">1.8.6. UC30 – Cập nhật trạng thái đơn hàng
+DU_9noBwxVV13ah_5AG6-87 CSDL
+DU_9noBwxVV13ah_5AG6-89 Xử lý tìm kiếm đơn hàng
+DU_9noBwxVV13ah_5AG6-91 Giao diện tìm kiếm
+DU_9noBwxVV13ah_5AG6-93 Chọn một đơn hàng cần theo dõi
+DU_9noBwxVV13ah_5AG6-94 Yêu cầu lấy trạng thái và lịch sử đơn hàng
+DU_9noBwxVV13ah_5AG6-95 Truy xuất trạng thái hiện tại và lịch sử thay đổi trạng thái của đơn hàng
+DU_9noBwxVV13ah_5AG6-96 Trả về dữ liệu lịch sử
+DU_9noBwxVV13ah_5AG6-98 Hiển thị trạng thái hiện tại (ví dụ: Chờ xử lý, Đã xác nhận, Đang giao, Đã giao, Đã hủy) cùng thời điểm cập nhật của từng trạng thái
+DU_9noBwxVV13ah_5AG6-99 Người dùng
+DU_9noBwxVV13ah_5AG6-101 Nhân viên
+DU_9noBwxVV13ah_5AG6-102 mso-ascii-font-family:"Times New Roman";mso-ascii-theme-font:major-latin; mso-hansi-font-family:"Times New Roman";mso-hansi-theme-font:major-latin; mso-bidi-font-family:"Times New Roman";mso-bidi-theme-font:major-latin; font-weight:normal">1.8.7. UC31 – Hủy đơn hàng
+DU_9noBwxVV13ah_5AG6-105 CSDL
+DU_9noBwxVV13ah_5AG6-107 Xử lý hủy đơn hàng
+DU_9noBwxVV13ah_5AG6-109 Giao diện hủy đơn hàng
+DU_9noBwxVV13ah_5AG6-111 Khách hàng
+DU_9noBwxVV13ah_5AG6-112 Chọn một đơn hàng cần cập nhật
+DU_9noBwxVV13ah_5AG6-113 Yêu cầu lấy thông tin trạng thái
+DU_9noBwxVV13ah_5AG6-114 Truy vấn đơn hàng
+DU_9noBwxVV13ah_5AG6-115 Trả về dữ liệu
+DU_9noBwxVV13ah_5AG6-118 Hiển thị trạng thái hiện tại và các trạng thái hợp lệ có thể chuyển tiếp
+DU_9noBwxVV13ah_5AG6-119 Chọn trạng thái mới và nhập ghi chú (nếu có) và nhấn Xác nhận
+DU_9noBwxVV13ah_5AG6-122 Gửi thông tin cập nhật trạng thái
+DU_9noBwxVV13ah_5AG6-123 Cập nhật trạng thái đơn hàng và lưu lại lịch sử thay đổi
+DU_9noBwxVV13ah_5AG6-124 Xác nhận thành công
+DU_9noBwxVV13ah_5AG6-127 Thông báo cập nhật thành công, khách hàng xem được trạng thái mới
+DU_9noBwxVV13ah_5AG6-128 Phản hồi thành công
+DU_9noBwxVV13ah_5AG6-130 mso-ascii-font-family:"Times New Roman";mso-ascii-theme-font:major-latin; mso-hansi-font-family:"Times New Roman";mso-hansi-theme-font:major-latin; mso-bidi-font-family:"Times New Roman";mso-bidi-theme-font:major-latin; font-weight:normal">1.9. Quản lý tồn kho
+DU_9noBwxVV13ah_5AG6-133 CSDL
+DU_9noBwxVV13ah_5AG6-135 Xử lý tìm kiếm đơn hàng
+DU_9noBwxVV13ah_5AG6-137 Giao diện tìm kiếm
+DU_9noBwxVV13ah_5AG6-139 Nhân viên
+DU_9noBwxVV13ah_5AG6-140 Mở chi tiết đơn hàng và chọn Hủy đơn hàng
+DU_9noBwxVV13ah_5AG6-141 Kiểm tra đơn hàng có thỏa điều kiện cho phép hủy hay không
+DU_9noBwxVV13ah_5AG6-142 Truy vấn trạng thái đơn hàng
+DU_9noBwxVV13ah_5AG6-143 Trả về trạng thái
+DU_9noBwxVV13ah_5AG6-145 Hiển thị form xác nhận và yêu cầu nhập lý do hủy
+DU_9noBwxVV13ah_5AG6-147 Nhập lý do và xác nhận hủy
+DU_9noBwxVV13ah_5AG6-150 Gửi yêu cầu hủy đơn hàng
+DU_9noBwxVV13ah_5AG6-151 Chuyển trạng thái đơn hàng thành Đã hủy và cập nhật lại số lượng tồn kho
+DU_9noBwxVV13ah_5AG6-152 Xác nhận thành công
+DU_9noBwxVV13ah_5AG6-154 Phản hồi thành công
+DU_9noBwxVV13ah_5AG6-156 Thông báo hủy đơn hàng thành công
+DU_9noBwxVV13ah_5AG6-158 mso-ascii-font-family:"Times New Roman";mso-ascii-theme-font:major-latin; mso-hansi-font-family:"Times New Roman";mso-hansi-theme-font:major-latin; mso-bidi-font-family:"Times New Roman";mso-bidi-theme-font:major-latin; font-weight:normal">1.9.1. UC32 – Theo dõi tồn kho
+DU_9noBwxVV13ah_5AG6-160 mso-ascii-font-family:"Times New Roman";mso-ascii-theme-font:major-latin; mso-hansi-font-family:"Times New Roman";mso-hansi-theme-font:major-latin; mso-bidi-font-family:"Times New Roman";mso-bidi-theme-font:major-latin; font-weight:normal">1.9.2. UC33 – Kiểm tra tình trạng hàng
+DU_9noBwxVV13ah_5AG6-163 CSDL
+DU_9noBwxVV13ah_5AG6-165 Xử lý tìm kiếm đơn hàng
+DU_9noBwxVV13ah_5AG6-167 Giao diện tìm kiếm
+DU_9noBwxVV13ah_5AG6-169 Nhân viên
+DU_9noBwxVV13ah_5AG6-170 Chọn chức năng Quản lý tồn kho
+DU_9noBwxVV13ah_5AG6-171 Yêu cầu dữ liệu tồn kho
+DU_9noBwxVV13ah_5AG6-172 Truy xuất dữ liệu tồn kho
+DU_9noBwxVV13ah_5AG6-173 Trả về danh sách sản phẩm
+DU_9noBwxVV13ah_5AG6-175 Hiển thị danh sách sản phẩm cùng số lượng tồn theo kích cỡ, màu
+DU_9noBwxVV13ah_5AG6-177 Tìm kiếm hoặc lọc sản phẩm theo tên, mã, tình trạng tồn kho
+DU_9noBwxVV13ah_5AG6-179 Gửi yêu cầu lọc
+DU_9noBwxVV13ah_5AG6-180 Hiển thị kết quả phù hợp với yêu cầu của tác nhân
+DU_9noBwxVV13ah_5AG6-181 mso-ascii-font-family:"Times New Roman";mso-ascii-theme-font:major-latin; mso-hansi-font-family:"Times New Roman";mso-hansi-theme-font:major-latin; mso-bidi-font-family:"Times New Roman";mso-bidi-theme-font:major-latin; font-weight:normal">1.10. Quản lý phiếu nhập
+DU_9noBwxVV13ah_5AG6-184 CSDL
+DU_9noBwxVV13ah_5AG6-186 Xử lý thêm phiếu nhập
+DU_9noBwxVV13ah_5AG6-188 Giao diện thêm phiếu
+DU_9noBwxVV13ah_5AG6-190 Nhân viên
+DU_9noBwxVV13ah_5AG6-191 Chọn một sản phẩm từ danh sách tồn kho
+DU_9noBwxVV13ah_5AG6-192 Yêu cầu kiểm tra chi tiết sản phẩm
+DU_9noBwxVV13ah_5AG6-193 Truy xuất số lượng tồn và các lần nhập, bán gần đây của sản phẩm
+DU_9noBwxVV13ah_5AG6-194 Trả về dữ liệu lịch sử và tồn kho
+DU_9noBwxVV13ah_5AG6-195 Phân loại tình trạng hàng
+DU_9noBwxVV13ah_5AG6-198 Hiển thị tình trạng hàng theo từng kích cỡ, màu sắc (còn hàng, sắp hết hàng, hết hàng).
+DU_9noBwxVV13ah_5AG6-202 mso-ascii-font-family:"Times New Roman";mso-ascii-theme-font:major-latin; mso-hansi-font-family:"Times New Roman";mso-hansi-theme-font:major-latin; mso-bidi-font-family:"Times New Roman";mso-bidi-theme-font:major-latin; font-weight:normal">1.10.1. UC34 – Thêm phiếu nhập
+DU_9noBwxVV13ah_5AG6-203 mso-ascii-font-family:"Times New Roman";mso-ascii-theme-font:major-latin; mso-hansi-font-family:"Times New Roman";mso-hansi-theme-font:major-latin; mso-bidi-font-family:"Times New Roman";mso-bidi-theme-font:major-latin; font-weight:normal">1.10.2. UC35 – Xóa phiếu nhập
+DU_9noBwxVV13ah_5AG6-206 CSDL
+DU_9noBwxVV13ah_5AG6-208 Xử lý xóa phiếu nhập
+DU_9noBwxVV13ah_5AG6-210 Giao diện xóa phiếu
+DU_9noBwxVV13ah_5AG6-212 Nhân viên
+DU_9noBwxVV13ah_5AG6-213 Chọn chức năng Quản lý phiếu nhập và nhấn Thêm phiếu nhập
+DU_9noBwxVV13ah_5AG6-214 Hiển thị form phiếu nhập gồm mã phiếu, ngày nhập, nhà cung cấp và danh sách mặt hàng nhập.
+DU_9noBwxVV13ah_5AG6-215 Chọn sản phẩm, nhập kích cỡ, màu sắc, số lượng, giá nhập cho từng mặt hàng và nhấn Lưu
+DU_9noBwxVV13ah_5AG6-217 Gửi dữ liệu phiếu nhập mới
+DU_9noBwxVV13ah_5AG6-218 Lưu phiếu nhập và cộng số lượng nhập vào tồn kho.
+DU_9noBwxVV13ah_5AG6-219 Kiểm tra dữ liệu hợp lệ
+DU_9noBwxVV13ah_5AG6-220 Xác nhận lưu thành công
+DU_9noBwxVV13ah_5AG6-223 Phản hồi thành công
+DU_9noBwxVV13ah_5AG6-224 Thông báo thêm phiếu nhập thành công
+DU_9noBwxVV13ah_5AG6-225 mso-ascii-font-family:"Times New Roman";mso-ascii-theme-font:major-latin; mso-hansi-font-family:"Times New Roman";mso-hansi-theme-font:major-latin; mso-bidi-font-family:"Times New Roman";mso-bidi-theme-font:major-latin; font-weight:normal">1.10.3. UC36 – Sửa phiếu nhập
+DU_9noBwxVV13ah_5AG6-228 CSDL
+DU_9noBwxVV13ah_5AG6-230 Xử lý sửa phiếu nhập
+DU_9noBwxVV13ah_5AG6-232 Giao diện sửa phiếu
+DU_9noBwxVV13ah_5AG6-234 Nhân viên
+DU_9noBwxVV13ah_5AG6-235 Chọn phiếu nhập cần xóa trong danh sách và nhấn Xóa
+DU_9noBwxVV13ah_5AG6-236 Hiển thị hộp thoại yêu cầu xác nhận
+DU_9noBwxVV13ah_5AG6-237 Xác nhận xóa
+DU_9noBwxVV13ah_5AG6-238 Gửi yêu cầu xóa phiếu nhập
+DU_9noBwxVV13ah_5AG6-239 Kiểm tra việc xóa có làm sai lệch số lượng tồn kho hay không
+DU_9noBwxVV13ah_5AG6-240 Trả về dữ liệu liên quan
+DU_9noBwxVV13ah_5AG6-241 Xóa phiếu nhập và hoàn lại số lượng tồn kho tương ứng
+DU_9noBwxVV13ah_5AG6-242 Xác nhận thành công
+DU_9noBwxVV13ah_5AG6-246 Phản hồi thành công
+DU_9noBwxVV13ah_5AG6-247 Thông báo xóa thành công và cập nhật danh sách phiếu nhập
+DU_9noBwxVV13ah_5AG6-248 Chọn phiếu nhập cần sửa và nhấn Sửa
+DU_9noBwxVV13ah_5AG6-249 mso-ascii-font-family:"Times New Roman";mso-ascii-theme-font:major-latin; mso-hansi-font-family:"Times New Roman";mso-hansi-theme-font:major-latin; mso-bidi-font-family:"Times New Roman";mso-bidi-theme-font:major-latin; font-weight:normal">1.10.4. UC37 – Chi tiết phiếu nhập
+DU_9noBwxVV13ah_5AG6-252 CSDL
+DU_9noBwxVV13ah_5AG6-254 Xử lý chi tiết phiếu nhập
+DU_9noBwxVV13ah_5AG6-256 Giao diện chi tiết phiếu nhập
+DU_9noBwxVV13ah_5AG6-258 Nhân viên
+DU_9noBwxVV13ah_5AG6-259 Chọn một phiếu nhập trong danh sách
+DU_9noBwxVV13ah_5AG6-260 Yêu cầu lấy thông tin phiếu nhập
+DU_9noBwxVV13ah_5AG6-261 Truy vấn dữ liệu phiếu nhập
+DU_9noBwxVV13ah_5AG6-262 Trả về thông tin hiện tại
+DU_9noBwxVV13ah_5AG6-266 Thông báo cập nhật thành công
+DU_9noBwxVV13ah_5AG6-267 Hiển thị thông tin hiện tại của phiếu nhập
+DU_9noBwxVV13ah_5AG6-268 Chỉnh sửa thông tin (nhà cung cấp, ngày nhập mặt hàng, số lượng, giá nhập) và nhấn Lưu
+DU_9noBwxVV13ah_5AG6-269 Gửi dữ liệu cập nhật
+DU_9noBwxVV13ah_5AG6-271 Kiểm tra dữ liệu hợp lệ
+DU_9noBwxVV13ah_5AG6-272 Cập nhật phiếu nhập và điều chỉnh tồn kho theo phần chênh lệch
+DU_9noBwxVV13ah_5AG6-273 Xác nhận thành công
+DU_9noBwxVV13ah_5AG6-276 Phản hồi thành công
+DU_9noBwxVV13ah_5AG6-277 mso-ascii-font-family:"Times New Roman";mso-ascii-theme-font:major-latin; mso-hansi-font-family:"Times New Roman";mso-hansi-theme-font:major-latin; mso-bidi-font-family:"Times New Roman";mso-bidi-theme-font:major-latin; font-weight:normal">1.11. Quản lý khiếu nại
+DU_9noBwxVV13ah_5AG6-280 CSDL
+DU_9noBwxVV13ah_5AG6-282 Xử lý yêu cầu khiếu nại
+DU_9noBwxVV13ah_5AG6-284 Giao diện gửi yêu cầu
+DU_9noBwxVV13ah_5AG6-286 Khách hàng
+DU_9noBwxVV13ah_5AG6-287 Chọn chức năng Hỗ trợ / Khiếu nại và nhấn Gửi yêu cầu
+DU_9noBwxVV13ah_5AG6-288 Yêu cầu chi tiết phiếu nhập
+DU_9noBwxVV13ah_5AG6-289 Truy xuất thông tin phiếu nhập
+DU_9noBwxVV13ah_5AG6-290 Trả về dữ liệu chi tiết
+DU_9noBwxVV13ah_5AG6-292 Hiển thị mã phiếu, ngày nhập, nhà cung cấp, người lập phiếu, danh sách mặt hàng (kích cỡ, màu sắc, số lượng, giá nhập) và tổng giá trị
+DU_9noBwxVV13ah_5AG6-295 mso-ascii-font-family:"Times New Roman";mso-ascii-theme-font:major-latin; mso-hansi-font-family:"Times New Roman";mso-hansi-theme-font:major-latin; mso-bidi-font-family:"Times New Roman";mso-bidi-theme-font:major-latin; font-weight:normal">1.11.1. UC38 – Gửi yêu cầu
+DU_9noBwxVV13ah_5AG6-299 CSDL
+DU_9noBwxVV13ah_5AG6-301 Xử lý chi tiết phiếu nhập
+DU_9noBwxVV13ah_5AG6-303 Giao diện chi tiết phiếu nhập
+DU_9noBwxVV13ah_5AG6-305 Người dùng
+DU_9noBwxVV13ah_5AG6-306 Chọn chức năng Theo dõi yêu cầu
+DU_9noBwxVV13ah_5AG6-307 Hiển thị form gồm loại yêu cầu, đơn hàng liên quan (nếu có), tiêu đề và nội dung
+DU_9noBwxVV13ah_5AG6-310 Nhập thông tin (có thể đính kèm hình ảnh) và nhấn Gửi
+DU_9noBwxVV13ah_5AG6-311 Gửi dữ liệu yêu cầu
+DU_9noBwxVV13ah_5AG6-312 Kiểm tra dữ liệu hợp lệ
+DU_9noBwxVV13ah_5AG6-313 Ghi nhận yêu cầu với trạng thái Chờ tiếp nhận và tạo mã yêu cầu
+DU_9noBwxVV13ah_5AG6-314 Xác nhận lưu thành công
+DU_9noBwxVV13ah_5AG6-317 Thông báo gửi thành công kèm mã yêu cầu để khách hàng theo dõi
+DU_9noBwxVV13ah_5AG6-318 Phản hồi mã yêu cầu
+DU_9noBwxVV13ah_5AG6-319 "Times New Roman",serif;mso-ascii-theme-font:major-latin;mso-fareast-font-family: "Times New Roman";mso-hansi-theme-font:major-latin;mso-bidi-theme-font:major-latin; mso-ansi-language:VI;mso-fareast-language:VI;mso-bidi-language:AR-SA"> 1.11.2. UC39 – Theo dõi trạng thái yêu cầu
+DU_9noBwxVV13ah_5AG6-320 1.11.3. UC40 – Lấy danh sách yêu cầu có trạng thái Chờ tiếp nhận
+DU_9noBwxVV13ah_5AG6-323 CSDL
+DU_9noBwxVV13ah_5AG6-325 Xử lý tiếp nhận yêu cầu
+DU_9noBwxVV13ah_5AG6-327 Giao diện tiếp nhận yêu cầu
+DU_9noBwxVV13ah_5AG6-329 Nhân viên
+DU_9noBwxVV13ah_5AG6-330 Yêu cầu lấy danh sách yêu cầu
+DU_9noBwxVV13ah_5AG6-331 Truy xuất danh sách yêu cầu phù hợp với phân quyền
+DU_9noBwxVV13ah_5AG6-332 Trả về danh sách
+DU_9noBwxVV13ah_5AG6-335 Hiển thị danh sách yêu cầu của khách hàng hoặc danh sách yêu cầu cần theo dõi (nhân viên, Admin).
+DU_9noBwxVV13ah_5AG6-336 Chọn một yêu cầu
+DU_9noBwxVV13ah_5AG6-337 Yêu cầu chi tiết yêu cầu
+DU_9noBwxVV13ah_5AG6-339 Truy vấn trạng thái và lịch sử phản hồi
+DU_9noBwxVV13ah_5AG6-340 Trả về dữ liệu chi tiết
+DU_9noBwxVV13ah_5AG6-341 Hiển thị trạng thái hiện tại, lịch sử cập nhật và các phản hồi của nhân viên chăm sóc khách hàng
+DU_9noBwxVV13ah_5AG6-342 mso-ascii-font-family:"Times New Roman";mso-ascii-theme-font:major-latin; mso-hansi-font-family:"Times New Roman";mso-hansi-theme-font:major-latin; mso-bidi-font-family:"Times New Roman";mso-bidi-theme-font:major-latin; font-weight:normal">1.11.4. UC41 – Xem danh sách yêu cầu
+DU_9noBwxVV13ah_5AG6-352 Chọn chức năng Quản lý khiếu nại và mở danh sách yêu cầu mới
+DU_9noBwxVV13ah_5AG6-353 Yêu cầu danh sách yêu cầu mới
+DU_9noBwxVV13ah_5AG6-354 Truy vấn các yêu cầu ở trạng thái Chờ xác nhận
+DU_9noBwxVV13ah_5AG6-355 Trả về danh sách
+DU_9noBwxVV13ah_5AG6-358 Hiển thị danh sách
+DU_9noBwxVV13ah_5AG6-359 Chọn một yêu cầu và xem nội dung và chọn Tiếp nhận
+DU_9noBwxVV13ah_5AG6-360 Gửi yêu cầu tiếp nhận
+DU_9noBwxVV13ah_5AG6-362 Ghi nhận nhân viên tiếp nhận và chuyển trạng thái yêu cầu thành Đã tiếp nhận
+DU_9noBwxVV13ah_5AG6-363 Trả về danh sách
+DU_9noBwxVV13ah_5AG6-365 Phản hồi thành công
+DU_9noBwxVV13ah_5AG6-367 Thông báo tiếp nhận thành công, khách hàng thấy trạng thái mới
+DU_9noBwxVV13ah_5AG6-368 mso-ascii-font-family:"Times New Roman";mso-ascii-theme-font:major-latin; mso-hansi-font-family:"Times New Roman";mso-hansi-theme-font:major-latin; mso-bidi-font-family:"Times New Roman";mso-bidi-theme-font:major-latin; font-weight:normal">1.11.5. UC42 – Phân loại yêu cầu
+DU_9noBwxVV13ah_5AG6-371 CSDL
+DU_9noBwxVV13ah_5AG6-373 Xử lý xem phân loại yêu cầu
+DU_9noBwxVV13ah_5AG6-375 Giao diện phân loại yêu cầu
+DU_9noBwxVV13ah_5AG6-377 Nhân viên
+DU_9noBwxVV13ah_5AG6-389 mso-ascii-font-family:"Times New Roman";mso-ascii-theme-font:major-latin; mso-hansi-font-family:"Times New Roman";mso-hansi-theme-font:major-latin; mso-bidi-font-family:"Times New Roman";mso-bidi-theme-font:major-latin; font-weight:normal">1.11.6. UC43 – Xử lý yêu cầu
+DU_9noBwxVV13ah_5AG6-392 CSDL
+DU_9noBwxVV13ah_5AG6-394 Xử lý xem phân loại yêu cầu
+DU_9noBwxVV13ah_5AG6-396 Giao diện phân loại yêu cầu
+DU_9noBwxVV13ah_5AG6-399 Mở một yêu cầu trong danh sách
+DU_9noBwxVV13ah_5AG6-400 Truy vấn dữ liệu yêu cầu
+DU_9noBwxVV13ah_5AG6-401 Yêu cầu thông tin
+DU_9noBwxVV13ah_5AG6-402 Trả về nội dung và loại hiện tại
+DU_9noBwxVV13ah_5AG6-404 Hiển thị nội dung yêu cầu và loại hiện tại
+DU_9noBwxVV13ah_5AG6-406 Chọn loại (và mức ưu tiên nếu có) phù hợp với nội dung
+DU_9noBwxVV13ah_5AG6-407 Gửi thông tin phân loại mới
+DU_9noBwxVV13ah_5AG6-409 Cập nhật phân loại trong hệ thống
+DU_9noBwxVV13ah_5AG6-410 Xác nhận thành công
+DU_9noBwxVV13ah_5AG6-413 Thông báo cập nhật thành công
+DU_9noBwxVV13ah_5AG6-414 Phản hồi cập nhật thành công
+DU_9noBwxVV13ah_5AG6-415 Nhân viên
+DU_9noBwxVV13ah_5AG6-416 Mở yêu cầu cần xử lý
+DU_9noBwxVV13ah_5AG6-417 Yêu cầu thông tin
+DU_9noBwxVV13ah_5AG6-418 Truy vấn nội dung yêu cầu, thông tin khách hàng và đơn hàng liên quan
+DU_9noBwxVV13ah_5AG6-419 mso-ascii-font-family:"Times New Roman";mso-ascii-theme-font:major-latin; mso-hansi-font-family:"Times New Roman";mso-hansi-theme-font:major-latin; mso-bidi-font-family:"Times New Roman";mso-bidi-theme-font:major-latin; font-weight:normal">1.11.7. UC44 – Cập nhật trạng thái yêu cầu
+DU_9noBwxVV13ah_5AG6-422 CSDL
+DU_9noBwxVV13ah_5AG6-424 Xử lý xem phân loại yêu cầu
+DU_9noBwxVV13ah_5AG6-426 Giao diện phân loại yêu cầu
+DU_9noBwxVV13ah_5AG6-428 Nhân viên
+DU_9noBwxVV13ah_5AG6-432 Trả về dữ liệu
+DU_9noBwxVV13ah_5AG6-434 Hiển thị nội dung yêu cầu, thông tin khách hàng và đơn hàng liên quan (nếu có)
+DU_9noBwxVV13ah_5AG6-436 Nhập nội dung phản hồi và kết quả xử lý, nhấn Gửi
+DU_9noBwxVV13ah_5AG6-438 Gửi dữ liệu phản hồi
+DU_9noBwxVV13ah_5AG6-441 Lưu phản hồi, gửi đến khách hàng và ghi nhận vào lịch sử xử lý yêu cầu
+DU_9noBwxVV13ah_5AG6-442 Xác nhận thành công
+DU_9noBwxVV13ah_5AG6-446 Phản hồi thành công
+DU_9noBwxVV13ah_5AG6-447 Thông báo gửi phản hồi thành công; cập nhật trạng thái yêu cầu "Times New Roman",serif;mso-ascii-theme-font:major-latin;mso-fareast-font-family: "Times New Roman";mso-hansi-theme-font:major-latin;mso-bidi-theme-font:major-latin; mso-ansi-language:VI;mso-fareast-language:VI;mso-bidi-language:AR-SA">
+DU_9noBwxVV13ah_5AG6-449 Mở yêu cầu cần cập nhật
+DU_9noBwxVV13ah_5AG6-450 Yêu cầu thông tin trạng thái
+DU_9noBwxVV13ah_5AG6-451 Truy vấn trạng thái
+DU_9noBwxVV13ah_5AG6-452 Trả về dữ liệu
+DU_9noBwxVV13ah_5AG6-454 Hiển thị trạng thái hiện tại và các trạng thái hợp lệ có thể chuyển
+DU_9noBwxVV13ah_5AG6-456 Chọn trạng thái mới và nhập ghi chú và nhấn Xác nhận
+DU_9noBwxVV13ah_5AG6-457 Gửi dữ liệu cập nhật trạng thái
+DU_9noBwxVV13ah_5AG6-459 Cập nhật trạng thái và lưu lịch sử
+DU_9noBwxVV13ah_5AG6-460 Xác nhận thành công
+DU_9noBwxVV13ah_5AG6-463 Thông báo thành công; khách hàng xem được trạng thái mới
+DU_9noBwxVV13ah_5AG6-464 Phản hồi thành công
+DU_9noBwxVV13ah_5AG6-465 mso-ascii-font-family:"Times New Roman";mso-ascii-theme-font:major-latin; mso-hansi-font-family:"Times New Roman";mso-hansi-theme-font:major-latin; mso-bidi-font-family:"Times New Roman";mso-bidi-theme-font:major-latin; font-weight:normal">1.12. Báo cáo thống kê
+DU_9noBwxVV13ah_5AG6-466 mso-ascii-font-family:"Times New Roman";mso-ascii-theme-font:major-latin; mso-hansi-font-family:"Times New Roman";mso-hansi-theme-font:major-latin; mso-bidi-font-family:"Times New Roman";mso-bidi-theme-font:major-latin; font-weight:normal">1.12.1. UC45 – Thống kê mặt hàng bán chạy
+DU_9noBwxVV13ah_5AG6-468 CSDL
+DU_9noBwxVV13ah_5AG6-469 Xử lý quản lý thống kê
+DU_9noBwxVV13ah_5AG6-470 Giao diện xem thống kê
+DU_9noBwxVV13ah_5AG6-475 Chọn chức năng Báo cáo thống kê và chọn Thống kê mặt hàng bán chạy
+DU_9noBwxVV13ah_5AG6-476 Hiển thị form chọn khoảng thời gian (ngày, tháng, quý hoặc năm) và số lượng mặt hàng cần hiển thị
+DU_9noBwxVV13ah_5AG6-477 Chọn khoảng thời gian, số lượng và nhấn Xem thống kê
+DU_9noBwxVV13ah_5AG6-478 Gửi tham số thống kê
+DU_9noBwxVV13ah_5AG6-480 Trả về dữ liệu tổng hợp
+DU_9noBwxVV13ah_5AG6-481 Sắp xếp theo thứ giảm dần số lượng bán
+DU_9noBwxVV13ah_5AG6-484 Phản hồi kết quả thống kê
+DU_9noBwxVV13ah_5AG6-486 Hiển thị danh sách (hoặc biểu đồ) mặt hàng bán chạy theo thứ tự giảm dần số lượng bán
+DU_9noBwxVV13ah_5AG6-487 Admin
+DU_9noBwxVV13ah_5AG6-488 mso-ascii-font-family:"Times New Roman";mso-ascii-theme-font:major-latin; mso-hansi-font-family:"Times New Roman";mso-hansi-theme-font:major-latin; mso-bidi-font-family:"Times New Roman";mso-bidi-theme-font:major-latin; font-weight:normal">1.12.2. UC46 – Thống kê doanh thu
+DU_9noBwxVV13ah_5AG6-496 CSDL
+DU_9noBwxVV13ah_5AG6-498 Xử lý quản lý thống kê
+DU_9noBwxVV13ah_5AG6-500 Giao diện xem thống kê
+DU_9noBwxVV13ah_5AG6-503 Chọn chức năng Báo cáo thống kê và chọn Thống kê doanh thu
+DU_9noBwxVV13ah_5AG6-504 Hiển thị form chọn khoảng thời gian và cách xem (ngày, tháng, quý hoặc năm)
+DU_9noBwxVV13ah_5AG6-505 Chọn khoảng thời gian, số lượng và nhấn Xem thống kê
+DU_9noBwxVV13ah_5AG6-506 Gửi tham số thống kê doanh thu
+DU_9noBwxVV13ah_5AG6-509 Tính tổng doanh thu và nhóm theo mốc thời gian
+DU_9noBwxVV13ah_5AG6-510 Phản hồi kết quả dữ liệu
+DU_9noBwxVV13ah_5AG6-511 Hiển thị tổng doanh thu và doanh thu theo từng mốc thời gian dưới dạng bảng hoặc biểu đồ
+DU_9noBwxVV13ah_5AG6-512 Admin
+DU_9noBwxVV13ah_5AG6-523 CSDL
+DU_9noBwxVV13ah_5AG6-526 Xử lý xem danh sách yêu cầu
+DU_9noBwxVV13ah_5AG6-529 Giao diện xem danh sách yêu cầu
+DU_9noBwxVV13ah_5AG6-532 Nhân viên
+DU_9noBwxVV13ah_5AG6-533 Chọn chức năng Quản lý khiếu nại
+DU_9noBwxVV13ah_5AG6-534 Yêu cầu truy xuất danh sách yêu cầu
+DU_9noBwxVV13ah_5AG6-535 Truy xuất danh sách yêu cầu
+DU_9noBwxVV13ah_5AG6-536 Trả về dữ liệu
+DU_9noBwxVV13ah_5AG6-537 Hiển thị danh sách gồm mã yêu cầu, khách hàng, loại yêu cầu, ngày gửi và trạng thái
+DU_9noBwxVV13ah_5AG6-538 Thực hiện lọc theo trạng thái, loại yêu cầu hoặc tìm theo mã yêu cầu, tên khách hàng
+DU_9noBwxVV13ah_5AG6-539 Gửi tiêu chí lọc/ tìm kiếm
+DU_9noBwxVV13ah_5AG6-540 Truy vấn dữ liệu theo tiêu chí
+DU_9noBwxVV13ah_5AG6-541 Trả về dữ liệu
+DU_9noBwxVV13ah_5AG6-542 Hiển thị danh sách sau khi lọc/ tìm kiếm
+DU_9noBwxVV13ah_5AG6-543 Chọn một yêu cầu để xem nội dung chi tiết
+DU_9noBwxVV13ah_5AG6-544 Nhân viên
+qqH9LA40Kc29VzrD2bVA-1 Hiển thị thông tin hiện tại của khách hàng
+qqH9LA40Kc29VzrD2bVA-5 Hiển thị danh sách khách hàng
+qqH9LA40Kc29VzrD2bVA-6 Truy vấn từ khóa
+qqH9LA40Kc29VzrD2bVA-7 Trả về kết quả
+qqH9LA40Kc29VzrD2bVA-8 Tra về thành công
+qqH9LA40Kc29VzrD2bVA-14 Trả về thành công
+qqH9LA40Kc29VzrD2bVA-15 Trả về danh sách thành công
+qqH9LA40Kc29VzrD2bVA-16 Trả về thành công
+qqH9LA40Kc29VzrD2bVA-18 Trả về thành công
+qqH9LA40Kc29VzrD2bVA-19 Trả về thành công
+qqH9LA40Kc29VzrD2bVA-24 Trả về danh sách thành công
+qqH9LA40Kc29VzrD2bVA-26 Trả về dữ liệu thành công
+qqH9LA40Kc29VzrD2bVA-27 Trả dữ liệu thành công
+qqH9LA40Kc29VzrD2bVA-29 Trả kết quả thành công
+qqH9LA40Kc29VzrD2bVA-30 Truy vấn dữ liệu thanh toán
+qqH9LA40Kc29VzrD2bVA-32 Trả về danh sách
+qqH9LA40Kc29VzrD2bVA-33 Trả về thành công
+KKMkCGbyXJ8c2uJvRpJs-2 Truy vấn thông tin
+KKMkCGbyXJ8c2uJvRpJs-4 Trả về thông tin
+KKMkCGbyXJ8c2uJvRpJs-5 Trả về thành công
+KKMkCGbyXJ8c2uJvRpJs-6 Trả danh sách thành công
+KKMkCGbyXJ8c2uJvRpJs-7 Trả danh sách thành công
+KKMkCGbyXJ8c2uJvRpJs-8 Trả dữ liệu thành công
+KKMkCGbyXJ8c2uJvRpJs-9 Trả thông tin thành công
+KKMkCGbyXJ8c2uJvRpJs-10 Trả danh sách thành công
+KKMkCGbyXJ8c2uJvRpJs-11 Chọn một đơn hàng để xem chi tiết
+KKMkCGbyXJ8c2uJvRpJs-13 Trả thông tin thành công
+KKMkCGbyXJ8c2uJvRpJs-15 Trả dữ liệu thành công
+KKMkCGbyXJ8c2uJvRpJs-17 Trả dữ liệu thành công
+KKMkCGbyXJ8c2uJvRpJs-18 Trả trạng thái thành công
+KKMkCGbyXJ8c2uJvRpJs-19 Trả danh sách thành công
+KKMkCGbyXJ8c2uJvRpJs-21 Truy vấn yêu cầu lọc
+KKMkCGbyXJ8c2uJvRpJs-23 Trả về dữ liệu
+KKMkCGbyXJ8c2uJvRpJs-24 Trả về thành công
+KKMkCGbyXJ8c2uJvRpJs-26 Phản hồi thành công
+KKMkCGbyXJ8c2uJvRpJs-27 Xem các mặt hàng cần nhập thêm và có thể chuyển sang tạo phiếu nhập
+KKMkCGbyXJ8c2uJvRpJs-28 Trả thông tin thành công
+KKMkCGbyXJ8c2uJvRpJs-30 Trả dữ liệu thành công
+KKMkCGbyXJ8c2uJvRpJs-32 Trả về danh sách thành công
+KKMkCGbyXJ8c2uJvRpJs-33 Trả dữ liệu thành công
+KKMkCGbyXJ8c2uJvRpJs-35 Trả danh sách thành công
+KKMkCGbyXJ8c2uJvRpJs-36 Trả dữ liệu thành công
+KKMkCGbyXJ8c2uJvRpJs-37 Trả dữ liệu thành công
+KKMkCGbyXJ8c2uJvRpJs-39 Trả nội dung và loại hiện tại thành công
+KKMkCGbyXJ8c2uJvRpJs-40 Trả dữ liệu thành công
+KKMkCGbyXJ8c2uJvRpJs-42 Trả về dữ liệu thành công
+cE_zY3amT6DIqukuJC-b-1 Kiểm tra tài khoản có tồn tại
+cE_zY3amT6DIqukuJC-b-3 Truy vấn tài khoản theo email, tên đăng nhập
+cE_zY3amT6DIqukuJC-b-5 Thôn báo gửi mã xác nhận
+cE_zY3amT6DIqukuJC-b-7 Hiển thị form nhập mã và mật khẩu mới
+cE_zY3amT6DIqukuJC-b-8 Nhập mã, đặt mật khẩu và xác nhận
+cE_zY3amT6DIqukuJC-b-9 Gửi dữ liệu mật khẩu mới
+cE_zY3amT6DIqukuJC-b-10 Kiểm tra mã và tính hợp lệ
+cE_zY3amT6DIqukuJC-b-12 Kiểm tra sản phẩm không bị ràng buôc
+cE_zY3amT6DIqukuJC-b-13 Kiểm tra lựa chọn hợp lệ
+cE_zY3amT6DIqukuJC-b-14 Truy vấn số lượng tồn
+cE_zY3amT6DIqukuJC-b-15 Xác nhận đủ số lượng tồn kho
+cE_zY3amT6DIqukuJC-b-16 Kiểm tra lựa chọn hợp lệ
+cE_zY3amT6DIqukuJC-b-17 Tổng hợp số lượng bán của từng sản phẩm từ các đơn hàng hợp lệ trong khoảng thời gian đã chọn
+cE_zY3amT6DIqukuJC-b-18 Truy xuất danh sách tổng hợp
+cE_zY3amT6DIqukuJC-b-19 Trả về dữ liệu tổng hợp
+cE_zY3amT6DIqukuJC-b-20 Tổng hợp số lượng bán của từng sản phẩm từ các đơn hàng hợp lệ trong khoảng thời gian đã chọn
+cE_zY3amT6DIqukuJC-b-21 Truy xuất danh sách tổng hợp
+ZETkFUtleLES0XmkZZ70-1 1.13.1. UC47 – Xem lịch sử mua hàng cá nhân
+ZETkFUtleLES0XmkZZ70-5 Giao diện xem lịch sử
+ZETkFUtleLES0XmkZZ70-8 :Xử lý lịch sử mua hàng
+ZETkFUtleLES0XmkZZ70-10 CSDL
+ZETkFUtleLES0XmkZZ70-12 1.13.2. UC48 – Quản lý loại sản phẩm
+ZETkFUtleLES0XmkZZ70-13 Mở lịch sử mua hàng
+ZETkFUtleLES0XmkZZ70-14 Yêu cầu lấy lịch sử mua hàng (mã KH)
+ZETkFUtleLES0XmkZZ70-15 Lọc danh sách đặt hàng (mã KH) và sắp xếp mới nhất
+ZETkFUtleLES0XmkZZ70-16 Trả về dữ liệu đơn hàng
+ZETkFUtleLES0XmkZZ70-17 Gửi dữ liệu (mã đơn, ngày, tổng tiền, trạng thái)
+ZETkFUtleLES0XmkZZ70-18 Hiển thị danh sách đơn
+ZETkFUtleLES0XmkZZ70-19 Chọn đơn để xem sản phẩm, size, voucher và thanh toán
+ZETkFUtleLES0XmkZZ70-24 Giao diện sản phẩm
+ZETkFUtleLES0XmkZZ70-28 :Xử lý quản lý loại sản phẩm
+ZETkFUtleLES0XmkZZ70-31 CSDL
+ZETkFUtleLES0XmkZZ70-34 Mở Quản lý loại
+ZETkFUtleLES0XmkZZ70-35 Tải danh sách loại sản phẩm
+ZETkFUtleLES0XmkZZ70-36 Truy xuất categories
+ZETkFUtleLES0XmkZZ70-37 Trả về dữ liệu
+ZETkFUtleLES0XmkZZ70-38 Gửi dữ liệu loại sản phẩm
+ZETkFUtleLES0XmkZZ70-39 Hiển tên, mô tả, số sản phẩm và trạng thái
+ZETkFUtleLES0XmkZZ70-40 Thêm hoặc sửa, lưu và ẩn/hiện
+ZETkFUtleLES0XmkZZ70-41 Gửi thông tin cập nhật
+ZETkFUtleLES0XmkZZ70-42 Cập nhật categoties và menu User
+ZETkFUtleLES0XmkZZ70-43 Xác nhận thành công
+ZETkFUtleLES0XmkZZ70-44 Thông báo hoàn tất
+ZETkFUtleLES0XmkZZ70-45 Hiển thị kết quả
+ZETkFUtleLES0XmkZZ70-46 1.13.3. UC49 – Quản lý giá bán
+ZETkFUtleLES0XmkZZ70-51 Giao diện giá bán
+ZETkFUtleLES0XmkZZ70-55 Xử lý quản lý giá bán
+ZETkFUtleLES0XmkZZ70-58 CSDL
+ZETkFUtleLES0XmkZZ70-61 Mở Quản lý giá bán
+ZETkFUtleLES0XmkZZ70-62 1.13.4. UC50 – Quản lý trạng thái tài khoản khách hàng
+ZETkFUtleLES0XmkZZ70-63 Yêu cầu thông tin giá
+ZETkFUtleLES0XmkZZ70-64 Truy xuất giá nhập và giá bán
+ZETkFUtleLES0XmkZZ70-65 Trả về dữ liệu giá
+ZETkFUtleLES0XmkZZ70-66 Gửi thông tin giá
+ZETkFUtleLES0XmkZZ70-67 Hiển thị giá nhập và giá bán
+ZETkFUtleLES0XmkZZ70-68 Nhập giá hoặc tỷ lệ lợi nhuận
+ZETkFUtleLES0XmkZZ70-69 Gửi dữ liệu giá/ lợi nhuận mới
+ZETkFUtleLES0XmkZZ70-70 Lưu giá bán cùng giá hiển thị
+ZETkFUtleLES0XmkZZ70-71 Xác nhận lưu thành công
+ZETkFUtleLES0XmkZZ70-72 Phản hồi thành công
+ZETkFUtleLES0XmkZZ70-73 Hiển thị kết quả
+ZETkFUtleLES0XmkZZ70-78 Giao diện tài khoản khách hàng
+ZETkFUtleLES0XmkZZ70-82 Xử lý quản lý tài khoản khách hàng
+ZETkFUtleLES0XmkZZ70-85 CSDL
+ZETkFUtleLES0XmkZZ70-88 Mở Quản lý khách
+ZETkFUtleLES0XmkZZ70-89 Yêu cầu danh sách khách hàng
+ZETkFUtleLES0XmkZZ70-90 Truy xuất userList
+ZETkFUtleLES0XmkZZ70-91 Trả về danh sách
+ZETkFUtleLES0XmkZZ70-92 Gửi danh sách khách hàng
+ZETkFUtleLES0XmkZZ70-93 Hiển thị danh sách
+ZETkFUtleLES0XmkZZ70-94 Chọn tài khoản, chọn Khóa/Mở khóa hoặc Xóa
+ZETkFUtleLES0XmkZZ70-95 Gửi yêu cầu thay đổi trạng thái
+ZETkFUtleLES0XmkZZ70-96 Cập nhật userList, trangThai, biKhoa và phát sự kiện
+ZETkFUtleLES0XmkZZ70-97 Xác nhận cập nhật thành công
+ZETkFUtleLES0XmkZZ70-98 Phản hồi thành công
+ZETkFUtleLES0XmkZZ70-99 Hiển thị kết quả
+ZETkFUtleLES0XmkZZ70-100 1.13.5. UC51 – Cập nhật và bổ sung tồn kho theo size
+ZETkFUtleLES0XmkZZ70-105 Giao diện cập nhật và bổ sung tồn kho
+ZETkFUtleLES0XmkZZ70-109 Xử lý cập nhật và bổ sung theo size
+ZETkFUtleLES0XmkZZ70-112 CSDL
+ZETkFUtleLES0XmkZZ70-115 Mở Quản lý tồn kho
+ZETkFUtleLES0XmkZZ70-116 Yêu cầu dữ liệu tồn kho
+ZETkFUtleLES0XmkZZ70-117 Truy xuất tồn tổng và tồn theo size
+ZETkFUtleLES0XmkZZ70-118 Trả về dữ liệu tồn kho
+ZETkFUtleLES0XmkZZ70-119 Gửi danh sách tồn kho
+ZETkFUtleLES0XmkZZ70-120 Hiển thị tồn tổng và tồn theo size (cho phép lọc theo size/ trạng thái)
+ZETkFUtleLES0XmkZZ70-121 Thêm size mới hoặc lập phiếu nhập hoàn thành
+ZETkFUtleLES0XmkZZ70-122 Gửi dữ liệu cập nhật tồn kho/ size
+ZETkFUtleLES0XmkZZ70-123 Cộng đúng số lượng vào đúng size khi hoàn thành, cập nhật số lượng tồn, tổng đã nhập
+ZETkFUtleLES0XmkZZ70-124 Xác nhận lưu
+ZETkFUtleLES0XmkZZ70-125 Phản hồi lưu thành công
+ZETkFUtleLES0XmkZZ70-126 Hiển thị tồn kho đã cập nhật
+ZETkFUtleLES0XmkZZ70-127 1.14. Voucher và hỗ trợ
+ZETkFUtleLES0XmkZZ70-128 1.14.1. UC52 – Áp dụng voucher khi thanh toán
+ZETkFUtleLES0XmkZZ70-132 Giao diện khuyến mãi
+ZETkFUtleLES0XmkZZ70-135 Xử lý khuyến mãi
+ZETkFUtleLES0XmkZZ70-137 CSDL
+ZETkFUtleLES0XmkZZ70-139 Khách hàng
+ZETkFUtleLES0XmkZZ70-140 Chọn voucher mặc định hoặc nhập mã tại checkout
+ZETkFUtleLES0XmkZZ70-141 Gửi mã voucher và thông tin đơn hàng
+ZETkFUtleLES0XmkZZ70-142 Trả về kết quả
+ZETkFUtleLES0XmkZZ70-143 Gửi thông báo phản hồi
+ZETkFUtleLES0XmkZZ70-144 Hiển thị thông tin thanh toán sau khi áp dụng voucher
+ZETkFUtleLES0XmkZZ70-145 1.14.2. UC53 – Quản lý voucher
+ZETkFUtleLES0XmkZZ70-149 Giao diện quản lý
+ZETkFUtleLES0XmkZZ70-152 Xử lý quản lý voucher
+ZETkFUtleLES0XmkZZ70-154 CSDL
+ZETkFUtleLES0XmkZZ70-156 Admin
+ZETkFUtleLES0XmkZZ70-157 Mở Quản lý voucher/ thêm voucher mới
+ZETkFUtleLES0XmkZZ70-158 Gửi thông tin ( mã, loại giảm, giá trị,giá tối thiểu, giảm tối đa, thời gian và trạng thái )
+ZETkFUtleLES0XmkZZ70-159 Lưu danh sách
+ZETkFUtleLES0XmkZZ70-160 Xác nhận lưu thành công
+ZETkFUtleLES0XmkZZ70-161 Phản hồi thành công
+ZETkFUtleLES0XmkZZ70-162 Hiển thị danh sách voucher
+ZETkFUtleLES0XmkZZ70-163 1.14.3. UC54 – Khách hàng chat hỗ trợ
+ZETkFUtleLES0XmkZZ70-168 Giao diện Chat
+ZETkFUtleLES0XmkZZ70-172 Xử lý Chat hỗ trợ
+ZETkFUtleLES0XmkZZ70-175 CSDL
+ZETkFUtleLES0XmkZZ70-178 Mở Khung chat
+ZETkFUtleLES0XmkZZ70-179 Yêu cầu khởi tạo/ đọc luồng
+ZETkFUtleLES0XmkZZ70-180 Truy vấn tạo/ đọc supportThreads
+ZETkFUtleLES0XmkZZ70-181 Trả về dữ liệu luồng chat
+ZETkFUtleLES0XmkZZ70-182 Gửi dữ liệu
+ZETkFUtleLES0XmkZZ70-183 Hiển thị khung chat và sẵn sàng chat
+ZETkFUtleLES0XmkZZ70-184 Gửi tin, ảnh tối đa 2MB hoặc mã sản phẩm
+ZETkFUtleLES0XmkZZ70-185 Xử lý và gửi nội dung tin nhắn
+ZETkFUtleLES0XmkZZ70-186 Lưu tin nhắn vào storage
+ZETkFUtleLES0XmkZZ70-187 Xác nhận lưu
+ZETkFUtleLES0XmkZZ70-188 Cập nhật giao diện chat qua storage event
+ZETkFUtleLES0XmkZZ70-189 Hiển thị tin nhắn ở hai phía
+ZETkFUtleLES0XmkZZ70-190 Khách hàng
+ZETkFUtleLES0XmkZZ70-191 Nhân viên
+ZETkFUtleLES0XmkZZ70-192 Admin
+ZETkFUtleLES0XmkZZ70-193 Admin
+ZETkFUtleLES0XmkZZ70-194 Admin
+ZETkFUtleLES0XmkZZ70-195 Khách hàng
+ZETkFUtleLES0XmkZZ70-196 Tính, kiểm tra giá bán
+ZETkFUtleLES0XmkZZ70-197 Kiểm tra hợp lệ
+ZETkFUtleLES0XmkZZ70-198 Kiểm tra điều kiện size và số lượng tồn
+ZETkFUtleLES0XmkZZ70-199 Kiểm tra mã, thời gian, trạng thái và đơn tối thiểu
+ZETkFUtleLES0XmkZZ70-200 Tạm tính, giảm giá, ship và tổng sau giảm
+ZETkFUtleLES0XmkZZ70-201 1.14.5. UC55 – Nhân viên/Admin chat với khách hàng
+ZETkFUtleLES0XmkZZ70-207 Giao diện Chat
+ZETkFUtleLES0XmkZZ70-212 Xử lý Chat hỗ trợ
+ZETkFUtleLES0XmkZZ70-216 CSDL
+ZETkFUtleLES0XmkZZ70-220 Đăng nhập hệ thống và truy cập trang /support
+ZETkFUtleLES0XmkZZ70-221 Yêu cầu lấy danh sách supportThreads
+ZETkFUtleLES0XmkZZ70-222 Truy vấn danh sách supportThreads
+ZETkFUtleLES0XmkZZ70-223 Trả về dữ liệu danh sách
+ZETkFUtleLES0XmkZZ70-224 Gửi dữ liệu
+ZETkFUtleLES0XmkZZ70-225 Hiển thị các danh sách supportThreads
+ZETkFUtleLES0XmkZZ70-226 Chọn một supportThreads của khách hàng
+ZETkFUtleLES0XmkZZ70-227 Yêu cầu lấy nội dung tin
+ZETkFUtleLES0XmkZZ70-228 Truy vấn nội dung tin nhắn
+ZETkFUtleLES0XmkZZ70-229 Trả về nội dung tin nhắn
+ZETkFUtleLES0XmkZZ70-230 Gửi nội dung
+ZETkFUtleLES0XmkZZ70-231 Hiển thị hiển thị nội dung tin nhắn
+ZETkFUtleLES0XmkZZ70-232 Nhân viên
+ZETkFUtleLES0XmkZZ70-233 Nhập nội dung phản hồi hoặc đính kèm hình ảnh, đường dẫn sản phẩm và gửi tin
+ZETkFUtleLES0XmkZZ70-234 Gửi tin nhắn mới
+ZETkFUtleLES0XmkZZ70-235 Lưu tin nhắn vào cuộc hội thoại và cập nhật nội dung cho khách hàng
+ZETkFUtleLES0XmkZZ70-236 Xác nhận đã lưu
+ZETkFUtleLES0XmkZZ70-237 Cập nhật nội dung cho khách hàng
+ZETkFUtleLES0XmkZZ70-238 Khách hàng nhận được tin nhắn và có thể tiếp tục phản hồi

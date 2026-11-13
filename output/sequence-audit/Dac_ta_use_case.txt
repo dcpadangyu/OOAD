@@ -1,0 +1,1451 @@
+ĐẶC TẢ USE CASE
+Các tác nhân của hệ thống:
+Khách hàng
+Người mua hàng: đăng ký, tra cứu sản phẩm, quản lý giỏ hàng, áp dụng voucher, voucher dùng được và không dùng được, đặt hàng, thanh toán, xem lịch sử mua hàng, gửi yêu cầu hỗ trợ và theo dõi trạng thái yêu cầu.
+Nhân viên bán hàng
+Quản lý sản phẩm (thêm, sửa, xóa, ẩn/hiện) và xử lý đơn hàng (xác nhận, giao, hủy); quản lý voucher (tạo, sửa) và phát, thu hồi voucher riêng cho khách hàng.
+Nhân viên kho
+Quản lý tồn kho theo từng size giày, lập và hoàn thành phiếu nhập; chỉ được thêm hoặc bớt size của sản phẩm, không sửa thông tin khác; có thể xem danh sách sản phẩm.
+Nhân viên kiểm kho
+Xem sản phẩm và theo dõi tồn kho để kiểm tra, đối chiếu hàng hóa; không được thay đổi dữ liệu.
+Nhân viên chăm sóc khách hàng
+Trả lời chat và gọi hỗ trợ khách hàng (tiếp nhận, xử lý hội thoại hỗ trợ), phản hồi đánh giá sản phẩm, hủy đơn hàng khi xử lý khiếu nại; phát voucher bồi thường cho khách hàng (chỉ các voucher Admin cho phép).
+Admin
+Toàn quyền quản trị: quản lý tài khoản khách hàng (khóa/mở khóa, đặt lại mật khẩu) và nhân viên (thêm, sửa, khóa, xóa, phân quyền theo chức vụ); quản lý sản phẩm, loại sản phẩm (hãng), giá bán, nhập hàng, tồn kho theo size, đơn hàng, đánh giá sản phẩm, hỗ trợ khách hàng (chat, gọi) và báo cáo doanh thu.
+Danh sách use case
+Use case chi tiết:
+Mã
+Tên use case
+Tác nhân
+UC01
+Đăng nhập hệ thống
+Khách hàng, Nhân viên bán hàng, Nhân viên kho, Nhân viên kiểm kho, Nhân viên chăm sóc khách hàng, Admin
+UC02
+Đăng xuất hệ thống
+Khách hàng, Nhân viên bán hàng, Nhân viên kho, Nhân viên kiểm kho, Nhân viên chăm sóc khách hàng, Admin
+UC03
+Quên mật khẩu
+Khách hàng
+UC04
+Đăng ký tài khoản
+Khách hàng
+UC05
+Cập nhật thông tin cá nhân
+Khách hàng
+UC06
+Đổi mật khẩu
+Khách hàng
+UC07
+Xem danh sách khách hàng
+Admin
+UC08
+Xem lịch sử mua hàng của khách hàng
+Admin
+UC09
+Tạo tài khoản nhân viên mới
+Admin
+UC10
+Sửa thông tin nhân viên
+Admin
+UC11
+Phân quyền
+Admin
+UC12
+Tìm kiếm sản phẩm
+Khách hàng, Nhân viên bán hàng, Admin
+UC13
+Lọc sản phẩm
+Khách hàng, Nhân viên bán hàng, Admin
+UC14
+Xem chi tiết sản phẩm
+Khách hàng, Nhân viên bán hàng, Admin
+UC15
+Xem sản phẩm đang khuyến mãi
+Khách hàng, Nhân viên bán hàng, Admin
+UC16
+Thêm sản phẩm
+Nhân viên bán hàng, Admin
+UC17
+Xóa sản phẩm
+Nhân viên bán hàng, Admin
+UC18
+Sửa sản phẩm
+Nhân viên bán hàng, Admin (Nhân viên kho chỉ thêm/bớt size)
+UC19
+Quản lý danh mục
+Nhân viên bán hàng, Admin
+UC20
+Quản lý thương hiệu
+Nhân viên bán hàng, Admin
+UC21
+Quản lý khuyến mãi
+Nhân viên bán hàng, Admin
+UC22
+Thêm vào giỏ hàng
+Khách hàng
+UC23
+Mua ngay
+Khách hàng
+UC24
+Xem giỏ hàng
+Khách hàng
+UC25
+Cập nhật giỏ hàng
+Khách hàng
+UC26
+Thanh toán đơn hàng
+Khách hàng
+UC27
+Thanh toán khi nhận hàng
+Khách hàng
+UC28
+Thanh toán chuyển khoản
+Khách hàng
+UC29
+Xác nhận thông tin thanh toán
+Nhân viên bán hàng, Admin
+UC30
+Đặt hàng
+Khách hàng
+UC31
+Chọn địa chỉ giao hàng
+Khách hàng
+UC32
+Lọc đơn hàng
+Nhân viên bán hàng, Admin
+UC33
+Tìm kiếm đơn hàng
+Nhân viên bán hàng, Admin
+UC34
+Xem chi tiết đơn hàng
+Khách hàng, Nhân viên bán hàng, Admin
+UC35
+Theo dõi tình trạng đơn hàng
+Khách hàng, Nhân viên bán hàng, Admin
+UC36
+Cập nhật trạng thái đơn hàng
+Nhân viên bán hàng, Admin
+UC37
+Hủy đơn hàng
+Khách hàng, Nhân viên bán hàng, Nhân viên CSKH, Admin (hủy qua trạng thái “Hủy”).
+UC38
+Theo dõi tồn kho
+Nhân viên kho, Nhân viên kiểm kho, Admin
+UC39
+Kiểm tra tình trạng hàng
+Nhân viên kho, Nhân viên kiểm kho, Admin
+UC40
+Thêm phiếu nhập
+Nhân viên kho, Admin
+UC41
+Xóa phiếu nhập
+Nhân viên kho, Admin
+UC42
+Sửa phiếu nhập
+Nhân viên kho, Admin
+UC43
+Chi tiết phiếu nhập
+Nhân viên kho, Admin
+UC44
+Đánh giá sản phẩm
+Khách hàng
+UC45
+Xem đánh giá
+Khách hàng
+UC46
+Phản hồi đánh giá
+Nhân viên chăm sóc khách hàng
+UC47
+Xem danh sách đánh giá
+Nhân viên chăm sóc khách hàng, Admin
+UC48
+Lọc đánh giá
+Nhân viên chăm sóc khách hàng, Admin
+UC49
+Kiểm duyệt đánh giá
+Nhân viên chăm sóc khách hàng, Admin
+UC50
+Ẩn/ hiện đánh giá
+Nhân viên chăm sóc khách hàng
+UC51
+Thống kê mặt hàng bán chạy
+Admin
+UC52
+Thống kê doanh thu
+Admin
+UC53
+Thống kê đơn hàng
+Admin
+UC54
+Thống kê tồn kho
+Admin
+UC55
+Xem lịch sử mua hàng cá nhân
+Khách hàng
+UC56
+Quản lý loại sản phẩm
+Admin
+UC57
+Quản lý giá bán
+Admin
+UC58
+Quản lý trạng thái tài khoản khách hàng
+Admin
+UC59
+Cập nhật và bổ sung tồn kho theo size
+Nhân viên kho, Admin
+UC60
+Áp dụng voucher khi thanh toán
+Khách hàng
+UC61
+Quản lý voucher
+Nhân viên bán hàng, Admin
+UC62
+Phát và thu hồi voucher cho khách hàng
+Nhân viên bán hàng, Nhân viên chăm sóc khách hàng, Admin
+UC63
+Xem voucher dùng được và không dùng được
+Khách hàng
+UC64
+Gửi yêu cầu hỗ trợ
+Khách hàng
+UC65
+Quản lý hỗ trợ khách hàng
+Nhân viên chăm sóc khách hàng, Admin
+Phần 1. Đặc tả use case chi tiết
+1.1. Quản lý đăng nhập
+1.1.1. UC01 – Đăng nhập hệ thống
+Tóm tắt
+Cho phép người dùng nhập thông tin tài khoản để hệ thống xác thực và cấp quyền truy cập các chức năng tương ứng với vai trò của mình. Người dùng phải đăng nhập thành công thì mới sử dụng được các chức năng khác của hệ thống.
+Dòng sự kiện chính
+Người dùng chọn chức năng Đăng nhập.
+Hệ thống hiển thị form đăng nhập gồm tên đăng nhập, mật khẩu và ô Ghi nhớ đăng nhập.
+Người dùng nhập thông tin và nhấn nút Đăng nhập.
+Hệ thống kiểm tra dữ liệu nhập vào có đầy đủ và đúng định dạng.
+Hệ thống đối chiếu thông tin với dữ liệu tài khoản đã lưu.
+Hệ thống tạo phiên làm việc. Hệ thống có hai trang đăng nhập riêng (Admin và Nhân viên) nên không tự nhận vai trò từ một form đăng nhập chung.
+Hệ thống chuyển người dùng đến giao diện chính tương ứng với vai trò của người dùng.
+Dòng sự kiện phụ
+– Thiếu thông tin: hệ thống báo lỗi và yêu cầu nhập đầy đủ tên đăng nhập, mật khẩu.
+– Sai tên đăng nhập hoặc mật khẩu: hệ thống thông báo đăng nhập không thành công và cho phép nhập lại; nhân viên nhập sai 5 lần liên tiếp thì tài khoản bị tạm khóa đăng nhập 60 giây.
+– Tài khoản bị khóa hoặc vô hiệu hóa: hệ thống thông báo và từ chối đăng nhập.
+– Khách hàng đăng nhập bằng mật khẩu tạm do Admin cấp: hệ thống chuyển sang trang Đổi mật khẩu để khách hàng đặt mật khẩu mới.
+– Khách hàng quên mật khẩu: chọn Quên mật khẩu, hệ thống thực hiện use case Quên mật khẩu (UC03); Admin và nhân viên liên hệ quản trị viên để được hỗ trợ.
+Tiền điều kiện (pre-condition)
+Người dùng đã có tài khoản trong hệ thống.
+Người dùng chưa đăng nhập.
+Hậu điều kiện (post-condition)
+Thành công: phiên làm việc được tạo và người dùng chỉ sử dụng được các chức năng phù hợp với vai trò.
+Thất bại: không tạo phiên làm việc, hệ thống giữ nguyên trạng thái chưa đăng nhập.
+
+1.1.2. UC02 – Đăng xuất hệ thống
+Tóm tắt
+Cho phép người dùng kết thúc phiên làm việc hiện tại để bảo vệ tài khoản khi không sử dụng hệ thống.
+Dòng sự kiện chính
+Người dùng chọn chức năng Đăng xuất.
+Hệ thống kết thúc phiên làm việc và xóa thông tin phiên của người dùng.
+Hệ thống chuyển người dùng về trang đăng nhập (hoặc trang chủ).
+Dòng sự kiện phụ
+– Phiên làm việc đã hết hạn: hệ thống tự động chuyển người dùng về trang đăng nhập.
+– Lỗi kết nối khi đăng xuất: hệ thống thông báo lỗi và cho phép người dùng thực hiện lại.
+Tiền điều kiện (pre-condition)
+Người dùng đã đăng nhập vào hệ thống (UC01).
+Hậu điều kiện (post-condition)
+Phiên làm việc kết thúc, người dùng không thể truy cập các chức năng yêu cầu đăng nhập cho đến khi đăng nhập lại.
+
+1.1.3. UC03 – Quên mật khẩu
+Tóm tắt
+Use case mở rộng (Extend) của Đăng nhập hệ thống, cho phép khách hàng đặt lại mật khẩu bằng mã OTP gửi qua email khi không nhớ mật khẩu hiện tại. Admin và nhân viên không có luồng đặt lại mật khẩu; hệ thống chỉ hiển thị thông báo “Liên hệ quản trị viên”.
+Dòng sự kiện chính
+Tại form đăng nhập, khách hàng chọn Quên mật khẩu.
+Hệ thống hiển thị form yêu cầu nhập email đã đăng ký.
+Khách hàng nhập email và yêu cầu gửi mã xác nhận.
+Hệ thống kiểm tra tài khoản có tồn tại và không bị khóa.
+Hệ thống gửi mã OTP đến email của khách hàng.
+Khách hàng nhập mã OTP, mật khẩu mới (ít nhất 8 ký tự) và xác nhận mật khẩu mới.
+Hệ thống kiểm tra mã OTP và mật khẩu mới hợp lệ, sau đó cập nhật mật khẩu (lưu dạng mã hóa).
+Hệ thống thông báo đặt lại mật khẩu thành công và chuyển về trang đăng nhập (khách hàng không được đăng nhập tự động).
+Dòng sự kiện phụ
+– Email chưa được đăng ký: hệ thống thông báo và yêu cầu nhập lại.
+– Tài khoản đang bị khóa: hệ thống từ chối đặt lại mật khẩu.
+– Mã OTP sai hoặc hết hạn: hệ thống thông báo và cho phép gửi lại mã.
+– Mật khẩu mới dưới 8 ký tự hoặc không khớp phần xác nhận: hệ thống báo lỗi và yêu cầu nhập lại.
+– Admin hoặc nhân viên chọn Quên mật khẩu: hệ thống chỉ hiển thị thông báo “Liên hệ quản trị viên”, không gửi mã OTP và không cho đặt lại mật khẩu.
+Tiền điều kiện (pre-condition)
+Tài khoản của người dùng đã tồn tại trong hệ thống.
+Khách hàng truy cập được email đã dùng để đăng ký tài khoản.
+Hậu điều kiện (post-condition)
+Thành công: mật khẩu mới có hiệu lực, mật khẩu cũ không còn sử dụng được.
+Thất bại: mật khẩu hiện tại của tài khoản không thay đổi.
+
+1.2. Quản lý tài khoản (Khách hàng)
+1.2.1. UC04 – Đăng ký tài khoản
+Tóm tắt
+Cho phép khách hàng mới tạo tài khoản để đăng nhập, mua hàng và theo dõi đơn hàng trên hệ thống.
+Dòng sự kiện chính
+Khách hàng chọn chức năng Đăng ký.
+Hệ thống hiển thị form đăng ký gồm tên đăng nhập, email, số điện thoại, địa chỉ, mật khẩu và xác nhận mật khẩu.
+Khách hàng nhập đầy đủ thông tin và nhấn Đăng ký.
+Hệ thống kiểm tra dữ liệu hợp lệ (tên đăng nhập chỉ gồm chữ, tối thiểu 3 ký tự; số điện thoại dạng 0xxxxxxxxx; mật khẩu tối thiểu 8 ký tự) và không trùng với tài khoản khác, sau đó gửi mã OTP xác thực đến email.
+Khách hàng nhập mã OTP.
+Hệ thống xác thực và tạo tài khoản khách hàng (mật khẩu được mã hóa trước khi lưu).
+Hệ thống thông báo đăng ký thành công và chuyển đến trang đăng nhập.
+Dòng sự kiện phụ
+– Thiếu thông tin hoặc sai định dạng (tên đăng nhập, email, số điện thoại, địa chỉ ít nhất 10 ký tự): hệ thống báo lỗi tại trường tương ứng.
+– Tên đăng nhập, email hoặc số điện thoại đã được đăng ký: hệ thống thông báo và yêu cầu dùng thông tin khác.
+– Mật khẩu không khớp phần xác nhận hoặc dưới 8 ký tự; mã OTP sai hoặc hết hạn: hệ thống yêu cầu nhập lại.
+Tiền điều kiện (pre-condition)
+Khách hàng chưa có tài khoản và chưa đăng nhập.
+Hậu điều kiện (post-condition)
+Thành công: tài khoản khách hàng được tạo và có thể đăng nhập.
+Thất bại: hệ thống không tạo tài khoản mới.
+
+1.2.2. UC05 – Cập nhật thông tin cá nhân
+Tóm tắt
+Cho phép khách hàng xem và chỉnh sửa thông tin cá nhân của mình như họ tên, số điện thoại và quản lý danh sách địa chỉ nhận hàng (thêm, sửa, xóa, đặt địa chỉ mặc định).
+Dòng sự kiện chính
+Khách hàng chọn chức năng Thông tin cá nhân.
+Hệ thống hiển thị thông tin hiện tại của khách hàng.
+Khách hàng chỉnh sửa các thông tin cần thay đổi và nhấn Lưu.
+Hệ thống kiểm tra tính hợp lệ của dữ liệu.
+Hệ thống cập nhật thông tin và thông báo cập nhật thành công.
+Dòng sự kiện phụ
+– Dữ liệu không hợp lệ hoặc để trống trường bắt buộc: hệ thống báo lỗi và không lưu.
+– Số điện thoại hoặc email trùng với tài khoản khác: hệ thống thông báo và yêu cầu nhập lại.
+– Khách hàng hủy thao tác: hệ thống giữ nguyên thông tin cũ.
+Tiền điều kiện (pre-condition)
+Khách hàng đã đăng nhập vào hệ thống thành công (UC01).
+Hậu điều kiện (post-condition)
+Thành công: thông tin cá nhân được cập nhật và dùng cho các đơn hàng sau đó.
+Thất bại: thông tin cũ được giữ nguyên.
+
+1.2.3. UC06 – Đổi mật khẩu
+Tóm tắt
+Cho phép khách hàng thay đổi mật khẩu đăng nhập của mình khi đang sử dụng hệ thống; xác minh bằng mật khẩu hiện tại hoặc mã OTP gửi qua email.
+Dòng sự kiện chính
+Khách hàng chọn chức năng Đổi mật khẩu.
+Hệ thống hiển thị form gồm mật khẩu hiện tại (hoặc mã OTP gửi qua email), mật khẩu mới và xác nhận mật khẩu mới.
+Khách hàng nhập thông tin và nhấn Xác nhận.
+Hệ thống kiểm tra mật khẩu hiện tại (hoặc mã OTP) có đúng hay không.
+Hệ thống kiểm tra mật khẩu mới có ít nhất 8 ký tự, khác mật khẩu cũ và khớp với phần xác nhận.
+Hệ thống cập nhật mật khẩu mới (lưu dạng mã hóa), đăng xuất khách hàng và yêu cầu đăng nhập lại bằng mật khẩu mới.
+Dòng sự kiện phụ
+– Mật khẩu hiện tại sai: hệ thống thông báo và yêu cầu nhập lại.
+– Mật khẩu mới trùng mật khẩu cũ hoặc không đạt yêu cầu: hệ thống báo lỗi.
+– Mật khẩu mới không khớp phần xác nhận: hệ thống yêu cầu nhập lại.
+Tiền điều kiện (pre-condition)
+Khách hàng đã đăng nhập vào hệ thống thành công (UC01).
+Hậu điều kiện (post-condition)
+Thành công: mật khẩu mới có hiệu lực cho các lần đăng nhập sau.
+Thất bại: mật khẩu hiện tại không thay đổi.
+
+1.3. Quản lý khách hàng (Admin)
+1.3.1. UC07 – Xem danh sách khách hàng
+Tóm tắt
+Cho phép Admin xem danh sách tài khoản khách hàng của cửa hàng cùng trạng thái để theo dõi, quản lý; từ danh sách có thể xem lịch sử mua hàng của khách (UC08) và khóa/mở khóa hoặc reset mật khẩu (UC58).
+Dòng sự kiện chính
+Admin chọn chức năng Quản lý khách hàng.
+Hệ thống truy xuất danh sách tài khoản khách hàng.
+Hệ thống hiển thị danh sách gồm mã khách hàng, họ tên, số điện thoại, email, ngày tạo, trạng thái tài khoản.
+Admin chọn một khách hàng để xem lịch sử mua hàng (UC08) hoặc khóa/mở khóa, reset mật khẩu (UC58).
+Dòng sự kiện phụ
+– Chưa có khách hàng nào: hệ thống thông báo danh sách trống.
+– Lỗi truy xuất dữ liệu: hệ thống thông báo lỗi và cho phép tải lại.
+Tiền điều kiện (pre-condition)
+Admin đã đăng nhập vào hệ thống thành công (UC01).
+Hậu điều kiện (post-condition)
+Danh sách khách hàng được hiển thị, dữ liệu không bị thay đổi.
+1.3.2. UC08 – Xem lịch sử mua hàng của khách hàng
+Tóm tắt
+Cho phép Admin xem các đơn hàng đã đặt của một khách hàng cụ thể, kèm trạng thái và chi tiết từng đơn.
+Dòng sự kiện chính
+Admin mở danh sách khách hàng (UC07) và chọn một khách hàng.
+Hệ thống lấy các đơn hàng của khách hàng đó và sắp xếp đơn mới nhất lên trước.
+Hệ thống hiển thị mã đơn, ngày đặt, tổng tiền và trạng thái của từng đơn.
+Admin chọn một đơn để xem chi tiết (UC34).
+Dòng sự kiện phụ
+– Khách hàng chưa có đơn nào: hệ thống hiển thị danh sách trống.
+– Tài khoản khách hàng không còn tồn tại: hệ thống thông báo và quay về danh sách.
+Tiền điều kiện (pre-condition)
+Admin đã đăng nhập vào hệ thống thành công (UC01). Khách hàng cần xem tồn tại trong hệ thống.
+Hậu điều kiện (post-condition)
+Lịch sử mua hàng của đúng khách hàng được hiển thị, dữ liệu không bị thay đổi.
+1.4. Quản lý tài khoản nhân viên
+1.4.1. UC09 – Tạo tài khoản nhân viên mới
+Tóm tắt
+Cho phép Admin tạo tài khoản cho nhân viên mới và gán chức vụ (nhân viên bán hàng, nhân viên kho, nhân viên chăm sóc khách hàng, nhân viên kiểm kho).
+Dòng sự kiện chính
+Admin chọn chức năng Quản lý tài khoản nhân viên và nhấn Thêm nhân viên.
+Hệ thống hiển thị form gồm họ tên, giới tính, số điện thoại, địa chỉ, chức vụ, tên đăng nhập và mật khẩu ban đầu.
+Admin nhập thông tin, chọn chức vụ và nhấn Lưu.
+Hệ thống kiểm tra dữ liệu hợp lệ (số điện thoại 10 số bắt đầu bằng 0; mật khẩu ít nhất 8 ký tự gồm cả chữ và số) và không trùng với nhân viên đã có.
+Hệ thống tạo tài khoản nhân viên (mật khẩu được mã hóa) và gán chức vụ đã chọn.
+Hệ thống thông báo tạo thành công và hiển thị nhân viên mới trong danh sách.
+Dòng sự kiện phụ
+– Thiếu thông tin bắt buộc hoặc sai định dạng: hệ thống báo lỗi và không lưu.
+– Tên đăng nhập hoặc số điện thoại đã tồn tại, hoặc tên đăng nhập trùng SĐT hoặc tên với quản trị viên: hệ thống thông báo và yêu cầu nhập lại.
+– Admin hủy thao tác: hệ thống không tạo tài khoản.
+Tiền điều kiện (pre-condition)
+Admin đã đăng nhập vào hệ thống thành công (UC01).
+Hậu điều kiện (post-condition)
+Thành công: tài khoản nhân viên mới được tạo và có thể đăng nhập với đúng vai trò.
+Thất bại: hệ thống không tạo tài khoản.
+
+1.4.2. UC10 – Sửa thông tin nhân viên
+Tóm tắt
+Cho phép Admin cập nhật thông tin của nhân viên (họ tên, giới tính, số điện thoại, địa chỉ, chức vụ, mật khẩu mới nếu cần), khóa hoặc mở khóa tài khoản và xóa nhân viên chưa phát sinh dữ liệu.
+Dòng sự kiện chính
+Admin chọn chức năng Quản lý tài khoản nhân viên.
+Hệ thống hiển thị danh sách nhân viên.
+Admin chọn nhân viên cần sửa.
+Hệ thống hiển thị thông tin hiện tại của nhân viên (tên đăng nhập hiển thị nhưng không thể thay đổi).
+Admin chỉnh sửa thông tin (có thể đặt mật khẩu mới) và nhấn Lưu.
+Hoặc Admin chọn nút Khóa/Mở khóa tài khoản, hoặc nút Xóa nhân viên (hai nút riêng) và xác nhận ở hộp thoại.
+Hệ thống kiểm tra điều kiện (dữ liệu hợp lệ; với thao tác xóa, nhân viên chưa phát sinh dữ liệu), thực hiện thao tác đã chọn (cập nhật thông tin, khóa/mở khóa hoặc xóa) và thông báo thành công.
+Dòng sự kiện phụ
+– Dữ liệu không hợp lệ: hệ thống báo lỗi và yêu cầu chỉnh sửa lại.
+– Số điện thoại trùng với nhân viên khác: hệ thống thông báo và không lưu.
+– Khóa tài khoản hoặc đổi chức vụ: nhân viên bị đăng xuất, các hội thoại hỗ trợ đang phụ trách được trả về hàng đợi.
+– Nhân viên đã có phiếu nhập hoặc hội thoại gắn với mình: hệ thống không cho xóa và đề nghị khóa tài khoản.
+– Admin hủy thao tác hoặc hủy ở hộp thoại xác nhận (Khóa/Mở khóa, Xóa): hệ thống giữ nguyên thông tin cũ.
+Tiền điều kiện (pre-condition)
+Admin đã đăng nhập vào hệ thống thành công (UC01).
+Tài khoản nhân viên cần sửa đã tồn tại.
+Hậu điều kiện (post-condition)
+Thành công: thông tin nhân viên được cập nhật, tài khoản được khóa/mở khóa hoặc nhân viên được xóa theo thao tác đã chọn.
+Thất bại: thông tin cũ được giữ nguyên.
+1.4.3. UC11 – Phân quyền
+Tóm tắt
+Cho phép Admin gán và thay đổi chức vụ của nhân viên; quyền truy cập các chức năng của nhân viên được xác định theo chức vụ.
+Dòng sự kiện chính
+Admin chọn chức năng Quản lý tài khoản nhân viên và chọn nhân viên cần phân quyền.
+Hệ thống hiển thị chức vụ hiện tại (nhân viên bán hàng, nhân viên kho, nhân viên kiểm kho, nhân viên chăm sóc khách hàng).
+Admin chọn chức vụ mới và nhấn Lưu.
+Hệ thống kiểm tra chức vụ hợp lệ và cập nhật. Quyền theo chức vụ: nhân viên bán hàng – sản phẩm, đơn hàng, voucher; nhân viên kho – tồn kho, phiếu nhập, thêm/bớt size; nhân viên kiểm kho – chỉ xem sản phẩm và tồn kho; nhân viên CSKH – hỗ trợ khách hàng, hủy đơn, phát voucher được phép.
+Hệ thống đăng xuất nhân viên để áp dụng quyền mới và thông báo phân quyền thành công.
+Dòng sự kiện phụ
+– Chức vụ không hợp lệ hoặc chưa chọn: hệ thống báo lỗi và không lưu.
+– Nhân viên đang phụ trách hội thoại hỗ trợ: các hội thoại được trả về hàng đợi (theo UC10).
+– Admin hủy thao tác: hệ thống giữ nguyên chức vụ cũ.
+Tiền điều kiện (pre-condition)
+Admin đã đăng nhập vào hệ thống thành công (UC01). Tài khoản nhân viên cần phân quyền đã tồn tại.
+Hậu điều kiện (post-condition)
+Thành công: nhân viên chỉ sử dụng được các chức năng đúng với chức vụ mới. Thất bại: chức vụ và quyền được giữ nguyên.
+
+1.5. Quản lý sản phẩm / Tra cứu sản phẩm
+1.5.1. UC12 – Tìm kiếm sản phẩm
+Tóm tắt
+Cho phép người dùng tìm sản phẩm theo từ khóa. Khách hàng tìm theo tên giày, thương hiệu; nhân viên bán hàng và Admin tìm theo mã hoặc tên để quản lý sản phẩm.
+Dòng sự kiện chính
+Tác nhân nhập từ khóa vào ô tìm kiếm sản phẩm.
+Hệ thống gợi ý ngay các sản phẩm phù hợp (tối đa 6 gợi ý).
+Với khách hàng, hệ thống lưu 6 từ khóa tìm gần nhất.
+Tác nhân nhấn Enter hoặc chọn một gợi ý.
+Hệ thống hiển thị danh sách kết quả gồm hình ảnh, tên, giá và điểm đánh giá trung bình (nếu có).
+Tác nhân chọn một sản phẩm để xem chi tiết (UC14).
+Dòng sự kiện phụ
+– Từ khóa để trống: hệ thống hiển thị toàn bộ danh sách sản phẩm.
+– Không có sản phẩm phù hợp: hệ thống thông báo không tìm thấy kết quả.
+Tiền điều kiện (pre-condition)
+Khách hàng không cần đăng nhập để xem sản phẩm; nhân viên bán hàng và Admin đã đăng nhập vào hệ thống (UC01).
+Hậu điều kiện (post-condition)
+Danh sách sản phẩm phù hợp được hiển thị, dữ liệu không bị thay đổi.
+
+1.5.2. UC13 – Lọc sản phẩm
+Tóm tắt
+Cho phép người dùng thu hẹp danh sách sản phẩm theo thương hiệu (chọn ở menu), giá, màu sắc, chất liệu, phong cách, giới tính và kích cỡ.
+Dòng sự kiện chính
+Tác nhân mở danh sách sản phẩm (hoặc chọn một thương hiệu ở menu).
+Tác nhân chọn một hoặc nhiều tiêu chí lọc: khoảng giá (dưới 1 triệu, 1–2 triệu, 2–3 triệu, 3–4 triệu, trên 4 triệu), màu sắc, chất liệu, phong cách, giới tính, kích cỡ.
+Hệ thống lọc ngay khi tác nhân đổi tiêu chí, chỉ giữ các sản phẩm thỏa mãn tất cả tiêu chí đã chọn.
+Hệ thống hiển thị danh sách sản phẩm sau khi lọc (phân trang 15 sản phẩm mỗi trang).
+Tác nhân chọn một sản phẩm để xem chi tiết (UC14).
+Dòng sự kiện phụ
+– Không có sản phẩm thỏa tiêu chí: hệ thống thông báo không có kết quả.
+– Tác nhân chọn lại "Tất cả" ở một tiêu chí: hệ thống bỏ lọc tiêu chí đó và hiển thị lại danh sách.
+Tiền điều kiện (pre-condition)
+Khách hàng không cần đăng nhập; nhân viên bán hàng và Admin đã đăng nhập vào hệ thống (UC01).
+Hậu điều kiện (post-condition)
+Danh sách sản phẩm đã lọc được hiển thị, dữ liệu không bị thay đổi.
+
+1.5.3. UC14 – Xem chi tiết sản phẩm
+Tóm tắt
+Cho phép người dùng xem đầy đủ thông tin của một sản phẩm trong cửa sổ chi tiết: hình ảnh, mô tả, giá, màu sắc, chất liệu và tình trạng còn hàng theo từng size.
+Dòng sự kiện chính
+Tác nhân chọn một sản phẩm trong danh sách.
+Hệ thống truy xuất thông tin sản phẩm.
+Hệ thống hiển thị cửa sổ chi tiết gồm hình ảnh, tên, mô tả, giá, màu sắc, chất liệu, phong cách, giới tính, các size (size hết hàng bị khóa, size sắp hết hiển thị số đôi còn lại) và đánh giá của khách hàng.
+Khách hàng có thể chọn size và thêm sản phẩm vào giỏ hàng (UC22) hoặc mua ngay (UC23).
+Nhân viên bán hàng và Admin sửa hoặc xóa sản phẩm ở màn hình Quản lý sản phẩm (UC18, UC17).
+Dòng sự kiện phụ
+– Sản phẩm đã bị ẩn hoặc xóa: hệ thống thông báo sản phẩm không còn được bán.
+– Sản phẩm hết hàng ở tất cả size: sản phẩm không còn hiển thị trên trang chủ; nếu chỉ một size hết hàng, size đó bị khóa và không chọn được.
+Tiền điều kiện (pre-condition)
+Khách hàng không cần đăng nhập; nhân viên bán hàng và Admin đã đăng nhập vào hệ thống (UC01).
+Sản phẩm cần xem tồn tại trong hệ thống.
+Hậu điều kiện (post-condition)
+Thông tin chi tiết của sản phẩm được hiển thị, dữ liệu không bị thay đổi.
+
+1.5.4. UC15 – Xem sản phẩm đang khuyến mãi
+Tóm tắt
+Cho phép người dùng xem riêng các sản phẩm đang có khuyến mãi; là mở rộng của Tìm kiếm sản phẩm (UC12) và Lọc sản phẩm (UC13).
+Dòng sự kiện chính
+Tác nhân chọn mục Sản phẩm khuyến mãi (hoặc tiêu chí lọc khuyến mãi khi tìm kiếm/lọc sản phẩm).
+Hệ thống truy xuất các sản phẩm thuộc chương trình khuyến mãi còn hiệu lực (UC21).
+Hệ thống hiển thị danh sách gồm hình ảnh, tên, giá gốc, giá sau giảm và mức giảm.
+Tác nhân chọn một sản phẩm để xem chi tiết (UC14).
+Dòng sự kiện phụ
+– Không có sản phẩm nào đang khuyến mãi: hệ thống thông báo không có kết quả.
+– Chương trình hết hạn trong lúc xem: sản phẩm hiển thị lại giá bán thường khi tải lại.
+Tiền điều kiện (pre-condition)
+Khách hàng không cần đăng nhập; nhân viên bán hàng và Admin đã đăng nhập (UC01).
+Hậu điều kiện (post-condition)
+Danh sách sản phẩm khuyến mãi được hiển thị, dữ liệu không bị thay đổi.
+1.5.5. UC16 – Thêm sản phẩm
+Tóm tắt
+Cho phép nhân viên bán hàng và Admin thêm sản phẩm giày mới vào hệ thống (giá bán được thiết lập riêng ở Quản lý giá bán, số lượng tồn nhập qua Phiếu nhập hàng).
+Dòng sự kiện chính
+Tác nhân chọn chức năng Quản lý sản phẩm và nhấn Thêm mới sản phẩm.
+Hệ thống hiển thị form nhập thông tin sản phẩm gồm mã, loại (hãng), danh mục, tên, giới tính, mô tả, màu sắc, chất liệu, phong cách, giá nhập, các size sẽ bán, mô tả chi tiết và hình ảnh.
+Tác nhân nhập thông tin và nhấn Lưu.
+Hệ thống kiểm tra dữ liệu hợp lệ (giá nhập lớn hơn 0, đã chọn ảnh và ít nhất một size) và mã sản phẩm không bị trùng.
+Hệ thống lưu sản phẩm mới với tồn kho bằng 0 ở mọi size.
+Hệ thống thông báo thêm thành công và hiển thị sản phẩm trong danh sách.
+Dòng sự kiện phụ
+– Thiếu thông tin bắt buộc: hệ thống báo lỗi và yêu cầu bổ sung.
+– Mã sản phẩm đã tồn tại: hệ thống thông báo và yêu cầu nhập mã khác.
+– Giá nhập không hợp lệ (phải lớn hơn 0), chưa chọn ảnh hoặc chưa chọn size: hệ thống báo lỗi và yêu cầu bổ sung.
+– Tác nhân hủy thao tác: hệ thống không lưu dữ liệu.
+Tiền điều kiện (pre-condition)
+Nhân viên bán hàng hoặc Admin đã đăng nhập vào hệ thống (UC01).
+Hậu điều kiện (post-condition)
+Thành công: sản phẩm mới được lưu; khách hàng chỉ nhìn thấy sản phẩm sau khi sản phẩm có giá bán (UC57) và có tồn kho (qua UC40).
+Thất bại: hệ thống không thêm sản phẩm.
+
+1.5.6. UC17 – Xóa sản phẩm
+Tóm tắt
+Cho phép nhân viên bán hàng và Admin xóa sản phẩm không còn kinh doanh khỏi hệ thống.
+Dòng sự kiện chính
+Tác nhân chọn sản phẩm cần xóa trong danh sách (hoặc trang chi tiết) và nhấn Xóa.
+Hệ thống hiển thị hộp thoại yêu cầu xác nhận xóa.
+Tác nhân xác nhận xóa.
+Hệ thống kiểm tra sản phẩm có đang bị ràng buộc dữ liệu hay không.
+Hệ thống xóa sản phẩm và thông báo xóa thành công.
+Hệ thống cập nhật lại danh sách sản phẩm.
+Dòng sự kiện phụ
+– Tác nhân chọn Hủy: hệ thống đóng hộp thoại và không xóa sản phẩm.
+– Sản phẩm đang nằm trong đơn hàng chưa hoàn tất (trạng thái Mới đặt, Đã xử lý) hoặc phiếu nhập chưa hoàn thành: hệ thống chặn xóa và thông báo lý do.
+– Sản phẩm chỉ còn nằm trong lịch sử (đơn hàng đã kết thúc, phiếu nhập đã hoàn thành): hệ thống hiển thị cảnh báo; tác nhân xác nhận thì vẫn xóa được.
+Tiền điều kiện (pre-condition)
+Nhân viên bán hàng hoặc Admin đã đăng nhập vào hệ thống (UC01).
+Sản phẩm cần xóa tồn tại trong hệ thống.
+Hậu điều kiện (post-condition)
+Thành công: sản phẩm không còn hiển thị trong hệ thống.
+Thất bại: dữ liệu sản phẩm được giữ nguyên.
+
+1.5.7. UC18 – Sửa sản phẩm
+Tóm tắt
+Cho phép nhân viên bán hàng và Admin chỉnh sửa thông tin sản phẩm (giá nhập, mô tả, size, màu sắc, hình ảnh, trạng thái hiển thị...); nhân viên kho chỉ được thêm hoặc bớt size.
+Dòng sự kiện chính
+Tác nhân chọn sản phẩm cần sửa và nhấn Sửa.
+Hệ thống hiển thị form chứa thông tin hiện tại của sản phẩm (mã sản phẩm không thể thay đổi).
+Tác nhân chỉnh sửa thông tin cần thay đổi (kể cả ẩn/hiện sản phẩm, thêm size mới hoặc bỏ size đã hết hàng) và nhấn Lưu.
+Hệ thống kiểm tra dữ liệu hợp lệ.
+Số lượng tồn không sửa tay mà chỉ thay đổi qua phiếu nhập và đơn hàng.
+Hệ thống cập nhật thông tin sản phẩm và thông báo thành công.
+Dòng sự kiện phụ
+– Dữ liệu không hợp lệ hoặc thiếu thông tin bắt buộc: hệ thống báo lỗi và không lưu.
+– Giá nhập mới cao hơn giá bán hiện tại: hệ thống cảnh báo và yêu cầu xác nhận.
+– Bỏ size còn hàng trong kho: hệ thống từ chối và thông báo lý do.
+– Tác nhân hủy thao tác: hệ thống giữ nguyên thông tin cũ.
+Tiền điều kiện (pre-condition)
+Nhân viên bán hàng, Nhân viên kho (chỉ them/bớt size) hoặc Admin đã đăng nhập vào hệ thống (UC01).
+Sản phẩm cần sửa tồn tại trong hệ thống.
+Hậu điều kiện (post-condition)
+Thành công: thông tin sản phẩm được cập nhật và hiển thị thống nhất trên toàn hệ thống.
+Thất bại: thông tin cũ được giữ nguyên.
+
+1.5.8. UC19 – Quản lý danh mục
+Tóm tắt
+Cho phép nhân viên bán hàng và Admin xem danh sách, thêm, sửa và ẩn/hiện danh mục sản phẩm để phân nhóm sản phẩm trên cửa hàng.
+Dòng sự kiện chính
+Tác nhân chọn chức năng Quản lý danh mục.
+Hệ thống hiển thị danh sách danh mục gồm tên, mô tả, số sản phẩm và trạng thái (Hiển thị, Đã ẩn).
+Tác nhân chọn Thêm danh mục hoặc chọn một danh mục để sửa, nhập tên, mô tả và nhấn Lưu.
+Tác nhân có thể chọn Ẩn/Hiện một danh mục và xác nhận ở hộp thoại.
+Hệ thống kiểm tra dữ liệu, lưu thay đổi và cập nhật danh mục hiển thị trên trang khách hàng.
+Dòng sự kiện phụ
+– Tên danh mục để trống hoặc trùng: hệ thống báo lỗi và không lưu.
+– Danh mục đang ẩn: sản phẩm thuộc danh mục không hiển thị cho khách hàng cho đến khi danh mục được hiện lại.
+– Tác nhân hủy thao tác hoặc hủy ở hộp thoại xác nhận: hệ thống giữ nguyên dữ liệu.
+Tiền điều kiện (pre-condition)
+Nhân viên bán hàng hoặc Admin đã đăng nhập vào hệ thống (UC01).
+Hậu điều kiện (post-condition)
+Thành công: danh mục được cập nhật và đồng bộ ở các màn hình liên quan. Thất bại: dữ liệu giữ nguyên.
+1.5.9. UC20 – Quản lý thương hiệu
+Tóm tắt
+Cho phép nhân viên bán hàng và Admin xem danh sách, thêm, sửa và xóa thương hiệu giày; thương hiệu dùng để gán cho sản phẩm và lọc ở menu cửa hàng (liên quan UC56).
+Dòng sự kiện chính
+Tác nhân chọn chức năng Quản lý thương hiệu.
+Hệ thống hiển thị danh sách thương hiệu gồm tên, mô tả và số sản phẩm.
+Tác nhân chọn Thêm thương hiệu hoặc chọn một thương hiệu để sửa, nhập thông tin và nhấn Lưu.
+Tác nhân có thể chọn Xóa một thương hiệu và xác nhận ở hộp thoại.
+Hệ thống kiểm tra dữ liệu, lưu thay đổi và cập nhật thương hiệu trên trang khách hàng.
+Dòng sự kiện phụ
+– Tên thương hiệu để trống hoặc trùng: hệ thống báo lỗi và không lưu.
+– Thương hiệu còn sản phẩm: hệ thống không cho xóa và thông báo lý do.
+– Tác nhân hủy ở hộp thoại xác nhận: hệ thống giữ nguyên dữ liệu.
+Tiền điều kiện (pre-condition)
+Nhân viên bán hàng hoặc Admin đã đăng nhập vào hệ thống (UC01).
+Hậu điều kiện (post-condition)
+Thành công: danh sách thương hiệu được cập nhật. Thất bại: dữ liệu giữ nguyên.
+1.5.10. UC21 – Quản lý khuyến mãi
+Tóm tắt
+Cho phép nhân viên bán hàng và Admin xem, thêm, sửa, ngừng/kích hoạt chương trình khuyến mãi và áp dụng khuyến mãi cho sản phẩm (giảm giá theo sản phẩm, khác với voucher giảm giá khi thanh toán ở UC61).
+Dòng sự kiện chính
+Tác nhân chọn chức năng Quản lý khuyến mãi.
+Hệ thống hiển thị danh sách chương trình khuyến mãi kèm thời gian áp dụng và trạng thái.
+Tác nhân chọn Thêm chương trình hoặc chọn một chương trình để sửa, nhập tên, mô tả, mức giảm (%), ngày bắt đầu, ngày kết thúc và nhấn Lưu.
+Tác nhân chọn các sản phẩm áp dụng khuyến mãi (Áp dụng khuyến mãi cho sản phẩm).
+Tác nhân có thể Ngừng hoặc Kích hoạt chương trình và xác nhận ở hộp thoại.
+Hệ thống kiểm tra dữ liệu, lưu thay đổi và cập nhật giá hiển thị của các sản phẩm được áp dụng.
+Dòng sự kiện phụ
+– Thiếu thông tin, mức giảm không hợp lệ hoặc ngày kết thúc trước ngày bắt đầu: hệ thống báo lỗi và không lưu.
+– Giá sau khuyến mãi thấp hơn giá nhập của sản phẩm: hệ thống từ chối áp dụng (theo UC57).
+– Chương trình hết hạn hoặc đã ngừng: sản phẩm trở về giá bán thường.
+– Tác nhân hủy ở hộp thoại xác nhận: hệ thống giữ nguyên dữ liệu.
+Tiền điều kiện (pre-condition)
+Nhân viên bán hàng hoặc Admin đã đăng nhập vào hệ thống (UC01). Sản phẩm áp dụng đã có giá bán (UC57).
+Hậu điều kiện (post-condition)
+Thành công: chương trình khuyến mãi được lưu và có hiệu lực theo thời gian. Thất bại: dữ liệu giữ nguyên.
+1.6. Quản lý giỏ hàng
+1.6.1. UC22 – Thêm vào giỏ hàng
+Tóm tắt
+Cho phép khách hàng thêm sản phẩm đã chọn vào giỏ hàng để mua sau.
+Dòng sự kiện chính
+Khách hàng mở cửa sổ chi tiết sản phẩm.
+Khách hàng chọn size (size hết hàng không chọn được).
+Khách hàng nhấn “Thêm vào giỏ hàng”.
+Hệ thống kiểm tra size đã chọn và số lượng còn trong kho.
+Hệ thống thêm sản phẩm (số lượng 1) vào giỏ hàng và thông báo thành công.
+Dòng sự kiện phụ
+– Sản phẩm hết hàng hoặc số lượng vượt quá tồn kho của size (tính cả số đã có trong giỏ): hệ thống thông báo và không thêm sản phẩm.– Sản phẩm cùng size đã có trong giỏ hàng: hệ thống tăng số lượng của dòng đó.– Sản phẩm vừa bị ẩn hoặc không còn bán: hệ thống thông báo không còn được bán.– Lỗi cập nhật giỏ hàng: hệ thống thông báo lỗi và giữ nguyên giỏ hàng trước đó.
+Tiền điều kiện (pre-condition)
+- Sản phẩm đang được kinh doanh và còn hàng.- Khách hàng có thể thêm vào giỏ trước; đăng nhập được yêu cầu khi đặt hàng.
+Hậu điều kiện (post-condition)
+- Thành công: giỏ hàng của khách hàng chứa sản phẩm vừa chọn.- Thất bại: giỏ hàng không thay đổi.
+1.6.2. UC23 – Mua ngay
+Tóm tắt
+Cho phép khách hàng chọn mua nhanh một sản phẩm và chuyển đến bước đặt hàng với sản phẩm đó.
+Dòng sự kiện chính
+Khách hàng mở cửa sổ chi tiết sản phẩm.
+Khách hàng chọn size.
+Khách hàng nhấn “Mua ngay”.
+Hệ thống kiểm tra size và số lượng còn trong kho.
+Hệ thống thêm sản phẩm vào giỏ hàng, chỉ chọn đúng dòng vừa thêm và chuyển khách hàng đến trang thanh toán (UC30).
+Nếu chưa đăng nhập, hệ thống chuyển đến trang đăng nhập trước.
+Dòng sự kiện phụ
+– Sản phẩm hết hàng hoặc số lượng vượt quá tồn kho: hệ thống thông báo và không tiếp tục.– Sản phẩm không còn được bán: hệ thống thông báo và yêu cầu chọn lại.
+Tiền điều kiện (pre-condition)
+- Sản phẩm đang được kinh doanh và còn hàng.- Khách hàng đăng nhập khi tiến hành thanh toán.
+Hậu điều kiện (post-condition)
+- Thành công: hệ thống chuyển khách hàng đến bước đặt hàng với sản phẩm vừa chọn; sản phẩm này được thêm vào giỏ hàng.- Thất bại: hệ thống không chuyển sang bước đặt hàng.
+
+1.6.3. UC24 – Xem giỏ hàng
+Tóm tắt
+Cho phép khách hàng xem các sản phẩm đã thêm vào giỏ hàng cùng số lượng và tổng tiền tạm tính.
+Dòng sự kiện chính
+Khách hàng chọn biểu tượng Giỏ hàng.
+Hệ thống truy xuất giỏ hàng và đối chiếu từng dòng với dữ liệu sản phẩm mới nhất.
+Hệ thống hiển thị danh sách sản phẩm gồm hình ảnh, tên, size, đơn giá, số lượng và thành tiền.
+Khách hàng tích chọn các dòng muốn thanh toán, tổng tiền tính theo các dòng đã chọn.
+Khách hàng có thể chọn Cập nhật giỏ hàng (UC25) hoặc Đặt hàng (UC30).
+Dòng sự kiện phụ
+– Giỏ hàng trống: hệ thống thông báo giỏ hàng chưa có sản phẩm và gợi ý quay lại mua sắm.
+– Sản phẩm trong giỏ đã bị ẩn hoặc xóa: hệ thống tự loại khỏi giỏ; giá, tên và hình ảnh luôn được cập nhật theo dữ liệu mới nhất.
+Tiền điều kiện (pre-condition)
+Khách hàng đã đăng nhập vào hệ thống thành công (UC01).
+Hậu điều kiện (post-condition)
+Nội dung giỏ hàng được hiển thị, dữ liệu không bị thay đổi.
+
+1.6.4. UC25 – Cập nhật giỏ hàng
+Tóm tắt
+Cho phép khách hàng thay đổi số lượng, tích chọn dòng thanh toán hoặc xóa sản phẩm trong giỏ hàng trước khi đặt hàng (muốn đổi size thì xóa dòng và thêm lại).
+Dòng sự kiện chính
+Khách hàng mở giỏ hàng (UC24).
+Khách hàng tăng, giảm số lượng hoặc chọn Xóa đối với dòng sản phẩm cần điều chỉnh.
+Hệ thống kiểm tra số lượng so với tồn kho của đúng size.
+Hệ thống cập nhật giỏ hàng và tính lại thành tiền, tổng tiền.
+Hệ thống hiển thị giỏ hàng sau khi cập nhật.
+Dòng sự kiện phụ
+– Số lượng vượt quá tồn kho của size: hệ thống thông báo và không cho tăng thêm.
+– Số lượng giảm xuống dưới 1: hệ thống xóa dòng sản phẩm khỏi giỏ hàng.
+– Lỗi cập nhật: hệ thống thông báo lỗi và giữ nguyên giỏ hàng cũ.
+Tiền điều kiện (pre-condition)
+Khách hàng đã đăng nhập vào hệ thống thành công (UC01).
+Giỏ hàng có ít nhất một sản phẩm.
+Hậu điều kiện (post-condition)
+Thành công: giỏ hàng phản ánh đúng các thay đổi của khách hàng.
+Thất bại: giỏ hàng được giữ nguyên như trước.
+
+1.7. Quản lý thanh toán
+1.7.1. UC26 – Thanh toán đơn hàng
+Tóm tắt
+Use case chung của bước thanh toán: khách hàng xem tóm tắt đơn hàng và chọn phương thức thanh toán khi nhận hàng (UC27) hoặc chuyển khoản (UC28).
+Dòng sự kiện chính
+Tại bước đặt hàng (UC30), khách hàng chọn Thanh toán.
+Hệ thống hiển thị tóm tắt đơn hàng gồm sản phẩm, tạm tính, giảm giá voucher (UC60), phí vận chuyển (30.000đ, miễn phí cho đơn từ 10.000.000đ) và tổng tiền phải trả.
+Khách hàng chọn phương thức Thanh toán khi nhận hàng (UC27) hoặc Thanh toán chuyển khoản (UC28).
+Hệ thống thực hiện use case của phương thức đã chọn và ghi nhận phương thức, trạng thái thanh toán vào đơn hàng.
+Dòng sự kiện phụ
+– Chưa chọn phương thức thanh toán hoặc chưa chọn địa chỉ giao hàng: hệ thống yêu cầu bổ sung.
+– Sản phẩm hết hàng hoặc voucher không còn hiệu lực: hệ thống thông báo và quay lại giỏ hàng.
+– Khách hàng hủy: hệ thống không tạo đơn hàng, giỏ hàng được giữ nguyên.
+Tiền điều kiện (pre-condition)
+Khách hàng đã đăng nhập (UC01) và đang ở bước đặt hàng với ít nhất một sản phẩm hợp lệ.
+Hậu điều kiện (post-condition)
+Thành công: đơn hàng được ghi nhận kèm phương thức và trạng thái thanh toán tương ứng. Thất bại: hệ thống không tạo đơn hàng.
+1.7.2. UC27 – Thanh toán khi nhận hàng
+Tóm tắt
+Cho phép khách hàng chọn hình thức trả tiền mặt khi nhận hàng. Hệ thống ghi nhận phương thức và trạng thái thanh toán tương ứng cho đơn hàng.
+Dòng sự kiện chính
+Tại bước đặt hàng (UC30), khách hàng chọn phương thức Thanh toán khi nhận hàng.
+Hệ thống hiển thị tóm tắt đơn hàng gồm danh sách sản phẩm, tạm tính, giảm giá voucher (nếu có), phí vận chuyển (30.000đ, miễn phí cho đơn từ 10.000.000đ) và tổng số tiền phải trả.
+Khách hàng xác nhận đặt hàng.
+Hệ thống ghi nhận phương thức thanh toán khi nhận hàng và đặt trạng thái thanh toán là Chưa thanh toán.
+Hệ thống thông báo đặt hàng thành công kèm mã đơn hàng.
+Khi đơn hàng được giao thành công, hệ thống tự cập nhật trạng thái thanh toán là Đã thanh toán.
+Dòng sự kiện phụ
+– Chưa chọn địa chỉ giao hàng: hệ thống yêu cầu chọn địa chỉ.
+– Sản phẩm hết hàng hoặc không đủ số lượng: hệ thống thông báo và quay lại giỏ hàng.
+– Khách hàng chọn Hủy: hệ thống không tạo đơn hàng.
+Tiền điều kiện (pre-condition)
+Khách hàng đã đăng nhập vào hệ thống thành công (UC01).
+Khách hàng đang ở bước đặt hàng với ít nhất một sản phẩm hợp lệ.
+Hậu điều kiện (post-condition)
+Thành công: đơn hàng được ghi nhận với phương thức thanh toán khi nhận hàng và trạng thái thanh toán Chưa thanh toán.
+Thất bại: hệ thống không tạo đơn hàng.
+
+1.7.3. UC28 – Thanh toán chuyển khoản
+Tóm tắt
+Cho phép khách hàng thanh toán đơn hàng bằng chuyển khoản qua mã QR ngân hàng. Đơn hàng chỉ được ghi nhận chính thức sau khi khách hàng xác nhận đã chuyển khoản.
+Dòng sự kiện chính
+Tại bước đặt hàng (UC30), khách hàng chọn phương thức Thanh toán chuyển khoản.
+Hệ thống lưu đơn hàng tạm (chưa trừ kho, giữ trong 30 phút) và hiển thị mã QR ngân hàng cùng số tiền cần chuyển (đã gồm phí vận chuyển và trừ voucher).
+Khách hàng thực hiện chuyển khoản theo hướng dẫn và nhấn “Đã hoàn tất chuyển khoản”.
+Hệ thống kiểm tra lại tồn kho và voucher, trừ kho và tạo đơn hàng chính thức ở trạng thái Chờ xác nhận với trạng thái thanh toán Đã thanh toán.
+Hệ thống xóa các sản phẩm đã đặt khỏi giỏ hàng và thông báo đặt hàng thành công kèm mã đơn hàng.
+Dòng sự kiện phụ
+– Chưa chọn địa chỉ giao hàng: hệ thống yêu cầu chọn địa chỉ.
+– Sản phẩm hết hàng hoặc voucher không còn hiệu lực khi xác nhận: hệ thống chuyển sang trang thất bại và không tạo đơn.
+– Quá 30 phút hoặc khách hàng hủy thanh toán: đơn tạm bị xóa, giỏ hàng được giữ nguyên.
+Tiền điều kiện (pre-condition)
+Khách hàng đã đăng nhập vào hệ thống thành công (UC01).
+Khách hàng đang ở bước đặt hàng với ít nhất một sản phẩm hợp lệ.
+Hậu điều kiện (post-condition)
+Thành công: đơn hàng được ghi nhận với phương thức chuyển khoản và trạng thái thanh toán Đã thanh toán.
+Thất bại: hệ thống không tạo đơn hàng.
+
+1.7.4. UC29 – Xác nhận thông tin thanh toán
+Tóm tắt
+Cho phép nhân viên bán hàng và Admin đối chiếu khoản chuyển khoản của đơn hàng với thông tin thanh toán đã ghi nhận trước khi xử lý giao hàng.
+Dòng sự kiện chính
+Tác nhân mở chi tiết một đơn hàng thanh toán chuyển khoản (UC34).
+Hệ thống hiển thị phương thức thanh toán, số tiền phải thanh toán (đã gồm phí vận chuyển và trừ voucher), trạng thái thanh toán và thời điểm khách xác nhận đã chuyển khoản.
+Tác nhân đối chiếu số tiền đã nhận với số tiền của đơn hàng.
+Tác nhân chọn Xác nhận đã nhận tiền, hoặc Báo sai lệch kèm ghi chú nếu số tiền không khớp.
+Hệ thống ghi nhận kết quả đối chiếu, người xác nhận và thời điểm xác nhận vào đơn hàng, sau đó thông báo thành công.
+Dòng sự kiện phụ
+– Đơn thanh toán khi nhận hàng: hệ thống không có thao tác xác nhận vì chưa thu tiền (UC27).
+– Báo sai lệch nhưng chưa nhập ghi chú: hệ thống yêu cầu nhập ghi chú.
+– Lỗi lưu dữ liệu: hệ thống thông báo lỗi và giữ nguyên thông tin cũ.
+– Đơn đã hủy: hệ thống không cho xác nhận.
+Tiền điều kiện (pre-condition)
+Nhân viên bán hàng hoặc Admin đã đăng nhập vào hệ thống (UC01). Đơn hàng chuyển khoản tồn tại (UC28).
+Hậu điều kiện (post-condition)
+Thành công: kết quả đối chiếu thanh toán được lưu kèm người xác nhận. Thất bại: thông tin đơn hàng được giữ nguyên.
+1.8. Quản lý đơn hàng
+1.8.1. UC30 – Đặt hàng
+Tóm tắt
+Cho phép khách hàng tạo đơn hàng từ các sản phẩm trong giỏ hàng (hoặc từ chức năng Mua ngay), nhập thông tin nhận hàng và chọn phương thức thanh toán.
+Dòng sự kiện chính
+Khách hàng chọn Đặt hàng từ giỏ hàng (hoặc sau khi chọn Mua ngay).
+Hệ thống hiển thị danh sách sản phẩm, địa chỉ giao hàng đã chọn (có thể đổi hoặc thêm trong danh sách địa chỉ), phần chọn voucher, tạm tính, giảm giá, phí vận chuyển và tổng tiền.
+Khách hàng kiểm tra, chọn voucher (nếu có) và chọn phương thức thanh toán (UC27 hoặc UC28).
+Khách hàng xác nhận đặt hàng.
+Hệ thống kiểm tra số lượng tồn kho của các sản phẩm.
+Hệ thống tạo đơn hàng ở trạng thái Chờ xác nhận và trừ tồn kho đúng size (đơn chuyển khoản trừ kho khi khách hàng xác nhận đã chuyển khoản).
+Hệ thống xóa các sản phẩm đã đặt khỏi giỏ hàng và thông báo mã đơn hàng cho khách hàng.
+Dòng sự kiện phụ
+– Chưa chọn địa chỉ giao hàng: hệ thống yêu cầu chọn địa chỉ.
+– Voucher không hợp lệ: hệ thống báo lỗi và không áp dụng voucher.
+– Có sản phẩm hết hàng hoặc không đủ số lượng: hệ thống thông báo, khách hàng quay lại giỏ hàng để điều chỉnh.
+– Khách hàng hủy: hệ thống không tạo đơn hàng, giỏ hàng được giữ nguyên.
+Tiền điều kiện (pre-condition)
+Khách hàng đã đăng nhập vào hệ thống thành công (UC01).
+Giỏ hàng có ít nhất một sản phẩm hoặc khách hàng đã chọn Mua ngay.
+Hậu điều kiện (post-condition)
+Thành công: đơn hàng mới được tạo, tồn kho được cập nhật, khách hàng có thể theo dõi đơn hàng (UC35).
+Thất bại: không có đơn hàng nào được tạo.
+
+1.8.2. UC31 – Chọn địa chỉ giao hàng
+Tóm tắt
+Cho phép khách hàng chọn, đổi hoặc thêm địa chỉ nhận hàng ở bước đặt hàng.
+Dòng sự kiện chính
+Tại bước đặt hàng (UC30), hệ thống hiển thị địa chỉ giao hàng đang chọn (ưu tiên địa chỉ mặc định).
+Khách hàng chọn Đổi địa chỉ; hệ thống hiển thị danh sách địa chỉ đã lưu trong thông tin cá nhân (UC05).
+Khách hàng chọn một địa chỉ trong danh sách, hoặc chọn Thêm địa chỉ mới và nhập họ tên người nhận, số điện thoại, địa chỉ.
+Hệ thống kiểm tra dữ liệu hợp lệ, lưu địa chỉ mới (nếu có) và gán địa chỉ đã chọn cho đơn hàng đang đặt.
+Dòng sự kiện phụ
+– Khách hàng chưa có địa chỉ nào: hệ thống yêu cầu thêm địa chỉ mới.
+– Thiếu thông tin hoặc sai định dạng số điện thoại: hệ thống báo lỗi tại trường tương ứng và không lưu.
+– Khách hàng đóng danh sách mà không chọn: hệ thống giữ nguyên địa chỉ đang chọn.
+Tiền điều kiện (pre-condition)
+Khách hàng đã đăng nhập (UC01) và đang ở bước đặt hàng (UC30).
+Hậu điều kiện (post-condition)
+Thành công: đơn hàng được gắn địa chỉ giao hàng đã chọn. Thất bại: địa chỉ giao hàng không thay đổi.
+1.8.3. UC32 – Lọc đơn hàng
+Tóm tắt
+Cho phép nhân viên bán hàng và Admin lọc danh sách đơn hàng theo khoảng ngày đặt, trạng thái đơn và trạng thái thanh toán.
+Dòng sự kiện chính
+Tác nhân chọn chức năng Quản lý đơn hàng.
+Hệ thống hiển thị thẻ tóm tắt theo trạng thái và danh sách đơn hàng (mới nhất trước, 10 đơn mỗi trang).
+Tác nhân chọn một hoặc nhiều tiêu chí lọc: từ ngày, đến ngày, trạng thái đơn, trạng thái thanh toán.
+Hệ thống lọc ngay các đơn hàng thỏa mãn tiêu chí.
+Hệ thống hiển thị danh sách đơn hàng sau khi lọc.
+Dòng sự kiện phụ
+– Không có đơn hàng thỏa tiêu chí: hệ thống thông báo không có kết quả.
+– Khoảng ngày đảo ngược (từ ngày lớn hơn đến ngày): hệ thống không có kết quả và hiển thị danh sách trống.
+Tiền điều kiện (pre-condition)
+Nhân viên bán hàng hoặc Admin đã đăng nhập vào hệ thống (UC01).
+Hậu điều kiện (post-condition)
+Danh sách đơn hàng đã lọc được hiển thị, dữ liệu không bị thay đổi.
+
+1.8.4. UC33 – Tìm kiếm đơn hàng
+Tóm tắt
+Cho phép nhân viên bán hàng và Admin tìm đơn hàng theo mã đơn.
+Dòng sự kiện chính
+Tác nhân chọn chức năng Quản lý đơn hàng.
+Tác nhân nhập mã đơn vào ô tìm kiếm.
+Hệ thống tìm ngay các đơn hàng phù hợp khi tác nhân nhập mã đơn (hoặc khi nhấn Tìm).
+Hệ thống hiển thị danh sách đơn hàng tìm được.
+Tác nhân chọn một đơn hàng để xem chi tiết (UC34).
+Dòng sự kiện phụ
+– Mã đơn để trống: hệ thống hiển thị toàn bộ đơn hàng hoặc yêu cầu nhập từ khóa.
+– Không tìm thấy đơn hàng phù hợp: hệ thống thông báo không có kết quả.
+Tiền điều kiện (pre-condition)
+Nhân viên bán hàng hoặc Admin đã đăng nhập vào hệ thống (UC01).
+Hậu điều kiện (post-condition)
+Danh sách đơn hàng tìm được hiển thị, dữ liệu không bị thay đổi.
+
+1.8.5. UC34 – Xem chi tiết đơn hàng
+Tóm tắt
+Cho phép người dùng xem đầy đủ thông tin của một đơn hàng. Khách hàng chỉ xem được đơn hàng của chính mình.
+Dòng sự kiện chính
+Tác nhân chọn một đơn hàng trong danh sách.
+Hệ thống truy xuất thông tin đơn hàng.
+Hệ thống hiển thị mã đơn, ngày đặt, trạng thái, danh sách sản phẩm (size, số lượng, đơn giá), thông tin nhận hàng, phương thức và trạng thái thanh toán, tiền hàng, giảm giá voucher, phí vận chuyển và tổng tiền.
+Tùy vai trò, tác nhân có thể Theo dõi tình trạng (UC35), Hủy đơn hàng (UC37) hoặc Cập nhật trạng thái (UC36).
+Dòng sự kiện phụ
+– Đơn hàng không tồn tại: hệ thống thông báo và quay về danh sách.
+– Khách hàng truy cập đơn hàng không thuộc về mình: hệ thống từ chối hiển thị.
+Tiền điều kiện (pre-condition)
+Tác nhân đã đăng nhập vào hệ thống (UC01).
+Đơn hàng cần xem tồn tại.
+Hậu điều kiện (post-condition)
+Thông tin chi tiết đơn hàng được hiển thị, dữ liệu không bị thay đổi.
+
+1.8.6. UC35 – Theo dõi tình trạng đơn hàng
+Tóm tắt
+Cho phép người dùng theo dõi tình trạng xử lý hiện tại của đơn hàng qua thanh tiến trình trạng thái, từ khi đặt đến khi hoàn tất.
+Dòng sự kiện chính
+Tác nhân chọn một đơn hàng cần theo dõi.
+Hệ thống truy xuất trạng thái hiện tại của đơn hàng và tự cập nhật khi nhân viên đổi trạng thái.
+Hệ thống hiển thị trạng thái hiện tại (Chờ xác nhận, Đang giao, Thành công hoặc Đã hủy) cùng thời điểm giao hoặc hủy (nếu có).
+Dòng sự kiện phụ
+– Đơn hàng chưa được xử lý: hệ thống chỉ hiển thị trạng thái ban đầu Chờ xác nhận.
+– Đơn hàng không tồn tại hoặc không thuộc về khách hàng đang đăng nhập: hệ thống thông báo và từ chối hiển thị.
+Tiền điều kiện (pre-condition)
+Tác nhân đã đăng nhập vào hệ thống (UC01).
+Đơn hàng cần theo dõi tồn tại.
+Hậu điều kiện (post-condition)
+Tình trạng đơn hàng được hiển thị, dữ liệu không bị thay đổi.
+
+1.8.7. UC36 – Cập nhật trạng thái đơn hàng
+Tóm tắt
+Cho phép nhân viên bán hàng và Admin cập nhật trạng thái xử lý của đơn hàng (Mới đặt, Đã xử lý, Đã giao hoặc Hủy) để khách hàng và cửa hàng cùng theo dõi; nhân viên CSKH chỉ được hủy đơn.
+
+
+Dòng sự kiện chính
+Tác nhân chọn một đơn hàng cần cập nhật.
+Hệ thống hiển thị trạng thái hiện tại và chỉ các trạng thái hợp lệ có thể chuyển tiếp.
+Tác nhân chọn trạng thái mới.
+Tác nhân nhấn Cập nhật và xác nhận ở hộp thoại cảnh báo.
+Hệ thống cập nhật trạng thái đơn hàng ở cả phía quản trị lẫn phía khách hàng. Khi Đã giao: chốt giá vốn, cộng số lượng đã bán, đặt thanh toán là Đã thanh toán và gửi tin cảm ơn vào khung chat của khách. Khi Hủy: hoàn lại tồn kho (đơn đã thanh toán chuyển sang Cần hoàn tiền).
+Hệ thống thông báo cập nhật thành công, khách hàng xem được trạng thái mới.
+Dòng sự kiện phụ
+– Trạng thái không hợp lệ (ví dụ đơn đã giao hoặc đã hủy): hệ thống không cho chọn.
+– Tác nhân hủy ở hộp thoại xác nhận: hệ thống giữ nguyên trạng thái cũ.
+– Lỗi lưu dữ liệu: hệ thống thông báo lỗi, trạng thái cũ được giữ nguyên.
+Tiền điều kiện (pre-condition)
+Nhân viên bán hàng hoặc Admin đã đăng nhập vào hệ thống (UC01).
+Đơn hàng tồn tại và chưa ở trạng thái kết thúc.
+Hậu điều kiện (post-condition)
+Thành công: đơn hàng có trạng thái mới; thời điểm giao hoặc hủy được ghi nhận.
+Thất bại: trạng thái đơn hàng không thay đổi.
+
+1.8.8. UC37 – Hủy đơn hàng
+Tóm tắt
+Cho phép khách hàng hủy đơn hàng của mình khi đơn còn ở trạng thái Chờ xác nhận. Nhân viên bán hàng, nhân viên CSKH và Admin cũng có thể hủy đơn ở màn hình Quản lý đơn hàng (UC36).
+Dòng sự kiện chính
+Khách hàng mở chi tiết đơn hàng (UC34) và chọn Hủy đơn hàng.
+Hệ thống kiểm tra đơn hàng còn ở trạng thái Chờ xác nhận.
+Hệ thống hiển thị hộp thoại yêu cầu xác nhận hủy.
+Khách hàng xác nhận hủy.
+Hệ thống chuyển trạng thái đơn hàng thành Đã hủy và hoàn lại số lượng tồn kho đúng size (đơn đã thanh toán được đánh dấu Cần hoàn tiền).
+Hệ thống thông báo hủy đơn hàng thành công.
+Dòng sự kiện phụ
+– Đơn hàng đã giao hoặc đang giao, không còn thỏa điều kiện hủy: hệ thống từ chối và thông báo lý do.
+– Khách hàng chọn không hủy: hệ thống giữ nguyên đơn hàng.
+– Nhân viên bán hàng, nhân viên CSKH hoặc Admin hủy đơn ở màn hình Quản lý đơn hàng: chọn trạng thái Hủy theo UC36; hệ thống hoàn lại tồn kho và, với đơn đã thanh toán, đánh dấu Cần hoàn tiền.
+Tiền điều kiện (pre-condition)
+Khách hàng đã đăng nhập vào hệ thống thành công (UC01).
+Đơn hàng thuộc về khách hàng và đang ở trạng thái cho phép hủy.
+Hậu điều kiện (post-condition)
+Thành công: đơn hàng ở trạng thái Đã hủy và tồn kho được cập nhật lại.
+Thất bại: đơn hàng được giữ nguyên.
+
+1.9. Quản lý tồn kho
+1.9.1. UC38 – Theo dõi tồn kho
+Tóm tắt
+Cho phép nhân viên kho, nhân viên kiểm kho và Admin theo dõi số lượng tồn kho của từng sản phẩm theo kích cỡ để chủ động kiểm soát hàng hóa.
+Dòng sự kiện chính
+Tác nhân chọn chức năng Quản lý tồn kho.
+Hệ thống truy xuất dữ liệu tồn kho.
+Hệ thống hiển thị thẻ tổng quan (số sản phẩm, tổng số đôi, giá trị tồn, sắp hết theo ngưỡng mặc định 10 đôi và điều chỉnh được, hết hàng, đang chờ giao) và danh sách sản phẩm cùng tồn kho theo size, số đã nhập, đã bán, chờ giao, giá bán và giá trị tồn.
+Tác nhân có thể tìm kiếm, sắp xếp hoặc lọc theo danh mục, size, tên, mã, tình trạng tồn kho, khoảng ngày.
+Có thể xuất danh sách ra file CSV.
+Hệ thống hiển thị kết quả phù hợp với yêu cầu của tác nhân.
+Dòng sự kiện phụ
+– Chưa có dữ liệu tồn kho: hệ thống thông báo danh sách trống.
+– Không có sản phẩm phù hợp: hệ thống thông báo không có kết quả.
+– Lỗi truy xuất dữ liệu: hệ thống thông báo lỗi và cho phép tải lại.
+Tiền điều kiện (pre-condition)
+Nhân viên kho, nhân viên kiểm kho hoặc Admin đã đăng nhập vào hệ thống (UC01).
+Hậu điều kiện (post-condition)
+Thông tin tồn kho được hiển thị, dữ liệu không bị thay đổi.
+
+1.9.2. UC39 – Kiểm tra tình trạng hàng
+Tóm tắt
+Cho phép nhân viên kho, nhân viên kiểm kho và Admin kiểm tra tình trạng hàng hóa: bình thường, sắp hết hàng hoặc hết hàng (theo ngưỡng thiết lập được), nhằm kịp thời lập kế hoạch nhập hàng.
+Dòng sự kiện chính
+Tác nhân mở màn hình Quản lý tồn kho (UC38).
+Hệ thống phân loại từng sản phẩm theo tổng tồn kho và ngưỡng sắp hết (mặc định 10 đôi, điều chỉnh được).
+Hệ thống hiển thị nhãn tình trạng của sản phẩm và màu của từng size (còn từ 3 đôi, còn 1–2 đôi, đã hết), kèm số lượng sản phẩm trên từng tab trạng thái.
+Tác nhân lọc theo tab Bình thường, Sắp hết hàng hoặc Hết hàng để xác định mặt hàng cần nhập thêm và lập phiếu nhập (UC40).
+Dòng sự kiện phụ
+– Sản phẩm chưa có dữ liệu nhập, bán: hệ thống chỉ hiển thị số lượng tồn hiện tại.
+– Sản phẩm đang ẩn hoặc chưa có giá bán: hệ thống gắn nhãn cảnh báo vì sản phẩm chưa hiển thị trên cửa hàng.
+Tiền điều kiện (pre-condition)
+Nhân viên kho, nhân viên kiểm kho hoặc Admin đã đăng nhập vào hệ thống (UC01).
+Hậu điều kiện (post-condition)
+Tình trạng hàng hóa được hiển thị, dữ liệu không bị thay đổi.
+
+1.10. Quản lý phiếu nhập
+1.10.1. UC40 – Thêm phiếu nhập
+Tóm tắt
+Cho phép nhân viên kho và Admin lập phiếu nhập hàng mới để ghi nhận hàng hóa nhập vào kho; tồn kho được cộng khi phiếu ở trạng thái Hoàn thành.
+Dòng sự kiện chính
+Tác nhân chọn chức năng Quản lý phiếu nhập và nhấn Thêm phiếu nhập.
+Hệ thống hiển thị form phiếu nhập gồm ngày nhập, nhà cung cấp, trạng thái phiếu (Hoàn thành hoặc Chưa hoàn thành) và danh sách mặt hàng nhập.
+Mã phiếu do hệ thống tự sinh, người lập phiếu là người đang đăng nhập.
+Tác nhân nhập mã sản phẩm, chọn size, nhập số lượng và giá nhập cho từng mặt hàng.
+Tác nhân nhấn Lưu.
+Hệ thống kiểm tra dữ liệu hợp lệ.
+Hệ thống lưu phiếu nhập.
+Nếu phiếu ở trạng thái Hoàn thành, hệ thống cộng số lượng vào đúng size của sản phẩm, cập nhật tổng đã nhập và giá vốn.
+Hệ thống thông báo thêm phiếu nhập thành công.
+Dòng sự kiện phụ
+– Thiếu thông tin bắt buộc (ngày nhập, nhà cung cấp) hoặc chưa có mặt hàng nào: hệ thống báo lỗi và yêu cầu bổ sung.
+– Số lượng hoặc giá nhập không hợp lệ (nhỏ hơn hoặc bằng 0): hệ thống báo lỗi và yêu cầu nhập lại.
+– Mã sản phẩm không tồn tại hoặc chưa chọn size: hệ thống báo lỗi và yêu cầu nhập lại.
+– Tác nhân hủy thao tác: hệ thống không lưu phiếu nhập.
+Tiền điều kiện (pre-condition)
+Nhân viên kho hoặc Admin đã đăng nhập vào hệ thống (UC01).
+Các sản phẩm cần nhập đã tồn tại trong hệ thống.
+Hậu điều kiện (post-condition)
+Thành công: phiếu nhập được lưu; tồn kho của các mặt hàng được cập nhật khi phiếu Hoàn thành.
+Thất bại: không có phiếu nhập nào được tạo, tồn kho không đổi.
+
+1.10.2. UC41 – Xóa phiếu nhập
+Tóm tắt
+Cho phép nhân viên kho và Admin xóa phiếu nhập chưa hoàn thành; phiếu đã hoàn thành chỉ có thể hủy (do Admin), khi đó tồn kho được trừ lại.
+Dòng sự kiện chính
+Tác nhân chọn phiếu nhập trong danh sách và nhấn Xóa (phiếu chưa hoàn thành) hoặc Hủy phiếu (phiếu đã hoàn thành, chỉ Admin).
+Hệ thống hiển thị hộp thoại yêu cầu xác nhận.
+Tác nhân xác nhận.
+Với phiếu đã hoàn thành, hệ thống kiểm tra việc trừ lại có làm tồn kho bị âm hay không.
+Hệ thống xóa phiếu chưa hoàn thành, hoặc chuyển phiếu đã hoàn thành sang trạng thái Đã hủy và trừ lại đúng số lượng đã nhập ở từng size.
+Hệ thống thông báo thành công và cập nhật danh sách phiếu nhập.
+Dòng sự kiện phụ
+– Tác nhân chọn Hủy: hệ thống không xóa phiếu nhập.
+– Việc hủy khiến số lượng tồn kho bị âm (hàng đã được bán): hệ thống từ chối và thông báo lý do.
+Tiền điều kiện (pre-condition)
+Nhân viên kho hoặc Admin đã đăng nhập vào hệ thống (UC01).
+Phiếu nhập cần xóa tồn tại trong hệ thống.
+Hậu điều kiện (post-condition)
+Thành công: phiếu chưa hoàn thành bị xóa (tồn kho không đổi) hoặc phiếu đã hoàn thành chuyển sang trạng thái Đã hủy và tồn kho được trừ lại.
+Thất bại: phiếu nhập và tồn kho được giữ nguyên.
+
+1.10.3. UC42 – Sửa phiếu nhập
+Tóm tắt
+Cho phép nhân viên kho và Admin chỉnh sửa phiếu nhập chưa hoàn thành khi có sai sót về nhà cung cấp, ngày nhập, mặt hàng, số lượng hoặc giá nhập.
+Dòng sự kiện chính
+Tác nhân chọn phiếu nhập chưa hoàn thành cần sửa và nhấn Sửa.
+Hệ thống hiển thị thông tin hiện tại của phiếu nhập.
+Tác nhân chỉnh sửa thông tin (nhà cung cấp, ngày nhập, mặt hàng, số lượng, giá nhập) và nhấn Lưu.
+Hệ thống kiểm tra dữ liệu hợp lệ.
+Hệ thống cập nhật phiếu nhập (tồn kho chưa thay đổi vì phiếu chưa hoàn thành).
+Hệ thống thông báo cập nhật thành công.
+Dòng sự kiện phụ
+– Dữ liệu không hợp lệ: hệ thống báo lỗi và yêu cầu nhập lại.
+– Phiếu đã hoàn thành: hệ thống không cho sửa; Admin hủy phiếu rồi lập phiếu mới.
+– Tác nhân hủy thao tác: hệ thống giữ nguyên phiếu nhập.
+Tiền điều kiện (pre-condition)
+Nhân viên kho hoặc Admin đã đăng nhập vào hệ thống (UC01).
+Phiếu nhập cần sửa tồn tại trong hệ thống và chưa hoàn thành.
+Hậu điều kiện (post-condition)
+Thành công: phiếu nhập được cập nhật và tồn kho không thay đổi vì phiếu nhập chưa hoàn thành.
+Thất bại: phiếu nhập và tồn kho được giữ nguyên.
+
+1.10.4. UC43 – Chi tiết phiếu nhập
+Tóm tắt
+Cho phép nhân viên kho và Admin xem đầy đủ thông tin của một phiếu nhập.
+Dòng sự kiện chính
+Tác nhân chọn một phiếu nhập trong danh sách.
+Hệ thống truy xuất thông tin phiếu nhập.
+Hệ thống hiển thị mã phiếu, ngày nhập, nhà cung cấp, trạng thái phiếu, người lập phiếu, danh sách mặt hàng (size, số lượng, giá nhập) và tổng giá trị.
+Tác nhân có thể chọn Sửa (UC42) hoặc Xóa/Hủy phiếu (UC41) tùy trạng thái phiếu.
+Dòng sự kiện phụ
+– Phiếu nhập không tồn tại hoặc đã bị xóa: hệ thống thông báo và quay về danh sách.
+Tiền điều kiện (pre-condition)
+Nhân viên kho hoặc Admin đã đăng nhập vào hệ thống (UC01).
+Phiếu nhập cần xem tồn tại.
+Hậu điều kiện (post-condition)
+Thông tin chi tiết phiếu nhập được hiển thị, dữ liệu không bị thay đổi.
+
+1.11. Quản lý đánh giá
+1.11.1. UC44 – Đánh giá sản phẩm
+Tóm tắt
+Cho phép khách hàng đánh giá sản phẩm đã mua bằng số sao, nhận xét và hình ảnh (nếu có) sau khi đơn hàng được giao thành công.
+Dòng sự kiện chính
+Khách hàng mở chi tiết đơn hàng đã giao (UC34/UC55) và chọn Đánh giá ở sản phẩm cần đánh giá. 
+Hệ thống hiển thị form gồm số sao (1–5), nội dung nhận xét và ô đính kèm ảnh. Khách hàng chọn số sao, nhập nhận xét (có thể đính kèm ảnh tối đa 2MB) và nhấn Gửi đánh giá. 
+Hệ thống kiểm tra dữ liệu hợp lệ và khách hàng chưa đánh giá sản phẩm này trong đơn đó. 
+Hệ thống lưu đánh giá ở trạng thái Hiển thị, cập nhật điểm đánh giá trung bình của sản phẩm và thông báo gửi đánh giá thành công.
+Dòng sự kiện phụ
+– Chưa chọn số sao: hệ thống báo lỗi và không lưu.
+ – Ảnh lớn hơn 2MB hoặc sai định dạng: hệ thống không gửi và báo lỗi.
+ – Đơn hàng chưa giao thành công hoặc đã hủy: hệ thống không cho đánh giá. 
+– Sản phẩm trong đơn đã được đánh giá: hệ thống thông báo và không cho đánh giá lần nữa. 
+– Nội dung chứa từ ngữ bị cấm: hệ thống từ chối gửi. 
+– Khách hàng hủy thao tác: hệ thống không lưu.
+Tiền điều kiện (pre-condition)
+Khách hàng đã đăng nhập (UC01). Khách hàng có đơn hàng ở trạng thái Thành công chứa sản phẩm cần đánh giá.
+Hậu điều kiện (post-condition)
+Thành công: đánh giá được lưu, điểm trung bình của sản phẩm được cập nhật và hiển thị ở chi tiết sản phẩm (UC14). 
+Thất bại: không có đánh giá nào được lưu.
+1.11.2. UC45 – Xem đánh giá
+Tóm tắt
+Cho phép khách hàng xem các đánh giá của sản phẩm (điểm trung bình, số lượng theo từng mức sao, nhận xét, ảnh và phản hồi của cửa hàng) trong cửa sổ chi tiết sản phẩm.
+Dòng sự kiện chính
+Khách hàng mở chi tiết sản phẩm (UC14). 
+Hệ thống truy xuất các đánh giá đang ở trạng thái Hiển thị của sản phẩm. 
+Hệ thống hiển thị điểm đánh giá trung bình, số đánh giá theo từng mức sao và danh sách đánh giá (mới nhất trước) gồm tên người đánh giá, số sao, nhận xét, ảnh, ngày đánh giá và phản hồi của cửa hàng (nếu có). 
+Khách hàng có thể lọc theo số sao hoặc theo đánh giá có ảnh.
+Dòng sự kiện phụ
+– Sản phẩm chưa có đánh giá: hệ thống thông báo chưa có đánh giá. – Không có đánh giá phù hợp bộ lọc: hệ thống thông báo không có kết quả. 
+– Đánh giá đã bị ẩn (UC50): không hiển thị với khách hàng khác; riêng người viết vẫn thấy đánh giá của mình kèm nhãn “Đang bị ẩn”.
+Tiền điều kiện (pre-condition)
+Sản phẩm tồn tại. Khách hàng không cần đăng nhập để xem.
+Hậu điều kiện (post-condition)
+Các đánh giá đang hiển thị của sản phẩm được trình bày đúng, dữ liệu không bị thay đổi.
+1.11.3. UC46 – Phản hồi đánh giá
+Tóm tắt
+Cho phép nhân viên chăm sóc khách hàng và Admin gửi phản hồi công khai của cửa hàng cho một đánh giá của khách hàng (cảm ơn, giải đáp hoặc xin lỗi và hướng xử lý).
+Dòng sự kiện chính
+Tác nhân mở danh sách đánh giá (UC47) và chọn một đánh giá cần phản hồi. 
+Hệ thống hiển thị nội dung đánh giá, sản phẩm, đơn hàng liên quan và thông tin khách hàng. 
+Tác nhân nhập nội dung phản hồi (có thể chọn mẫu trả lời nhanh) và nhấn Gửi phản hồi. 
+Hệ thống kiểm tra nội dung, lưu phản hồi kèm tên người phản hồi và thời điểm, rồi hiển thị phản hồi dưới đánh giá ở trang chi tiết sản phẩm (UC45).
+Dòng sự kiện phụ
+– Nội dung phản hồi để trống: hệ thống không gửi. 
+– Đánh giá đã có phản hồi: tác nhân chọn Sửa phản hồi, hệ thống thay nội dung cũ bằng nội dung mới. 
+– Đánh giá đang bị ẩn: hệ thống vẫn lưu phản hồi nhưng chỉ hiển thị khi đánh giá được hiện lại. 
+– Khách hàng cần được hỗ trợ trực tiếp (đơn hàng, đổi trả…): tác nhân hướng dẫn khách dùng chat hỗ trợ (UC66).
+Tiền điều kiện (pre-condition)
+Nhân viên chăm sóc khách hàng hoặc Admin đã đăng nhập (UC01). Đánh giá cần phản hồi tồn tại.
+Hậu điều kiện (post-condition)
+Thành công: phản hồi được lưu và hiển thị dưới đánh giá. 
+Thất bại: đánh giá giữ nguyên, không có phản hồi mới.
+
+1.11.4. UC47 – Xem danh sách đánh giá
+Tóm tắt
+Cho phép nhân viên chăm sóc khách hàng và Admin xem danh sách toàn bộ đánh giá của khách hàng để theo dõi, phản hồi và kiểm duyệt.
+Dòng sự kiện chính
+Tác nhân chọn chức năng Quản lý đánh giá. 
+Hệ thống truy xuất danh sách đánh giá (mới nhất trước). 
+Hệ thống hiển thị sản phẩm, tên khách hàng, số sao, nội dung, ngày đánh giá, trạng thái (Hiển thị, Đã ẩn) và tình trạng phản hồi (Chưa phản hồi, Đã phản hồi). 
+Tác nhân có thể lọc theo số sao, sản phẩm, trạng thái, tình trạng phản hồi hoặc tìm theo tên, mã khách hàng. 
+Tác nhân chọn một đánh giá để xem chi tiết, phản hồi (UC46), kiểm duyệt (UC49) hoặc ẩn/hiện (UC50).
+Dòng sự kiện phụ
+– Chưa có đánh giá nào: hệ thống thông báo danh sách trống. 
+– Không có đánh giá phù hợp bộ lọc: hệ thống thông báo không có kết quả. 
+– Lỗi truy xuất dữ liệu: hệ thống thông báo lỗi và cho phép tải lại.
+Tiền điều kiện (pre-condition)
+Nhân viên chăm sóc khách hàng hoặc Admin đã đăng nhập (UC01).
+Hậu điều kiện (post-condition)
+Danh sách đánh giá được hiển thị, dữ liệu không bị thay đổi.
+
+1.11.5. UC48 – Lọc đánh giá
+Tóm tắt
+Cho phép nhân viên chăm sóc khách hàng và Admin lọc danh sách đánh giá theo số sao, sản phẩm, trạng thái và tình trạng phản hồi; là mở rộng của Xem danh sách đánh giá (UC47).
+Dòng sự kiện chính
+Tác nhân mở danh sách đánh giá (UC47).
+Tác nhân chọn một hoặc nhiều tiêu chí lọc: số sao, sản phẩm, trạng thái (Hiển thị, Đã ẩn), tình trạng phản hồi (Chưa phản hồi, Đã phản hồi).
+Hệ thống lọc ngay khi tác nhân đổi tiêu chí, chỉ giữ các đánh giá thỏa mãn tất cả tiêu chí.
+Hệ thống hiển thị danh sách đánh giá sau khi lọc (mới nhất trước).
+Dòng sự kiện phụ
+– Không có đánh giá thỏa tiêu chí: hệ thống thông báo không có kết quả.
+– Tác nhân chọn lại Tất cả ở một tiêu chí: hệ thống bỏ lọc tiêu chí đó.
+Tiền điều kiện (pre-condition)
+Nhân viên chăm sóc khách hàng hoặc Admin đã đăng nhập (UC01).
+Hậu điều kiện (post-condition)
+Danh sách đánh giá đã lọc được hiển thị, dữ liệu không bị thay đổi.
+1.11.6. UC49 – Kiểm duyệt đánh giá
+Tóm tắt
+Cho phép nhân viên chăm sóc khách hàng và Admin xem xét nội dung đánh giá có phù hợp hay không (ngôn từ thô tục, spam, quảng cáo, thông tin cá nhân, không liên quan sản phẩm) và quyết định giữ hiển thị hoặc ẩn.
+Dòng sự kiện chính
+Tác nhân mở một đánh giá cần kiểm duyệt từ danh sách (UC47). 
+Hệ thống hiển thị nội dung, ảnh, thông tin người đánh giá và đơn hàng liên quan. 
+Tác nhân xem xét nội dung và chọn kết quả: Giữ hiển thị hoặc Ẩn đánh giá (kèm lý do). 
+Hệ thống thực hiện Ẩn/hiện đánh giá (UC50) theo lựa chọn, ghi lại người kiểm duyệt, thời điểm và lý do. 
+Hệ thống thông báo kiểm duyệt thành công.
+Dòng sự kiện phụ
+– Chọn Ẩn nhưng chưa nhập lý do: hệ thống yêu cầu nhập lý do. 
+– Đánh giá đã được người khác kiểm duyệt: hệ thống hiển thị kết quả trước đó, tác nhân có thể thay đổi. 
+– Đánh giá có nội dung phản ánh sự cố cần hỗ trợ: tác nhân vẫn giữ hiển thị và hướng khách hàng sang chat hỗ trợ (UC66). 
+– Tác nhân hủy thao tác: hệ thống giữ nguyên trạng thái đánh giá.
+Tiền điều kiện (pre-condition)
+Nhân viên chăm sóc khách hàng hoặc Admin đã đăng nhập (UC01). Đánh giá cần kiểm duyệt tồn tại.
+Hậu điều kiện (post-condition)
+Thành công: đánh giá được giữ hiển thị hoặc ẩn, lịch sử kiểm duyệt được lưu. 
+Thất bại: trạng thái đánh giá không thay đổi.
+
+1.11.7. UC50 – Ẩn/ hiện đánh giá
+Tóm tắt
+Cho phép nhân viên chăm sóc khách hàng và Admin ẩn hoặc hiện lại một đánh giá trên trang sản phẩm mà không xóa dữ liệu đánh giá.
+Dòng sự kiện chính
+Tác nhân chọn một đánh giá (từ UC47 hoặc trong lúc kiểm duyệt UC49). 
+Hệ thống hiển thị trạng thái hiện tại (Hiển thị hoặc Đã ẩn). 
+Tác nhân chọn Ẩn hoặc Hiện và xác nhận ở hộp thoại. 
+Hệ thống cập nhật trạng thái đánh giá, tính lại điểm đánh giá trung bình và số lượng đánh giá của sản phẩm (đánh giá ẩn không được tính). 
+Hệ thống thông báo cập nhật thành công.
+Dòng sự kiện phụ
+– Tác nhân hủy ở hộp thoại xác nhận: hệ thống giữ nguyên trạng thái cũ. 
+– Lỗi lưu dữ liệu: hệ thống thông báo lỗi, trạng thái cũ được giữ nguyên.
+Tiền điều kiện (pre-condition)
+Nhân viên chăm sóc khách hàng hoặc Admin đã đăng nhập (UC01). Đánh giá tồn tại.
+Hậu điều kiện (post-condition)
+Thành công: đánh giá hiển thị hoặc ẩn theo lựa chọn, điểm trung bình sản phẩm được cập nhật. 
+Thất bại: trạng thái đánh giá không thay đổi.
+
+1.12. Báo cáo thống kê
+1.12.1. UC51 – Thống kê mặt hàng bán chạy
+Tóm tắt
+Cho phép Admin xem các mặt hàng bán chạy nhất (Top 8) trong một khoảng thời gian ngay trong báo cáo doanh thu để nắm bắt nhu cầu thị trường và hỗ trợ kế hoạch nhập hàng.
+Dòng sự kiện chính
+Admin chọn chức năng Báo cáo doanh thu (báo cáo mặt hàng bán chạy và doanh thu hiển thị chung trên một trang).
+Admin chọn khoảng thời gian (từ ngày, đến ngày) và chu kỳ xem (ngày, tuần, tháng hoặc năm). Số lượng hiển thị không chọn được, bảng Top 8 là cố định.
+Admin nhấn Áp dụng.
+Hệ thống tổng hợp số lượng bán của từng sản phẩm từ các đơn hàng đã giao trong khoảng thời gian đã chọn.
+Hệ thống hiển thị Top 8 sản phẩm bán chạy theo thứ tự giảm dần số lượng và bảng chi tiết doanh thu, lợi nhuận gộp theo từng sản phẩm.
+Dòng sự kiện phụ
+– Từ ngày lớn hơn đến ngày: hệ thống không có dữ liệu để hiển thị.
+– Không có dữ liệu bán hàng trong khoảng thời gian: hệ thống thông báo không có dữ liệu.
+Tiền điều kiện (pre-condition)
+Admin đã đăng nhập vào hệ thống thành công (UC01).
+Hậu điều kiện (post-condition)
+Báo cáo mặt hàng bán chạy được hiển thị, dữ liệu trong hệ thống không bị thay đổi.
+
+1.12.2. UC52 – Thống kê doanh thu
+Tóm tắt
+Cho phép Admin thống kê doanh thu của cửa hàng (tiền hàng đã trừ voucher, không gồm phí vận chuyển) theo ngày, tuần, tháng hoặc năm, cùng giá vốn và lợi nhuận gộp.
+Dòng sự kiện chính
+Admin chọn chức năng Báo cáo doanh thu.
+Admin chọn khoảng thời gian và cách xem (theo ngày, tuần, tháng hoặc năm).
+Admin nhấn Áp dụng.
+Hệ thống tổng hợp doanh thu, số đơn, số lượng bán, voucher đã giảm, giá vốn và lợi nhuận gộp từ các đơn hàng đã giao (tính theo ngày giao) trong khoảng thời gian đã chọn.
+Hệ thống hiển thị các thẻ tổng quan (doanh thu, số đơn, giá trị trung bình mỗi đơn, số lượng bán, giá vốn, lợi nhuận gộp), biểu đồ cột theo mốc thời gian và bảng doanh thu theo từng sản phẩm.
+Dòng sự kiện phụ
+– Khoảng thời gian không hợp lệ: hệ thống báo lỗi và yêu cầu chọn lại.
+– Không có đơn hàng trong khoảng thời gian: hệ thống thông báo không có dữ liệu.
+Tiền điều kiện (pre-condition)
+Admin đã đăng nhập vào hệ thống thành công (UC01).
+Hậu điều kiện (post-condition)
+Báo cáo doanh thu được hiển thị, dữ liệu trong hệ thống không bị thay đổi.
+
+1.12.3. UC53 – Thống kê đơn hàng
+Tóm tắt
+Cho phép Admin thống kê số lượng đơn hàng theo trạng thái trong một khoảng thời gian để theo dõi tình hình xử lý đơn.
+Dòng sự kiện chính
+Admin chọn chức năng Báo cáo thống kê, mục Thống kê đơn hàng.
+Admin chọn khoảng thời gian (từ ngày, đến ngày) và chu kỳ xem (ngày, tuần, tháng hoặc năm), nhấn Áp dụng.
+Hệ thống tổng hợp số đơn theo từng trạng thái (Chờ xác nhận, Đang giao, Thành công, Đã hủy) và tỷ lệ hủy trong khoảng thời gian đã chọn.
+Hệ thống hiển thị các thẻ tổng quan, biểu đồ theo mốc thời gian và bảng số đơn theo trạng thái.
+Dòng sự kiện phụ
+– Từ ngày lớn hơn đến ngày: hệ thống báo lỗi và yêu cầu chọn lại.
+– Không có đơn hàng trong khoảng thời gian: hệ thống thông báo không có dữ liệu.
+Tiền điều kiện (pre-condition)
+Admin đã đăng nhập vào hệ thống thành công (UC01).
+Hậu điều kiện (post-condition)
+Báo cáo thống kê đơn hàng được hiển thị, dữ liệu trong hệ thống không bị thay đổi.
+1.12.4. UC54 – Thống kê tồn kho
+Tóm tắt
+Cho phép Admin thống kê tình hình tồn kho toàn cửa hàng: tổng số đôi, giá trị tồn, số sản phẩm sắp hết và hết hàng.
+Dòng sự kiện chính
+Admin chọn chức năng Báo cáo thống kê, mục Thống kê tồn kho.
+Hệ thống tổng hợp dữ liệu tồn kho (UC38) và phân loại tình trạng hàng theo ngưỡng sắp hết (UC39).
+Hệ thống hiển thị các thẻ tổng quan (số sản phẩm, tổng số đôi, giá trị tồn, sắp hết, hết hàng) và bảng tồn kho theo danh mục hoặc theo size.
+Admin có thể lọc theo danh mục, size hoặc tình trạng hàng để xem chi tiết.
+Dòng sự kiện phụ
+– Chưa có dữ liệu tồn kho: hệ thống thông báo không có dữ liệu.
+– Lỗi truy xuất dữ liệu: hệ thống thông báo lỗi và cho phép tải lại.
+Tiền điều kiện (pre-condition)
+Admin đã đăng nhập vào hệ thống thành công (UC01).
+Hậu điều kiện (post-condition)
+Báo cáo thống kê tồn kho được hiển thị, dữ liệu trong hệ thống không bị thay đổi.
+Phần 2. Bổ sung đặc tả các chức năng còn thiếu
+1.13.1. UC55 – Xem lịch sử mua hàng cá nhân
+Tóm tắt
+Khách hàng xem các đơn hàng của chính mình, trạng thái và chi tiết mua hàng.
+Dòng sự kiện chính
+Khách hàng chọn Lịch sử mua hàng trong trang tài khoản.
+Hệ thống lấy các đơn hàng của chính khách hàng đó và sắp xếp đơn mới nhất lên trước.
+Hệ thống hiển thị mã đơn, ngày đặt, tổng tiền và trạng thái của từng đơn.
+Khách hàng chọn một đơn để xem chi tiết.
+Hệ thống hiển thị sản phẩm, size, số lượng, voucher đã dùng, phí vận chuyển và phương thức thanh toán của đơn.
+Dòng sự kiện phụ
+- Không có đơn: hiển thị danh sách trống.
+- Đơn chuyển khoản tạm còn hạn: cho phép tiếp tục thanh toán.
+- Đơn chờ xác nhận có thể hủy.
+Tiền điều kiện (pre-condition)
+Khách hàng đã đăng nhập (UC01).
+Hậu điều kiện (post-condition)
+Lịch sử và chi tiết đơn của đúng khách hàng được hiển thị.
+
+1.13.2. UC56 – Quản lý loại sản phẩm
+Tóm tắt
+Admin thêm, sửa, ẩn/hiện và xóa loại sản phẩm.
+Dòng sự kiện chính
+Admin chọn chức năng Quản lý loại sản phẩm.
+Hệ thống hiển thị danh sách loại gồm tên, mô tả, số sản phẩm và trạng thái.
+Admin chọn Thêm loại hoặc chọn một loại để sửa, nhập thông tin và nhấn Lưu.
+Admin có thể ẩn/hiện hoặc xóa một loại sản phẩm.
+Hệ thống kiểm tra dữ liệu, lưu thay đổi và cập nhật danh mục loại trên trang khách hàng.
+Dòng sự kiện phụ
+- Tên trống/trùng: không lưu.
+-  Không xóa loại còn sản phẩm; dùng ẩn nếu cần.
+Tiền điều kiện (pre-condition)
+Admin đã đăng nhập và có quyền quản lý loại.
+Hậu điều kiện (post-condition)
+Loại sản phẩm được cập nhật và các màn hình liên quan được đồng bộ.
+
+1.13.3. UC57 – Quản lý giá bán
+Tóm tắt
+Admin thiết lập và cập nhật giá bán theo giá trực tiếp hoặc phần trăm lợi nhuận.
+Dòng sự kiện chính
+Admin chọn chức năng Quản lý giá bán.
+Hệ thống hiển thị danh sách sản phẩm kèm giá nhập và giá bán hiện tại.
+Admin chọn sản phẩm và nhập giá bán mới hoặc tỷ lệ lợi nhuận (%) so với giá nhập.
+Hệ thống tính giá bán (nếu nhập tỷ lệ) và kiểm tra giá bán không thấp hơn giá nhập.
+Hệ thống lưu giá bán mới và cập nhật giá hiển thị trên trang khách hàng.
+Dòng sự kiện phụ
+- Giá không hợp lệ: không lưu. 
+- Giá thấp hơn giá nhập: hệ thống từ chối lưu và báo lỗi.
+-  Chưa có giá nhập: hệ thống báo lỗi không tính được giá bán.
+Tiền điều kiện (pre-condition)
+Admin đã đăng nhập và sản phẩm đã tồn tại.
+Hậu điều kiện (post-condition)
+Giá bán và giá hiển thị được lưu: sản phẩm có giá bán và còn hang được hiển thị cho khách hàng.
+
+1.13.4. UC58 – Quản lý trạng thái tài khoản khách hàng
+Tóm tắt
+Admin khóa, mở khóa hoặc reset mật khẩu cho tài khoản khách hàng (hệ thống sinh mật khẩu ngẫu nhiên và hiển thị cho Admin); không xóa tài khoản khách hàng.
+Dòng sự kiện chính
+Admin chọn chức năng Quản lý khách hàng.
+Hệ thống hiển thị danh sách tài khoản khách hàng kèm trạng thái của từng khách hàng.
+Admin chọn tài khoản cần xử lý.
+Admin chọn Khóa / Mở khóa tài khoản hoặc Reset mật khẩu, rồi xác nhận.
+Hệ thống cập nhật trạng thái tài khoản; với Reset mật khẩu, hệ thống sinh mật khẩu ngẫu nhiên và hiển thị cho Admin một lần để chuyển cho khách hàng.
+Khách hàng dùng mật khẩu tạm phải đổi mật khẩu ở lần đăng nhập tiếp theo.
+Dòng sự kiện phụ
+- Tài khoản không tồn tại: báo lỗi. Admin hủy ở hộp thoại xác nhận (khóa/mở khóa, reset mật khẩu): giữ nguyên.
+-  Khách bị khóa: bị buộc đăng xuất và không thể đặt hàng.
+Tiền điều kiện (pre-condition)
+Admin đã đăng nhập và tài khoản cần xử lý tồn tại.
+Hậu điều kiện (post-condition)
+Trạng thái hoặc mật khẩu của tài khoản được cập nhật; tài khoản bị khóa không thể đăng nhập.
+
+1.13.5. UC59 – Cập nhật và bổ sung tồn kho theo size
+Tóm tắt
+Nhân viên kho hoặc Admin theo dõi tồn kho từng size, cập nhật size và bổ sung số lượng qua phiếu nhập.
+Dòng sự kiện chính
+Nhân viên kho hoặc Admin chọn chức năng Quản lý tồn kho.
+Hệ thống hiển thị tồn kho tổng và tồn theo từng size của mỗi sản phẩm, cho phép lọc theo size và trạng thái (còn hàng, sắp hết, hết hàng).
+Tác nhân thêm size mới cho sản phẩm khi cần (ở màn hình sửa sản phẩm, chế độ chỉ cập nhật size).
+Tác nhân lập phiếu nhập ghi số lượng nhập cho từng size (UC40).
+Khi phiếu nhập được hoàn thành, hệ thống cộng số lượng vào đúng size, cập nhật tồn kho tổng và tổng đã nhập.
+Dòng sự kiện phụ
+- Size ngoài khoảng 20–60 hoặc số lượng âm: báo lỗi. Không xóa size còn hàng.
+- Phiếu thiếu sản phẩm, size hoặc số lượng: không cho hoàn thành.
+Tiền điều kiện (pre-condition)
+Nhân viên kho hoặc Admin đã đăng nhập và có quyền kho.
+Hậu điều kiện (post-condition)
+Tồn kho tổng luôn bằng tổng tồn theo size; các màn hình nhận dữ liệu cập nhật.
+Phần 3. Bổ sung đặc tả voucher và hỗ trợ
+1.14.1. UC60 – Áp dụng voucher khi thanh toán
+Tóm tắt
+Khách chọn voucher mặc định hoặc nhập mã tại checkout.
+Dòng sự kiện chính
+Tại trang thanh toán, hệ thống hiển thị danh sách voucher: mã dùng được hiển thị dạng thẻ, mã còn thiếu đơn tối thiểu hiện mờ kèm số tiền cần mua thêm.
+Khách hàng chọn một voucher trong danh sách hoặc nhập mã voucher.
+Hệ thống kiểm tra mã, trạng thái, thời gian hiệu lực, tổng lượt dùng, lượt dùng của tài khoản, điều kiện khách mới, voucher riêng khách (chỉ dùng được khi đã được nhân viên phát cho tài khoản) và đơn tối thiểu.
+Hệ thống hiển thị tạm tính, số tiền giảm, phí vận chuyển và tổng tiền sau giảm.
+Khách hàng tiếp tục đặt hàng (UC30); với đơn chuyển khoản, hệ thống kiểm tra lại voucher khi khách hàng xác nhận đã chuyển khoản.
+Dòng sự kiện phụ
+-  Mã sai, hết hạn, chưa tới ngày áp dụng, hết lượt hoặc không đúng đối tượng: báo lỗi, chưa đạt đơn tối thiểu: báo cần mua thêm.
+-  Mỗi đơn chỉ dùng một voucher; giảm giá chỉ trừ vào tiền hàng, không trừ phí vận chuyển. 
+- Voucher riêng khách chưa được phát cho tài khoản (hoặc đã dùng, đã thu hồi): báo mã chỉ dành cho khách được tặng và không hiển thị trong danh sách.
+Tiền điều kiện (pre-condition)
+Khách đã đăng nhập và đang checkout.
+Hậu điều kiện (post-condition)
+Đơn hàng lưu mã voucher, tạm tính, số tiền giảm và tổng tiền sau giảm.
+1.14.2. UC61 – Quản lý voucher
+Tóm tắt
+Admin và Nhân viên bán hàng thêm, sửa, tạm dừng và xóa voucher của cửa hàng, đặt phạm vi áp dụng của voucher (công khai hoặc riêng khách).
+Dòng sự kiện chính
+Admin hoặc Nhân viên bán hàng chọn chức năng Quản lý voucher.
+Hệ thống hiển thị danh sách voucher kèm trạng thái, phạm vi, số lượt đã dùng, số lần đã phát và thống kê tổng quan.
+Tác nhân chọn Thêm voucher hoặc chọn một voucher để sửa.
+Tác nhân nhập mã, tên chương trình, mô tả, loại giảm (số tiền hoặc phần trăm), giá trị giảm, giảm tối đa, đơn tối thiểu, ngày bắt đầu, hạn dùng, số lượt mỗi tài khoản, tổng lượt phát hành, điều kiện chỉ dành cho khách mới, phạm vi (Công khai hoặc Riêng khách) và trạng thái.
+Với voucher Riêng khách, Admin có thể bật tùy chọn Cho phép nhân viên CSKH phát.
+Tác nhân nhấn Lưu; hệ thống kiểm tra dữ liệu và lưu voucher.
+Tác nhân có thể tạm dừng voucher, hoặc xóa voucher chưa có đơn hàng nào sử dụng (xóa voucher thì xóa luôn các lần đã phát của voucher đó).
+Dòng sự kiện phụ
+-Mã trùng, giá trị giảm sai (số tiền giảm lớn hơn đơn tối thiểu, phần trăm vượt 100) hoặc thời gian sai: không lưu.
+ Voucher tạm dừng, hết hạn, chưa tới ngày hoặc hết lượt không được dùng. 
+-Mã đã có đơn sử dụng không xóa được, chỉ tạm dừng.
+ Voucher đã có đơn sử dụng hoặc đã được phát không đổi được phạm vi. - Chỉ Admin được bật Cho phép nhân viên CSKH phát và Khôi phục voucher mặc định; Nhân viên bán hàng không có hai quyền này.
+- Các chức vụ khác không vào được chức năng.
+Tiền điều kiện (pre-condition)
+Admin hoặc Nhân viên bán hàng đã đăng nhập (UC01) và có quyền quản lý voucher.
+Hậu điều kiện (post-condition)
+Voucher sẵn sàng cho checkout theo thời gian, trạng thái và phạm vi áp dụng.
+1.14.3. UC62 – Phát và thu hồi voucher cho khách hàng
+Tóm tắt
+Cho phép Admin và Nhân viên bán hàng phát voucher riêng cho một, một nhóm hoặc tất cả khách hàng và thu hồi voucher chưa dùng; Nhân viên chăm sóc khách hàng chỉ phát các voucher Admin cho phép (ví dụ voucher bồi thường). Mỗi lần phát được ghi nhận người phát, thời điểm và lý do.
+Dòng sự kiện chính
+Tác nhân chọn chức năng Quản lý voucher, tab Phân phát voucher.
+Hệ thống hiển thị biểu mẫu phát voucher (danh sách voucher riêng khách đang chạy mà tác nhân được phát, danh sách khách hàng đang hoạt động, ô lý do) và lịch sử các lần phát.
+Tác nhân chọn voucher cần phát.
+Tác nhân tìm và chọn một hoặc nhiều khách hàng (Admin và Nhân viên bán hàng có thể chọn Phát cho tất cả khách hàng) và nhập lý do phát.
+Tác nhân nhấn Phát voucher.
+Hệ thống kiểm tra quyền, hiệu lực của voucher và tổng lượt phát hành, bỏ qua khách đang có voucher đó chưa dùng, rồi ghi mỗi lần phát (voucher, khách nhận, người phát, chức vụ, thời điểm, lý do, trạng thái Chưa dùng).
+Hệ thống hiển thị số khách đã nhận, số khách bị bỏ qua và cập nhật lịch sử phát.
+Để thu hồi, Admin hoặc Nhân viên bán hàng chọn Thu hồi ở một lần phát có trạng thái Chưa dùng và xác nhận.
+Hệ thống chuyển lần phát sang Đã thu hồi, ghi người thu hồi và thời điểm; khách hàng không còn dùng được voucher đó.
+Dòng sự kiện phụ
+– Nhân viên CSKH chỉ thấy các voucher Admin đã cho phép phát, không có nút Thu hồi và chỉ xem lịch sử do mình phát.
+– Chưa chọn voucher hoặc chưa chọn khách hàng: hệ thống không phát và báo lỗi.
+– Voucher tạm dừng, hết hạn, chưa tới ngày hoặc đã hết tổng lượt phát hành: không phát được.
+– Khách đang có voucher đó chưa dùng: hệ thống bỏ qua khách này, không phát trùng.
+– Voucher phạm vi Công khai: không phát được vì ai cũng dùng được bằng mã.
+– Lần phát khách đã dùng: không thu hồi được; nếu đơn dùng voucher bị hủy thì voucher tự trả lại cho khách.
+– Khách bị khóa tài khoản không xuất hiện trong danh sách chọn.
+– Nhân viên kho và Nhân viên kiểm kho không có quyền phát hay thu hồi voucher.
+– Tác nhân hủy ở hộp thoại xác nhận (Phát cho tất cả, Thu hồi): dữ liệu giữ nguyên.
+Tiền điều kiện (pre-condition)
+Admin, Nhân viên bán hàng hoặc Nhân viên CSKH đã đăng nhập khu quản trị (UC01) và có quyền phát voucher.
+Có ít nhất một voucher phạm vi Riêng khách đang chạy (UC61).
+Hậu điều kiện (post-condition)
+Thành công: lần phát được ghi nhận kèm người phát; voucher xuất hiện trong mục Voucher của tôi và ở bước thanh toán của khách hàng. Với thu hồi, khách hàng không còn dùng được voucher.
+Thất bại: không có lần phát hay thu hồi nào được ghi.
+1.14.4. UC63 – Xem voucher dùng được và không dùng được
+Tóm tắt
+Cho phép khách hàng đã đăng nhập xem các voucher của mình chia thành hai nhóm: dùng được và không dùng được (kèm lý do), gồm cả voucher công khai và voucher riêng được cửa hàng tặng. Voucher dùng được sẽ hiển thị ở bước thanh toán.
+Dòng sự kiện chính
+Khách hàng chọn Voucher trên thanh menu (hoặc Voucher của tôi trong trang tài khoản).
+Hệ thống kiểm tra từng voucher theo tài khoản (trạng thái, thời gian hiệu lực, tổng lượt, lượt dùng của tài khoản, điều kiện khách mới, voucher riêng đã được tặng hay chưa) và chia thành hai nhóm Dùng được và Không dùng được, kèm số lượng mỗi nhóm.
+Ở nhóm Dùng được, hệ thống hiển thị giá trị giảm, đơn tối thiểu, hạn dùng, mã và, với voucher riêng, nhãn Dành riêng cho bạn cùng ngày tặng và lý do tặng.
+Ở nhóm Không dùng được, hệ thống hiển thị thêm lý do (hết hạn, tạm ngưng, hết lượt, đã dùng hết lượt của tài khoản, chỉ dành cho khách mới, đã dùng voucher được tặng).
+Khách hàng chọn Dùng ngay ở một voucher dùng được; hệ thống chọn sẵn voucher đó và chuyển tới giỏ hàng.
+Khi thanh toán (UC60), hệ thống đưa voucher đã chọn và các voucher dùng được vào danh sách voucher; voucher được áp dụng nếu đơn hàng đạt điều kiện, và lần dùng được ghi nhận theo đơn hàng.
+Dòng sự kiện phụ
+– Voucher riêng chưa được tặng cho tài khoản hoặc đã bị thu hồi: không hiển thị ở cả hai nhóm.
+– Khách hàng chưa có voucher nào dùng được: hệ thống hiển thị thông báo chưa có voucher.
+– Đơn dùng voucher bị hủy: voucher trở lại nhóm Dùng được nếu còn hạn và còn lượt.
+– Khách hàng khác nhập mã voucher riêng: hệ thống báo mã chỉ dành cho khách được tặng.
+– Khách hàng chưa đăng nhập: hệ thống chuyển tới trang đăng nhập.
+Tiền điều kiện (pre-condition)
+Khách hàng đã đăng nhập vào hệ thống (UC01).
+Hậu điều kiện (post-condition)
+Khách hàng nắm được voucher nào dùng được, voucher nào không và lý do; voucher đã dùng hoặc đã thu hồi không dùng lại được.
+1.14.5. UC64 – Gửi yêu cầu hỗ trợ
+Tóm tắt
+Cho phép khách hàng gửi yêu cầu hỗ trợ qua khung chat (kèm ảnh hoặc mã sản phẩm) và theo dõi trạng thái yêu cầu; nhân viên xử lý theo UC66.
+Dòng sự kiện chính
+Khách hàng chọn biểu tượng Chat hỗ trợ.
+Hệ thống hiển thị khung chat và lịch sử hội thoại (nếu có).
+Khách hàng nhập nội dung, có thể đính kèm ảnh (tối đa 2MB) hoặc nhập mã sản phẩm để gửi kèm liên kết sản phẩm, rồi nhấn Gửi.
+Hệ thống kiểm tra dữ liệu, lưu tin nhắn, tạo hội thoại ở trạng thái Chờ tiếp nhận (nếu chưa có hội thoại đang mở) và hiển thị tin nhắn trong khung chat.
+Khách hàng theo dõi trạng thái yêu cầu (Chờ tiếp nhận, Đang xử lý, Đã đóng) và nhận phản hồi của nhân viên ngay trong khung chat.
+Dòng sự kiện phụ
+– Nội dung trống, ảnh lớn hơn 2MB hoặc mã sản phẩm không tồn tại: hệ thống không gửi và báo lỗi.
+– Khách hàng đã có hội thoại đang mở: hệ thống gửi tin vào hội thoại đó, không tạo hội thoại mới.
+– Khách hàng chưa đăng nhập: hệ thống chuyển tới trang đăng nhập.
+– Cần trao đổi trực tiếp: khách hàng chọn Gọi hỗ trợ (UC65).
+Tiền điều kiện (pre-condition)
+Khách hàng đã đăng nhập vào hệ thống thành công (UC01).
+Hậu điều kiện (post-condition)
+Thành công: tin nhắn được lưu và hiển thị cho cả hai phía, yêu cầu vào hàng đợi của nhân viên CSKH. Thất bại: tin nhắn không được lưu.
+1.14.7. UC65 – Quản lý hỗ trợ khách hàng
+Tóm tắt
+Cho phép Nhân viên chăm sóc khách hàng (CSKH) và Admin quản lý các hội thoại hỗ trợ của khách hàng. Nhân viên CSKH xem danh sách và lọc hội thoại, xem thông tin khách hàng đi kèm, tiếp nhận, trả lời, tiếp quản, kết thúc và mở lại hội thoại; Admin chỉ xem danh sách hội thoại (mới nhất trước) và trả lời, không có thao tác tiếp nhận, lọc, đóng hội thoại. Toàn bộ tin nhắn được lưu làm lịch sử hỗ trợ.
+Dòng sự kiện chính
+Nhân viên CSKH hoặc Admin chọn chức năng Hỗ trợ khách hàng.
+Hệ thống hiển thị danh sách hội thoại có bộ lọc (Tất cả, Chờ tiếp nhận, Đang xử lý, Đã đóng), ô tìm theo tên hoặc mã khách và số tin chưa đọc; hội thoại cần xử lý trước được mở sẵn.
+Tác nhân chọn một hội thoại; hệ thống hiển thị nội dung tin nhắn cùng thông tin khách hàng (mã, số điện thoại, email, tối đa 3 đơn hàng gần nhất) và đánh dấu các tin đã đọc.
+Tác nhân chọn Tiếp nhận; hệ thống ghi nhận nhân viên phụ trách, chuyển hội thoại sang Đang xử lý và ghi tin nhắn hệ thống vào hội thoại.
+Tác nhân nhập câu trả lời (có thể chọn mẫu trả lời nhanh, gửi ảnh hoặc link sản phẩm theo mã) và nhấn Gửi.
+Hệ thống lưu tin nhắn, hiển thị ngay trong hội thoại và chuyển tin mới tới khách hàng.
+Khi yêu cầu đã được giải quyết, tác nhân chọn Kết thúc hội thoại và xác nhận.
+Hệ thống chuyển hội thoại sang Đã đóng, ghi người đóng và thời điểm đóng, gửi tin nhắn hệ thống cảm ơn khách hàng.
+Dòng sự kiện phụ
+– Admin: hệ thống hiển thị danh sách hội thoại sắp theo thời gian mới nhất, không có bộ lọc và không có các thao tác tiếp nhận, đóng hội thoại; Admin chỉ xem nội dung và trả lời khách hàng.
+– Tác nhân trả lời khi hội thoại còn ở trạng thái Chờ tiếp nhận: hệ thống tự tiếp nhận hội thoại cho nhân viên đó.
+– Hội thoại đang do nhân viên khác phụ trách: tác nhân chọn Tiếp quản và xác nhận mới trả lời được; hệ thống ghi tin nhắn hệ thống về việc tiếp quản.
+– Hội thoại đã đóng: tác nhân chọn Mở lại hội thoại; hệ thống từ chối nếu khách hàng đã có hội thoại khác đang mở.
+– Nội dung trống, ảnh lớn hơn 2MB hoặc mã sản phẩm không tồn tại: hệ thống không gửi và báo lỗi.
+– Cần trao đổi trực tiếp: tác nhân gọi hỗ trợ cho khách hàng theo số điện thoại trong thông tin khách hàng.
+– Bộ nhớ trình duyệt đầy: hệ thống báo không lưu được tin nhắn và đề nghị dùng ảnh nhỏ hơn hoặc xóa bớt dữ liệu cũ.
+– Hội thoại chỉ có tin nhắn hệ thống (ví dụ tin cảm ơn khi đơn hàng được giao): không xuất hiện trong hàng đợi của nhân viên.
+– Nhân viên bị khóa tài khoản hoặc đổi chức vụ: các hội thoại đang phụ trách được trả về Chờ tiếp nhận để nhân viên khác tiếp nhận.
+– Nhân viên bán hàng, Nhân viên kho và Nhân viên kiểm kho không có quyền vào chức năng Hỗ trợ khách hàng.
+– Tác nhân hủy ở hộp thoại xác nhận (Tiếp quản, Kết thúc hội thoại): trạng thái hội thoại giữ nguyên.
+Tiền điều kiện (pre-condition)
+Nhân viên CSKH hoặc Admin đã đăng nhập khu quản trị (UC01) và có quyền vào trang Hỗ trợ khách hàng.
+Có ít nhất một hội thoại hỗ trợ do khách hàng khởi tạo.
+Hậu điều kiện (post-condition)
+Thành công: tin nhắn được lưu trong hội thoại và hiển thị cho cả hai phía; trạng thái hội thoại và nhân viên phụ trách phản ánh đúng các thao tác đã thực hiện.
+Thất bại: tin nhắn hoặc thay đổi trạng thái không được lưu và hội thoại giữ nguyên.
