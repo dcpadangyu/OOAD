@@ -1,0 +1,314 @@
+
+%%{init: {
+  'theme': 'base',
+  'themeVariables': {
+    'fontFamily': 'Arial',
+    'fontSize': '18px',
+    'primaryColor': '#ffffff',
+    'primaryTextColor': '#000000',
+    'primaryBorderColor': '#000000',
+    'lineColor': '#000000',
+    'secondaryColor': '#ffffff',
+    'tertiaryColor': '#ffffff'
+  }
+}}%%
+
+classDiagram
+direction TB
+
+class DanhMuc {
+  -String maDanhMuc
+  -String tenDanhMuc
+  -String moTa
+  -String trangThai
+  +themDanhMuc(tenDanhMuc, moTa) void
+  +suaDanhMuc(maDanhMuc, tenDanhMuc, moTa) void
+  +xoaDanhMuc(maDanhMuc) void
+  +anDanhMuc(maDanhMuc) void
+}
+
+class ThuongHieu {
+  -String maThuongHieu
+  -String tenThuongHieu
+  -String moTa
+  -String trangThai
+  +themThuongHieu(tenThuongHieu, moTa) void
+  +suaThuongHieu(maThuongHieu, tenThuongHieu, moTa) void
+  +xoaThuongHieu(maThuongHieu) void
+}
+
+class SanPham {
+  -String maSanPham
+  -String tenSanPham
+  -String moTa
+  -String hinhAnh
+  -double giaBan
+  -String trangThai
+  +timKiemSanPham(tuKhoa) List
+  +locSanPham(maDanhMuc, maThuongHieu, giaMin, giaMax) List
+  +xemChiTiet(maSanPham) SanPham
+  +themSanPham(tenSanPham, moTa, hinhAnh, giaBan) String
+  +suaSanPham(maSanPham, tenSanPham, moTa, hinhAnh, giaBan) void
+  +xoaSanPham(maSanPham) void
+}
+
+class ChiTietSanPham {
+  -String maChiTietSP
+  -String kichCo
+  -String mauSac
+  -int soLuongTon
+  -int mucCanhBao
+  +kiemTraTonKho(maChiTietSP, soLuongCan) boolean
+  +tinhTonKho(maChiTietSP) int
+  +capNhatTonKho(maChiTietSP, soLuong) void
+}
+
+class BaoCaoThongKe {
+  -Date tuNgay
+  -Date denNgay
+  -Date ngayLap
+  +thongKeDoanhThu(tuNgay, denNgay) double
+  +thongKeSanPhamBanChay(tuNgay, denNgay) List
+  +thongKeDonHang(tuNgay, denNgay) double
+  +thongKeTonKho() List
+}
+
+class KhachHang {
+  -String maKhachHang
+  -String hoTen
+  -String email
+  -String soDienThoai
+  -String tenDangNhap
+  -String matKhau
+  -String trangThaiKichHoat
+  -Date ngayDangKy
+  +dangKy(hoTen, email, soDienThoai, tenDangNhap, matKhau) boolean
+  +dangNhap(tenDangNhap, matKhau) boolean
+  +dangXuat() void
+  +quenMatKhau(email) boolean
+  +doiMatKhau(matKhauCu, matKhauMoi) boolean
+  +capNhatThongTin(hoTen, email, soDienThoai) void
+  +xemLichSuMuaHang(maKhachHang) List
+  +xemThongTinCaNhan() KhachHang
+}
+
+class NhanVien {
+  -String maNhanVien
+  -String hoTen
+  -String email
+  -String soDienThoai
+  -String tenDangNhap
+  -String matKhau
+  -String trangThaiKichHoat
+  -Date ngayVaoLam
+  +dangNhap(tenDangNhap, matKhau) boolean
+  +dangXuat() void
+  +quenMatKhau(email) boolean
+  +doiMatKhau(matKhauCu, matKhauMoi) boolean
+  +capNhatThongTin(hoTen, email, soDienThoai) void
+  +themNhanVien(hoTen, email, soDienThoai, tenDangNhap, matKhau) String
+  +suaThongTinNhanVien(maNhanVien, hoTen, email, soDienThoai) void
+  +phanQuyen(maNhanVien, maVaiTro) boolean
+}
+
+class Quyen {
+  -String maQuyen
+  -String tenQuyen
+  -String moTa
+  +kiemTraQuyen(maNhanVien, maQuyen) boolean
+  +themQuyen(tenQuyen, moTa) void
+  +xoaQuyen(maQuyen) void
+  +capNhatQuyen(maQuyen, tenQuyen, moTa) void
+}
+
+class VaiTro {
+  -String maVaiTro
+  -String tenVaiTro
+  -String moTa
+  +themQuyen(maVaiTro, maQuyen) void
+  +xoaQuyen(maVaiTro, maQuyen) void
+  +capNhatVaiTro(tenVaiTro, moTa) void
+  +kiemTraQuyen(maQuyen) boolean
+}
+
+class GioHang {
+  -String maGioHang
+  -double tongTienTamTinh
+  -Date ngayCapNhat
+  +themVaoGioHang(maChiTietSP, soLuong) void
+  +xemGioHang() List
+  +capNhatGioHang(maChiTietSP, soLuong) void
+  +xoaKhoiGioHang(maChiTietSP) void
+  +tinhTongTien() double
+}
+
+class ChiTietGioHang {
+  -String maChiTietGioHang
+  -int soLuong
+  -double donGia
+  -double thanhTien
+  +capNhatSoLuong(soLuongMoi) void
+  +tinhThanhTien() double
+  +kiemTraSoLuong(soLuongCan) boolean
+}
+
+class DonHang {
+  -String maDonHang
+  -Date ngayDat
+  -double tongTien
+  -String hoTenNguoiNhan
+  -String soDienThoaiNhan
+  -String diaChiGiaoHang
+  -String trangThaiDonHang
+  -Date ngayCapNhat
+  +taoDonHang(maKhachHang, hoTenNguoiNhan, soDienThoaiNhan, diaChiGiaoHang) String
+  +huyDonHang(maDonHang) boolean
+  +capNhatTrangThai(maDonHang, trangThaiMoi) void
+  +theoDoiTinhTrang(maDonHang) String
+  +timKiemDonHang(tuKhoa) List
+  +xemChiTiet(maDonHang) DonHang
+  +tinhTongTien(maDonHang) double
+}
+
+class ChiTietDonHang {
+  -String maChiTietDonHang
+  -int soLuong
+  -double donGia
+  -double thanhTien
+  +tinhThanhTien() double
+  +capNhatSoLuong(soLuongMoi) void
+}
+
+class HoaDon {
+  -String maHoaDon
+  -Date ngayLap
+  -String tenNguoiMua
+  -String diaChiNguoiMua
+  -double tongTienHang
+  -double tienGiamGia
+  -double tongThanhToan
+  -String trangThaiHoaDon
+  +lapHoaDon(maDonHang) String
+  +tinhTongTien() double
+  +xemChiTietHoaDon(maHoaDon) HoaDon
+  +huyHoaDon(maHoaDon) boolean
+}
+
+class ThanhToan {
+  -String maThanhToan
+  -String phuongThucThanhToan
+  -String trangThaiThanhToan
+  -double soTien
+  -Date ngayThanhToan
+  -String maGiaoDich
+  +taoThanhToan(maDonHang, phuongThucThanhToan, soTien) String
+  +xacNhanThanhToan(maThanhToan) boolean
+  +kiemTraTrangThai(maThanhToan) String
+  +capNhatTrangThai(maThanhToan, trangThaiMoi) void
+}
+
+class PhieuNhap {
+  -String maPhieuNhap
+  -Date ngayNhap
+  -double tongTienNhap
+  -String ghiChu
+  -String trangThai
+  +themPhieuNhap(ghiChu) String
+  +xemChiTietPhieuNhap(maPhieuNhap) PhieuNhap
+  +tinhTongTien(maPhieuNhap) double
+}
+
+class ChiTietPhieuNhap {
+  -String maChiTietPhieuNhap
+  -int soLuongNhap
+  -double donGiaNhap
+  -double thanhTien
+  +tinhThanhTien() double
+  +capNhatSoLuongNhap(soLuongNhap) void
+}
+
+class YeuCauKhieuNai {
+  -String maYeuCau
+  -String loaiYeuCau
+  -String tieuDe
+  -String noiDung
+  -String trangThaiYeuCau
+  -Date ngayGui
+  +guiYeuCau(loaiYeuCau, tieuDe, noiDung) String
+  +tiepNhanYeuCau(maYeuCau) void
+  +phanLoaiYeuCau(maYeuCau, loaiYeuCau) void
+  +xuLyYeuCau(maYeuCau, noiDungXuLy) void
+  +capNhatTrangThaiYeuCau(maYeuCau, trangThaiMoi) void
+}
+
+class PhanHoiYeuCau {
+  -String maPhanHoi
+  -String noiDungPhanHoi
+  -Date ngayPhanHoi
+  +taoPhanHoi(maYeuCau, noiDungPhanHoi) String
+  +suaPhanHoi(maPhanHoi, noiDungPhanHoi) void
+  +xemChiTietPhanHoi(maPhanHoi) PhanHoiYeuCau
+}
+
+class DiaChiGiaoHang {
+  -String maDiaChi
+  -String soNha
+  -String tenDuong
+  -String tenPhuong
+  -String tenThanhPho
+  +themDiaChi(soNha, tenDuong, tenPhuong, tenThanhPho) void
+  +capNhatDiaChi(maDiaChi, soNha, tenDuong, tenPhuong, tenThanhPho) void
+  +xoaDiaChi(maDiaChi) void
+  +datLamMacDinh(maDiaChi) void
+}
+
+
+%% QUAN HE SAN PHAM
+DanhMuc \"1\" -- \"0..*\" SanPham : phan loai
+ThuongHieu \"1\" -- \"0..*\" SanPham : thuoc thuong hieu
+SanPham \"1\" *-- \"1..*\" ChiTietSanPham : co bien the
+
+%% QUAN HE KHACH HANG
+KhachHang \"1\" -- \"0..1\" GioHang : so huu
+KhachHang \"1\" -- \"0..*\" DonHang : dat hang
+KhachHang \"1\" *-- \"0..*\" DiaChiGiaoHang : quan ly dia chi
+DonHang \"0..*\" -- \"0..1\" DiaChiGiaoHang : dia chi duoc chon
+
+%% QUAN HE GIO HANG
+GioHang \"1\" *-- \"0..*\" ChiTietGioHang : chua
+ChiTietGioHang \"0..*\" -- \"1\" ChiTietSanPham : tham chieu
+
+%% QUAN HE DON HANG
+DonHang \"1\" *-- \"1..*\" ChiTietDonHang : chua
+ChiTietDonHang \"0..*\" -- \"1\" ChiTietSanPham : tham chieu
+
+%% QUAN HE HOA DON VA THANH TOAN
+DonHang \"1\" -- \"0..1\" HoaDon : phat sinh
+DonHang \"1\" -- \"0..*\" ThanhToan : thanh toan
+
+%% QUAN HE NHAN VIEN
+VaiTro \"1\" -- \"0..*\" NhanVien : phan cong
+NhanVien \"1\" -- \"0..*\" PhieuNhap : lap phieu
+NhanVien \"1\" -- \"0..*\" PhanHoiYeuCau : phan hoi
+
+%% QUAN HE VAI TRO VA QUYEN
+VaiTro \"0..*\" -- \"0..*\" Quyen : duoc gan
+
+%% QUAN HE KHIEU NAI
+KhachHang \"1\" -- \"0..*\" YeuCauKhieuNai : gui yeu cau
+YeuCauKhieuNai \"1\" *-- \"0..*\" PhanHoiYeuCau : co phan hoi
+
+%% QUAN HE PHIEU NHAP
+PhieuNhap \"1\" *-- \"1..*\" ChiTietPhieuNhap : chua
+ChiTietPhieuNhap \"0..*\" -- \"1\" ChiTietSanPham : nhap bien the
+
+%% QUAN HE BAO CAO - DUONG NET DUT
+BaoCaoThongKe ..> DonHang : thong ke doanh thu
+BaoCaoThongKe ..> ChiTietSanPham : thong ke ton kho
+
+
+%% Dinh dang tat ca cac lop
+classDef default fill:#ffffff,stroke:#000000,color:#000000,stroke-width:1.5px
+",
+  "config": null,
+  "version": "12

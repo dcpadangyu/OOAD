@@ -1,4 +1,4 @@
-(function () {
+﻿(function () {
   "use strict";
 
   const THREADS_KEY = "supportThreads";
@@ -6,7 +6,24 @@
   const readThreads = () => {
     try {
       const value = JSON.parse(localStorage.getItem(THREADS_KEY) || "[]");
-      return Array.isArray(value) ? value : [];
+      return Array.isArray(value) ? value.map((thread) => ({
+        ...thread,
+        messages: (Array.isArray(thread.messages) ? thread.messages : []).map((message) => {
+          // Đọc tương thích tin nhắn cũ; lưu lại bằng tên thuộc tính của lớp HoTro.
+          const { senderId, senderType, text, type, data, productId, createdAt, ...rest } = message;
+          return {
+            ...rest,
+            maHotro: message.maHotro ?? message.id,
+            maNguoiGui: message.maNguoiGui ?? senderId,
+            loaiNguoiGui: message.loaiNguoiGui ?? senderType,
+            noiDung: message.noiDung ?? text,
+            loaiTinNhan: message.loaiTinNhan ?? type,
+            tepDinhKem: message.tepDinhKem ?? data,
+            maSanPham: message.maSanPham ?? productId,
+            thoiGianGui: message.thoiGianGui ?? createdAt
+          };
+        })
+      })) : [];
     } catch (_) { return []; }
   };
   const writeThreads = (threads) => localStorage.setItem(THREADS_KEY, JSON.stringify(threads));
@@ -28,7 +45,7 @@
     return window.__ooadJitsiApiPromise;
   }
 
-  function getThread(user) {
+  function layCuocTroChuyen(user) {
     const threads = readThreads();
     let thread = threads.find((item) => item.customerId === user.maKhachHang && item.status !== "closed");
     if (!thread) {
@@ -39,14 +56,22 @@
     return thread;
   }
 
-  function addMessage(threadId, message) {
+  function guiTinNhan(threadId, message) {
     const threads = readThreads();
     const thread = threads.find((item) => item.id === threadId);
     if (!thread) return;
     thread.messages = Array.isArray(thread.messages) ? thread.messages : [];
-    thread.messages.push({ id: id("MSG"), createdAt: new Date().toISOString(), ...message });
+    thread.messages.push({ id: id("MSG"), maHotro: id("HT"), thoiGianGui: new Date().toISOString(), ...message });
     thread.updatedAt = new Date().toISOString();
     writeThreads(threads);
+  }
+
+  function xemTinNhan() {
+    return readThreads().flatMap((thread) => thread.messages || []);
+  }
+
+  function lienKetSanPham(maSanPham) {
+    return { loaiTinNhan: "product", maSanPham };
   }
 
   function closeCall() {
@@ -57,7 +82,7 @@
     document.getElementById("supportCallModal")?.remove();
   }
 
-  async function openCall(thread, displayName) {
+  async function GoiDien(thread, displayName) {
     const room = `OOAD-Support-${thread.id.replace(/[^a-zA-Z0-9]/g, "")}`;
     closeCall();
     document.body.insertAdjacentHTML("beforeend", `
@@ -97,16 +122,16 @@
     if (document.getElementById("supportChatPanel")) return;
     const user = currentUser();
     if (!user) return;
-    const thread = getThread(user);
+    const thread = layCuocTroChuyen(user);
     document.body.insertAdjacentHTML("beforeend", `
       <button class="support-chat-launcher" id="supportChatLauncher">💬 Hỗ trợ</button>
       <section class="support-chat-panel" id="supportChatPanel" aria-label="Chat hỗ trợ">
-        <div class="support-chat-head"><strong>Hỗ trợ khách hàng</strong><button id="supportChatClose" aria-label="Đóng">×</button></div>
+        <div class="support-chat-head"><strong>Hỗ trợ khách hàng</strong><button id="supportChatClose" style=" background: none; border: none; color: #000; font-size: 1.5em; cursor: pointer;" aria-label="Đóng">×</button></div>
         <div class="support-chat-status" id="supportChatStatus">Đang chờ nhân viên tiếp nhận</div>
         <div class="support-chat-messages" id="supportChatMessages"></div>
         <div class="support-chat-tools">
           <button type="button" id="supportChatImage">Ảnh</button>
-          <button type="button" id="supportChatProduct">Link sản phẩm</button>
+          <button type="button" id="supportChatProduct">Mã sản phẩm</button>
           <button type="button" id="supportChatCall">Gọi miễn phí</button>
           <input type="file" id="supportChatFile" accept="image/*" hidden>
         </div>
@@ -124,12 +149,12 @@
         ? `Đang hỗ trợ: ${fresh.assignedTo}`
         : "Đang chờ nhân viên tiếp nhận";
       messages.innerHTML = (fresh.messages || []).map((item) => {
-        const content = item.type === "image"
-          ? `<img src="${esc(item.data)}" alt="Ảnh khách gửi">`
-          : item.type === "product"
+        const content = item.loaiTinNhan === "image"
+          ? `<img src="${esc(item.tepDinhKem)}" alt="Ảnh khách gửi">`
+          : item.loaiTinNhan === "product"
             ? `<a class="support-chat-product" href="${esc(item.url)}" target="_blank" rel="noopener">🛍️ ${esc(item.name)}</a>`
-            : esc(item.text);
-        return `<div class="support-chat-message ${item.senderType === "customer" ? "mine" : ""}"><small>${esc(item.senderName || "Hỗ trợ")}</small>${content}</div>`;
+            : esc(item.noiDung);
+        return `<div class="support-chat-message ${item.loaiNguoiGui === "customer" ? "mine" : ""}"><small>${esc(item.senderName || "Hỗ trợ")}</small>${content}</div>`;
       }).join("") || "<p>Xin chào! Shop sẽ hỗ trợ bạn sớm nhất.</p>";
       messages.scrollTop = messages.scrollHeight;
     };
@@ -139,7 +164,7 @@
       event.preventDefault();
       const input = document.getElementById("supportChatInput");
       if (!input.value.trim()) return;
-      addMessage(thread.id, { senderType: "customer", senderId: user.maKhachHang, senderName: user.hoTen, type: "text", text: input.value.trim() });
+      guiTinNhan(thread.id, { loaiNguoiGui: "customer", maNguoiGui: user.maKhachHang, senderName: user.hoTen, loaiTinNhan: "text", noiDung: input.value.trim() });
       input.value = ""; render();
     };
     document.getElementById("supportChatImage").onclick = () => document.getElementById("supportChatFile").click();
@@ -147,7 +172,7 @@
       const file = document.getElementById("supportChatFile").files[0];
       if (!file || file.size > 2 * 1024 * 1024) { alert("Ảnh phải nhỏ hơn 2MB."); return; }
       const reader = new FileReader();
-      reader.onload = () => { addMessage(thread.id, { senderType: "customer", senderId: user.maKhachHang, senderName: user.hoTen, type: "image", data: reader.result, text: file.name }); render(); };
+      reader.onload = () => { guiTinNhan(thread.id, { loaiNguoiGui: "customer", maNguoiGui: user.maKhachHang, senderName: user.hoTen, loaiTinNhan: "image", tepDinhKem: reader.result, noiDung: file.name }); render(); };
       reader.readAsDataURL(file);
     };
     document.getElementById("supportChatProduct").onclick = () => {
@@ -156,14 +181,20 @@
       let products = []; try { products = JSON.parse(localStorage.getItem("productsLocal") || "[]"); } catch (_) {}
       const product = products.find((item) => item.maSanPham === code.trim());
       if (!product) { alert("Không tìm thấy sản phẩm."); return; }
-      addMessage(thread.id, { senderType: "customer", senderId: user.maKhachHang, senderName: user.hoTen, type: "product", productId: product.maSanPham, name: product.tenSanPham, url: `pages/home.html?search=${encodeURIComponent(product.tenSanPham)}#sanpham` });
+      guiTinNhan(thread.id, { loaiNguoiGui: "customer", maNguoiGui: user.maKhachHang, senderName: user.hoTen, loaiTinNhan: "product", maSanPham: product.maSanPham, name: product.tenSanPham, url: `pages/home.html?search=${encodeURIComponent(product.tenSanPham)}#sanpham` });
       render();
     };
-    document.getElementById("supportChatCall").onclick = () => openCall(thread, user.hoTen);
+    document.getElementById("supportChatCall").onclick = () => GoiDien(thread, user.hoTen);
     window.addEventListener("storage", (event) => { if (event.key === THREADS_KEY) render(); });
     render();
   }
 
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init, { once: true });
   else init();
+  window.SupportChat = {
+    guiTinNhan,
+    xemTinNhan,
+    lienKetSanPham,
+    GoiDien
+  };
 })();
