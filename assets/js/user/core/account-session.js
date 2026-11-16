@@ -73,8 +73,12 @@
   function setCurrentUser(user) {
     const normalized = normalizeUser(user);
     if (!normalized) {
-      localStorage.removeItem("currentUser");
+      clearSession();
       return null;
+    }
+    const previous = normalizeUser(parseJSON("currentUser", null));
+    if (!previous || previous.maKhachHang !== normalized.maKhachHang) {
+      clearShoppingState();
     }
     localStorage.setItem("currentUser", JSON.stringify(normalized));
     return normalized;
@@ -166,9 +170,15 @@
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", startWatch);
   else startWatch();
 
+  function clearShoppingState() {
+    ["cart", "selectedCartItems", "selectedAddress", "CurrDanhSachDatHang"].forEach((key) => {
+      localStorage.removeItem(key);
+    });
+  }
+
   function clearSession() {
+    clearShoppingState();
     localStorage.removeItem("currentUser");
-    localStorage.removeItem("selectedAddress");
   }
 
   window.UserSession = Object.freeze({
