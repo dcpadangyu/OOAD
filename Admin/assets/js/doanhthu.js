@@ -232,7 +232,7 @@
     }
   }
 
-  function compute(orders, from, to) {
+  function thongKeDoanhThu(orders, from, to) {
     // Chỉ tính đơn ĐÃ GIAO có ngày đặt hợp lệ; bỏ qua đơn có ngày lỗi
     const filtered = orders.filter((o) => isDelivered(o) && within(ngayTinh(o), from, to));
     const bangGiaVon = layBangGiaVon();
@@ -392,18 +392,19 @@
     document.getElementById("BCDT_apply").addEventListener("click", () => {
       const from = document.getElementById("BCDT_from").value;
       const to = document.getElementById("BCDT_to").value;
-      render(compute(getOrders(), from, to));
+      render(thongKeDoanhThu(getOrders(), from, to));
     });
 
     document.getElementById("BCDT_viewType").addEventListener("change", () => {
       const from = document.getElementById("BCDT_from").value;
       const to = document.getElementById("BCDT_to").value;
-      render(compute(getOrders(), from, to));
+      render(thongKeDoanhThu(getOrders(), from, to));
     });
   }
 
   function ensureMounted() {
-    const sec = document.getElementById(SECTION_ID);
+    // Vẽ vào khung tab Doanh thu nếu có (sections/reports.html), nếu không thì vào cả trang báo cáo
+    const sec = document.getElementById("BCDT_root") || document.getElementById(SECTION_ID);
     if (!sec) return;
     if (!sec.dataset.bound) {
       buildLayout(sec);
@@ -412,7 +413,7 @@
     }
     const from = document.getElementById("BCDT_from").value;
     const to = document.getElementById("BCDT_to").value;
-    render(compute(getOrders(), from, to));
+    render(thongKeDoanhThu(getOrders(), from, to));
   }
 
   window.addEventListener("hashchange", ensureMounted);

@@ -62,10 +62,10 @@ function initializeCategoryManagement() {
             editCategoryByName(categoryName);
         } else if (isDelete) {
             console.log('Delete button clicked for category:', categoryName);
-            deleteCategoryByName(categoryName);
+            xoaDanhMuc(categoryName);
         } else if (isToggle) {
             console.log('Toggle button clicked for category:', categoryName);
-            toggleCategoryStatusByName(categoryName);
+            anDanhMuc(categoryName);
         }
     });
 
@@ -231,21 +231,35 @@ function editCategoryByName(name) {
     setTimeout(() => modal.classList.add('show'), 10);
 }
 
+// Nút Lưu trên form: đọc dữ liệu rồi gọi themDanhMuc hoặc suaDanhMuc (class DanhMuc)
 function saveCategory() {
-    console.log('Saving category...');
     const form = document.getElementById('categoryForm');
     if (!form) {
         console.error('Category form not found');
         return;
     }
+    const name = (document.getElementById('categoryName').value || '').trim();
+    const description = (document.getElementById('categoryDescription').value || '').trim();
+    const status = (document.getElementById('categoryStatus').value || 'active');
+    if ((form.dataset.mode || 'add') === 'add') themDanhMuc(name, description, status);
+    else suaDanhMuc(form.dataset.originalName || '', name, description, status);
+}
 
+function themDanhMuc(tenDanhMuc, moTa, trangThai) {
+    ghiDanhMuc('add', tenDanhMuc, moTa, trangThai, '');
+}
+
+function suaDanhMuc(maDanhMuc, tenDanhMuc, moTa, trangThai) {
+    ghiDanhMuc('edit', tenDanhMuc, moTa, trangThai, maDanhMuc);
+}
+
+// Phần dùng chung khi thêm / sửa danh mục (mã danh mục = tên danh mục)
+function ghiDanhMuc(mode, tenDanhMuc, moTa, trangThai, maDanhMucCu) {
     try {
-        // Get form values
-        const name = (document.getElementById('categoryName').value || '').trim();
-        const description = (document.getElementById('categoryDescription').value || '').trim();
-        const status = (document.getElementById('categoryStatus').value || 'active');
-        const mode = form.dataset.mode || 'add';
-        const originalName = form.dataset.originalName || '';
+        const name = String(tenDanhMuc || '').trim();
+        const description = String(moTa || '').trim();
+        const status = trangThai || 'active';
+        const originalName = maDanhMucCu || '';
 
         console.log('Form data:', { name, description, status, mode, originalName });
 
@@ -379,7 +393,7 @@ function formatDateLoai(dateString) { if (!dateString) return ''; const d = new 
 
 // Nút ẩn/hiện CHỈ đổi trạng thái của loại ("active"/"hidden"); cửa hàng lọc sản phẩm theo trạng thái loại,
 // còn trạng thái hiển thị riêng của từng sản phẩm được giữ nguyên.
-function toggleCategoryStatusByName(name) {
+function anDanhMuc(name) {
     try {
         const categories = JSON.parse(localStorage.getItem('categories')) || sampleCategories;
         const idx = categories.findIndex(c => c && c.tenLoai === name);
@@ -416,7 +430,7 @@ function toggleCategoryStatusByName(name) {
     }
 }
 
-function deleteCategoryByName(name) {
+function xoaDanhMuc(name) {
     if (name === null || name === undefined) return;
     const inUse = (typeof getLocalProducts === 'function' ? getLocalProducts() : JSON.parse(localStorage.getItem('productsLocal') || '[]')).filter(p => p.maLoai === name).length;
     if (inUse > 0) {

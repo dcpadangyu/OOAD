@@ -9,6 +9,7 @@
         '/inventory': 'page-inventory',
         '/prices': 'page-prices',
         '/orders': 'page-orders',
+        '/vouchers': 'page-vouchers',
         '/reviews': 'page-reviews',
         '/support': 'page-support',
         '/reports': 'page-reports',
@@ -19,9 +20,9 @@
     };
 
     const ROLE_ROUTES = {
-        'Nhân viên bán hàng': ['/', '/products', '/orders'],
+        'Nhân viên bán hàng': ['/', '/products', '/orders', '/vouchers'],
         'Nhân viên kho': ['/', '/products', '/import', '/inventory'],
-        'Nhân viên CSKH': ['/', '/orders', '/reviews', '/support'],
+        'Nhân viên CSKH': ['/', '/orders', '/reviews', '/support', '/vouchers'],
         'Nhân viên kiểm kho': ['/', '/products', '/inventory']
     };
 

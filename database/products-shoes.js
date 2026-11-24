@@ -359,10 +359,9 @@ const ShopCore = (function () {
       spThayDoi = true;
     }
 
-    // Giao thanh cong => da thu tien (COD/nhan tai cua hang); huy don da thanh toan => can hoan tien.
+    // Giao thanh cong => da thu tien (COD/nhan tai cua hang).
     const capNhatThanhToan = (d) => {
       if (newStatus === "daGiao") d.trangThaiThanhToan = "paid";
-      else if (newStatus === "huy" && d.trangThaiThanhToan === "paid") d.trangThaiThanhToan = "refund";
     };
     if (spThayDoi && !saveLocalProducts(danhSach)) {
       return { ok: false, message: "Không thể lưu tồn kho (bộ nhớ trình duyệt đã đầy)." };

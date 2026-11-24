@@ -29,17 +29,59 @@ function validateLogin(username, password) {
   return true;
 }
 
-function handleLogin(username, password) {
+// UC01: nhân viên nhập sai mật khẩu 5 lần liên tiếp thì tài khoản bị tạm khóa đăng nhập 60 giây.
+const NV_SAI_TOI_DA = 5;
+const NV_THOI_GIAN_KHOA = 60 * 1000;
+
+function nvDocSaiMatKhau() {
+  try { return JSON.parse(localStorage.getItem("nvDangNhapSai") || "{}") || {}; } catch (e) { return {}; }
+}
+
+function nvGhiSaiMatKhau(ds) {
+  localStorage.setItem("nvDangNhapSai", JSON.stringify(ds));
+}
+
+function dangNhap(username, password) {
   return new Promise((resolve) => {
     setTimeout(() => {
       const emp = findNhanVienByUsername(username);
-      if (!emp || emp.matKhau !== password) {
+      const khoaTk = emp ? String(emp.tenDangNhap).toLowerCase() : "";
+      const dsSai = nvDocSaiMatKhau();
+      const ttSai = khoaTk ? dsSai[khoaTk] : null;
+      if (ttSai && ttSai.khoaDen > Date.now()) {
+        const giay = Math.ceil((ttSai.khoaDen - Date.now()) / 1000);
+        resolve({ success: false, message: `Tài khoản tạm khóa đăng nhập do nhập sai ${NV_SAI_TOI_DA} lần. Vui lòng thử lại sau ${giay} giây!` });
+        return;
+      }
+      const dung = emp && (window.PasswordUtil ? PasswordUtil.verify(password, emp.matKhau) : emp.matKhau === password);
+      if (!dung) {
+        if (emp) {
+          const soLan = ((ttSai && ttSai.soLan) || 0) + 1;
+          if (soLan >= NV_SAI_TOI_DA) {
+            dsSai[khoaTk] = { soLan: 0, khoaDen: Date.now() + NV_THOI_GIAN_KHOA };
+            nvGhiSaiMatKhau(dsSai);
+            resolve({ success: false, message: `Bạn đã nhập sai ${NV_SAI_TOI_DA} lần liên tiếp. Tài khoản bị tạm khóa đăng nhập 60 giây!` });
+            return;
+          }
+          dsSai[khoaTk] = { soLan: soLan, khoaDen: 0 };
+          nvGhiSaiMatKhau(dsSai);
+        }
         resolve({ success: false, message: "Tên đăng nhập hoặc mật khẩu không đúng!" });
         return;
+      }
+      if (khoaTk && dsSai[khoaTk]) {
+        delete dsSai[khoaTk];
+        nvGhiSaiMatKhau(dsSai);
       }
       if (emp.trangThai === "khoa") {
         resolve({ success: false, message: "Tài khoản của bạn đã bị khóa, liên hệ quản trị viên!" });
         return;
+      }
+      // Mật khẩu cũ còn chữ thường: băm lại ngay khi đăng nhập đúng.
+      if (window.PasswordUtil && !PasswordUtil.isHashed(emp.matKhau)) {
+        const ds = getLocalEmployees();
+        const k = ds.findIndex((e) => e.maNhanVien === emp.maNhanVien);
+        if (k >= 0) { ds[k].matKhau = PasswordUtil.hash(password); saveLocalEmployees(ds); }
       }
       resolve({
         success: true,
@@ -103,7 +145,7 @@ loginForm.addEventListener("submit", async function(e) {
   setLoadingState(true);
 
   try {
-    const result = await handleLogin(username, password);
+    const result = await dangNhap(username, password);
 
     if (result.success) {
       saveLoginInfo(username, remember);
@@ -114,7 +156,7 @@ loginForm.addEventListener("submit", async function(e) {
       sessionStorage.removeItem("adminUsername");
       sessionStorage.removeItem("loginTime");
 
-      employeeSession.logout();
+      employeeSession.dangXuat();
       employeeSession.login(result.employee);
 
       setTimeout(() => {

@@ -220,7 +220,7 @@ function QLNH_ganSuKienNutHanhDong() {
 
   vung.addEventListener("click", (e) => {
     const nutXem = e.target.closest(".QLNH_btn-xem");
-    if (nutXem) return QLNH_xemChiTietPhieuNhap(nutXem.dataset.ma);
+    if (nutXem) return xemChiTietPhieuNhap(nutXem.dataset.ma);
 
     const nutSua = e.target.closest(".QLNH_btn-sua");
     if (nutSua) return QLNH_suaPhieuNhap(nutSua.dataset.ma);
@@ -238,14 +238,14 @@ function QLNH_ganSuKienNutHanhDong() {
       if (chk.disabled) return;
       const ma = chk.dataset.ma;
       if (confirm(`Đánh dấu phiếu ${ma} là hoàn thành? Tồn kho sẽ được cộng và không thể sửa/xóa phiếu sau đó.`)) {
-        QLNH_hoanThanhPhieuNhap(ma);
+        xacNhanPhieuNhap(ma);
       }
     }
   });
 }
 
 // ==================== XEM CHI TIẾT ====================
-function QLNH_xemChiTietPhieuNhap(maPhieu) {
+function xemChiTietPhieuNhap(maPhieu) {
   const modal = document.getElementById("QLNH_modalChiTietPhieuNhap");
   const tbody = document.getElementById("QLNH_chiTietPhieuBody");
   const ngayNhapEl = document.getElementById("QLNH_chiTietNgayNhap");
@@ -396,7 +396,7 @@ function QLNH_ganAutocompleteSanPham(inputEl, row) {
     QLNH_datGia(row, QLNH_so(product.giaNhap));
     QLNH_capNhatOSize(row, product, "");
     dongGoiY();
-    QLNH_capNhatThanhTien(row);
+    tinhThanhTien(row);
   }
 
   function hienGoiY() {
@@ -409,7 +409,7 @@ function QLNH_ganAutocompleteSanPham(inputEl, row) {
       row.querySelector(".QLNH_tenSP").textContent = "";
       QLNH_datGia(row, 0);
       QLNH_capNhatOSize(row, null, "");
-      QLNH_capNhatThanhTien(row);
+      tinhThanhTien(row);
     }
 
     // Luôn đọc danh sách mới nhất từ localStorage để có sản phẩm vừa thêm
@@ -496,11 +496,11 @@ function QLNH_taoDongSanPham(opts) {
   const inputEl = row.querySelector(".QLNH_selectSP-input");
   if (inputEl) QLNH_ganAutocompleteSanPham(inputEl, row);
 
-  row.querySelector(".QLNH_soLuong").addEventListener("input", () => QLNH_capNhatThanhTien(row));
-  row.querySelector(".QLNH_giaNhap").addEventListener("input", () => QLNH_capNhatThanhTien(row));
+  row.querySelector(".QLNH_soLuong").addEventListener("input", () => tinhThanhTien(row));
+  row.querySelector(".QLNH_giaNhap").addEventListener("input", () => tinhThanhTien(row));
   row.querySelector(".QLNH_btn-xoa-sp").addEventListener("click", () => {
     row.remove();
-    QLNH_capNhatTongTien();
+    tinhTongTien();
   });
 
   // Có sẵn mã (sửa phiếu): điền tên, giá và danh sách size
@@ -577,16 +577,16 @@ function QLNH_layGiaDong(row) {
   return product ? QLNH_so(product.giaNhap) : 0;
 }
 
-function QLNH_capNhatThanhTien(row) {
+function tinhThanhTien(row) {
   const ma = QLNH_layMaDong(row);
   const sl = parseInt(row.querySelector(".QLNH_soLuong").value) || 0;
   const product = QLNH_productsLocal.find((p) => p.maSanPham === ma);
   const thanhTienCell = row.querySelector(".QLNH_thanhTien");
   thanhTienCell.textContent = product ? (QLNH_layGiaDong(row) * sl).toLocaleString("vi-VN") + "₫" : "";
-  QLNH_capNhatTongTien();
+  tinhTongTien();
 }
 
-function QLNH_capNhatTongTien() {
+function tinhTongTien() {
   let tong = 0;
   document.querySelectorAll("#QLNH_tableBodyNhap tr").forEach((r) => {
     const ma = QLNH_layMaDong(r);
@@ -599,7 +599,7 @@ function QLNH_capNhatTongTien() {
 // ====== Lưu phiếu nhập: MỘT handler duy nhất, rẽ nhánh theo QLNH_dangSuaPhieu ======
 QLNH_btnLuuPhieuMoi.onclick = () => {
   if (QLNH_dangSuaPhieu) QLNH_luuPhieuSua(QLNH_dangSuaPhieu);
-  else QLNH_luuPhieuMoi();
+  else themPhieuNhap();
 };
 
 function QLNH_homNayISO() {
@@ -687,7 +687,7 @@ function QLNH_baoCanhBao(canhBao) {
   return canhBao && canhBao.length ? "\n\nLưu ý:\n- " + canhBao.join("\n- ") : "";
 }
 
-function QLNH_luuPhieuMoi() {
+function themPhieuNhap() {
   const tt = QLNH_docThongTinPhieu();
   if (tt.loi) return alert(tt.loi);
 
@@ -763,7 +763,7 @@ function QLNH_suaPhieuNhap(maPhieu) {
       })
     );
   });
-  QLNH_capNhatTongTien();
+  tinhTongTien();
 }
 
 function QLNH_luuPhieuSua(maPhieu) {
@@ -881,7 +881,7 @@ function QLNH_capNhatTonKhoKhiHoanThanh(chiTiet) {
 }
 
 /* ====== HOÀN THÀNH, HỦY & XÓA ====== */
-function QLNH_hoanThanhPhieuNhap(maPhieu) {
+function xacNhanPhieuNhap(maPhieu) {
   const phieuIndex = QLNH_phieuNhapLocal.findIndex((p) => p.maPhieuNhap === maPhieu);
   if (phieuIndex === -1) return alert("Không tìm thấy phiếu!");
   const phieu = QLNH_phieuNhapLocal[phieuIndex];

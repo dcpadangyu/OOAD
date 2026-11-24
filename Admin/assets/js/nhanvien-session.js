@@ -25,7 +25,7 @@ class EmployeeSession {
     if (loginTime) {
       const timeDiff = Date.now() - new Date(loginTime).getTime();
       if (timeDiff > this.sessionTimeout) {
-        this.logout();
+        this.dangXuat();
         return false;
       }
     }
@@ -46,7 +46,7 @@ class EmployeeSession {
     if (!record || record.trangThai === "khoa") {
       // Ghi lai ly do de hien popup "Tai khoan da bi ngung hoat dong" (khong chi dang xuat im lang).
       try { sessionStorage.setItem(this.suspendedKey, "1"); } catch (e) { /* bo qua */ }
-      this.logout();
+      this.dangXuat();
       return false;
     }
     if (record.chucVu && sessionStorage.getItem(this.chucVuKey) !== record.chucVu) {
@@ -112,7 +112,7 @@ class EmployeeSession {
     check();
   }
 
-  logout() {
+  dangXuat() {
     sessionStorage.removeItem(this.sessionKey);
     sessionStorage.removeItem(this.usernameKey);
     sessionStorage.removeItem(this.fullNameKey);

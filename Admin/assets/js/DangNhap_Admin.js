@@ -132,8 +132,8 @@ loginForm.addEventListener('submit', async function(e) {
             showNotification(result.message, 'success');
 
             // Xóa phiên nhân viên còn sót lại trong cùng tab (để getCurrentAdmin() trả về đúng admin)
-            if (typeof employeeSession !== 'undefined' && typeof employeeSession.logout === 'function') {
-                employeeSession.logout();
+            if (typeof employeeSession !== 'undefined' && typeof employeeSession.dangXuat === 'function') {
+                employeeSession.dangXuat();
             }
             ['nvLoggedIn', 'nvUsername', 'nvFullName', 'nvChucVu', 'nvLoginTime'].forEach(function(key) {
                 sessionStorage.removeItem(key);
@@ -214,11 +214,6 @@ passwordInput.addEventListener('blur', function() {
 
 // Phím Enter: dùng submit gốc của form (nút type="submit"), không tự phát sự kiện submit lần nữa
 
-// Event listener cho forgot password
-document.querySelector('.forgot-password').addEventListener('click', function(e) {
-    e.preventDefault();
-    showNotification('Liên hệ quản trị viên để được hỗ trợ!', 'warning');
-});
 
 // Khôi phục thông tin đăng nhập đã lưu khi trang load
 document.addEventListener('DOMContentLoaded', function() {

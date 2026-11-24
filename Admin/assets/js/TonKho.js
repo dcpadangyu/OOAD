@@ -547,3 +547,46 @@ window.addEventListener("storage", (event) => {
     window.dispatchEvent(new Event("productsUpdated"));
   }
 });
+
+// ==================== UC38: Xuất danh sách tồn kho (đang lọc) ra file CSV ====================
+function TK_xuatCSV() {
+  const ds = typeof TK_layDanhSachDaLoc === "function" ? TK_layDanhSachDaLoc() : [];
+  if (!ds.length) {
+    alert("Không có sản phẩm nào để xuất.");
+    return;
+  }
+  const o = (v) => {
+    const s = String(v === undefined || v === null ? "" : v);
+    return /[",\r\n;]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s;
+  };
+  const tinhTrang = (sp) => {
+    const ton = Number(sp.soLuongTon) || 0;
+    return ton === 0 ? "Hết hàng" : ton < nguongSapHet ? "Sắp hết hàng" : "Bình thường";
+  };
+  const header = ["Mã sản phẩm", "Tên sản phẩm", "Loại", "Tồn kho", "Tồn theo size", "Đã nhập", "Đã bán", "Giá nhập", "Giá bán", "Giá trị tồn", "Tình trạng"];
+  const rows = ds.map((sp) => {
+    const sizes = Object.entries(sp.tonKhoTheoSize || {})
+      .sort((a, b) => Number(a[0]) - Number(b[0]))
+      .map(([sz, q]) => `${sz}:${q}`).join(" | ");
+    return [sp.maSanPham, sp.tenSanPham, sp.maLoai, Number(sp.soLuongTon) || 0, sizes, Number(sp.tongDaNhap) || 0,
+      Number(sp.tongDaBan) || 0, Number(sp.giaNhap) || 0, Number(sp.giaBan) || 0, TK_giaTriTon(sp), tinhTrang(sp)].map(o).join(",");
+  });
+  // Ký tự BOM để Excel đọc đúng tiếng Việt
+  const csv = "﻿" + [header.map(o).join(","), ...rows].join("\r\n");
+  const d = new Date();
+  const p2 = (n) => String(n).padStart(2, "0");
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(new Blob([csv], { type: "text/csv;charset=utf-8" }));
+  a.download = `ton-kho_${d.getFullYear()}${p2(d.getMonth() + 1)}${p2(d.getDate())}_${p2(d.getHours())}${p2(d.getMinutes())}.csv`;
+  document.body.appendChild(a);
+  a.click();
+  setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 0);
+}
+
+document.addEventListener("DOMContentLoaded", function () {
+  const btn = document.getElementById("TK_btnCSV");
+  if (btn && !btn.dataset.bound) {
+    btn.dataset.bound = "1";
+    btn.addEventListener("click", TK_xuatCSV);
+  }
+});

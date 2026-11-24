@@ -30,14 +30,34 @@ document.addEventListener("DOMContentLoaded", () => {
     input.classList.toggle("input-success", !message);
   }
 
+  // So khớp mật khẩu: dữ liệu mới lưu dạng băm, dữ liệu cũ còn chữ thường vẫn đăng nhập được.
+  function checkPassword(plain, stored) {
+    if (window.PasswordUtil) return window.PasswordUtil.verify(plain, stored);
+    return String(stored ?? "") === plain;
+  }
+
+  // Tài khoản cũ còn lưu chữ thường: băm lại ngay khi đăng nhập đúng.
+  function upgradeHash(user, plain) {
+    const PU = window.PasswordUtil;
+    if (!PU || PU.isHashed(user.matKhau)) return;
+    try {
+      const raw = JSON.parse(localStorage.getItem("userList") || "[]");
+      const i = raw.findIndex((u) => window.UserSession.userMatches(window.UserSession.normalizeUser(u), user));
+      if (i < 0) return;
+      raw[i].matKhau = PU.hash(plain);
+      localStorage.setItem("userList", JSON.stringify(raw));
+    } catch (_) { /* bỏ qua */ }
+  }
+
   function authenticate(account, password) {
     const normalized = String(account || "").trim().toLowerCase();
     const users = getUsers();
     let user = users.find((item) => {
       const email = String(item.thuDienTu || "").trim().toLowerCase();
       const name = String(item.tenDangNhap || "").trim().toLowerCase();
-      return (email === normalized || name === normalized) && String(item.matKhau ?? "") === password;
+      return (email === normalized || name === normalized) && checkPassword(password, item.matKhau);
     });
+    if (user) upgradeHash(user, password);
 
     // Legacy data source compatibility: only consult customers when there is no matching userList identity.
     if (!user) {
@@ -47,7 +67,7 @@ document.addEventListener("DOMContentLoaded", () => {
           user = customers.find((item) => {
             const email = String(item.thuDienTu || "").trim().toLowerCase();
             const name = String(item.tenDangNhap || item.hoTen || "").trim().toLowerCase();
-            return (email === normalized || name === normalized) && String(item.matKhau ?? "") === password;
+            return (email === normalized || name === normalized) && checkPassword(password, item.matKhau);
           }) || null;
         }
       } catch (_) {}
@@ -84,6 +104,14 @@ document.addEventListener("DOMContentLoaded", () => {
     // Xoa du lieu con sot cua nguoi dung truoc (dia chi dang chon, don chuyen khoan dang cho).
     localStorage.removeItem("selectedAddress");
     localStorage.removeItem("CurrDanhSachDatHang");
+    // Đăng nhập bằng mật khẩu tạm do Admin cấp: bắt buộc đổi mật khẩu trước.
+    if (user.daDatLaiMatKhau === true) {
+      popup("info", "Cần đổi mật khẩu", "Bạn đang dùng mật khẩu tạm do cửa hàng cấp. Vui lòng đổi mật khẩu mới để tiếp tục.", () => {
+        window.location.href = "pages/change-password.html?batBuoc=1";
+      });
+      form.reset();
+      return;
+    }
     popup("success", "Đăng nhập thành công!", `Chào mừng ${currentUser.hoTen || currentUser.thuDienTu}`, () => {
       window.updateHeaderUI?.();
       window.location.href = "index.html";

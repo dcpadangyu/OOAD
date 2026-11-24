@@ -1,3 +1,11 @@
 <section id="page-reports" class="spa-page">
-            <!-- Nội dung sẽ được JS (doanhthu.js) render -->
+            <!-- Tab báo cáo: Doanh thu & bán chạy (doanhthu.js), Đơn hàng và Tồn kho (thongke.js) -->
+            <div class="TKE_tabs" id="TKE_tabs">
+              <button type="button" class="TKE_tab active" data-tab="revenue">Doanh thu &amp; bán chạy</button>
+              <button type="button" class="TKE_tab" data-tab="orders">Thống kê đơn hàng</button>
+              <button type="button" class="TKE_tab" data-tab="stock">Thống kê tồn kho</button>
+            </div>
+            <div id="BCDT_root"></div>
+            <div id="TKDH_root" hidden></div>
+            <div id="TKTK_root" hidden></div>
           </section>

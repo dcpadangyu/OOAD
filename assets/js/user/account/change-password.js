@@ -31,6 +31,12 @@ document.addEventListener("DOMContentLoaded", () => {
     return list.find((item) => window.UserSession.userMatches(item, sessionUser)) || sessionUser;
   }
 
+  // Mật khẩu lưu dạng băm (dữ liệu cũ có thể còn chữ thường).
+  function samePassword(plain, stored) {
+    if (window.PasswordUtil) return window.PasswordUtil.verify(plain, stored);
+    return plain === stored;
+  }
+
   window.showDoiMatKhauSection = function () {
     const user = getUser();
     if (!user) return requireLogin();
@@ -74,7 +80,7 @@ document.addEventListener("DOMContentLoaded", () => {
       popup("error", "Lỗi", "Mật khẩu mới phải có ít nhất 8 ký tự!");
       return;
     }
-    if (newPassword === currentPassword || newPassword === storedPassword) {
+    if (newPassword === currentPassword || samePassword(newPassword, storedPassword)) {
       popup("error", "Lỗi", "Mật khẩu mới phải khác mật khẩu cũ!");
       return;
     }
@@ -83,7 +89,7 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
-    const hasValidOldPassword = !!currentPassword && currentPassword === storedPassword;
+    const hasValidOldPassword = !!currentPassword && samePassword(currentPassword, storedPassword);
     let hasValidOtp = false;
     if (otpValue) {
       try {

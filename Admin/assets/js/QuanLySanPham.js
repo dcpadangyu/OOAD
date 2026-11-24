@@ -77,7 +77,7 @@ document.addEventListener("DOMContentLoaded", function () {
 function QLSP_ganSuKien() {
   document
     .getElementById("QLSP_locDanhMuc")
-    .addEventListener("change", QLSP_locTheoDanhMuc);
+    .addEventListener("change", locSanPham);
 
   const input = document.getElementById("QLSP_timId");
   const goiYBox = document.getElementById("QLSP_goiY");
@@ -96,7 +96,7 @@ function QLSP_ganSuKien() {
       const id = item.getAttribute("data-id");
       input.value = id;
       goiYBox.style.display = "none";
-      QLSP_thucHienTimKiem(id);
+      timKiemSanPham(id);
     });
   }
 
@@ -138,7 +138,7 @@ function QLSP_ganSuKien() {
     }
 
     const nutXoa = e.target.closest && e.target.closest(".QLSP_btn-xoa");
-    if (nutXoa) QLSP_xoaSanPham(nutXoa.getAttribute("data-id"));
+    if (nutXoa) xoaSanPham(nutXoa.getAttribute("data-id"));
   });
 
   // Đồng bộ khi dữ liệu loại sản phẩm đổi (cùng tab hoặc tab khác)
@@ -364,7 +364,8 @@ QLSP_inputImage.addEventListener("change", function() {
 });
 
 // ================== THÊM SẢN PHẨM ==================
-QLSP_form.addEventListener("submit", function (e) {
+// Thêm sản phẩm (class SanPham)
+function themSanPham(e) {
   e.preventDefault();
   let dsSanPham = getLocalProducts();
   const idInput = document.getElementById("QLSP_spId");
@@ -429,7 +430,8 @@ QLSP_form.addEventListener("submit", function (e) {
   QLSP_closeModal();
   QLSP_veLai();
   alert("Thêm sản phẩm thành công!");
-});
+}
+QLSP_form.addEventListener("submit", themSanPham);
 
 // ================== XÓA SẢN PHẨM ==================
 // Gom các nơi đang dùng sản phẩm: đơn hàng (đang xử lý / đã xong) và phiếu nhập (chưa / đã hoàn thành)
@@ -462,7 +464,7 @@ function QLSP_kiemTraSuDungSanPham(maSanPham) {
   return { donDangXuLy, donDaXong, phieuChua, phieuXong };
 }
 
-function QLSP_xoaSanPham(id) {
+function xoaSanPham(id) {
   const sp = QLSP_productsLocal.find((p) => p.maSanPham === id);
   if (!sp) return;
   const dung = QLSP_kiemTraSuDungSanPham(id);
@@ -567,9 +569,8 @@ document
     }
   });
 
-document
-  .getElementById("QLSP_btnUpdateSP")
-  .addEventListener("click", function () {
+// Sửa sản phẩm (class SanPham)
+function suaSanPham() {
     const id = document.getElementById("QLSP_editId").value.trim();
     let dsSanPham = getLocalProducts();
     const index = dsSanPham.findIndex((sp) => sp.maSanPham === id);
@@ -637,7 +638,8 @@ document
     QLSP_closeEditModal();
     QLSP_veLai();
     alert("Cập nhật sản phẩm thành công!");
-  });
+}
+document.getElementById("QLSP_btnUpdateSP").addEventListener("click", suaSanPham);
 
 document
   .getElementById("QLSP_btnCloseModalSua")
@@ -656,7 +658,7 @@ function QLSP_closeEditModal() {
 }
 
 // ==================== LỌC & TÌM KIẾM ====================
-function QLSP_locTheoDanhMuc() {
+function locSanPham() {
   // Đổi danh mục => bỏ lọc theo 1 mã cụ thể
   QLSP_maDangTim = "";
   const inputTim = document.getElementById("QLSP_timId");
@@ -711,7 +713,7 @@ function QLSP_timTheoMa() {
 }
 
 // Hàm thực hiện tìm kiếm thật sự và vẽ bảng
-function QLSP_thucHienTimKiem(id) {
+function timKiemSanPham(id) {
   QLSP_maDangTim = id;
   QLSP_currentPage = 1;
   QLSP_veLai();

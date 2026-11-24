@@ -70,6 +70,15 @@
     return !!aName && !!bName && aName === bName;
   }
 
+  // Băm mật khẩu trước khi lưu (nếu đã nạp database/password-util.js).
+  function hashIfPlain(user) {
+    const PU = window.PasswordUtil;
+    if (user && PU && user.matKhau !== undefined && user.matKhau !== "" && !PU.isHashed(user.matKhau)) {
+      user.matKhau = PU.hash(String(user.matKhau));
+    }
+    return user;
+  }
+
   function setCurrentUser(user) {
     const normalized = normalizeUser(user);
     if (!normalized) {
@@ -101,10 +110,14 @@
       if (!(options && options.passwordChange === true)) {
         if ("matKhau" in stored) normalized.matKhau = stored.matKhau;
         else delete normalized.matKhau;
+      } else {
+        // Đổi/quên mật khẩu: lưu dạng băm và bỏ cờ "mật khẩu tạm do Admin cấp".
+        hashIfPlain(normalized);
+        normalized.daDatLaiMatKhau = false;
       }
       users[index] = normalized;
     } else {
-      users.push(normalized);
+      users.push(hashIfPlain(normalized));
     }
     localStorage.setItem("userList", JSON.stringify(users));
     if (!(options && options.silent)) setCurrentUser(normalized);

@@ -19,10 +19,8 @@
 
   const state = {
     list: [],
-    tab: "process",
     page: 1,
     filters: { status: "all", rating: "all", media: "all", owner: "all", q: "", sort: "newest" },
-    stats: { from: "", to: "", catalog: "all" },
     openId: null,
     urls: [],
   };
@@ -65,13 +63,6 @@
     }
   }
 
-  function fmtHours(hours) {
-    if (hours === null || hours === undefined || !isFinite(hours)) return "—";
-    if (hours < 1) return Math.max(1, Math.round(hours * 60)) + " phút";
-    if (hours < 48) return hours.toFixed(1) + " giờ";
-    return (hours / 24).toFixed(1) + " ngày";
-  }
-  const pct = (part, total) => (total ? Math.round((part / total) * 100) : 0);
   const $ = (selector, root) => (root || document.getElementById(SECTION_ID)).querySelector(selector);
   const $$ = (selector, root) => Array.from((root || document.getElementById(SECTION_ID)).querySelectorAll(selector));
 
@@ -92,7 +83,6 @@
       </div>
       <div class="QLDG_tabs">
         <button type="button" class="QLDG_tab active" data-tab="process">Xử lý phản hồi <span class="QLDG_count" id="QLDG_tabBadge"></span></button>
-        <button type="button" class="QLDG_tab" data-tab="stats">Thống kê feedback</button>
       </div>
 
       <div class="QLDG_pane" id="QLDG_paneProcess">
@@ -124,20 +114,6 @@
           <span id="QLDG_pageInfo"></span>
           <button type="button" id="QLDG_next">Trang sau</button>
         </div>
-      </div>
-
-      <div class="QLDG_pane" id="QLDG_paneStats" hidden>
-        <div class="QLDG_filters QLDG_statsFilters">
-          <label>Từ ngày <input type="date" id="QLDG_sFrom"></label>
-          <label>Đến ngày <input type="date" id="QLDG_sTo"></label>
-          <label>Hãng <select id="QLDG_sCatalog"></select></label>
-          <div class="QLDG_quick">
-            <button type="button" data-range="7">7 ngày</button>
-            <button type="button" data-range="30">30 ngày</button>
-            <button type="button" data-range="0">Tất cả</button>
-          </div>
-        </div>
-        <div id="QLDG_statsBody"></div>
       </div>
 
       <div class="QLDG_modal" id="QLDG_modal" hidden>
@@ -325,7 +301,7 @@
     return !item.nguoiXuLy || item.nguoiXuLy.tenDangNhap === user.username;
   }
 
-  async function takeOver(id) {
+  async function tiepNhanYeuCau(id) {
     const user = me();
     await FS.update(id, (current) => ({
       nguoiXuLy: { tenDangNhap: user.username, hoTen: user.name },
@@ -333,6 +309,30 @@
       trangThai: current.trangThai === "daXuLy" ? "daXuLy" : "dangXuLy",
     }));
   }
+
+  // Ghi phản hồi của cửa hàng; thoiGian = lần phản hồi đầu tiên (dùng cho thống kê), lần sửa chỉ ghi thêm capNhatLuc
+  async function ghiPhanHoi(maYeuCau, noiDungPhanHoi) {
+    const user = me();
+    const current = (await FS.get(maYeuCau)) || state.list.find((entry) => entry.maDanhGia === maYeuCau);
+    const nowIso = new Date().toISOString();
+    const firstTime = current && current.phanHoi && current.phanHoi.thoiGian;
+    const phanHoi = firstTime
+      ? { noiDung: noiDungPhanHoi, nguoiGui: user.name, tenDangNhap: user.username, thoiGian: firstTime, capNhatLuc: nowIso }
+      : { noiDung: noiDungPhanHoi, nguoiGui: user.name, tenDangNhap: user.username, thoiGian: nowIso };
+    await FS.update(maYeuCau, {
+      nguoiXuLy: current && current.nguoiXuLy ? current.nguoiXuLy : { tenDangNhap: user.username, hoTen: user.name },
+      ngayTiepNhan: (current && current.ngayTiepNhan) || nowIso,
+      phanHoi,
+      trangThai: "daXuLy",
+    });
+  }
+
+  // Class PhanHoiYeuCau
+  async function taoPhanHoi(maYeuCau, noiDungPhanHoi) { await ghiPhanHoi(maYeuCau, noiDungPhanHoi); }
+  async function suaPhanHoi(maYeuCau, noiDungPhanHoi) { await ghiPhanHoi(maYeuCau, noiDungPhanHoi); }
+
+  // Class DanhGia
+  async function capNhatTrangThaiYeuCau(maYeuCau, trangThaiMoi) { await FS.update(maYeuCau, { trangThai: trangThaiMoi }); }
 
   async function handleModalClick(event) {
     const target = event.target;
@@ -356,28 +356,17 @@
         }
       }
       if (target.closest(".QLDG_mTake")) {
-        await takeOver(id);
+        await tiepNhanYeuCau(id);
         toast("Đã tiếp nhận xử lý phản hồi.");
       } else if (target.closest(".QLDG_mSend")) {
         const text = ($("#QLDG_replyText").value || "").trim();
         if (!text) return modalError("Vui lòng nhập nội dung phản hồi cho khách.");
-        const user = me();
         const current = (await FS.get(id)) || state.list.find((entry) => entry.maDanhGia === id);
-        const nowIso = new Date().toISOString();
-        // thoiGian = lần phản hồi ĐẦU TIÊN (dùng cho thống kê thời gian phản hồi); lần sau chỉ ghi thêm capNhatLuc
-        const firstTime = current && current.phanHoi && current.phanHoi.thoiGian;
-        const phanHoi = firstTime
-          ? { noiDung: text, nguoiGui: user.name, tenDangNhap: user.username, thoiGian: firstTime, capNhatLuc: nowIso }
-          : { noiDung: text, nguoiGui: user.name, tenDangNhap: user.username, thoiGian: nowIso };
-        await FS.update(id, {
-          nguoiXuLy: current && current.nguoiXuLy ? current.nguoiXuLy : { tenDangNhap: user.username, hoTen: user.name },
-          ngayTiepNhan: (current && current.ngayTiepNhan) || nowIso,
-          phanHoi,
-          trangThai: "daXuLy",
-        });
+        if (current && current.phanHoi && current.phanHoi.thoiGian) await suaPhanHoi(id, text);
+        else await taoPhanHoi(id, text);
         toast("Đã gửi phản hồi cho khách hàng.");
       } else if (target.closest(".QLDG_mReopen")) {
-        await FS.update(id, { trangThai: "dangXuLy" });
+        await capNhatTrangThaiYeuCau(id, "dangXuLy");
         toast("Đã mở lại phản hồi để xử lý tiếp.");
       } else if (target.closest(".QLDG_mHide")) {
         const current = state.list.find((entry) => entry.maDanhGia === id);
@@ -400,146 +389,6 @@
     document.body.appendChild(box);
   }
 
-  // ---------------- Thống kê ----------------
-  function statsRange() {
-    const from = state.stats.from ? new Date(state.stats.from + "T00:00:00") : null;
-    const to = state.stats.to ? new Date(state.stats.to + "T23:59:59") : null;
-    return { from, to };
-  }
-
-  function statsData() {
-    const { from, to } = statsRange();
-    return state.list.filter((item) => {
-      const date = new Date(item.ngayTao);
-      if (from && date < from) return false;
-      if (to && date > to) return false;
-      if (state.stats.catalog !== "all" && (item.maLoai || "Khác") !== state.stats.catalog) return false;
-      return true;
-    });
-  }
-
-  function trendBuckets(list, from, to) {
-    if (!list.length) return [];
-    const dates = list.map((item) => new Date(item.ngayTao));
-    const start = from || new Date(Math.min.apply(null, dates));
-    const end = to || new Date(Math.max.apply(null, dates));
-    const spanDays = Math.round((end - start) / 86400000) + 1;
-    const monthly = spanDays > 62;
-    const buckets = [];
-    const index = {};
-    if (monthly) {
-      const cursor = new Date(start.getFullYear(), start.getMonth(), 1);
-      while (cursor <= end) {
-        const key = `${cursor.getFullYear()}-${String(cursor.getMonth() + 1).padStart(2, "0")}`;
-        index[key] = buckets.length;
-        buckets.push({ key, label: `${String(cursor.getMonth() + 1).padStart(2, "0")}/${cursor.getFullYear()}`, count: 0, sum: 0 });
-        cursor.setMonth(cursor.getMonth() + 1);
-      }
-    } else {
-      const cursor = new Date(start.getFullYear(), start.getMonth(), start.getDate());
-      while (cursor <= end) {
-        const key = `${cursor.getFullYear()}-${String(cursor.getMonth() + 1).padStart(2, "0")}-${String(cursor.getDate()).padStart(2, "0")}`;
-        index[key] = buckets.length;
-        buckets.push({ key, label: `${String(cursor.getDate()).padStart(2, "0")}/${String(cursor.getMonth() + 1).padStart(2, "0")}`, count: 0, sum: 0 });
-        cursor.setDate(cursor.getDate() + 1);
-      }
-    }
-    list.forEach((item) => {
-      const d = new Date(item.ngayTao);
-      const key = monthly ? `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}` : `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
-      const bucket = buckets[index[key]];
-      if (bucket) { bucket.count += 1; bucket.sum += Number(item.soSao) || 0; }
-    });
-    return buckets;
-  }
-
-  function renderStats() {
-    const select = $("#QLDG_sCatalog");
-    const catalogs = Array.from(new Set(state.list.map((item) => item.maLoai || "Khác"))).sort();
-    select.innerHTML = `<option value="all">Tất cả hãng</option>` + catalogs.map((c) => `<option value="${esc(c)}">${esc(c)}</option>`).join("");
-    select.value = catalogs.includes(state.stats.catalog) ? state.stats.catalog : "all";
-    $("#QLDG_sFrom").value = state.stats.from;
-    $("#QLDG_sTo").value = state.stats.to;
-
-    const list = statsData();
-    const body = $("#QLDG_statsBody");
-    if (!list.length) {
-      body.innerHTML = `<div class="QLDG_empty">Chưa có dữ liệu feedback trong khoảng đã chọn.</div>`;
-      return;
-    }
-    const s = FS.summarize(list);
-    const pending = s.byStatus.moi + s.byStatus.dangXuLy;
-    const maxDist = Math.max.apply(null, [1, 2, 3, 4, 5].map((n) => s.dist[n]));
-    const { from, to } = statsRange();
-    const buckets = trendBuckets(list, from, to);
-    const maxBucket = Math.max.apply(null, buckets.map((b) => b.count).concat([1]));
-    // "Cao nhất"/"cần cải thiện" cần >= 2 đánh giá nếu có ít nhất một sản phẩm đạt ngưỡng đó (tránh 1 đánh giá lẻ chiếm bảng); không thì dùng tất cả
-    const rankPool = s.products.some((p) => p.count >= 2) ? s.products.filter((p) => p.count >= 2) : s.products;
-    const best = rankPool.slice().sort((a, b) => b.avg - a.avg || b.count - a.count).slice(0, 5);
-    const worst = rankPool.slice().sort((a, b) => a.avg - b.avg || b.count - a.count).slice(0, 5);
-    const most = s.products.slice().sort((a, b) => b.count - a.count || b.avg - a.avg).slice(0, 5);
-    const productRows = (rows) => rows.map((p, i) => `<tr><td>${i + 1}</td><td>${esc(p.name)}<small>${esc(p.catalog)}</small></td><td><b>${p.avg.toFixed(1)}</b> <span class="QLDG_stars">★</span></td><td>${p.count}</td></tr>`).join("");
-    const statusTotal = s.total || 1;
-
-    body.innerHTML = `
-      <div class="QLDG_cards">
-        <div class="QLDG_stat"><span>Tổng feedback</span><strong>${s.total}</strong><small>${s.withComment} có nhận xét · ${s.withMedia} có ảnh/video</small></div>
-        <div class="QLDG_stat"><span>Điểm trung bình</span><strong>${s.avg.toFixed(2)} <i class="QLDG_stars">★</i></strong><small class="QLDG_stars">${FS.stars(s.avg)}</small></div>
-        <div class="QLDG_stat QLDG_good"><span>Hài lòng (4-5 sao)</span><strong>${pct(s.positive, s.total)}%</strong><small>${s.positive} đánh giá</small></div>
-        <div class="QLDG_stat QLDG_bad"><span>Chưa hài lòng (1-2 sao)</span><strong>${pct(s.negative, s.total)}%</strong><small>${s.negative} đánh giá</small></div>
-        <div class="QLDG_stat QLDG_warn"><span>Chờ xử lý</span><strong>${pending}</strong><small>${s.byStatus.moi} mới · ${s.byStatus.dangXuLy} đang xử lý</small></div>
-        <div class="QLDG_stat"><span>Thời gian phản hồi TB</span><strong class="QLDG_small">${fmtHours(s.avgResponseHours)}</strong><small>Đã phản hồi ${pct(s.byStatus.daXuLy, s.total)}%</small></div>
-      </div>
-
-      <div class="QLDG_grid2">
-        <section class="QLDG_panel">
-          <h4>Phân bố số sao</h4>
-          ${[5, 4, 3, 2, 1].map((n) => `<div class="QLDG_hbar"><span>${n} ★</span><i><b class="QLDG_r${n}" style="width:${maxDist ? (s.dist[n] / maxDist) * 100 : 0}%"></b></i><em>${s.dist[n]} <small>(${pct(s.dist[n], s.total)}%)</small></em></div>`).join("")}
-        </section>
-        <section class="QLDG_panel">
-          <h4>Trạng thái xử lý</h4>
-          <div class="QLDG_stack">
-            <b class="QLDG_st_moi" style="width:${(s.byStatus.moi / statusTotal) * 100}%" title="Mới"></b>
-            <b class="QLDG_st_dangXuLy" style="width:${(s.byStatus.dangXuLy / statusTotal) * 100}%" title="Đang xử lý"></b>
-            <b class="QLDG_st_daXuLy" style="width:${(s.byStatus.daXuLy / statusTotal) * 100}%" title="Đã phản hồi"></b>
-          </div>
-          <ul class="QLDG_legend">
-            <li><i class="QLDG_st_moi"></i> Mới: <b>${s.byStatus.moi}</b> (${pct(s.byStatus.moi, s.total)}%)</li>
-            <li><i class="QLDG_st_dangXuLy"></i> Đang xử lý: <b>${s.byStatus.dangXuLy}</b> (${pct(s.byStatus.dangXuLy, s.total)}%)</li>
-            <li><i class="QLDG_st_daXuLy"></i> Đã phản hồi: <b>${s.byStatus.daXuLy}</b> (${pct(s.byStatus.daXuLy, s.total)}%)</li>
-          </ul>
-          <h4 class="QLDG_sub">Hình thức đánh giá</h4>
-          <div class="QLDG_hbar"><span>Chữ</span><i><b class="QLDG_r4" style="width:${pct(s.withComment, s.total)}%"></b></i><em>${s.withComment} <small>(${pct(s.withComment, s.total)}%)</small></em></div>
-          <div class="QLDG_hbar"><span>Ảnh</span><i><b class="QLDG_r3" style="width:${pct(s.withImage, s.total)}%"></b></i><em>${s.withImage} <small>(${pct(s.withImage, s.total)}%)</small></em></div>
-          <div class="QLDG_hbar"><span>Video</span><i><b class="QLDG_r5" style="width:${pct(s.withVideo, s.total)}%"></b></i><em>${s.withVideo} <small>(${pct(s.withVideo, s.total)}%)</small></em></div>
-        </section>
-      </div>
-
-      <section class="QLDG_panel">
-        <h4>Số feedback theo ${buckets.length && buckets[0].key.length === 7 ? "tháng" : "ngày"} <small>(màu cột thể hiện điểm trung bình: xanh ≥ 4, vàng ≥ 3, đỏ &lt; 3)</small></h4>
-        <div class="QLDG_vchart">${buckets.map((b) => {
-          const avg = b.count ? b.sum / b.count : 0;
-          const tone = !b.count ? "" : avg >= 4 ? "QLDG_tg" : avg >= 3 ? "QLDG_ty" : "QLDG_tr";
-          return `<div class="QLDG_vcol" title="${esc(b.label)}: ${b.count} feedback${b.count ? ", TB " + avg.toFixed(1) + "★" : ""}"><em>${b.count || ""}</em><b class="${tone}" style="height:${(b.count / maxBucket) * 100}%"></b><span>${esc(b.label)}</span></div>`;
-        }).join("")}</div>
-      </section>
-
-      <div class="QLDG_grid3">
-        <section class="QLDG_panel"><h4>Sản phẩm được đánh giá cao nhất</h4><table class="QLDG_table"><thead><tr><th>#</th><th>Sản phẩm</th><th>Điểm</th><th>SL</th></tr></thead><tbody>${productRows(best)}</tbody></table></section>
-        <section class="QLDG_panel"><h4>Sản phẩm cần cải thiện</h4><table class="QLDG_table"><thead><tr><th>#</th><th>Sản phẩm</th><th>Điểm</th><th>SL</th></tr></thead><tbody>${productRows(worst)}</tbody></table></section>
-        <section class="QLDG_panel"><h4>Được đánh giá nhiều nhất</h4><table class="QLDG_table"><thead><tr><th>#</th><th>Sản phẩm</th><th>Điểm</th><th>SL</th></tr></thead><tbody>${productRows(most)}</tbody></table></section>
-      </div>
-
-      <div class="QLDG_grid2">
-        <section class="QLDG_panel"><h4>Theo hãng</h4>
-          ${s.catalogs.map((c) => `<div class="QLDG_hbar"><span>${esc(c.name)}</span><i><b class="QLDG_r${Math.max(1, Math.min(5, Math.round(c.avg)))}" style="width:${(c.avg / 5) * 100}%"></b></i><em>${c.avg.toFixed(1)}★ <small>(${c.count})</small></em></div>`).join("")}
-        </section>
-        <section class="QLDG_panel"><h4>Hiệu suất nhân viên CSKH</h4>
-          ${s.staff.length ? `<table class="QLDG_table"><thead><tr><th>Nhân viên</th><th>Đã nhận</th><th>Hoàn tất</th><th>TG phản hồi TB</th></tr></thead><tbody>${s.staff.map((st) => `<tr><td>${esc(st.name)}</td><td>${st.received}</td><td>${st.done}</td><td>${fmtHours(st.avgHours)}</td></tr>`).join("")}</tbody></table>` : `<p class="QLDG_dim">Chưa có nhân viên nào tiếp nhận phản hồi.</p>`}
-        </section>
-      </div>`;
-  }
-
   // ---------------- Tải dữ liệu & sự kiện ----------------
   async function reload() {
     try {
@@ -550,43 +399,22 @@
       if (box) box.innerHTML = `<div class="QLDG_empty">Không đọc được dữ liệu đánh giá: ${esc(error.message)}</div>`;
     }
     renderChips();
-    if (state.tab === "process") renderList(); else renderStats();
-  }
-
-  function setTab(tab) {
-    state.tab = tab;
-    $$(".QLDG_tab").forEach((button) => button.classList.toggle("active", button.dataset.tab === tab));
-    $("#QLDG_paneProcess").hidden = tab !== "process";
-    $("#QLDG_paneStats").hidden = tab !== "stats";
-    if (tab === "process") renderList(); else renderStats();
-  }
-
-  function setRange(days) {
-    if (!days) { state.stats.from = ""; state.stats.to = ""; return; }
-    const today = new Date();
-    const from = new Date(today.getFullYear(), today.getMonth(), today.getDate() - (days - 1));
-    const fmt = (d) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
-    state.stats.from = fmt(from);
-    state.stats.to = fmt(today);
+    renderList();
   }
 
   function bind(section) {
     section.addEventListener("click", (event) => {
       const target = event.target;
       if (!(target instanceof Element)) return;
-      const tab = target.closest(".QLDG_tab");
-      if (tab) return setTab(tab.dataset.tab);
       const chip = target.closest(".QLDG_chip");
       if (chip) { state.filters.status = chip.dataset.status; state.page = 1; renderChips(); return renderList(); }
-      const quick = target.closest(".QLDG_quick button");
-      if (quick) { setRange(Number(quick.dataset.range)); return renderStats(); }
       if (target.closest("#QLDG_prev")) { state.page = Math.max(1, state.page - 1); return renderList(); }
       if (target.closest("#QLDG_next")) { state.page += 1; return renderList(); }
       const card = target.closest(".QLDG_card");
       if (card) {
         const id = card.dataset.id;
         if (target.closest(".QLDG_take")) {
-          takeOver(id).then(() => { toast("Đã tiếp nhận xử lý phản hồi."); return reload(); }).then(() => openModal(id)).catch((error) => alert(error.message));
+          tiepNhanYeuCau(id).then(() => { toast("Đã tiếp nhận xử lý phản hồi."); return reload(); }).then(() => openModal(id)).catch((error) => alert(error.message));
           return;
         }
         if (target.closest(".QLDG_view") || !target.closest("button")) return openModal(id);
@@ -608,9 +436,6 @@
     $("#QLDG_search").addEventListener("input", onFilter);
     ["#QLDG_fRating", "#QLDG_fMedia", "#QLDG_fOwner", "#QLDG_fSort"].forEach((selector) => $(selector).addEventListener("change", onFilter));
 
-    $("#QLDG_sFrom").addEventListener("change", (e) => { state.stats.from = e.target.value; renderStats(); });
-    $("#QLDG_sTo").addEventListener("change", (e) => { state.stats.to = e.target.value; renderStats(); });
-    $("#QLDG_sCatalog").addEventListener("change", (e) => { state.stats.catalog = e.target.value; renderStats(); });
   }
 
   function mount() {

@@ -1,0 +1,139 @@
+<section id="page-vouchers" class="spa-page">
+            <div class="QLV_head">
+              <h3>Quản lý voucher</h3>
+              <div class="QLV_headActions">
+                <button type="button" id="QLV_btnKhoiPhuc" class="QLV_btn QLV_btn-light" hidden>
+                  <i class="fa-solid fa-rotate-left"></i> Khôi phục voucher mặc định
+                </button>
+                <button type="button" id="QLV_btnThem" class="QLV_btn QLV_btn-primary">
+                  <i class="fa-solid fa-plus"></i> Thêm voucher
+                </button>
+              </div>
+            </div>
+
+            <div class="QLV_tabs" id="QLV_tabs">
+              <button type="button" class="QLV_tab active" data-tab="list">Danh sách voucher</button>
+              <button type="button" class="QLV_tab" data-tab="phat">Phân phát voucher</button>
+            </div>
+
+            <!-- UC61: danh sách voucher -->
+            <div id="QLV_panelList">
+              <div class="QLV_cards" id="QLV_cards"></div>
+              <div class="QLV_tableWrap">
+                <table class="QLV_table">
+                  <thead>
+                    <tr>
+                      <th>Mã</th>
+                      <th>Tên chương trình</th>
+                      <th>Giảm</th>
+                      <th>Đơn tối thiểu</th>
+                      <th>Hiệu lực</th>
+                      <th>Phạm vi</th>
+                      <th>Đã dùng</th>
+                      <th>Đã phát</th>
+                      <th>Trạng thái</th>
+                      <th>Thao tác</th>
+                    </tr>
+                  </thead>
+                  <tbody id="QLV_tbody"></tbody>
+                </table>
+              </div>
+            </div>
+
+            <!-- UC62: phân phát voucher -->
+            <div id="QLV_panelPhat" hidden>
+              <div class="QLV_phatGrid">
+                <div class="QLV_box">
+                  <h4>Phát voucher cho khách hàng</h4>
+                  <label class="QLV_field">
+                    <span>Voucher <small>(voucher riêng khách đang chạy mà bạn được phát)</small></span>
+                    <select id="QLV_phatVoucher"></select>
+                  </label>
+                  <div class="QLV_field">
+                    <span>Khách hàng</span>
+                    <input type="text" id="QLV_timKhach" placeholder="Tìm theo tên, mã, email, số điện thoại..." />
+                    <label class="QLV_check" id="QLV_tatCaWrap" hidden>
+                      <input type="checkbox" id="QLV_phatTatCa" /> Phát cho tất cả khách hàng
+                    </label>
+                    <div class="QLV_khachList" id="QLV_khachList"></div>
+                    <small class="QLV_hint" id="QLV_daChon">Đã chọn 0 khách hàng</small>
+                  </div>
+                  <label class="QLV_field">
+                    <span>Lý do phát</span>
+                    <textarea id="QLV_lyDo" rows="2" placeholder="Ví dụ: bồi thường đơn giao trễ"></textarea>
+                  </label>
+                  <button type="button" id="QLV_btnPhat" class="QLV_btn QLV_btn-primary">
+                    <i class="fa-solid fa-gift"></i> Phát voucher
+                  </button>
+                  <div class="QLV_ketQua" id="QLV_ketQua" hidden></div>
+                </div>
+                <div class="QLV_box">
+                  <h4>Lịch sử phát voucher</h4>
+                  <div class="QLV_tableWrap">
+                    <table class="QLV_table">
+                      <thead>
+                        <tr>
+                          <th>Thời điểm</th>
+                          <th>Voucher</th>
+                          <th>Khách nhận</th>
+                          <th>Người phát</th>
+                          <th>Lý do</th>
+                          <th>Trạng thái</th>
+                          <th class="QLV_colThuHoi">Thao tác</th>
+                        </tr>
+                      </thead>
+                      <tbody id="QLV_lichSu"></tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Hộp thoại thêm / sửa voucher -->
+            <div class="QLV_modal" id="QLV_modal" hidden>
+              <div class="QLV_modalBox" role="dialog" aria-modal="true" aria-labelledby="QLV_modalTitle">
+                <div class="QLV_modalHead">
+                  <h4 id="QLV_modalTitle">Thêm voucher</h4>
+                  <button type="button" class="QLV_close" id="QLV_btnDong" aria-label="Đóng">&times;</button>
+                </div>
+                <form id="QLV_form" class="QLV_form" novalidate>
+                  <label class="QLV_field"><span>Mã voucher *</span><input type="text" id="QLV_ma" maxlength="30" /></label>
+                  <label class="QLV_field"><span>Tên chương trình *</span><input type="text" id="QLV_ten" maxlength="150" /></label>
+                  <label class="QLV_field QLV_full"><span>Mô tả</span><textarea id="QLV_moTa" rows="2"></textarea></label>
+                  <label class="QLV_field"><span>Loại giảm *</span>
+                    <select id="QLV_loai">
+                      <option value="SO_TIEN">Số tiền</option>
+                      <option value="PHAN_TRAM">Phần trăm</option>
+                    </select>
+                  </label>
+                  <label class="QLV_field"><span id="QLV_giaTriLabel">Giá trị giảm (đ) *</span><input type="number" id="QLV_giaTri" min="0" step="1" /></label>
+                  <label class="QLV_field" id="QLV_giamToiDaWrap"><span>Giảm tối đa (đ)</span><input type="number" id="QLV_giamToiDa" min="0" step="1" placeholder="Để trống nếu không giới hạn" /></label>
+                  <label class="QLV_field"><span>Đơn tối thiểu (đ)</span><input type="number" id="QLV_donToiThieu" min="0" step="1" /></label>
+                  <label class="QLV_field"><span>Ngày bắt đầu *</span><input type="date" id="QLV_batDau" /></label>
+                  <label class="QLV_field"><span>Hạn dùng *</span><input type="date" id="QLV_ketThuc" /></label>
+                  <label class="QLV_field"><span>Số lượt mỗi tài khoản *</span><input type="number" id="QLV_moiTaiKhoan" min="1" step="1" /></label>
+                  <label class="QLV_field"><span>Tổng lượt phát hành *</span><input type="number" id="QLV_tongLuot" min="1" step="1" /></label>
+                  <label class="QLV_field"><span>Phạm vi *</span>
+                    <select id="QLV_phamVi">
+                      <option value="TAT_CA">Công khai</option>
+                      <option value="RIENG_KHACH">Riêng khách</option>
+                    </select>
+                    <small class="QLV_hint" id="QLV_phamViHint" hidden>Voucher đã có đơn sử dụng hoặc đã được phát nên không đổi được phạm vi.</small>
+                  </label>
+                  <label class="QLV_field"><span>Trạng thái</span>
+                    <select id="QLV_trangThai">
+                      <option value="HOAT_DONG">Hoạt động</option>
+                      <option value="TAM_DUNG">Tạm dừng</option>
+                    </select>
+                  </label>
+                  <label class="QLV_check QLV_full"><input type="checkbox" id="QLV_khachMoi" /> Chỉ dành cho khách mới</label>
+                  <label class="QLV_check QLV_full" id="QLV_cskhWrap" hidden><input type="checkbox" id="QLV_choCSKH" /> Cho phép nhân viên CSKH phát</label>
+                  <p class="QLV_loi QLV_full" id="QLV_loi" hidden></p>
+                  <div class="QLV_formActions QLV_full">
+                    <button type="button" class="QLV_btn QLV_btn-light" id="QLV_btnHuy">Hủy</button>
+                    <button type="submit" class="QLV_btn QLV_btn-primary">Lưu</button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </section>

@@ -106,7 +106,7 @@ function QLNV_veBang() {
     // Gắn sự kiện bằng addEventListener (không nội suy dữ liệu vào thuộc tính onclick)
     const maNv = nv.maNhanVien;
     row.querySelector(".btn-edit").addEventListener("click", function() { QLNV_moModalSua(maNv); });
-    row.querySelector(".btn-toggle").addEventListener("click", function() { QLNV_khoaMoKhoa(maNv); });
+    row.querySelector(".btn-toggle").addEventListener("click", function() { capNhatTrangThaiKichHoat(maNv); });
     row.querySelector(".btn-delete").addEventListener("click", function() { QLNV_xoa(maNv); });
     tbody.appendChild(row);
   });
@@ -254,47 +254,56 @@ function QLNV_luuNhanVien() {
   );
   if (trungSdt) return QLNV_notify("Số điện thoại đã được dùng cho nhân viên khác!", "error");
 
+  const matKhauHopLe = (mk) => mk.length >= 8 && /[A-Za-z]/.test(mk) && /\d/.test(mk);
   if (!isEdit) {
-    if (password.length < 6) return QLNV_notify("Mật khẩu phải có ít nhất 6 ký tự!", "error");
-  } else if (password && password.length < 6) {
-    return QLNV_notify("Mật khẩu mới phải có ít nhất 6 ký tự!", "error");
+    if (!matKhauHopLe(password)) return QLNV_notify("Mật khẩu phải có ít nhất 8 ký tự gồm cả chữ và số!", "error");
+  } else if (password && !matKhauHopLe(password)) {
+    return QLNV_notify("Mật khẩu mới phải có ít nhất 8 ký tự gồm cả chữ và số!", "error");
   }
 
-  if (isEdit) {
-    const index = QLNV_danhSach.findIndex((e) => e.maNhanVien === QLNV_dangSuaMa);
-    if (index === -1) return;
-    QLNV_danhSach[index].tenNhanVien = ten;
-    QLNV_danhSach[index].gioiTinh = gioiTinh;
-    QLNV_danhSach[index].soDienThoai = sdt;
-    QLNV_danhSach[index].diaChi = diaChi;
-    QLNV_danhSach[index].chucVu = chucVu;
-    QLNV_danhSach[index].tenDangNhap = username;
-    if (password) QLNV_danhSach[index].matKhau = password;
-    saveLocalEmployees(QLNV_danhSach);
-    QLNV_notify("Đã cập nhật nhân viên!", "success");
-  } else {
-    QLNV_danhSach.push({
-      maNhanVien: ma,
-      tenNhanVien: ten,
-      gioiTinh: gioiTinh,
-      soDienThoai: sdt,
-      diaChi: diaChi,
-      chucVu: chucVu,
-      tenDangNhap: username,
-      matKhau: password,
-      ngayTao: new Date().toISOString().split("T")[0],
-      trangThai: "hoatdong"
-    });
-    saveLocalEmployees(QLNV_danhSach);
-    QLNV_notify("Đã thêm nhân viên mới!", "success");
-  }
+  const duLieu = { tenNhanVien: ten, gioiTinh, soDienThoai: sdt, diaChi, chucVu, tenDangNhap: username, matKhau: password };
+  if (isEdit) suaThongTinNhanVien(QLNV_dangSuaMa, duLieu);
+  else themNhanVien(ma, duLieu);
 
   QLNV_danhSach = getLocalEmployees() || [];
   QLNV_dongModal();
   QLNV_veBang();
 }
 
-function QLNV_khoaMoKhoa(ma) {
+// Thêm nhân viên (class NhanVien); mật khẩu lưu dạng mã hóa
+function themNhanVien(ma, duLieu) {
+  QLNV_danhSach.push({
+    maNhanVien: ma,
+    tenNhanVien: duLieu.tenNhanVien,
+    gioiTinh: duLieu.gioiTinh,
+    soDienThoai: duLieu.soDienThoai,
+    diaChi: duLieu.diaChi,
+    chucVu: duLieu.chucVu,
+    tenDangNhap: duLieu.tenDangNhap,
+    matKhau: window.PasswordUtil ? PasswordUtil.hash(duLieu.matKhau) : duLieu.matKhau,
+    ngayTao: new Date().toISOString().split("T")[0],
+    trangThai: "hoatdong"
+  });
+  saveLocalEmployees(QLNV_danhSach);
+  QLNV_notify("Đã thêm nhân viên mới!", "success");
+}
+
+// Sửa thông tin nhân viên (class NhanVien); để trống mật khẩu thì giữ mật khẩu cũ
+function suaThongTinNhanVien(maNhanVien, duLieu) {
+  const index = QLNV_danhSach.findIndex((e) => e.maNhanVien === maNhanVien);
+  if (index === -1) return;
+  QLNV_danhSach[index].tenNhanVien = duLieu.tenNhanVien;
+  QLNV_danhSach[index].gioiTinh = duLieu.gioiTinh;
+  QLNV_danhSach[index].soDienThoai = duLieu.soDienThoai;
+  QLNV_danhSach[index].diaChi = duLieu.diaChi;
+  QLNV_danhSach[index].chucVu = duLieu.chucVu;
+  QLNV_danhSach[index].tenDangNhap = duLieu.tenDangNhap;
+  if (duLieu.matKhau) QLNV_danhSach[index].matKhau = window.PasswordUtil ? PasswordUtil.hash(duLieu.matKhau) : duLieu.matKhau;
+  saveLocalEmployees(QLNV_danhSach);
+  QLNV_notify("Đã cập nhật nhân viên!", "success");
+}
+
+function capNhatTrangThaiKichHoat(ma) {
   const index = QLNV_danhSach.findIndex((e) => e.maNhanVien === ma);
   if (index === -1) return;
   const dangKhoa = QLNV_danhSach[index].trangThai === "khoa";

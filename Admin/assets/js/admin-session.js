@@ -82,7 +82,7 @@ class AdminSession {
     // Đăng xuất
     logout() {
         if (typeof employeeSession !== 'undefined') {
-            employeeSession.logout();
+            employeeSession.dangXuat();
         }
         sessionStorage.removeItem(this.sessionKey);
         sessionStorage.removeItem(this.usernameKey);

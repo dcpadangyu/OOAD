@@ -15,7 +15,7 @@ const read = (rel) => fs.readFileSync(path.join(adminDir, rel), "utf8").replace(
 // Thứ tự các mục trong vùng nội dung (mỗi mục là 1 file trong Admin/sections/)
 const SECTIONS = [
   "dashboard", "customers", "categories", "products", "import", "inventory",
-  "prices", "orders", "reviews", "support", "reports", "employees",
+  "prices", "orders", "vouchers", "reviews", "support", "reports", "employees",
   "order-detail", "orders-list", "customers-list",
 ];
 // Các khối khung (mỗi khối là 1 file trong Admin/components/)
